@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>품목 검색 [CPPD01]</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    font-size: 12px;
+    color: #333;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  /* ── 팝업 컨테이너 ── */
+  .popup {
+    width: 900px;
+    background: #ffffff;
+    border: 1px solid #888;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    overflow: hidden;
+    position: fixed;
+  }
+
+  /* ── 타이틀바 ── */
+  .popup-title {
+    background: #304a6e;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    cursor: move;
+    border-radius: 6px 6px 0 0;
+  }
+  .popup-title .close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 2px;
+  }
+  .popup-title .close-btn:hover { color: #ffd0d0; }
+
+  /* ── 본문 ── */
+  .popup-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff;
+  }
+
+  /* ── 검색 영역 ── */
+  .search-area {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .search-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .search-table td {
+    height: 36px;
+    padding: 4px 10px;
+    border: 1px solid #e5e7eb;
+    font-size: 13px;
+  }
+
+  .search-table td.lbl {
+    width: 80px;
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: right;
+    padding-right: 12px;
+    white-space: nowrap;
+  }
+
+  .search-table td.val {
+    background: #fff;
+  }
+
+  .search-table td.empty-lbl,
+  .search-table td.empty-val {
+    background: #f3f4f6;
+  }
+
+  .search-table input,
+  .search-table select {
+    width: 100%;
+    height: 26px;
+    font-size: 13px;
+    color: #111827;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0 8px;
+    font-family: inherit;
+    outline: none;
+  }
+
+  .search-table input:focus,
+  .search-table select:focus {
+    border-color: #7aa2c8;
+    box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+  }
+
+  /* ── 버튼 영역 ── */
+  .btn-area {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 2px 0;
+  }
+
+  .btn {
+    border: 1px solid #a8bfd8;
+    background: #ffffff;
+    color: #3a6ea5;
+    font-weight: 500;
+    width: 74px;
+    height: 28px;
+    font-size: 13px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn:hover {
+    border-color: #7aa2c8;
+    background: #f4f8fc;
+    color: #2a5a8f;
+  }
+
+  /* ── 패널 (그리드 래퍼) ── */
+  .panel {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── 그리드 스크롤 래퍼 ── */
+  .grid-wrap {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 260px;
+    min-height: 260px;
+    max-height: 260px;
+  }
+
+  /* 커스텀 세로 스크롤바 */
+  .grid-wrap::-webkit-scrollbar { width: 8px; height: 0; }
+  .grid-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+  .grid-wrap::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  .grid-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  .grid-wrap::-webkit-scrollbar-corner { background: #f1f5f9; }
+
+  /* ── 그리드 테이블 ── */
+  .grid-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* 헤더 */
+  .grid-table thead th {
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    padding: 3px 4px;
+    white-space: nowrap;
+    height: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  /* 데이터 셀 */
+  .grid-table td {
+    height: 26px;
+    padding: 1px 4px;
+    font-size: 12px;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .grid-table tbody tr {
+    cursor: pointer;
+    background: #fff;
+  }
+  .grid-table tbody tr:hover { background: #eff6ff; }
+  .grid-table tbody tr.selected { background: #dbeafe; }
+
+  /* 정렬 유틸 */
+  .tc { text-align: center; }
+  .tl { text-align: left; }
+  .tr { text-align: right; }
+
+  /* 빈 메시지 */
+  .empty-td {
+    height: 26px;
+    padding: 110px 0 !important;
+    text-align: center;
+    vertical-align: middle;
+    color: #999;
+    font-size: 13px;
+    border: none !important;
+  }
+
+  /* ── 페이징 footer ── */
+  .grid-footer {
+    height: 40px;
+    background: #fafafa;
+    border-top: 1px solid #e5e7eb;
+    padding: 5px 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .page-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    padding: 0;
+  }
+  .page-btn:hover:not(.active) { background: #f1f5f9; }
+  .page-btn.active { background: #4b5563; color: #fff; border-color: #4b5563; }
+
+  .page-btn.arrow {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6b7280;
+    border-color: #e5e7eb;
+  }
+  .page-btn.arrow:hover { background: #f1f5f9; color: #374151; }
+
+  .page-size-wrap {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .page-size-wrap select {
+    height: 28px;
+    min-width: 64px;
+    padding: 0 20px 0 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: inherit;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .row-count {
+    position: absolute;
+    right: 12px;
+    font-size: 11px;
+    color: #6b7280;
+  }
+</style>
+</head>
+<body>
+
+<div class="popup" id="popup">
+  <!-- 타이틀 -->
+  <div class="popup-title" id="dragHandle">
+    품목 검색 [CPPD01]
+    <button class="close-btn" onclick="closePopup()">✕</button>
+  </div>
+
+  <div class="popup-body">
+    <!-- 검색 조건 2행 -->
+    <div class="search-area">
+      <table class="search-table">
+        <colgroup>
+          <col style="width: 72px">
+          <col style="width: 25%">
+          <col style="width: 72px">
+          <col style="width: 25%">
+          <col style="width: 72px">
+          <col style="width: 25%">
+          <col style="width: 72px">
+          <col style="width: 25%">
+        </colgroup>
+        <tbody>
+          <!-- 1행 -->
+          <tr>
+            <td class="lbl">사업장</td>
+            <td class="val">
+              <select id="bizPlace">
+                <option value="10">아임유어박스</option>
+                <option value="20">본사</option>
+                <option value="30">물류센터</option>
+              </select>
+            </td>
+            <td class="lbl">품목번호</td>
+            <td class="val">
+              <input type="text" id="prodNo" onkeydown="handleKey(event)">
+            </td>
+            <td class="lbl">품목명</td>
+            <td class="val">
+              <input type="text" id="prodNm" onkeydown="handleKey(event)">
+            </td>
+            <td class="lbl">규격</td>
+            <td class="val">
+              <input type="text" id="prodSpec" onkeydown="handleKey(event)">
+            </td>
+          </tr>
+          <!-- 2행 -->
+          <tr>
+            <td class="lbl">품목분류</td>
+            <td class="val">
+              <select id="prodCls">
+                <option value="">선택</option>
+                <option value="10">상품</option>
+                <option value="20">세트</option>
+                <option value="30">부자재</option>
+                <option value="40">원재료</option>
+              </select>
+            </td>
+            <td class="lbl">대분류</td>
+            <td class="val">
+              <select id="lgCls">
+                <option value="">선택</option>
+                <option value="01">냉동식품</option>
+                <option value="02">냉장식품</option>
+                <option value="03">상온식품</option>
+              </select>
+            </td>
+            <td class="lbl">중분류</td>
+            <td class="val">
+              <select id="mdCls">
+                <option value="">선택</option>
+                <option value="01">밥류</option>
+                <option value="02">면류</option>
+                <option value="03">반찬류</option>
+                <option value="04">디저트</option>
+              </select>
+            </td>
+            <td class="lbl">소분류</td>
+            <td class="val">
+              <select id="smCls">
+                <option value="">선택</option>
+                <option value="01">볶음밥</option>
+                <option value="02">도시락</option>
+                <option value="03">국탕류</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 버튼 -->
+    <div class="btn-area">
+      <button class="btn" onclick="doSearch()">검&nbsp;&nbsp;색</button>
+      <button class="btn" onclick="doReset()">초기화</button>
+    </div>
+
+    <!-- 그리드 패널 -->
+    <div class="panel">
+      <div class="grid-wrap" id="gridWrap">
+        <table class="grid-table" id="gridTable">
+          <thead>
+            <tr>
+              <th style="width:40px">No.</th>
+              <th style="width:100px">품목번호</th>
+              <th style="width:200px">품목명</th>
+              <th style="width:130px">규격</th>
+              <th style="width:50px">단위</th>
+              <th style="width:70px">품목분류</th>
+              <th style="width:80px">대분류</th>
+              <th style="width:80px">중분류</th>
+              <th style="width:80px">소분류</th>
+            </tr>
+          </thead>
+          <tbody id="gridBody">
+            <tr><td colspan="9" class="empty-td">검색 조건을 입력 후 검색하세요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 페이징 footer -->
+      <div class="grid-footer">
+        <div class="pagination" id="pagerPages"></div>
+        <div class="page-size-wrap">
+          <select id="pageSize" onchange="changePageSize()">
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="rowCount">0 rows</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 샘플 데이터 ──
+const allData = [
+  { prodNo:'P0003',      prodNm:'냉동 군만두 (1kg 업소용)',              spec:'1kg*10봉/Box',        unit:'EA',  cls:'상품',   lg:'냉동식품', md:'반찬류', sm:'국탕류' },
+  { prodNo:'P0008',      prodNm:'냉동 디저트 세트 (조각케익+마카롱)',     spec:'개별포장*20품목/세트', unit:'EA',  cls:'상품',   lg:'냉동식품', md:'디저트', sm:'' },
+  { prodNo:'P0001',      prodNm:'냉동 불고기 볶음밥 (200g 낱봉)',        spec:'200g/봉',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'밥류',   sm:'볶음밥' },
+  { prodNo:'P0008_002',  prodNm:'마카롱 (6구 팩)',                       spec:'180g/팩',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'디저트', sm:'' },
+  { prodNo:'8800304770', prodNm:'백해당 제주순살온갈치조림 밀키트',       spec:'',                    unit:'EA',  cls:'세트',   lg:'냉장식품', md:'반찬류', sm:'국탕류' },
+  { prodNo:'P0006_001',  prodNm:'불고기 반찬',                           spec:'200g/EA',             unit:'EA',  cls:'상품',   lg:'냉장식품', md:'반찬류', sm:'' },
+  { prodNo:'P0004',      prodNm:'샐러드 전용 PET 용기 (투명 500ml)',     spec:'500ml*100개/Box',     unit:'EA',  cls:'부자재', lg:'',       md:'',      sm:'' },
+  { prodNo:'P0007',      prodNm:'일회용 부자재 세트 (종이컵+빨대+스푼)', spec:'구성품 2종*10개/세트', unit:'EA',  cls:'부자재', lg:'',       md:'',      sm:'' },
+  { prodNo:'P0010',      prodNm:'김치찌개 밀키트 (2인분)',               spec:'500g/팩',             unit:'EA',  cls:'세트',   lg:'냉장식품', md:'반찬류', sm:'국탕류' },
+  { prodNo:'P0011',      prodNm:'유기농 샐러드 믹스',                    spec:'200g/봉',             unit:'EA',  cls:'상품',   lg:'냉장식품', md:'반찬류', sm:'' },
+  { prodNo:'P0012',      prodNm:'닭갈비 볶음 (350g)',                   spec:'350g/팩',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'반찬류', sm:'' },
+  { prodNo:'P0013',      prodNm:'즉석 된장찌개 (1인분)',                 spec:'300ml/팩',            unit:'EA',  cls:'상품',   lg:'상온식품', md:'반찬류', sm:'국탕류' },
+  { prodNo:'P0014',      prodNm:'전복죽 (1인분)',                        spec:'450g/팩',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'밥류',   sm:'도시락' },
+  { prodNo:'P0015',      prodNm:'냉동 새우튀김 (20미)',                  spec:'400g/팩',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'반찬류', sm:'' },
+  { prodNo:'P0016',      prodNm:'스티로폼 보냉박스 (소)',                spec:'300*250*200mm',       unit:'EA',  cls:'부자재', lg:'',       md:'',      sm:'' },
+  { prodNo:'P0017',      prodNm:'아이스팩 (200g)',                       spec:'200g*50개/Box',       unit:'Box', cls:'부자재', lg:'',       md:'',      sm:'' },
+  { prodNo:'P0018',      prodNm:'냉동 순대 (500g)',                      spec:'500g/팩',             unit:'EA',  cls:'상품',   lg:'냉동식품', md:'반찬류', sm:'' },
+];
+
+let filteredData = [];
+let currentPage  = 1;
+let pageSize     = 50;
+let selectedRow  = null;
+
+function doSearch() {
+  const prodNo   = document.getElementById('prodNo').value.trim().toLowerCase();
+  const prodNm   = document.getElementById('prodNm').value.trim().toLowerCase();
+  const prodSpec = document.getElementById('prodSpec').value.trim().toLowerCase();
+  const prodCls  = document.getElementById('prodCls').value;
+
+  filteredData = allData.filter(r => {
+    if (prodNo   && !r.prodNo.toLowerCase().includes(prodNo))   return false;
+    if (prodNm   && !r.prodNm.toLowerCase().includes(prodNm))   return false;
+    if (prodSpec && !r.spec.toLowerCase().includes(prodSpec))   return false;
+    if (prodCls) {
+      const clsMap = { '10':'상품', '20':'세트', '30':'부자재', '40':'원재료' };
+      if (r.cls !== clsMap[prodCls]) return false;
+    }
+    return true;
+  });
+
+  currentPage = 1;
+  renderGrid();
+}
+
+function renderGrid() {
+  const tbody = document.getElementById('gridBody');
+  const total = filteredData.length;
+
+  if (total === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-td">조회된 데이터가 없습니다.</td></tr>';
+    renderPager(0, 0, 0);
+    return;
+  }
+
+  const start = (currentPage - 1) * pageSize;
+  const end   = Math.min(start + pageSize, total);
+  const page  = filteredData.slice(start, end);
+
+  tbody.innerHTML = page.map((r, i) => `
+    <tr onclick="selectRow(this, ${start + i})" ondblclick="confirmSelect(${start + i})">
+      <td class="tc">${start + i + 1}</td>
+      <td class="tl">${r.prodNo}</td>
+      <td class="tl">${r.prodNm}</td>
+      <td class="tl">${r.spec}</td>
+      <td class="tc">${r.unit}</td>
+      <td class="tc">${r.cls}</td>
+      <td class="tc">${r.lg}</td>
+      <td class="tc">${r.md}</td>
+      <td class="tc">${r.sm}</td>
+    </tr>
+  `).join('');
+
+  renderPager(start + 1, end, total);
+}
+
+function renderPager(start, end, total) {
+  document.getElementById('rowCount').textContent =
+    total > 0 ? `${start} ~ ${end} of ${total} rows` : '0 rows';
+
+  const pages = document.getElementById('pagerPages');
+  if (total === 0) { pages.innerHTML = ''; return; }
+
+  const totalPages = Math.ceil(total / pageSize);
+  let html = '';
+
+  if (currentPage > 1)
+    html += `<button class="page-btn arrow" onclick="goPage(${currentPage - 1})">&#8249;</button>`;
+
+  for (let p = 1; p <= totalPages; p++) {
+    if (totalPages <= 7 || Math.abs(p - currentPage) <= 2 || p === 1 || p === totalPages) {
+      html += `<button class="page-btn${p === currentPage ? ' active' : ''}" onclick="goPage(${p})">${p}</button>`;
+    } else if (Math.abs(p - currentPage) === 3) {
+      html += `<span style="padding:0 2px; color:#9ca3af; font-size:13px;">…</span>`;
+    }
+  }
+
+  if (currentPage < totalPages)
+    html += `<button class="page-btn arrow" onclick="goPage(${currentPage + 1})">&#8250;</button>`;
+
+  pages.innerHTML = html;
+}
+
+function goPage(p) { currentPage = p; renderGrid(); }
+
+function changePageSize() {
+  pageSize    = parseInt(document.getElementById('pageSize').value);
+  currentPage = 1;
+  if (filteredData.length > 0) renderGrid();
+}
+
+function selectRow(el, idx) {
+  document.querySelectorAll('#gridBody tr').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRow = filteredData[idx];
+}
+
+function confirmSelect(idx) {
+  selectedRow = filteredData[idx];
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: 'CPPD01_select', data: selectedRow }, '*');
+  } else {
+    alert(`선택: [${selectedRow.prodNo}] ${selectedRow.prodNm}`);
+  }
+}
+
+function doReset() {
+  ['prodNo', 'prodNm', 'prodSpec'].forEach(id => document.getElementById(id).value = '');
+  ['bizPlace', 'prodCls', 'lgCls', 'mdCls', 'smCls'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  filteredData = []; selectedRow = null; currentPage = 1;
+  document.getElementById('gridBody').innerHTML =
+    '<tr><td colspan="9" class="empty-td">검색 조건을 입력 후 검색하세요.</td></tr>';
+  renderPager(0, 0, 0);
+}
+
+function closePopup() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: 'CPPD01_close' }, '*');
+  } else {
+    document.querySelector('.popup').style.display = 'none';
+  }
+}
+function handleKey(e) { if (e.key === 'Enter') doSearch(); }
+
+// ── 초기 로드 시 전체 검색 / iframe 내부 감지 ──
+window.onload = () => {
+  doSearch();
+  // iframe 내부로 로드된 경우 body 배경 투명 처리
+  if (window.parent !== window) {
+    document.body.style.background = 'transparent';
+    document.body.style.minHeight  = 'auto';
+    document.body.style.alignItems = 'flex-start';
+  }
+};
+
+// ── 드래그 ──
+(function() {
+  const handle = document.getElementById('dragHandle');
+  const popup  = document.getElementById('popup');
+  let dragging = false, ox = 0, oy = 0;
+
+  handle.addEventListener('mousedown', e => {
+    dragging = true;
+    const r = popup.getBoundingClientRect();
+    ox = e.clientX - r.left;
+    oy = e.clientY - r.top;
+    popup.style.position = 'fixed';
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    popup.style.left = (e.clientX - ox) + 'px';
+    popup.style.top  = (e.clientY - oy) + 'px';
+  });
+  document.addEventListener('mouseup', () => { dragging = false; });
+})();
+</script>
+</body>
+</html>

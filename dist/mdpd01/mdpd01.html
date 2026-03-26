@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>품목 [MDPD01]</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-size: 12px;
+  color: #333;
+  background: #ffffff;
+  overflow: hidden;
+}
+.page-wrap {
+  padding: 6px 8px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === 헤더 === */
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 2px 6px 2px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.page-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+}
+.page-title .arrow { font-size: 11px; color: #6b7280; font-weight: 400; }
+.btn-search {
+  border: 1px solid #a8bfd8;
+  background: #ffffff;
+  color: #3a6ea5;
+  font-weight: 500;
+  padding: 0;
+  width: 74px;
+  height: 28px;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.btn-search:hover { border-color: #7aa2c8; background: #f4f8fc; color: #2a5a8f; }
+
+/* === 검색 영역 === */
+.search-area {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-top: -2px;
+}
+.search-area table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.search-area th {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: right;
+  padding: 6px 12px 6px 6px;
+  white-space: nowrap;
+  border: 1px solid #e5e7eb;
+  width: 82px;
+}
+.search-area td {
+  background: #fff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.search-area td.empty-label {
+  background: #f3f4f6;
+}
+.search-area td.empty-val {
+  background: #ffffff;
+}
+.search-area input:not([type="checkbox"]),
+.search-area select {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.search-area input:focus,
+.search-area select:focus {
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+  outline: none;
+}
+
+/* === 패널 === */
+.panel {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* === 툴바 === */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 32px;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.btn-icon {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  font-size: 12px;
+}
+.btn-icon:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-icon svg { width: 15px; height: 15px; }
+.btn-excel {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.btn-excel:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-excel svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-excel-gap { margin-left: 6px; }
+
+/* === 그리드 === */
+.grid-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.grid-wrap::-webkit-scrollbar { width: 8px; height: 0px; }
+.grid-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.grid-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.grid-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.grid-wrap::-webkit-scrollbar-corner { background: #f1f5f9; }
+.grid-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+.grid-table thead th {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  padding: 3px 4px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 30px;
+}
+.grid-table thead th.group-header {
+  background: #e0e7f0;
+  color: #304a6e;
+  font-weight: 700;
+}
+.grid-table thead tr:nth-child(2) th {
+  background: #eef0f4;
+  top: 30px;
+  z-index: 9;
+}
+.grid-table tbody td {
+  height: 26px;
+  padding: 1px 4px;
+  font-size: 12px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grid-table tbody td input:not([type="checkbox"]),
+.grid-table tbody td select {
+  height: 22px;
+  width: 100%;
+  font-size: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: inherit;
+}
+.grid-table tbody td input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+}
+.grid-table thead th input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+}
+.tc { text-align: center; }
+.tl { text-align: left; }
+.tr { text-align: right; }
+.grid-table tbody tr:hover { background: #eff6ff; }
+.grid-table tbody tr.selected { background: #dbeafe; }
+
+/* === 가로 스크롤 === */
+.h-scroll-wrap {
+  height: 12px;
+  border-top: 1px solid #e5e7eb;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+.h-scroll-wrap::-webkit-scrollbar { height: 8px; }
+.h-scroll-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.h-scroll-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.h-scroll-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.h-scroll-inner { height: 1px; }
+
+/* === 페이징 === */
+.grid-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+  padding: 5px 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.pagination button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.pagination button:hover { background: #f1f5f9; }
+.pagination button.active { background: #4b5563; color: #fff; }
+.page-size-wrap {
+  margin-left: 10px;
+}
+.page-size-wrap select {
+  height: 28px;
+  min-width: 64px;
+  padding: 0 20px 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+}
+.row-count {
+  position: absolute;
+  right: 12px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* === 모달 공통 === */
+.modal-bg {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-bg.show { display: flex; }
+.modal {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #304a6e;
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px 6px 0 0;
+  cursor: move;
+  user-select: none;
+}
+.modal-header .close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid #ddd;
+}
+
+/* === 업무규칙 모달 === */
+.rule-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #304a6e;
+  margin-bottom: 6px;
+}
+.modal-body table.rule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+.modal-body table.rule-table th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+.modal-body table.rule-table td {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #111827;
+}
+.modal-body ol {
+  padding-left: 18px;
+}
+.modal-body ol li {
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+.btn-modal-close {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  padding: 0 18px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #374151;
+  font-family: inherit;
+}
+.btn-modal-close:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+
+/* === 등록/수정 팝업 폼 === */
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.form-table th {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: right;
+  padding: 6px 12px 6px 6px;
+  white-space: nowrap;
+  border: 1px solid #e5e7eb;
+  width: 100px;
+}
+.form-table td {
+  background: #fff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.form-table td.empty-th {
+  background: #f3f4f6;
+}
+.form-table td.empty-td {
+  background: #fff;
+}
+.form-table input:not([type="checkbox"]),
+.form-table select,
+.form-table textarea {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.form-table input:focus,
+.form-table select:focus,
+.form-table textarea:focus {
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+  outline: none;
+}
+.form-table input[readonly] { background: #f3f4f6; }
+.form-table textarea {
+  height: 60px;
+  resize: vertical;
+  padding: 6px 8px;
+}
+.required { color: #e74c3c; font-weight: bold; }
+.btn-primary {
+  background: #304a6e;
+  border: 1px solid #304a6e;
+  color: #fff;
+  padding: 0 18px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary:hover { background: #263858; border-color: #263858; }
+.btn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+  padding: 0 18px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+
+/* === 검색 팝업 필드 === */
+.popup-field-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.popup-field-wrap input {
+  flex: 1;
+}
+.popup-field-wrap button {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0;
+}
+.popup-field-wrap button:hover { border-color: #9ca3af; background: #f9fafb; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <!-- 헤더 -->
+  <div class="page-header">
+    <span class="page-title">품목 [MDPD01] <span class="arrow">&#8744;</span></span>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" style="margin-left:auto" onclick="openRule()">업무규칙</button>
+  </div>
+
+  <!-- 검색 영역 -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col>
+      </colgroup>
+      <tr>
+        <th>사업장</th>
+        <td><select id="sBizSeq"><option value="">선택</option><option value="1000" selected>본사</option></select></td>
+        <th>품목번호</th>
+        <td><input type="text" id="sProdNo"></td>
+        <th>품목명</th>
+        <td><input type="text" id="sProdNm"></td>
+        <th>규격</th>
+        <td><input type="text" id="sSpec"></td>
+        <th>품목분류</th>
+        <td><select id="sProdClsCd"><option value="">선택</option><option value="RAW">원자재</option><option value="SUB">부자재</option><option value="PRD">상품</option></select></td>
+      </tr>
+      <tr>
+        <th>대분류</th>
+        <td><select id="sLrgCls"><option value="">선택</option><option value="FOOD">식품</option><option value="PKG">포장재</option><option value="ETC">잡화</option></select></td>
+        <th>중분류</th>
+        <td><select id="sMidCls"><option value="">선택</option><option value="BEV">음료</option><option value="DAIRY">유제품</option><option value="CUP">컵류</option><option value="CONS">소모품</option><option value="CONT">용기</option></select></td>
+        <th>소분류</th>
+        <td><select id="sSmlCls"><option value="">선택</option><option value="COFFEE">커피</option><option value="SYRUP">시럽</option><option value="CHOCO">초콜릿</option><option value="MILK">우유</option><option value="SAUCE">소스</option><option value="PCUP">종이컵</option><option value="STRAW">빨대</option><option value="LID">리드</option><option value="TMBLR">텀블러</option></select></td>
+        <th>사용여부</th>
+        <td><select id="sUseYn"><option value="">선택</option><option value="Y">사용</option><option value="N">미사용</option></select></td>
+        <td class="empty-label"></td>
+        <td class="empty-val"></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 그리드 패널 -->
+  <div class="panel">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn-icon" title="등록" onclick="openRegPopup('insert')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </button>
+        <button class="btn-icon" title="수정" onclick="openRegPopup('update')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn-icon" title="삭제" onclick="doDelete()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        </button>
+        <button class="btn-icon" title="복사" onclick="openRegPopup('copy')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+        <button class="btn-excel btn-excel-gap" title="엑셀등록" onclick="doExcelUpload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          엑셀등록
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn-excel" title="엑셀다운로드" onclick="doExcelDownload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          엑셀다운로드
+        </button>
+      </div>
+    </div>
+    <div class="grid-wrap" id="gridWrap">
+      <table class="grid-table" id="gridTable">
+        <thead>
+          <tr>
+            <th rowspan="2" style="width:40px">No.</th>
+            <th rowspan="2" style="width:35px"><input type="checkbox" id="chkAll" onclick="toggleAll(this)"></th>
+            <th rowspan="2" style="width:70px">사업장</th>
+            <th rowspan="2" style="width:110px">품목번호</th>
+            <th rowspan="2" style="width:160px">품목명</th>
+            <th rowspan="2" style="width:120px">규격</th>
+            <th rowspan="2" style="width:45px">단위</th>
+            <th rowspan="2" style="width:70px">품목분류</th>
+            <th rowspan="2" style="width:60px">대분류</th>
+            <th rowspan="2" style="width:60px">중분류</th>
+            <th rowspan="2" style="width:60px">소분류</th>
+            <th rowspan="2" style="width:80px">임박기준일수</th>
+            <th rowspan="2" style="width:80px">유효기준일수</th>
+            <th rowspan="2" style="width:55px">중량</th>
+            <th rowspan="2" style="width:55px">입수량</th>
+            <th rowspan="2" style="width:120px">상품식별코드</th>
+            <th rowspan="2" style="width:100px">물류식별코드</th>
+            <th rowspan="2" style="width:70px">원산지</th>
+            <th rowspan="2" style="width:75px">브랜드</th>
+            <th rowspan="2" style="width:60px">사용여부</th>
+            <th rowspan="2" style="width:65px">묶음수량</th>
+            <th rowspan="2" style="width:75px">묶음단위명</th>
+            <th rowspan="2" style="width:65px">단포수량</th>
+            <th rowspan="2" style="width:45px">배면</th>
+            <th rowspan="2" style="width:45px">배단</th>
+            <th rowspan="2" style="width:45px">가로</th>
+            <th rowspan="2" style="width:45px">세로</th>
+            <th rowspan="2" style="width:45px">높이</th>
+            <th colspan="2" class="group-header">품목</th>
+            <th colspan="2" class="group-header">파렛트</th>
+            <th rowspan="2" style="width:120px">비고</th>
+            <th rowspan="2" style="width:130px">변경일시</th>
+          </tr>
+          <tr>
+            <th style="width:90px">SKU</th>
+            <th style="width:65px">라벨</th>
+            <th style="width:80px">SKU</th>
+            <th style="width:65px">라벨</th>
+          </tr>
+        </thead>
+        <tbody id="gridBody"></tbody>
+      </table>
+    </div>
+    <div class="h-scroll-wrap" id="hScrollWrap">
+      <div class="h-scroll-inner" id="hScrollInner"></div>
+    </div>
+    <div class="grid-footer">
+      <div class="pagination" id="pagination"></div>
+      <div class="page-size-wrap">
+        <select id="pageSize" onchange="changePageSize()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+      </div>
+      <div class="row-count" id="rowCount"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 업무규칙 팝업 -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" onmousedown="startDrag(event, 'ruleModal')">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeRule()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table class="rule-table">
+        <tr><th>메뉴그룹명</th><td>기준정보</td><th>메뉴그룹코드</th><td>MD8000</td></tr>
+        <tr><th>메뉴명</th><td>품목</td><th>메뉴코드</th><td>MDPD01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">그리드 1개</td></tr>
+        <tr><th>목적</th><td colspan="3">품목 기준정보 등록·수정·조회</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol>
+        <li>사용여부는 사용/미사용 badge로 표시</li>
+        <li>복사 버튼은 선택된 행 1건을 기반으로 신규 품목 등록 팝업 오픈</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeRule()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 품목 등록/수정 팝업 -->
+<div class="modal-bg" id="regModal">
+  <div class="modal" style="width:800px">
+    <div class="modal-header" onmousedown="startDrag(event, 'regModal')">
+      <span id="regTitle">품목 등록 [MDPD01P01]</span>
+      <button class="close-btn" onclick="closeReg()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <table class="form-table">
+        <colgroup>
+          <col style="width:100px"><col><col style="width:100px"><col><col style="width:100px"><col>
+        </colgroup>
+        <tr>
+          <th>사업장 <span class="required">*</span></th>
+          <td><select id="fBizSeq"><option value="">선택</option><option value="1000">본사</option></select></td>
+          <th>품목번호</th>
+          <td><input type="text" id="fProdNo" readonly></td>
+          <th>품목분류 <span class="required">*</span></th>
+          <td><select id="fProdClsCd"><option value="">선택</option><option value="RAW">원자재</option><option value="SUB">부자재</option><option value="PRD">상품</option></select></td>
+        </tr>
+        <tr>
+          <th>품목명 <span class="required">*</span></th>
+          <td><input type="text" id="fProdNm"></td>
+          <th>규격</th>
+          <td><input type="text" id="fSpec"></td>
+          <th>단위</th>
+          <td><select id="fUnit"><option value="">선택</option><option value="EA">EA</option><option value="BOX">BOX</option><option value="KG">KG</option></select></td>
+        </tr>
+        <tr>
+          <th>대분류</th>
+          <td><select id="fLrgCls"><option value="">선택</option><option value="FOOD">식품</option><option value="PKG">포장재</option><option value="ETC">잡화</option></select></td>
+          <th>중분류</th>
+          <td><select id="fMidCls"><option value="">선택</option><option value="BEV">음료</option><option value="DAIRY">유제품</option><option value="CUP">컵류</option><option value="CONS">소모품</option><option value="CONT">용기</option></select></td>
+          <th>소분류</th>
+          <td><select id="fSmlCls"><option value="">선택</option><option value="COFFEE">커피</option><option value="SYRUP">시럽</option><option value="CHOCO">초콜릿</option><option value="MILK">우유</option><option value="SAUCE">소스</option><option value="PCUP">종이컵</option><option value="STRAW">빨대</option><option value="LID">리드</option><option value="TMBLR">텀블러</option></select></td>
+        </tr>
+        <tr>
+          <th>임박기준일수</th>
+          <td><input type="number" id="fImminentDays"></td>
+          <th>유효기준일수</th>
+          <td><input type="number" id="fValidDays"></td>
+          <th>중량</th>
+          <td><input type="number" id="fWeight" step="0.1"></td>
+        </tr>
+        <tr>
+          <th>입수량</th>
+          <td><input type="number" id="fPackQty"></td>
+          <th>상품식별코드</th>
+          <td><input type="text" id="fProdIdentCd"></td>
+          <th>물류식별코드</th>
+          <td><input type="text" id="fLogisIdentCd"></td>
+        </tr>
+        <tr>
+          <th>원산지</th>
+          <td><input type="text" id="fOrigin"></td>
+          <th>브랜드</th>
+          <td><input type="text" id="fBrand"></td>
+          <th>사용여부</th>
+          <td><select id="fUseYn"><option value="Y">사용</option><option value="N">미사용</option></select></td>
+        </tr>
+        <tr>
+          <th>묶음수량</th>
+          <td><input type="number" id="fBundleQty"></td>
+          <th>묶음단위명</th>
+          <td><input type="text" id="fBundleUnitNm"></td>
+          <th>단포수량</th>
+          <td><input type="number" id="fSingleQty"></td>
+        </tr>
+        <tr>
+          <th>배면</th>
+          <td><input type="number" id="fPalFace"></td>
+          <th>배단</th>
+          <td><input type="number" id="fPalTier"></td>
+          <th>가로</th>
+          <td><input type="number" id="fWidth"></td>
+        </tr>
+        <tr>
+          <th>세로</th>
+          <td><input type="number" id="fLength"></td>
+          <th>높이</th>
+          <td><input type="number" id="fHeight"></td>
+          <td class="empty-th"></td>
+          <td class="empty-td"></td>
+        </tr>
+        <tr>
+          <th>품목 SKU</th>
+          <td><input type="text" id="fProdSku"></td>
+          <th>품목 라벨</th>
+          <td><input type="text" id="fProdLabel"></td>
+          <td class="empty-th"></td>
+          <td class="empty-td"></td>
+        </tr>
+        <tr>
+          <th>파렛트 SKU</th>
+          <td><input type="text" id="fPltSku"></td>
+          <th>파렛트 라벨</th>
+          <td><input type="text" id="fPltLabel"></td>
+          <td class="empty-th"></td>
+          <td class="empty-td"></td>
+        </tr>
+        <tr>
+          <th>비고</th>
+          <td colspan="5"><textarea id="fRemark"></textarea></td>
+        </tr>
+      </table>
+    </div>
+    <div class="modal-footer" id="regFooter">
+      <button class="btn-primary" id="btnRegSubmit" onclick="doRegSubmit()">등록</button>
+    </div>
+  </div>
+</div>
+
+<!-- 공통 팝업 함수 (데이터 파일 로드 이전 독립 블록) -->
+<script>
+var _cpTargetId = null;
+function openCpPopup(targetId) {
+  _cpTargetId = targetId;
+  window.parent.postMessage({ type: 'OPEN_CP_LAYER' }, '*');
+}
+
+var _pdTargetId = null;
+function openPdPopup(targetId) {
+  _pdTargetId = targetId;
+  window.parent.postMessage({ type: 'OPEN_PD_LAYER' }, '*');
+}
+
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'CP_SELECTED' && _cpTargetId) {
+    var el = document.getElementById(_cpTargetId);
+    if (el) el.value = e.data.cpctNm || '';
+    _cpTargetId = null;
+  }
+  if (e.data && e.data.type === 'PD_SELECTED' && _pdTargetId) {
+    var el = document.getElementById(_pdTargetId);
+    if (el) el.value = e.data.prodNm || '';
+    _pdTargetId = null;
+  }
+});
+</script>
+
+<script src="./mdpd01-data.js"></script>
+<script>
+var productsAll = [];
+var filteredData = [];
+var currentPage = 1;
+var pageSize = 50;
+var selectedIdx = -1;
+var regMode = 'insert';
+
+window.addEventListener('DOMContentLoaded', function() {
+  productsAll = JSON.parse(JSON.stringify(MDPD01_DATA.products));
+  filteredData = productsAll.slice();
+  renderGrid();
+  syncHScroll();
+});
+
+/* === 검색 === */
+function doSearch() {
+  var bizNm = document.getElementById('sBizSeq');
+  var bizVal = bizNm.options[bizNm.selectedIndex] ? bizNm.options[bizNm.selectedIndex].text : '';
+  var prodNo = document.getElementById('sProdNo').value.trim().toLowerCase();
+  var prodNm = document.getElementById('sProdNm').value.trim().toLowerCase();
+  var spec = document.getElementById('sSpec').value.trim().toLowerCase();
+  var prodCls = document.getElementById('sProdClsCd');
+  var prodClsVal = prodCls.options[prodCls.selectedIndex] ? prodCls.options[prodCls.selectedIndex].text : '';
+  var lrgCls = document.getElementById('sLrgCls');
+  var lrgClsVal = lrgCls.options[lrgCls.selectedIndex] ? lrgCls.options[lrgCls.selectedIndex].text : '';
+  var midCls = document.getElementById('sMidCls');
+  var midClsVal = midCls.options[midCls.selectedIndex] ? midCls.options[midCls.selectedIndex].text : '';
+  var smlCls = document.getElementById('sSmlCls');
+  var smlClsVal = smlCls.options[smlCls.selectedIndex] ? smlCls.options[smlCls.selectedIndex].text : '';
+  var useYn = document.getElementById('sUseYn').value;
+
+  filteredData = productsAll.filter(function(r) {
+    if (document.getElementById('sBizSeq').value && r.bizNm !== bizVal) return false;
+    if (prodNo && r.prodNo.toLowerCase().indexOf(prodNo) === -1) return false;
+    if (prodNm && r.prodNm.toLowerCase().indexOf(prodNm) === -1) return false;
+    if (spec && r.spec.toLowerCase().indexOf(spec) === -1) return false;
+    if (document.getElementById('sProdClsCd').value && r.prodClsCd !== prodClsVal) return false;
+    if (document.getElementById('sLrgCls').value && r.lrgClsNm !== lrgClsVal) return false;
+    if (document.getElementById('sMidCls').value && r.midClsNm !== midClsVal) return false;
+    if (document.getElementById('sSmlCls').value && r.smlClsNm !== smlClsVal) return false;
+    if (useYn === 'Y' && r.useYn !== '사용') return false;
+    if (useYn === 'N' && r.useYn !== '미사용') return false;
+    return true;
+  });
+  currentPage = 1;
+  selectedIdx = -1;
+  renderGrid();
+}
+
+function doReset() {
+  document.getElementById('sBizSeq').selectedIndex = 0;
+  document.getElementById('sProdNo').value = '';
+  document.getElementById('sProdNm').value = '';
+  document.getElementById('sSpec').value = '';
+  document.getElementById('sProdClsCd').selectedIndex = 0;
+  document.getElementById('sLrgCls').selectedIndex = 0;
+  document.getElementById('sMidCls').selectedIndex = 0;
+  document.getElementById('sSmlCls').selectedIndex = 0;
+  document.getElementById('sUseYn').selectedIndex = 0;
+  filteredData = productsAll.slice();
+  currentPage = 1;
+  selectedIdx = -1;
+  renderGrid();
+}
+
+/* === 그리드 렌더링 === */
+function renderGrid() {
+  var tbody = document.getElementById('gridBody');
+  var start = (currentPage - 1) * pageSize;
+  var end = Math.min(start + pageSize, filteredData.length);
+  var pageData = filteredData.slice(start, end);
+  var html = '';
+  for (var i = 0; i < pageData.length; i++) {
+    var r = pageData[i];
+    var idx = start + i;
+    var cls = idx === selectedIdx ? ' class="selected"' : '';
+    html += '<tr' + cls + ' onclick="selectRow(' + idx + ')" ondblclick="openRegPopup(\'update\')">';
+    html += '<td class="tc">' + (idx + 1) + '</td>';
+    html += '<td class="tc"><input type="checkbox" data-idx="' + idx + '"></td>';
+    html += '<td class="tl">' + esc(r.bizNm) + '</td>';
+    html += '<td class="tl">' + esc(r.prodNo) + '</td>';
+    html += '<td class="tl">' + esc(r.prodNm) + '</td>';
+    html += '<td class="tl">' + esc(r.spec) + '</td>';
+    html += '<td class="tc">' + esc(r.unit) + '</td>';
+    html += '<td class="tc">' + esc(r.prodClsCd) + '</td>';
+    html += '<td class="tc">' + esc(r.lrgClsNm) + '</td>';
+    html += '<td class="tc">' + esc(r.midClsNm) + '</td>';
+    html += '<td class="tc">' + esc(r.smlClsNm) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.imminentDays) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.validDays) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.weight) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.packQty) + '</td>';
+    html += '<td class="tl">' + esc(r.prodIdentCd) + '</td>';
+    html += '<td class="tl">' + esc(r.logisIdentCd) + '</td>';
+    html += '<td class="tl">' + esc(r.origin) + '</td>';
+    html += '<td class="tl">' + esc(r.brand) + '</td>';
+    html += '<td class="tc">' + esc(r.useYn) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.bundleQty) + '</td>';
+    html += '<td class="tc">' + esc(r.bundleUnitNm) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.singleQty) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.palFace) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.palTier) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.width) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.length) + '</td>';
+    html += '<td class="tr">' + fmtNum(r.height) + '</td>';
+    html += '<td class="tl">' + esc(r.prodSku) + '</td>';
+    html += '<td class="tc">' + esc(r.prodLabel) + '</td>';
+    html += '<td class="tc">' + esc(r.pltSku) + '</td>';
+    html += '<td class="tc">' + esc(r.pltLabel) + '</td>';
+    html += '<td class="tl">' + esc(r.remark) + '</td>';
+    html += '<td class="tl">' + esc(r.modDt) + '</td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+  renderPagination();
+  syncHScroll();
+}
+
+function selectRow(idx) {
+  selectedIdx = idx;
+  renderGrid();
+}
+
+function toggleAll(el) {
+  var cbs = document.querySelectorAll('#gridBody input[type="checkbox"]');
+  for (var i = 0; i < cbs.length; i++) { cbs[i].checked = el.checked; }
+}
+
+function getCheckedIndices() {
+  var cbs = document.querySelectorAll('#gridBody input[type="checkbox"]:checked');
+  var indices = [];
+  for (var i = 0; i < cbs.length; i++) { indices.push(parseInt(cbs[i].getAttribute('data-idx'))); }
+  return indices;
+}
+
+/* === 페이징 === */
+function renderPagination() {
+  var total = filteredData.length;
+  var totalPages = Math.max(1, Math.ceil(total / pageSize));
+  var start = (currentPage - 1) * pageSize;
+  var end = Math.min(start + pageSize, total);
+  var html = '';
+  for (var p = 1; p <= totalPages; p++) {
+    html += '<button' + (p === currentPage ? ' class="active"' : '') + ' onclick="goPage(' + p + ')">' + p + '</button>';
+  }
+  document.getElementById('pagination').innerHTML = html;
+  document.getElementById('rowCount').textContent = total > 0 ? (start + 1) + ' ~ ' + end + ' of ' + total + ' rows' : '0 rows';
+}
+
+function goPage(p) { currentPage = p; renderGrid(); }
+function changePageSize() { pageSize = parseInt(document.getElementById('pageSize').value); currentPage = 1; renderGrid(); }
+
+/* === 가로 스크롤 동기화 === */
+function syncHScroll() {
+  var gridWrap = document.getElementById('gridWrap');
+  var hScrollWrap = document.getElementById('hScrollWrap');
+  var hScrollInner = document.getElementById('hScrollInner');
+  var table = document.getElementById('gridTable');
+  hScrollInner.style.width = table.scrollWidth + 'px';
+  hScrollWrap.onscroll = function() { gridWrap.scrollLeft = hScrollWrap.scrollLeft; };
+  gridWrap.onscroll = function() { hScrollWrap.scrollLeft = gridWrap.scrollLeft; };
+}
+
+/* === 업무규칙 팝업 === */
+function openRule() { centerModal('ruleModal'); document.getElementById('ruleModal').classList.add('show'); }
+function closeRule() { document.getElementById('ruleModal').classList.remove('show'); }
+
+/* === 등록/수정/복사 팝업 === */
+function openRegPopup(mode) {
+  regMode = mode;
+  var titleEl = document.getElementById('regTitle');
+  var footerEl = document.getElementById('regFooter');
+  clearForm();
+
+  if (mode === 'insert') {
+    titleEl.textContent = '품목 등록 [MDPD01P01]';
+    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">등록</button>';
+  } else if (mode === 'update') {
+    if (selectedIdx < 0) { alert('수정할 행을 선택하세요.'); return; }
+    titleEl.textContent = '품목 수정 [MDPD01P01]';
+    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">저장</button><button class="btn" onclick="closeReg()">취소</button>';
+    fillForm(filteredData[selectedIdx]);
+    document.getElementById('fProdNo').readOnly = true;
+  } else if (mode === 'copy') {
+    if (selectedIdx < 0) { alert('복사할 행을 선택하세요.'); return; }
+    titleEl.textContent = '품목 등록 [MDPD01P01]';
+    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">등록</button>';
+    fillForm(filteredData[selectedIdx]);
+    document.getElementById('fProdNo').value = '';
+    document.getElementById('fProdNo').readOnly = true;
+  }
+  centerModal('regModal');
+  document.getElementById('regModal').classList.add('show');
+}
+
+function closeReg() { document.getElementById('regModal').classList.remove('show'); }
+
+function clearForm() {
+  var ids = ['fBizSeq','fProdNo','fProdClsCd','fProdNm','fSpec','fUnit','fLrgCls','fMidCls','fSmlCls',
+    'fImminentDays','fValidDays','fWeight','fPackQty','fProdIdentCd','fLogisIdentCd','fOrigin','fBrand','fUseYn',
+    'fBundleQty','fBundleUnitNm','fSingleQty','fPalFace','fPalTier','fWidth','fLength','fHeight',
+    'fProdSku','fProdLabel','fPltSku','fPltLabel','fRemark'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (!el) continue;
+    if (el.tagName === 'SELECT') { el.selectedIndex = 0; }
+    else { el.value = ''; }
+  }
+  document.getElementById('fProdNo').readOnly = true;
+}
+
+function fillForm(r) {
+  setVal('fBizSeq', r.bizNm === '본사' ? '1000' : '');
+  document.getElementById('fProdNo').value = r.prodNo;
+  setSelByText('fProdClsCd', r.prodClsCd);
+  document.getElementById('fProdNm').value = r.prodNm;
+  document.getElementById('fSpec').value = r.spec;
+  setSelByText('fUnit', r.unit);
+  setSelByText('fLrgCls', r.lrgClsNm);
+  setSelByText('fMidCls', r.midClsNm);
+  setSelByText('fSmlCls', r.smlClsNm);
+  document.getElementById('fImminentDays').value = r.imminentDays;
+  document.getElementById('fValidDays').value = r.validDays;
+  document.getElementById('fWeight').value = r.weight;
+  document.getElementById('fPackQty').value = r.packQty;
+  document.getElementById('fProdIdentCd').value = r.prodIdentCd;
+  document.getElementById('fLogisIdentCd').value = r.logisIdentCd;
+  document.getElementById('fOrigin').value = r.origin;
+  document.getElementById('fBrand').value = r.brand;
+  document.getElementById('fUseYn').value = r.useYn === '사용' ? 'Y' : 'N';
+  document.getElementById('fBundleQty').value = r.bundleQty;
+  document.getElementById('fBundleUnitNm').value = r.bundleUnitNm;
+  document.getElementById('fSingleQty').value = r.singleQty;
+  document.getElementById('fPalFace').value = r.palFace;
+  document.getElementById('fPalTier').value = r.palTier;
+  document.getElementById('fWidth').value = r.width;
+  document.getElementById('fLength').value = r.length;
+  document.getElementById('fHeight').value = r.height;
+  document.getElementById('fProdSku').value = r.prodSku;
+  document.getElementById('fProdLabel').value = r.prodLabel;
+  document.getElementById('fPltSku').value = r.pltSku;
+  document.getElementById('fPltLabel').value = r.pltLabel;
+  document.getElementById('fRemark').value = r.remark;
+}
+
+function setVal(id, val) { document.getElementById(id).value = val; }
+function setSelByText(id, txt) {
+  var sel = document.getElementById(id);
+  for (var i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].text === txt) { sel.selectedIndex = i; return; }
+  }
+  sel.selectedIndex = 0;
+}
+
+function doRegSubmit() {
+  var bizSel = document.getElementById('fBizSeq');
+  var bizNm = bizSel.options[bizSel.selectedIndex] ? bizSel.options[bizSel.selectedIndex].text : '';
+  var prodClsSel = document.getElementById('fProdClsCd');
+  var prodClsTxt = prodClsSel.options[prodClsSel.selectedIndex] ? prodClsSel.options[prodClsSel.selectedIndex].text : '';
+  var unitSel = document.getElementById('fUnit');
+  var unitTxt = unitSel.options[unitSel.selectedIndex] ? unitSel.options[unitSel.selectedIndex].text : '';
+  var lrgSel = document.getElementById('fLrgCls');
+  var lrgTxt = lrgSel.options[lrgSel.selectedIndex] ? lrgSel.options[lrgSel.selectedIndex].text : '';
+  var midSel = document.getElementById('fMidCls');
+  var midTxt = midSel.options[midSel.selectedIndex] ? midSel.options[midSel.selectedIndex].text : '';
+  var smlSel = document.getElementById('fSmlCls');
+  var smlTxt = smlSel.options[smlSel.selectedIndex] ? smlSel.options[smlSel.selectedIndex].text : '';
+  var useYnSel = document.getElementById('fUseYn');
+  var useYnTxt = useYnSel.value === 'Y' ? '사용' : '미사용';
+
+  if (!document.getElementById('fBizSeq').value) { alert('사업장을 선택하세요.'); return; }
+  if (!document.getElementById('fProdNm').value.trim()) { alert('품목명을 입력하세요.'); return; }
+  if (!document.getElementById('fProdClsCd').value) { alert('품목분류를 선택하세요.'); return; }
+
+  var now = new Date();
+  var dtStr = now.getFullYear() + '-' + pad2(now.getMonth()+1) + '-' + pad2(now.getDate()) + ' ' + pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+
+  var obj = {
+    bizNm: bizNm,
+    prodNo: document.getElementById('fProdNo').value || ('PD-' + now.getFullYear() + '-' + pad4(productsAll.length + 1)),
+    prodNm: document.getElementById('fProdNm').value,
+    spec: document.getElementById('fSpec').value,
+    unit: unitTxt || 'EA',
+    prodClsCd: prodClsTxt,
+    lrgClsNm: lrgTxt,
+    midClsNm: midTxt,
+    smlClsNm: smlTxt,
+    imminentDays: parseInt(document.getElementById('fImminentDays').value) || 0,
+    validDays: parseInt(document.getElementById('fValidDays').value) || 0,
+    weight: parseFloat(document.getElementById('fWeight').value) || 0,
+    packQty: parseInt(document.getElementById('fPackQty').value) || 0,
+    prodIdentCd: document.getElementById('fProdIdentCd').value,
+    logisIdentCd: document.getElementById('fLogisIdentCd').value,
+    origin: document.getElementById('fOrigin').value,
+    brand: document.getElementById('fBrand').value,
+    useYn: useYnTxt,
+    bundleQty: parseInt(document.getElementById('fBundleQty').value) || 0,
+    bundleUnitNm: document.getElementById('fBundleUnitNm').value,
+    singleQty: parseInt(document.getElementById('fSingleQty').value) || 0,
+    palFace: parseInt(document.getElementById('fPalFace').value) || 0,
+    palTier: parseInt(document.getElementById('fPalTier').value) || 0,
+    width: parseInt(document.getElementById('fWidth').value) || 0,
+    length: parseInt(document.getElementById('fLength').value) || 0,
+    height: parseInt(document.getElementById('fHeight').value) || 0,
+    prodSku: document.getElementById('fProdSku').value,
+    prodLabel: document.getElementById('fProdLabel').value,
+    pltSku: document.getElementById('fPltSku').value,
+    pltLabel: document.getElementById('fPltLabel').value,
+    remark: document.getElementById('fRemark').value,
+    modDt: dtStr
+  };
+
+  if (regMode === 'update') {
+    productsAll[selectedIdx] = obj;
+    alert('수정되었습니다.');
+  } else {
+    productsAll.push(obj);
+    alert('등록되었습니다.');
+  }
+  filteredData = productsAll.slice();
+  renderGrid();
+  closeReg();
+}
+
+/* === 삭제 === */
+function doDelete() {
+  var indices = getCheckedIndices();
+  if (indices.length === 0) { alert('삭제할 행을 선택하세요.'); return; }
+  if (!confirm(indices.length + '건을 삭제하시겠습니까?')) return;
+  indices.sort(function(a,b) { return b - a; });
+  for (var i = 0; i < indices.length; i++) { productsAll.splice(indices[i], 1); }
+  filteredData = productsAll.slice();
+  selectedIdx = -1;
+  document.getElementById('chkAll').checked = false;
+  renderGrid();
+  alert('삭제되었습니다.');
+}
+
+/* === 엑셀 === */
+function doExcelUpload() { alert('엑셀등록 기능이 실행됩니다.'); }
+function doExcelDownload() { alert('엑셀다운로드 기능이 실행됩니다.'); }
+
+/* === 모달 드래그 === */
+var dragState = { active: false, modalId: '', startX: 0, startY: 0, origX: 0, origY: 0 };
+
+function centerModal(id) {
+  var bg = document.getElementById(id);
+  var modal = bg.querySelector('.modal');
+  var w = modal.offsetWidth || parseInt(modal.style.width) || 520;
+  var h = modal.offsetHeight || 400;
+  modal.style.left = Math.max(0, (window.innerWidth - w) / 2) + 'px';
+  modal.style.top = Math.max(0, (window.innerHeight - h) / 2) + 'px';
+}
+
+function startDrag(e, id) {
+  if (e.target.closest('.close-btn')) return;
+  var bg = document.getElementById(id);
+  var modal = bg.querySelector('.modal');
+  dragState.active = true;
+  dragState.modalId = id;
+  dragState.startX = e.clientX;
+  dragState.startY = e.clientY;
+  dragState.origX = parseInt(modal.style.left) || 0;
+  dragState.origY = parseInt(modal.style.top) || 0;
+  e.preventDefault();
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (!dragState.active) return;
+  var bg = document.getElementById(dragState.modalId);
+  var modal = bg.querySelector('.modal');
+  modal.style.left = (dragState.origX + e.clientX - dragState.startX) + 'px';
+  modal.style.top = (dragState.origY + e.clientY - dragState.startY) + 'px';
+});
+
+document.addEventListener('mouseup', function() { dragState.active = false; });
+
+/* === 유틸 === */
+function esc(v) { return v == null ? '' : String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtNum(v) { return v == null || v === '' ? '' : String(v); }
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function pad4(n) { var s = '0000' + n; return s.substring(s.length - 4); }
+
+window.addEventListener('resize', function() { syncHScroll(); });
+</script>
+</body>
+</html>
