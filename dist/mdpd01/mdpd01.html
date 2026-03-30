@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>품목 [MDPD01]</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +27,6 @@ body {
   align-items: center;
   padding: 4px 2px 6px 2px;
   gap: 6px;
-  flex-shrink: 0;
 }
 .page-title {
   font-size: 15px;
@@ -67,12 +65,13 @@ body {
   flex-shrink: 0;
   margin-top: -2px;
 }
-.search-area table {
+.search-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
-.search-area th {
+.search-table col.lbl { width: 82px; }
+.search-table th {
   background: #f3f4f6;
   color: #374151;
   font-weight: 600;
@@ -81,22 +80,17 @@ body {
   padding: 6px 12px 6px 6px;
   white-space: nowrap;
   border: 1px solid #e5e7eb;
-  width: 82px;
 }
-.search-area td {
-  background: #fff;
+.search-table td {
   padding: 4px 10px;
   border: 1px solid #e5e7eb;
   height: 36px;
+  background: #fff;
 }
-.search-area td.empty-label {
-  background: #f3f4f6;
-}
-.search-area td.empty-val {
-  background: #ffffff;
-}
-.search-area input:not([type="checkbox"]),
-.search-area select {
+.search-table td.empty-lbl { background: #f3f4f6; }
+.search-table td.empty-val { background: #fff; }
+.search-table input,
+.search-table select {
   width: 100%;
   height: 26px;
   font-size: 13px;
@@ -107,11 +101,20 @@ body {
   padding: 0 8px;
   font-family: inherit;
 }
-.search-area input:focus,
-.search-area select:focus {
+.search-table input:focus,
+.search-table select:focus {
+  outline: none;
   border-color: #7aa2c8;
   box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
-  outline: none;
+}
+
+/* === 메인 영역 === */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* === 패널 === */
@@ -158,7 +161,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #374151;
-  font-size: 12px;
+  font-family: inherit;
 }
 .btn-icon:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
 .btn-icon svg { width: 15px; height: 15px; }
@@ -180,7 +183,6 @@ body {
 }
 .btn-excel:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
 .btn-excel svg { width: 15px; height: 15px; flex-shrink: 0; }
-.btn-excel-gap { margin-left: 6px; }
 
 /* === 그리드 === */
 .grid-wrap {
@@ -194,6 +196,7 @@ body {
 .grid-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 .grid-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 .grid-wrap::-webkit-scrollbar-corner { background: #f1f5f9; }
+
 .grid-table {
   width: max-content;
   min-width: 100%;
@@ -201,63 +204,45 @@ body {
 }
 .grid-table thead th {
   background: #f3f4f6;
-  color: #374151;
-  font-weight: 600;
-  font-size: 12px;
-  text-align: center;
   border: 1px solid #e5e7eb;
   padding: 3px 4px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  text-align: center;
   white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 10;
   height: 30px;
 }
-.grid-table thead th.group-header {
+.grid-table thead tr:nth-child(2) th {
+  top: 30px;
+  z-index: 9;
+  background: #eef0f4;
+}
+.grid-table thead th.group-hd {
   background: #e0e7f0;
   color: #304a6e;
   font-weight: 700;
 }
-.grid-table thead tr:nth-child(2) th {
-  background: #eef0f4;
-  top: 30px;
-  z-index: 9;
-}
 .grid-table tbody td {
-  height: 26px;
+  border: 1px solid #e5e7eb;
   padding: 1px 4px;
   font-size: 12px;
   color: #111827;
-  border: 1px solid #e5e7eb;
+  height: 26px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.grid-table tbody td input:not([type="checkbox"]),
-.grid-table tbody td select {
-  height: 22px;
-  width: 100%;
-  font-size: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 3px;
-  padding: 0 4px;
-  font-family: inherit;
-}
-.grid-table tbody td input[type="checkbox"] {
-  width: 12px;
-  height: 12px;
-}
-.grid-table thead th input[type="checkbox"] {
-  width: 12px;
-  height: 12px;
-}
+.grid-table tbody tr:hover td { background: #eff6ff; }
+.grid-table tbody tr.selected td { background: #dbeafe; }
 .tc { text-align: center; }
-.tl { text-align: left; }
 .tr { text-align: right; }
-.grid-table tbody tr:hover { background: #eff6ff; }
-.grid-table tbody tr.selected { background: #dbeafe; }
+.tl { text-align: left; }
 
-/* === 가로 스크롤 === */
+/* === 가로 스크롤 바 === */
 .h-scroll-wrap {
   height: 12px;
   border-top: 1px solid #e5e7eb;
@@ -271,16 +256,16 @@ body {
 .h-scroll-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 .h-scroll-inner { height: 1px; }
 
-/* === 페이징 === */
+/* === 하단 페이징 === */
 .grid-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
   height: 40px;
   background: #fafafa;
   border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px 10px;
-  flex-shrink: 0;
   position: relative;
 }
 .pagination {
@@ -293,12 +278,11 @@ body {
   height: 30px;
   border-radius: 50%;
   border: none;
-  background: transparent;
+  background: none;
   font-size: 13px;
-  color: #374151;
   font-weight: 600;
+  color: #374151;
   cursor: pointer;
-  font-family: inherit;
 }
 .pagination button:hover { background: #f1f5f9; }
 .pagination button.active { background: #4b5563; color: #fff; }
@@ -313,6 +297,8 @@ body {
   border-radius: 4px;
   font-size: 12px;
   font-family: inherit;
+  background: #fff;
+  cursor: pointer;
 }
 .row-count {
   position: absolute;
@@ -325,13 +311,14 @@ body {
 .modal-bg {
   display: none;
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.45);
   z-index: 1000;
   align-items: center;
   justify-content: center;
 }
-.modal-bg.show { display: flex; }
+.modal-bg.open { display: flex; }
 .modal {
   position: absolute;
   background: #fff;
@@ -340,15 +327,15 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 .modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background: #304a6e;
   color: #fff;
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 600;
   border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: move;
   user-select: none;
 }
@@ -359,57 +346,20 @@ body {
   font-size: 20px;
   cursor: pointer;
   line-height: 1;
+  padding: 0;
 }
 .modal-body {
   padding: 16px 18px;
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: calc(90vh - 100px);
 }
 .modal-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #ddd;
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-top: 1px solid #ddd;
-}
-
-/* === 업무규칙 모달 === */
-.rule-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #304a6e;
-  margin-bottom: 6px;
-}
-.modal-body table.rule-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 12px;
-}
-.modal-body table.rule-table th {
-  background: #f3f4f6;
-  text-align: left;
-  padding: 6px 10px;
-  border: 1px solid #e5e7eb;
-  font-size: 12px;
-  font-weight: 600;
-  color: #374151;
-  white-space: nowrap;
-}
-.modal-body table.rule-table td {
-  padding: 6px 10px;
-  border: 1px solid #e5e7eb;
-  font-size: 12px;
-  color: #111827;
-}
-.modal-body ol {
-  padding-left: 18px;
-}
-.modal-body ol li {
-  font-size: 12px;
-  color: #374151;
-  line-height: 1.6;
-  margin-bottom: 6px;
 }
 .btn-modal-close {
   border: 1px solid #d1d5db;
@@ -424,8 +374,55 @@ body {
   font-family: inherit;
 }
 .btn-modal-close:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-primary {
+  background: #304a6e;
+  border: 1px solid #304a6e;
+  color: #fff;
+  padding: 0 18px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary:hover { background: #263858; border-color: #263858; }
+
+/* === 업무규칙 모달 === */
+.rule-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #304a6e;
+  margin-bottom: 6px;
+}
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+.modal-body table th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+.modal-body table td {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #111827;
+}
+.modal-body ol { padding-left: 18px; }
+.modal-body ol li { font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 6px; }
 
 /* === 등록/수정 팝업 폼 === */
+.form-wrap {
+  padding: 12px 14px;
+}
 .form-table {
   width: 100%;
   border-collapse: collapse;
@@ -440,7 +437,7 @@ body {
   padding: 6px 12px 6px 6px;
   white-space: nowrap;
   border: 1px solid #e5e7eb;
-  width: 100px;
+  width: 90px;
 }
 .form-table td {
   background: #fff;
@@ -448,12 +445,8 @@ body {
   border: 1px solid #e5e7eb;
   height: 36px;
 }
-.form-table td.empty-th {
-  background: #f3f4f6;
-}
-.form-table td.empty-td {
-  background: #fff;
-}
+.form-table td.empty-lbl { background: #f3f4f6; }
+.form-table td.empty-val { background: #fff; }
 .form-table input:not([type="checkbox"]),
 .form-table select,
 .form-table textarea {
@@ -467,78 +460,34 @@ body {
   padding: 0 8px;
   font-family: inherit;
 }
-.form-table input:focus,
-.form-table select:focus,
-.form-table textarea:focus {
-  border-color: #7aa2c8;
-  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
-  outline: none;
-}
-.form-table input[readonly] { background: #f3f4f6; }
 .form-table textarea {
   height: 60px;
   resize: vertical;
-  padding: 6px 8px;
+  padding: 4px 8px;
 }
-.required { color: #e74c3c; font-weight: bold; }
-.btn-primary {
-  background: #304a6e;
-  border: 1px solid #304a6e;
-  color: #fff;
-  padding: 0 18px;
-  height: 30px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
+.form-table input:focus,
+.form-table select:focus,
+.form-table textarea:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
 }
-.btn-primary:hover { background: #263858; border-color: #263858; }
-.btn {
-  border: 1px solid #d1d5db;
-  background: #fff;
-  color: #374151;
-  padding: 0 18px;
-  height: 30px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
+.form-table input[readonly],
+.form-table input.readonly {
+  background: #f3f4f6;
+  color: #6b7280;
 }
-.btn:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
-
-/* === 검색 팝업 필드 === */
-.popup-field-wrap {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.popup-field-wrap input {
-  flex: 1;
-}
-.popup-field-wrap button {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  padding: 0;
-}
-.popup-field-wrap button:hover { border-color: #9ca3af; background: #f9fafb; }
+.req { color: #e74c3c; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="page-wrap">
+
   <!-- 헤더 -->
   <div class="page-header">
-    <span class="page-title">품목 [MDPD01] <span class="arrow">&#8744;</span></span>
+    <div class="page-title">
+      품목 [MDPD01] <span class="arrow">∨</span>
+    </div>
     <button class="btn-search" onclick="doSearch()">검색</button>
     <button class="btn-search" onclick="doReset()">초기화</button>
     <button class="btn-search" style="margin-left:auto" onclick="openRule()">업무규칙</button>
@@ -546,125 +495,207 @@ body {
 
   <!-- 검색 영역 -->
   <div class="search-area">
-    <table>
+    <table class="search-table">
       <colgroup>
-        <col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col><col style="width:82px"><col>
+        <col class="lbl"><col><col class="lbl"><col><col class="lbl"><col>
+        <col class="lbl"><col><col class="lbl"><col>
       </colgroup>
-      <tr>
-        <th>사업장</th>
-        <td><select id="sBizSeq"><option value="">선택</option><option value="1000" selected>본사</option></select></td>
-        <th>품목번호</th>
-        <td><input type="text" id="sProdNo"></td>
-        <th>품목명</th>
-        <td><input type="text" id="sProdNm"></td>
-        <th>규격</th>
-        <td><input type="text" id="sSpec"></td>
-        <th>품목분류</th>
-        <td><select id="sProdClsCd"><option value="">선택</option><option value="RAW">원자재</option><option value="SUB">부자재</option><option value="PRD">상품</option></select></td>
-      </tr>
-      <tr>
-        <th>대분류</th>
-        <td><select id="sLrgCls"><option value="">선택</option><option value="FOOD">식품</option><option value="PKG">포장재</option><option value="ETC">잡화</option></select></td>
-        <th>중분류</th>
-        <td><select id="sMidCls"><option value="">선택</option><option value="BEV">음료</option><option value="DAIRY">유제품</option><option value="CUP">컵류</option><option value="CONS">소모품</option><option value="CONT">용기</option></select></td>
-        <th>소분류</th>
-        <td><select id="sSmlCls"><option value="">선택</option><option value="COFFEE">커피</option><option value="SYRUP">시럽</option><option value="CHOCO">초콜릿</option><option value="MILK">우유</option><option value="SAUCE">소스</option><option value="PCUP">종이컵</option><option value="STRAW">빨대</option><option value="LID">리드</option><option value="TMBLR">텀블러</option></select></td>
-        <th>사용여부</th>
-        <td><select id="sUseYn"><option value="">선택</option><option value="Y">사용</option><option value="N">미사용</option></select></td>
-        <td class="empty-label"></td>
-        <td class="empty-val"></td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>사업장</th>
+          <td><select id="sSite"><option value="">전체</option><option value="1">본사물류센터</option><option value="2">부산물류센터</option></select></td>
+          <th>품목번호</th>
+          <td><input type="text" id="sProdNo"></td>
+          <th>품목명</th>
+          <td><input type="text" id="sProdNm"></td>
+          <th>규격</th>
+          <td><input type="text" id="sSpec"></td>
+          <th>품목분류</th>
+          <td><select id="sProdCls"><option value="">전체</option><option value="1">음료</option><option value="2">농산물</option><option value="3">축산물</option><option value="4">유제품</option><option value="5">조미료</option><option value="6">냉동식품</option><option value="7">발효식품</option><option value="8">두류</option><option value="9">곡물</option></select></td>
+        </tr>
+        <tr>
+          <th>대분류</th>
+          <td><select id="sLg"><option value="">전체</option><option value="1">식품</option><option value="2">생활용품</option></select></td>
+          <th>중분류</th>
+          <td><select id="sMd"><option value="">전체</option><option value="1">음료류</option><option value="2">신선식품</option><option value="3">가공식품</option></select></td>
+          <th>소분류</th>
+          <td><select id="sSm"><option value="">전체</option><option value="1">과일음료</option><option value="2">과일</option><option value="3">채소</option><option value="4">란류</option><option value="5">우유</option><option value="6">두부</option><option value="7">오일류</option><option value="8">곡류</option><option value="9">냉동과일</option><option value="10">김치류</option></select></td>
+          <th>사용여부</th>
+          <td><select id="sUseYn"><option value="">전체</option><option value="사용">사용</option><option value="미사용">미사용</option></select></td>
+          <td class="empty-lbl"></td>
+          <td class="empty-val"></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
-  <!-- 그리드 패널 -->
-  <div class="panel">
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <button class="btn-icon" title="등록" onclick="openRegPopup('insert')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-        </button>
-        <button class="btn-icon" title="수정" onclick="openRegPopup('update')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="btn-icon" title="삭제" onclick="doDelete()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-        </button>
-        <button class="btn-icon" title="복사" onclick="openRegPopup('copy')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        </button>
-        <button class="btn-excel btn-excel-gap" title="엑셀등록" onclick="doExcelUpload()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          엑셀등록
-        </button>
+  <!-- 메인 영역 -->
+  <div class="main-area">
+    <div class="panel">
+      <!-- 툴바 -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <!-- 추가 -->
+          <button class="btn-icon" title="추가" onclick="doAdd()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </button>
+          <!-- 수정 -->
+          <button class="btn-icon" title="수정" onclick="doEdit()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <!-- 삭제 -->
+          <button class="btn-icon" title="삭제" onclick="doDelete()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+              <line x1="10" y1="11" x2="10" y2="17"/>
+              <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+          </button>
+          <!-- 복사 -->
+          <button class="btn-icon" title="복사" onclick="doCopy()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+          </button>
+          <!-- 엑셀등록 -->
+          <button class="btn-excel" title="엑셀등록" onclick="doExcelUpload()" style="margin-left:6px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            엑셀등록
+          </button>
+        </div>
+        <div class="toolbar-right">
+          <!-- 엑셀다운로드 -->
+          <button class="btn-excel" title="엑셀다운로드" onclick="doExcelDownload()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <polyline points="9 15 12 18 15 15"/>
+            </svg>
+            엑셀다운로드
+          </button>
+        </div>
       </div>
-      <div class="toolbar-right">
-        <button class="btn-excel" title="엑셀다운로드" onclick="doExcelDownload()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
-          엑셀다운로드
-        </button>
+
+      <!-- 그리드 -->
+      <div class="grid-wrap" id="gridWrap">
+        <table class="grid-table" id="gridTable">
+          <colgroup>
+            <col style="width:30px">   <!-- No. -->
+            <col style="width:26px">   <!-- checkbox -->
+            <col style="width:90px">   <!-- 사업장 -->
+            <col style="width:104px">  <!-- 품목번호 -->
+            <col>                      <!-- 품목명 -->
+            <col style="width:100px">  <!-- 규격 -->
+            <col style="width:44px">   <!-- 단위 -->
+            <col style="width:64px">   <!-- 품목분류 -->
+            <col style="width:56px">   <!-- 대분류 -->
+            <col style="width:56px">   <!-- 중분류 -->
+            <col style="width:56px">   <!-- 소분류 -->
+            <col style="width:88px">   <!-- 임박기준일수 -->
+            <col style="width:88px">   <!-- 유효기준일수 -->
+            <col style="width:60px">   <!-- 중량 -->
+            <col style="width:56px">   <!-- 입수량 -->
+            <col style="width:90px">   <!-- 상품식별코드 -->
+            <col style="width:90px">   <!-- 물류식별코드 -->
+            <col style="width:56px">   <!-- 원산지 -->
+            <col style="width:64px">   <!-- 브랜드 -->
+            <col style="width:64px">   <!-- 사용여부 -->
+            <col style="width:64px">   <!-- 묶음수량 -->
+            <col style="width:76px">   <!-- 묶음단위명 -->
+            <col style="width:64px">   <!-- 단포수량 -->
+            <col style="width:44px">   <!-- 배면 -->
+            <col style="width:44px">   <!-- 배단 -->
+            <col style="width:44px">   <!-- 가로 -->
+            <col style="width:44px">   <!-- 세로 -->
+            <col style="width:44px">   <!-- 높이 -->
+            <col style="width:60px">   <!-- 품목 SKU -->
+            <col style="width:50px">   <!-- 품목 라벨 -->
+            <col style="width:68px">   <!-- 파렛트 SKU -->
+            <col style="width:64px">   <!-- 파렛트 라벨 -->
+            <col style="width:100px">  <!-- 비고 -->
+            <col style="width:120px">  <!-- 변경일시 -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="tc" rowspan="2">No.</th>
+              <th class="tc" rowspan="2"><input type="checkbox" id="chkAll" style="width:12px;height:12px;" onclick="toggleAllCheck(this)"></th>
+              <th rowspan="2">사업장</th>
+              <th rowspan="2">품목번호</th>
+              <th rowspan="2">품목명</th>
+              <th rowspan="2">규격</th>
+              <th rowspan="2">단위</th>
+              <th rowspan="2">품목분류</th>
+              <th rowspan="2">대분류</th>
+              <th rowspan="2">중분류</th>
+              <th rowspan="2">소분류</th>
+              <th rowspan="2">임박기준일수</th>
+              <th rowspan="2">유효기준일수</th>
+              <th rowspan="2">중량</th>
+              <th rowspan="2">입수량</th>
+              <th rowspan="2">상품식별코드</th>
+              <th rowspan="2">물류식별코드</th>
+              <th rowspan="2">원산지</th>
+              <th rowspan="2">브랜드</th>
+              <th rowspan="2">사용여부</th>
+              <th rowspan="2">묶음수량</th>
+              <th rowspan="2">묶음단위명</th>
+              <th rowspan="2">단포수량</th>
+              <th rowspan="2">배면</th>
+              <th rowspan="2">배단</th>
+              <th rowspan="2">가로</th>
+              <th rowspan="2">세로</th>
+              <th rowspan="2">높이</th>
+              <th class="group-hd" colspan="2">품목</th>
+              <th class="group-hd" colspan="2">파렛트</th>
+              <th rowspan="2">비고</th>
+              <th rowspan="2">변경일시</th>
+            </tr>
+            <tr>
+              <th>SKU</th>
+              <th>라벨</th>
+              <th>SKU</th>
+              <th>라벨</th>
+            </tr>
+          </thead>
+          <tbody id="gridBody">
+          </tbody>
+        </table>
       </div>
-    </div>
-    <div class="grid-wrap" id="gridWrap">
-      <table class="grid-table" id="gridTable">
-        <thead>
-          <tr>
-            <th rowspan="2" style="width:40px">No.</th>
-            <th rowspan="2" style="width:35px"><input type="checkbox" id="chkAll" onclick="toggleAll(this)"></th>
-            <th rowspan="2" style="width:70px">사업장</th>
-            <th rowspan="2" style="width:110px">품목번호</th>
-            <th rowspan="2" style="width:160px">품목명</th>
-            <th rowspan="2" style="width:120px">규격</th>
-            <th rowspan="2" style="width:45px">단위</th>
-            <th rowspan="2" style="width:70px">품목분류</th>
-            <th rowspan="2" style="width:60px">대분류</th>
-            <th rowspan="2" style="width:60px">중분류</th>
-            <th rowspan="2" style="width:60px">소분류</th>
-            <th rowspan="2" style="width:80px">임박기준일수</th>
-            <th rowspan="2" style="width:80px">유효기준일수</th>
-            <th rowspan="2" style="width:55px">중량</th>
-            <th rowspan="2" style="width:55px">입수량</th>
-            <th rowspan="2" style="width:120px">상품식별코드</th>
-            <th rowspan="2" style="width:100px">물류식별코드</th>
-            <th rowspan="2" style="width:70px">원산지</th>
-            <th rowspan="2" style="width:75px">브랜드</th>
-            <th rowspan="2" style="width:60px">사용여부</th>
-            <th rowspan="2" style="width:65px">묶음수량</th>
-            <th rowspan="2" style="width:75px">묶음단위명</th>
-            <th rowspan="2" style="width:65px">단포수량</th>
-            <th rowspan="2" style="width:45px">배면</th>
-            <th rowspan="2" style="width:45px">배단</th>
-            <th rowspan="2" style="width:45px">가로</th>
-            <th rowspan="2" style="width:45px">세로</th>
-            <th rowspan="2" style="width:45px">높이</th>
-            <th colspan="2" class="group-header">품목</th>
-            <th colspan="2" class="group-header">파렛트</th>
-            <th rowspan="2" style="width:120px">비고</th>
-            <th rowspan="2" style="width:130px">변경일시</th>
-          </tr>
-          <tr>
-            <th style="width:90px">SKU</th>
-            <th style="width:65px">라벨</th>
-            <th style="width:80px">SKU</th>
-            <th style="width:65px">라벨</th>
-          </tr>
-        </thead>
-        <tbody id="gridBody"></tbody>
-      </table>
-    </div>
-    <div class="h-scroll-wrap" id="hScrollWrap">
-      <div class="h-scroll-inner" id="hScrollInner"></div>
-    </div>
-    <div class="grid-footer">
-      <div class="pagination" id="pagination"></div>
-      <div class="page-size-wrap">
-        <select id="pageSize" onchange="changePageSize()">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="200">200</option>
-        </select>
+
+      <!-- 가로 스크롤 -->
+      <div class="h-scroll-wrap" id="hScrollWrap">
+        <div class="h-scroll-inner" id="hScrollInner"></div>
       </div>
-      <div class="row-count" id="rowCount"></div>
+
+      <!-- 페이징 -->
+      <div class="grid-footer">
+        <div class="pagination" id="pagination"></div>
+        <div class="page-size-wrap">
+          <select id="pageSize" onchange="onPageSizeChange()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="rowCount"></span>
+      </div>
     </div>
   </div>
 </div>
@@ -672,13 +703,13 @@ body {
 <!-- 업무규칙 팝업 -->
 <div class="modal-bg" id="ruleModal">
   <div class="modal" style="width:520px">
-    <div class="modal-header" onmousedown="startDrag(event, 'ruleModal')">
+    <div class="modal-header" id="ruleModalHeader">
       <span>업무규칙</span>
-      <button class="close-btn" onclick="closeRule()">&#10005;</button>
+      <button class="close-btn" onclick="closeRule()">✕</button>
     </div>
     <div class="modal-body">
       <p class="rule-title">화면구성</p>
-      <table class="rule-table">
+      <table>
         <tr><th>메뉴그룹명</th><td>기준정보</td><th>메뉴그룹코드</th><td>MD8000</td></tr>
         <tr><th>메뉴명</th><td>품목</td><th>메뉴코드</th><td>MDPD01</td></tr>
         <tr><th>UI유형</th><td colspan="3">그리드 1개</td></tr>
@@ -697,131 +728,133 @@ body {
 </div>
 
 <!-- 품목 등록/수정 팝업 -->
-<div class="modal-bg" id="regModal">
-  <div class="modal" style="width:800px">
-    <div class="modal-header" onmousedown="startDrag(event, 'regModal')">
-      <span id="regTitle">품목 등록 [MDPD01P01]</span>
-      <button class="close-btn" onclick="closeReg()">&#10005;</button>
+<div class="modal-bg" id="prodModal">
+  <div class="modal" style="width:820px">
+    <div class="modal-header" id="prodModalHeader">
+      <span id="prodModalTitle">품목 등록 [MDPD01P01]</span>
+      <button class="close-btn" onclick="closeProdModal()">✕</button>
     </div>
     <div class="modal-body">
-      <table class="form-table">
-        <colgroup>
-          <col style="width:100px"><col><col style="width:100px"><col><col style="width:100px"><col>
-        </colgroup>
-        <tr>
-          <th>사업장 <span class="required">*</span></th>
-          <td><select id="fBizSeq"><option value="">선택</option><option value="1000">본사</option></select></td>
-          <th>품목번호</th>
-          <td><input type="text" id="fProdNo" readonly></td>
-          <th>품목분류 <span class="required">*</span></th>
-          <td><select id="fProdClsCd"><option value="">선택</option><option value="RAW">원자재</option><option value="SUB">부자재</option><option value="PRD">상품</option></select></td>
-        </tr>
-        <tr>
-          <th>품목명 <span class="required">*</span></th>
-          <td><input type="text" id="fProdNm"></td>
-          <th>규격</th>
-          <td><input type="text" id="fSpec"></td>
-          <th>단위</th>
-          <td><select id="fUnit"><option value="">선택</option><option value="EA">EA</option><option value="BOX">BOX</option><option value="KG">KG</option></select></td>
-        </tr>
-        <tr>
-          <th>대분류</th>
-          <td><select id="fLrgCls"><option value="">선택</option><option value="FOOD">식품</option><option value="PKG">포장재</option><option value="ETC">잡화</option></select></td>
-          <th>중분류</th>
-          <td><select id="fMidCls"><option value="">선택</option><option value="BEV">음료</option><option value="DAIRY">유제품</option><option value="CUP">컵류</option><option value="CONS">소모품</option><option value="CONT">용기</option></select></td>
-          <th>소분류</th>
-          <td><select id="fSmlCls"><option value="">선택</option><option value="COFFEE">커피</option><option value="SYRUP">시럽</option><option value="CHOCO">초콜릿</option><option value="MILK">우유</option><option value="SAUCE">소스</option><option value="PCUP">종이컵</option><option value="STRAW">빨대</option><option value="LID">리드</option><option value="TMBLR">텀블러</option></select></td>
-        </tr>
-        <tr>
-          <th>임박기준일수</th>
-          <td><input type="number" id="fImminentDays"></td>
-          <th>유효기준일수</th>
-          <td><input type="number" id="fValidDays"></td>
-          <th>중량</th>
-          <td><input type="number" id="fWeight" step="0.1"></td>
-        </tr>
-        <tr>
-          <th>입수량</th>
-          <td><input type="number" id="fPackQty"></td>
-          <th>상품식별코드</th>
-          <td><input type="text" id="fProdIdentCd"></td>
-          <th>물류식별코드</th>
-          <td><input type="text" id="fLogisIdentCd"></td>
-        </tr>
-        <tr>
-          <th>원산지</th>
-          <td><input type="text" id="fOrigin"></td>
-          <th>브랜드</th>
-          <td><input type="text" id="fBrand"></td>
-          <th>사용여부</th>
-          <td><select id="fUseYn"><option value="Y">사용</option><option value="N">미사용</option></select></td>
-        </tr>
-        <tr>
-          <th>묶음수량</th>
-          <td><input type="number" id="fBundleQty"></td>
-          <th>묶음단위명</th>
-          <td><input type="text" id="fBundleUnitNm"></td>
-          <th>단포수량</th>
-          <td><input type="number" id="fSingleQty"></td>
-        </tr>
-        <tr>
-          <th>배면</th>
-          <td><input type="number" id="fPalFace"></td>
-          <th>배단</th>
-          <td><input type="number" id="fPalTier"></td>
-          <th>가로</th>
-          <td><input type="number" id="fWidth"></td>
-        </tr>
-        <tr>
-          <th>세로</th>
-          <td><input type="number" id="fLength"></td>
-          <th>높이</th>
-          <td><input type="number" id="fHeight"></td>
-          <td class="empty-th"></td>
-          <td class="empty-td"></td>
-        </tr>
-        <tr>
-          <th>품목 SKU</th>
-          <td><input type="text" id="fProdSku"></td>
-          <th>품목 라벨</th>
-          <td><input type="text" id="fProdLabel"></td>
-          <td class="empty-th"></td>
-          <td class="empty-td"></td>
-        </tr>
-        <tr>
-          <th>파렛트 SKU</th>
-          <td><input type="text" id="fPltSku"></td>
-          <th>파렛트 라벨</th>
-          <td><input type="text" id="fPltLabel"></td>
-          <td class="empty-th"></td>
-          <td class="empty-td"></td>
-        </tr>
-        <tr>
-          <th>비고</th>
-          <td colspan="5"><textarea id="fRemark"></textarea></td>
-        </tr>
-      </table>
+      <div class="form-wrap" style="padding:0">
+        <table class="form-table">
+          <colgroup>
+            <col style="width:90px"><col><col style="width:90px"><col><col style="width:90px"><col>
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>사업장<span class="req">*</span></th>
+              <td><select id="fSite"><option value="">선택</option><option value="1">본사물류센터</option><option value="2">부산물류센터</option></select></td>
+              <th>품목번호<span class="req">*</span></th>
+              <td><input type="text" id="fProdNo"></td>
+              <th>품목명<span class="req">*</span></th>
+              <td><input type="text" id="fProdNm"></td>
+            </tr>
+            <tr>
+              <th>규격</th>
+              <td><input type="text" id="fSpec"></td>
+              <th>단위</th>
+              <td><input type="text" id="fUnit"></td>
+              <th>품목분류</th>
+              <td><select id="fProdCls"><option value="">선택</option><option value="음료">음료</option><option value="농산물">농산물</option><option value="축산물">축산물</option><option value="유제품">유제품</option><option value="조미료">조미료</option><option value="냉동식품">냉동식품</option><option value="발효식품">발효식품</option><option value="두류">두류</option><option value="곡물">곡물</option></select></td>
+            </tr>
+            <tr>
+              <th>대분류</th>
+              <td><select id="fLg"><option value="">선택</option><option value="식품">식품</option><option value="생활용품">생활용품</option></select></td>
+              <th>중분류</th>
+              <td><select id="fMd"><option value="">선택</option><option value="음료류">음료류</option><option value="신선식품">신선식품</option><option value="가공식품">가공식품</option></select></td>
+              <th>소분류</th>
+              <td><select id="fSm"><option value="">선택</option><option value="과일음료">과일음료</option><option value="과일">과일</option><option value="채소">채소</option><option value="란류">란류</option><option value="우유">우유</option><option value="두부">두부</option><option value="오일류">오일류</option><option value="곡류">곡류</option><option value="냉동과일">냉동과일</option><option value="김치류">김치류</option></select></td>
+            </tr>
+            <tr>
+              <th>임박기준일수</th>
+              <td><input type="number" id="fExpAlertDays"></td>
+              <th>유효기준일수</th>
+              <td><input type="number" id="fExpValidDays"></td>
+              <th>중량</th>
+              <td><input type="number" id="fWeight"></td>
+            </tr>
+            <tr>
+              <th>입수량</th>
+              <td><input type="number" id="fQtyPerBox"></td>
+              <th>묶음수량</th>
+              <td><input type="number" id="fBundleQty"></td>
+              <th>묶음단위명</th>
+              <td><input type="text" id="fBundleUnitNm"></td>
+            </tr>
+            <tr>
+              <th>단포수량</th>
+              <td><input type="number" id="fSingleQty"></td>
+              <th>배면</th>
+              <td><input type="number" id="fBackRow"></td>
+              <th>배단</th>
+              <td><input type="number" id="fBackCol"></td>
+            </tr>
+            <tr>
+              <th>가로</th>
+              <td><input type="number" id="fWidth"></td>
+              <th>세로</th>
+              <td><input type="number" id="fDepth"></td>
+              <th>높이</th>
+              <td><input type="number" id="fHeight"></td>
+            </tr>
+            <tr>
+              <th>상품식별코드</th>
+              <td><input type="text" id="fGoodsIdCd"></td>
+              <th>물류식별코드</th>
+              <td><input type="text" id="fLogisIdCd"></td>
+              <th>원산지</th>
+              <td><input type="text" id="fOrigin"></td>
+            </tr>
+            <tr>
+              <th>브랜드</th>
+              <td><input type="text" id="fBrand"></td>
+              <th>사용여부</th>
+              <td><select id="fUseYn"><option value="사용">사용</option><option value="미사용">미사용</option></select></td>
+              <td class="empty-lbl"></td>
+              <td class="empty-val"></td>
+            </tr>
+            <tr>
+              <th>품목 SKU</th>
+              <td><input type="text" id="fProdSku"></td>
+              <th>품목 라벨</th>
+              <td><input type="text" id="fProdLabel"></td>
+              <th>파렛트 SKU</th>
+              <td><input type="text" id="fPalletSku"></td>
+            </tr>
+            <tr>
+              <th>파렛트 라벨</th>
+              <td><input type="text" id="fPalletLabel"></td>
+              <td class="empty-lbl"></td>
+              <td class="empty-val"></td>
+              <td class="empty-lbl"></td>
+              <td class="empty-val"></td>
+            </tr>
+            <tr>
+              <th>비고</th>
+              <td colspan="5"><textarea id="fRemark"></textarea></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="modal-footer" id="regFooter">
-      <button class="btn-primary" id="btnRegSubmit" onclick="doRegSubmit()">등록</button>
+    <div class="modal-footer">
+      <button class="btn-primary" id="prodSaveBtn" onclick="saveProd()">등록</button>
+      <button class="btn-modal-close" onclick="closeProdModal()">취소</button>
     </div>
   </div>
 </div>
 
-<!-- 공통 팝업 함수 (데이터 파일 로드 이전 독립 블록) -->
 <script>
 var _cpTargetId = null;
 function openCpPopup(targetId) {
   _cpTargetId = targetId;
   window.parent.postMessage({ type: 'OPEN_CP_LAYER' }, '*');
 }
-
 var _pdTargetId = null;
 function openPdPopup(targetId) {
   _pdTargetId = targetId;
   window.parent.postMessage({ type: 'OPEN_PD_LAYER' }, '*');
 }
-
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'CP_SELECTED' && _cpTargetId) {
     var el = document.getElementById(_cpTargetId);
@@ -838,48 +871,156 @@ window.addEventListener('message', function(e) {
 
 <script src="./mdpd01-data.js"></script>
 <script>
-var productsAll = [];
-var filteredData = [];
+var mainAll = [];
+var mainFiltered = [];
 var currentPage = 1;
 var pageSize = 50;
 var selectedIdx = -1;
-var regMode = 'insert';
+var editMode = false;
+var editRowIdx = -1;
 
 window.addEventListener('DOMContentLoaded', function() {
-  productsAll = JSON.parse(JSON.stringify(MDPD01_DATA.products));
-  filteredData = productsAll.slice();
+  mainAll = JSON.parse(JSON.stringify(MDPD01_DATA.main));
+  mainFiltered = mainAll.slice();
   renderGrid();
   syncHScroll();
+  initDrag('ruleModal', 'ruleModalHeader');
+  initDrag('prodModal', 'prodModalHeader');
 });
 
-/* === 검색 === */
+function renderGrid() {
+  var tbody = document.getElementById('gridBody');
+  tbody.innerHTML = '';
+  var start = (currentPage - 1) * pageSize;
+  var end = Math.min(start + pageSize, mainFiltered.length);
+  var rows = mainFiltered.slice(start, end);
+  rows.forEach(function(d, i) {
+    var tr = document.createElement('tr');
+    tr.dataset.idx = start + i;
+    if ((start + i) === selectedIdx) tr.classList.add('selected');
+    tr.onclick = function() { selectRow(start + i, tr); };
+    tr.innerHTML =
+      '<td class="tc">' + (start + i + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" style="width:12px;height:12px;" onclick="event.stopPropagation()"></td>' +
+      '<td class="tl">' + esc(d.bizNm) + '</td>' +
+      '<td class="tl">' + esc(d.prodNo) + '</td>' +
+      '<td class="tl">' + esc(d.prodNm) + '</td>' +
+      '<td class="tl">' + esc(d.spec) + '</td>' +
+      '<td class="tc">' + esc(d.unit) + '</td>' +
+      '<td class="tc">' + esc(d.prodClsNm) + '</td>' +
+      '<td class="tc">' + esc(d.lgNm) + '</td>' +
+      '<td class="tc">' + esc(d.mdNm) + '</td>' +
+      '<td class="tc">' + esc(d.smNm) + '</td>' +
+      '<td class="tr">' + d.expAlertDays + '</td>' +
+      '<td class="tr">' + d.expValidDays + '</td>' +
+      '<td class="tr">' + d.weight + '</td>' +
+      '<td class="tr">' + d.qtyPerBox + '</td>' +
+      '<td class="tl">' + esc(d.goodsIdCd) + '</td>' +
+      '<td class="tl">' + esc(d.logisIdCd) + '</td>' +
+      '<td class="tl">' + esc(d.origin) + '</td>' +
+      '<td class="tl">' + esc(d.brand) + '</td>' +
+      '<td class="tc">' + esc(d.useYn) + '</td>' +
+      '<td class="tr">' + d.bundleQty + '</td>' +
+      '<td class="tc">' + esc(d.bundleUnitNm) + '</td>' +
+      '<td class="tr">' + d.singleQty + '</td>' +
+      '<td class="tr">' + d.backRow + '</td>' +
+      '<td class="tr">' + d.backCol + '</td>' +
+      '<td class="tr">' + d.width + '</td>' +
+      '<td class="tr">' + d.depth + '</td>' +
+      '<td class="tr">' + d.height + '</td>' +
+      '<td class="tl">' + esc(d.prodSku) + '</td>' +
+      '<td class="tc">' + esc(d.prodLabel) + '</td>' +
+      '<td class="tc">' + esc(d.palletSku) + '</td>' +
+      '<td class="tc">' + esc(d.palletLabel) + '</td>' +
+      '<td class="tl">' + esc(d.remark) + '</td>' +
+      '<td class="tl">' + esc(d.updDttm) + '</td>';
+    tbody.appendChild(tr);
+  });
+  renderPagination();
+  document.getElementById('rowCount').textContent =
+    (mainFiltered.length > 0 ? (start + 1) + ' ~ ' + end : '0') + ' of ' + mainFiltered.length + ' rows';
+  syncHScroll();
+}
+
+function selectRow(idx, tr) {
+  selectedIdx = idx;
+  document.querySelectorAll('#gridBody tr').forEach(function(r) { r.classList.remove('selected'); });
+  tr.classList.add('selected');
+}
+
+function renderPagination() {
+  var total = Math.ceil(mainFiltered.length / pageSize) || 1;
+  var pg = document.getElementById('pagination');
+  pg.innerHTML = '';
+  var maxBtn = 5;
+  var start = Math.max(1, currentPage - 2);
+  var end = Math.min(total, start + maxBtn - 1);
+  if (end - start < maxBtn - 1) start = Math.max(1, end - maxBtn + 1);
+
+  function btn(label, page, active) {
+    var b = document.createElement('button');
+    b.textContent = label;
+    if (active) b.classList.add('active');
+    b.onclick = function() { currentPage = page; renderGrid(); };
+    return b;
+  }
+  if (currentPage > 1) pg.appendChild(btn('‹', currentPage - 1, false));
+  for (var i = start; i <= end; i++) pg.appendChild(btn(i, i, i === currentPage));
+  if (currentPage < total) pg.appendChild(btn('›', currentPage + 1, false));
+}
+
+function onPageSizeChange() {
+  pageSize = parseInt(document.getElementById('pageSize').value);
+  currentPage = 1;
+  renderGrid();
+}
+
+function toggleAllCheck(chk) {
+  document.querySelectorAll('#gridBody input[type="checkbox"]').forEach(function(c) { c.checked = chk.checked; });
+}
+
+function getCheckedRows() {
+  var rows = [];
+  document.querySelectorAll('#gridBody tr').forEach(function(tr) {
+    var cb = tr.querySelector('input[type="checkbox"]');
+    if (cb && cb.checked) rows.push(parseInt(tr.dataset.idx));
+  });
+  return rows;
+}
+
 function doSearch() {
-  var bizNm = document.getElementById('sBizSeq');
-  var bizVal = bizNm.options[bizNm.selectedIndex] ? bizNm.options[bizNm.selectedIndex].text : '';
+  var site = document.getElementById('sSite').value;
   var prodNo = document.getElementById('sProdNo').value.trim().toLowerCase();
   var prodNm = document.getElementById('sProdNm').value.trim().toLowerCase();
   var spec = document.getElementById('sSpec').value.trim().toLowerCase();
-  var prodCls = document.getElementById('sProdClsCd');
-  var prodClsVal = prodCls.options[prodCls.selectedIndex] ? prodCls.options[prodCls.selectedIndex].text : '';
-  var lrgCls = document.getElementById('sLrgCls');
-  var lrgClsVal = lrgCls.options[lrgCls.selectedIndex] ? lrgCls.options[lrgCls.selectedIndex].text : '';
-  var midCls = document.getElementById('sMidCls');
-  var midClsVal = midCls.options[midCls.selectedIndex] ? midCls.options[midCls.selectedIndex].text : '';
-  var smlCls = document.getElementById('sSmlCls');
-  var smlClsVal = smlCls.options[smlCls.selectedIndex] ? smlCls.options[smlCls.selectedIndex].text : '';
+  var prodCls = document.getElementById('sProdCls').value;
+  var lg = document.getElementById('sLg').value;
+  var md = document.getElementById('sMd').value;
+  var sm = document.getElementById('sSm').value;
   var useYn = document.getElementById('sUseYn').value;
 
-  filteredData = productsAll.filter(function(r) {
-    if (document.getElementById('sBizSeq').value && r.bizNm !== bizVal) return false;
-    if (prodNo && r.prodNo.toLowerCase().indexOf(prodNo) === -1) return false;
-    if (prodNm && r.prodNm.toLowerCase().indexOf(prodNm) === -1) return false;
-    if (spec && r.spec.toLowerCase().indexOf(spec) === -1) return false;
-    if (document.getElementById('sProdClsCd').value && r.prodClsCd !== prodClsVal) return false;
-    if (document.getElementById('sLrgCls').value && r.lrgClsNm !== lrgClsVal) return false;
-    if (document.getElementById('sMidCls').value && r.midClsNm !== midClsVal) return false;
-    if (document.getElementById('sSmlCls').value && r.smlClsNm !== smlClsVal) return false;
-    if (useYn === 'Y' && r.useYn !== '사용') return false;
-    if (useYn === 'N' && r.useYn !== '미사용') return false;
+  mainFiltered = mainAll.filter(function(d) {
+    if (site && d.bizNm !== (site === '1' ? '본사물류센터' : '부산물류센터')) return false;
+    if (prodNo && d.prodNo.toLowerCase().indexOf(prodNo) < 0) return false;
+    if (prodNm && d.prodNm.toLowerCase().indexOf(prodNm) < 0) return false;
+    if (spec && d.spec.toLowerCase().indexOf(spec) < 0) return false;
+    if (prodCls) {
+      var clsMap = {'1':'음료','2':'농산물','3':'축산물','4':'유제품','5':'조미료','6':'냉동식품','7':'발효식품','8':'두류','9':'곡물'};
+      if (d.prodClsNm !== clsMap[prodCls]) return false;
+    }
+    if (lg) {
+      var lgMap = {'1':'식품','2':'생활용품'};
+      if (d.lgNm !== lgMap[lg]) return false;
+    }
+    if (md) {
+      var mdMap = {'1':'음료류','2':'신선식품','3':'가공식품'};
+      if (d.mdNm !== mdMap[md]) return false;
+    }
+    if (sm) {
+      var smMap = {'1':'과일음료','2':'과일','3':'채소','4':'란류','5':'우유','6':'두부','7':'오일류','8':'곡류','9':'냉동과일','10':'김치류'};
+      if (d.smNm !== smMap[sm]) return false;
+    }
+    if (useYn && d.useYn !== useYn) return false;
     return true;
   });
   currentPage = 1;
@@ -888,340 +1029,241 @@ function doSearch() {
 }
 
 function doReset() {
-  document.getElementById('sBizSeq').selectedIndex = 0;
+  document.getElementById('sSite').value = '';
   document.getElementById('sProdNo').value = '';
   document.getElementById('sProdNm').value = '';
   document.getElementById('sSpec').value = '';
-  document.getElementById('sProdClsCd').selectedIndex = 0;
-  document.getElementById('sLrgCls').selectedIndex = 0;
-  document.getElementById('sMidCls').selectedIndex = 0;
-  document.getElementById('sSmlCls').selectedIndex = 0;
-  document.getElementById('sUseYn').selectedIndex = 0;
-  filteredData = productsAll.slice();
+  document.getElementById('sProdCls').value = '';
+  document.getElementById('sLg').value = '';
+  document.getElementById('sMd').value = '';
+  document.getElementById('sSm').value = '';
+  document.getElementById('sUseYn').value = '';
+  mainFiltered = mainAll.slice();
   currentPage = 1;
   selectedIdx = -1;
   renderGrid();
 }
 
-/* === 그리드 렌더링 === */
-function renderGrid() {
-  var tbody = document.getElementById('gridBody');
-  var start = (currentPage - 1) * pageSize;
-  var end = Math.min(start + pageSize, filteredData.length);
-  var pageData = filteredData.slice(start, end);
-  var html = '';
-  for (var i = 0; i < pageData.length; i++) {
-    var r = pageData[i];
-    var idx = start + i;
-    var cls = idx === selectedIdx ? ' class="selected"' : '';
-    html += '<tr' + cls + ' onclick="selectRow(' + idx + ')" ondblclick="openRegPopup(\'update\')">';
-    html += '<td class="tc">' + (idx + 1) + '</td>';
-    html += '<td class="tc"><input type="checkbox" data-idx="' + idx + '"></td>';
-    html += '<td class="tl">' + esc(r.bizNm) + '</td>';
-    html += '<td class="tl">' + esc(r.prodNo) + '</td>';
-    html += '<td class="tl">' + esc(r.prodNm) + '</td>';
-    html += '<td class="tl">' + esc(r.spec) + '</td>';
-    html += '<td class="tc">' + esc(r.unit) + '</td>';
-    html += '<td class="tc">' + esc(r.prodClsCd) + '</td>';
-    html += '<td class="tc">' + esc(r.lrgClsNm) + '</td>';
-    html += '<td class="tc">' + esc(r.midClsNm) + '</td>';
-    html += '<td class="tc">' + esc(r.smlClsNm) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.imminentDays) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.validDays) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.weight) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.packQty) + '</td>';
-    html += '<td class="tl">' + esc(r.prodIdentCd) + '</td>';
-    html += '<td class="tl">' + esc(r.logisIdentCd) + '</td>';
-    html += '<td class="tl">' + esc(r.origin) + '</td>';
-    html += '<td class="tl">' + esc(r.brand) + '</td>';
-    html += '<td class="tc">' + esc(r.useYn) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.bundleQty) + '</td>';
-    html += '<td class="tc">' + esc(r.bundleUnitNm) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.singleQty) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.palFace) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.palTier) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.width) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.length) + '</td>';
-    html += '<td class="tr">' + fmtNum(r.height) + '</td>';
-    html += '<td class="tl">' + esc(r.prodSku) + '</td>';
-    html += '<td class="tc">' + esc(r.prodLabel) + '</td>';
-    html += '<td class="tc">' + esc(r.pltSku) + '</td>';
-    html += '<td class="tc">' + esc(r.pltLabel) + '</td>';
-    html += '<td class="tl">' + esc(r.remark) + '</td>';
-    html += '<td class="tl">' + esc(r.modDt) + '</td>';
-    html += '</tr>';
-  }
-  tbody.innerHTML = html;
-  renderPagination();
-  syncHScroll();
+function doAdd() {
+  editMode = false;
+  editRowIdx = -1;
+  clearForm();
+  document.getElementById('prodModalTitle').textContent = '품목 등록 [MDPD01P01]';
+  document.getElementById('prodSaveBtn').textContent = '등록';
+  document.getElementById('fProdNo').readOnly = false;
+  document.getElementById('fProdNo').classList.remove('readonly');
+  openModal('prodModal');
 }
 
-function selectRow(idx) {
-  selectedIdx = idx;
+function doEdit() {
+  if (selectedIdx < 0) { alert('수정할 행을 선택하세요.'); return; }
+  var d = mainFiltered[selectedIdx];
+  editMode = true;
+  editRowIdx = selectedIdx;
+  fillForm(d);
+  document.getElementById('prodModalTitle').textContent = '품목 수정 [MDPD01P01]';
+  document.getElementById('prodSaveBtn').textContent = '저장';
+  document.getElementById('fProdNo').readOnly = true;
+  document.getElementById('fProdNo').classList.add('readonly');
+  openModal('prodModal');
+}
+
+function doDelete() {
+  var checked = getCheckedRows();
+  var targets = checked.length > 0 ? checked : (selectedIdx >= 0 ? [selectedIdx] : []);
+  if (targets.length === 0) { alert('삭제할 행을 선택하세요.'); return; }
+  if (!confirm(targets.length + '건을 삭제하시겠습니까?')) return;
+  var toRemove = targets.map(function(i) { return mainFiltered[i]; });
+  mainAll = mainAll.filter(function(d) { return toRemove.indexOf(d) < 0; });
+  mainFiltered = mainFiltered.filter(function(d) { return toRemove.indexOf(d) < 0; });
+  selectedIdx = -1;
   renderGrid();
 }
 
-function toggleAll(el) {
-  var cbs = document.querySelectorAll('#gridBody input[type="checkbox"]');
-  for (var i = 0; i < cbs.length; i++) { cbs[i].checked = el.checked; }
+function doCopy() {
+  if (selectedIdx < 0) { alert('복사할 행을 선택하세요.'); return; }
+  var d = mainFiltered[selectedIdx];
+  editMode = false;
+  editRowIdx = -1;
+  fillForm(d);
+  document.getElementById('fProdNo').value = '';
+  document.getElementById('prodModalTitle').textContent = '품목 등록 [MDPD01P01]';
+  document.getElementById('prodSaveBtn').textContent = '등록';
+  document.getElementById('fProdNo').readOnly = false;
+  document.getElementById('fProdNo').classList.remove('readonly');
+  openModal('prodModal');
 }
 
-function getCheckedIndices() {
-  var cbs = document.querySelectorAll('#gridBody input[type="checkbox"]:checked');
-  var indices = [];
-  for (var i = 0; i < cbs.length; i++) { indices.push(parseInt(cbs[i].getAttribute('data-idx'))); }
-  return indices;
+function doExcelUpload() {
+  alert('엑셀등록 기능입니다.');
 }
 
-/* === 페이징 === */
-function renderPagination() {
-  var total = filteredData.length;
-  var totalPages = Math.max(1, Math.ceil(total / pageSize));
-  var start = (currentPage - 1) * pageSize;
-  var end = Math.min(start + pageSize, total);
-  var html = '';
-  for (var p = 1; p <= totalPages; p++) {
-    html += '<button' + (p === currentPage ? ' class="active"' : '') + ' onclick="goPage(' + p + ')">' + p + '</button>';
-  }
-  document.getElementById('pagination').innerHTML = html;
-  document.getElementById('rowCount').textContent = total > 0 ? (start + 1) + ' ~ ' + end + ' of ' + total + ' rows' : '0 rows';
+function doExcelDownload() {
+  alert('엑셀다운로드 기능입니다.');
 }
 
-function goPage(p) { currentPage = p; renderGrid(); }
-function changePageSize() { pageSize = parseInt(document.getElementById('pageSize').value); currentPage = 1; renderGrid(); }
+function saveProd() {
+  var prodNo = document.getElementById('fProdNo').value.trim();
+  var prodNm = document.getElementById('fProdNm').value.trim();
+  var site = document.getElementById('fSite').value;
+  if (!site) { alert('사업장을 선택하세요.'); return; }
+  if (!prodNo) { alert('품목번호를 입력하세요.'); return; }
+  if (!prodNm) { alert('품목명을 입력하세요.'); return; }
 
-/* === 가로 스크롤 동기화 === */
-function syncHScroll() {
-  var gridWrap = document.getElementById('gridWrap');
-  var hScrollWrap = document.getElementById('hScrollWrap');
-  var hScrollInner = document.getElementById('hScrollInner');
-  var table = document.getElementById('gridTable');
-  hScrollInner.style.width = table.scrollWidth + 'px';
-  hScrollWrap.onscroll = function() { gridWrap.scrollLeft = hScrollWrap.scrollLeft; };
-  gridWrap.onscroll = function() { hScrollWrap.scrollLeft = gridWrap.scrollLeft; };
-}
-
-/* === 업무규칙 팝업 === */
-function openRule() { centerModal('ruleModal'); document.getElementById('ruleModal').classList.add('show'); }
-function closeRule() { document.getElementById('ruleModal').classList.remove('show'); }
-
-/* === 등록/수정/복사 팝업 === */
-function openRegPopup(mode) {
-  regMode = mode;
-  var titleEl = document.getElementById('regTitle');
-  var footerEl = document.getElementById('regFooter');
-  clearForm();
-
-  if (mode === 'insert') {
-    titleEl.textContent = '품목 등록 [MDPD01P01]';
-    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">등록</button>';
-  } else if (mode === 'update') {
-    if (selectedIdx < 0) { alert('수정할 행을 선택하세요.'); return; }
-    titleEl.textContent = '품목 수정 [MDPD01P01]';
-    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">저장</button><button class="btn" onclick="closeReg()">취소</button>';
-    fillForm(filteredData[selectedIdx]);
-    document.getElementById('fProdNo').readOnly = true;
-  } else if (mode === 'copy') {
-    if (selectedIdx < 0) { alert('복사할 행을 선택하세요.'); return; }
-    titleEl.textContent = '품목 등록 [MDPD01P01]';
-    footerEl.innerHTML = '<button class="btn-primary" onclick="doRegSubmit()">등록</button>';
-    fillForm(filteredData[selectedIdx]);
-    document.getElementById('fProdNo').value = '';
-    document.getElementById('fProdNo').readOnly = true;
-  }
-  centerModal('regModal');
-  document.getElementById('regModal').classList.add('show');
-}
-
-function closeReg() { document.getElementById('regModal').classList.remove('show'); }
-
-function clearForm() {
-  var ids = ['fBizSeq','fProdNo','fProdClsCd','fProdNm','fSpec','fUnit','fLrgCls','fMidCls','fSmlCls',
-    'fImminentDays','fValidDays','fWeight','fPackQty','fProdIdentCd','fLogisIdentCd','fOrigin','fBrand','fUseYn',
-    'fBundleQty','fBundleUnitNm','fSingleQty','fPalFace','fPalTier','fWidth','fLength','fHeight',
-    'fProdSku','fProdLabel','fPltSku','fPltLabel','fRemark'];
-  for (var i = 0; i < ids.length; i++) {
-    var el = document.getElementById(ids[i]);
-    if (!el) continue;
-    if (el.tagName === 'SELECT') { el.selectedIndex = 0; }
-    else { el.value = ''; }
-  }
-  document.getElementById('fProdNo').readOnly = true;
-}
-
-function fillForm(r) {
-  setVal('fBizSeq', r.bizNm === '본사' ? '1000' : '');
-  document.getElementById('fProdNo').value = r.prodNo;
-  setSelByText('fProdClsCd', r.prodClsCd);
-  document.getElementById('fProdNm').value = r.prodNm;
-  document.getElementById('fSpec').value = r.spec;
-  setSelByText('fUnit', r.unit);
-  setSelByText('fLrgCls', r.lrgClsNm);
-  setSelByText('fMidCls', r.midClsNm);
-  setSelByText('fSmlCls', r.smlClsNm);
-  document.getElementById('fImminentDays').value = r.imminentDays;
-  document.getElementById('fValidDays').value = r.validDays;
-  document.getElementById('fWeight').value = r.weight;
-  document.getElementById('fPackQty').value = r.packQty;
-  document.getElementById('fProdIdentCd').value = r.prodIdentCd;
-  document.getElementById('fLogisIdentCd').value = r.logisIdentCd;
-  document.getElementById('fOrigin').value = r.origin;
-  document.getElementById('fBrand').value = r.brand;
-  document.getElementById('fUseYn').value = r.useYn === '사용' ? 'Y' : 'N';
-  document.getElementById('fBundleQty').value = r.bundleQty;
-  document.getElementById('fBundleUnitNm').value = r.bundleUnitNm;
-  document.getElementById('fSingleQty').value = r.singleQty;
-  document.getElementById('fPalFace').value = r.palFace;
-  document.getElementById('fPalTier').value = r.palTier;
-  document.getElementById('fWidth').value = r.width;
-  document.getElementById('fLength').value = r.length;
-  document.getElementById('fHeight').value = r.height;
-  document.getElementById('fProdSku').value = r.prodSku;
-  document.getElementById('fProdLabel').value = r.prodLabel;
-  document.getElementById('fPltSku').value = r.pltSku;
-  document.getElementById('fPltLabel').value = r.pltLabel;
-  document.getElementById('fRemark').value = r.remark;
-}
-
-function setVal(id, val) { document.getElementById(id).value = val; }
-function setSelByText(id, txt) {
-  var sel = document.getElementById(id);
-  for (var i = 0; i < sel.options.length; i++) {
-    if (sel.options[i].text === txt) { sel.selectedIndex = i; return; }
-  }
-  sel.selectedIndex = 0;
-}
-
-function doRegSubmit() {
-  var bizSel = document.getElementById('fBizSeq');
-  var bizNm = bizSel.options[bizSel.selectedIndex] ? bizSel.options[bizSel.selectedIndex].text : '';
-  var prodClsSel = document.getElementById('fProdClsCd');
-  var prodClsTxt = prodClsSel.options[prodClsSel.selectedIndex] ? prodClsSel.options[prodClsSel.selectedIndex].text : '';
-  var unitSel = document.getElementById('fUnit');
-  var unitTxt = unitSel.options[unitSel.selectedIndex] ? unitSel.options[unitSel.selectedIndex].text : '';
-  var lrgSel = document.getElementById('fLrgCls');
-  var lrgTxt = lrgSel.options[lrgSel.selectedIndex] ? lrgSel.options[lrgSel.selectedIndex].text : '';
-  var midSel = document.getElementById('fMidCls');
-  var midTxt = midSel.options[midSel.selectedIndex] ? midSel.options[midSel.selectedIndex].text : '';
-  var smlSel = document.getElementById('fSmlCls');
-  var smlTxt = smlSel.options[smlSel.selectedIndex] ? smlSel.options[smlSel.selectedIndex].text : '';
-  var useYnSel = document.getElementById('fUseYn');
-  var useYnTxt = useYnSel.value === 'Y' ? '사용' : '미사용';
-
-  if (!document.getElementById('fBizSeq').value) { alert('사업장을 선택하세요.'); return; }
-  if (!document.getElementById('fProdNm').value.trim()) { alert('품목명을 입력하세요.'); return; }
-  if (!document.getElementById('fProdClsCd').value) { alert('품목분류를 선택하세요.'); return; }
-
+  var siteNm = site === '1' ? '본사물류센터' : '부산물류센터';
   var now = new Date();
-  var dtStr = now.getFullYear() + '-' + pad2(now.getMonth()+1) + '-' + pad2(now.getDate()) + ' ' + pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+  var dttm = now.getFullYear() + '-' +
+    pad2(now.getMonth()+1) + '-' + pad2(now.getDate()) + ' ' +
+    pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
 
   var obj = {
-    bizNm: bizNm,
-    prodNo: document.getElementById('fProdNo').value || ('PD-' + now.getFullYear() + '-' + pad4(productsAll.length + 1)),
-    prodNm: document.getElementById('fProdNm').value,
+    bizNm: siteNm,
+    prodNo: prodNo,
+    prodNm: prodNm,
     spec: document.getElementById('fSpec').value,
-    unit: unitTxt || 'EA',
-    prodClsCd: prodClsTxt,
-    lrgClsNm: lrgTxt,
-    midClsNm: midTxt,
-    smlClsNm: smlTxt,
-    imminentDays: parseInt(document.getElementById('fImminentDays').value) || 0,
-    validDays: parseInt(document.getElementById('fValidDays').value) || 0,
+    unit: document.getElementById('fUnit').value,
+    prodClsNm: document.getElementById('fProdCls').value,
+    lgNm: document.getElementById('fLg').value,
+    mdNm: document.getElementById('fMd').value,
+    smNm: document.getElementById('fSm').value,
+    expAlertDays: parseInt(document.getElementById('fExpAlertDays').value) || 0,
+    expValidDays: parseInt(document.getElementById('fExpValidDays').value) || 0,
     weight: parseFloat(document.getElementById('fWeight').value) || 0,
-    packQty: parseInt(document.getElementById('fPackQty').value) || 0,
-    prodIdentCd: document.getElementById('fProdIdentCd').value,
-    logisIdentCd: document.getElementById('fLogisIdentCd').value,
+    qtyPerBox: parseInt(document.getElementById('fQtyPerBox').value) || 0,
+    goodsIdCd: document.getElementById('fGoodsIdCd').value,
+    logisIdCd: document.getElementById('fLogisIdCd').value,
     origin: document.getElementById('fOrigin').value,
     brand: document.getElementById('fBrand').value,
-    useYn: useYnTxt,
+    useYn: document.getElementById('fUseYn').value,
     bundleQty: parseInt(document.getElementById('fBundleQty').value) || 0,
     bundleUnitNm: document.getElementById('fBundleUnitNm').value,
     singleQty: parseInt(document.getElementById('fSingleQty').value) || 0,
-    palFace: parseInt(document.getElementById('fPalFace').value) || 0,
-    palTier: parseInt(document.getElementById('fPalTier').value) || 0,
+    backRow: parseInt(document.getElementById('fBackRow').value) || 0,
+    backCol: parseInt(document.getElementById('fBackCol').value) || 0,
     width: parseInt(document.getElementById('fWidth').value) || 0,
-    length: parseInt(document.getElementById('fLength').value) || 0,
+    depth: parseInt(document.getElementById('fDepth').value) || 0,
     height: parseInt(document.getElementById('fHeight').value) || 0,
     prodSku: document.getElementById('fProdSku').value,
     prodLabel: document.getElementById('fProdLabel').value,
-    pltSku: document.getElementById('fPltSku').value,
-    pltLabel: document.getElementById('fPltLabel').value,
+    palletSku: document.getElementById('fPalletSku').value,
+    palletLabel: document.getElementById('fPalletLabel').value,
     remark: document.getElementById('fRemark').value,
-    modDt: dtStr
+    updDttm: dttm
   };
 
-  if (regMode === 'update') {
-    productsAll[selectedIdx] = obj;
-    alert('수정되었습니다.');
+  if (editMode && editRowIdx >= 0) {
+    var target = mainFiltered[editRowIdx];
+    var allIdx = mainAll.indexOf(target);
+    if (allIdx >= 0) mainAll[allIdx] = obj;
+    mainFiltered[editRowIdx] = obj;
   } else {
-    productsAll.push(obj);
-    alert('등록되었습니다.');
+    mainAll.push(obj);
+    mainFiltered.push(obj);
   }
-  filteredData = productsAll.slice();
+  closeProdModal();
   renderGrid();
-  closeReg();
 }
 
-/* === 삭제 === */
-function doDelete() {
-  var indices = getCheckedIndices();
-  if (indices.length === 0) { alert('삭제할 행을 선택하세요.'); return; }
-  if (!confirm(indices.length + '건을 삭제하시겠습니까?')) return;
-  indices.sort(function(a,b) { return b - a; });
-  for (var i = 0; i < indices.length; i++) { productsAll.splice(indices[i], 1); }
-  filteredData = productsAll.slice();
-  selectedIdx = -1;
-  document.getElementById('chkAll').checked = false;
-  renderGrid();
-  alert('삭제되었습니다.');
+function clearForm() {
+  ['fSite','fProdNo','fProdNm','fSpec','fUnit','fProdCls','fLg','fMd','fSm',
+   'fExpAlertDays','fExpValidDays','fWeight','fQtyPerBox','fGoodsIdCd','fLogisIdCd',
+   'fOrigin','fBrand','fBundleQty','fBundleUnitNm','fSingleQty','fBackRow','fBackCol',
+   'fWidth','fDepth','fHeight','fProdSku','fProdLabel','fPalletSku','fPalletLabel','fRemark'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('fUseYn').value = '사용';
 }
 
-/* === 엑셀 === */
-function doExcelUpload() { alert('엑셀등록 기능이 실행됩니다.'); }
-function doExcelDownload() { alert('엑셀다운로드 기능이 실행됩니다.'); }
+function fillForm(d) {
+  var siteVal = d.bizNm === '본사물류센터' ? '1' : '2';
+  document.getElementById('fSite').value = siteVal;
+  document.getElementById('fProdNo').value = d.prodNo || '';
+  document.getElementById('fProdNm').value = d.prodNm || '';
+  document.getElementById('fSpec').value = d.spec || '';
+  document.getElementById('fUnit').value = d.unit || '';
+  document.getElementById('fProdCls').value = d.prodClsNm || '';
+  document.getElementById('fLg').value = d.lgNm || '';
+  document.getElementById('fMd').value = d.mdNm || '';
+  document.getElementById('fSm').value = d.smNm || '';
+  document.getElementById('fExpAlertDays').value = d.expAlertDays || '';
+  document.getElementById('fExpValidDays').value = d.expValidDays || '';
+  document.getElementById('fWeight').value = d.weight || '';
+  document.getElementById('fQtyPerBox').value = d.qtyPerBox || '';
+  document.getElementById('fGoodsIdCd').value = d.goodsIdCd || '';
+  document.getElementById('fLogisIdCd').value = d.logisIdCd || '';
+  document.getElementById('fOrigin').value = d.origin || '';
+  document.getElementById('fBrand').value = d.brand || '';
+  document.getElementById('fUseYn').value = d.useYn || '사용';
+  document.getElementById('fBundleQty').value = d.bundleQty || '';
+  document.getElementById('fBundleUnitNm').value = d.bundleUnitNm || '';
+  document.getElementById('fSingleQty').value = d.singleQty || '';
+  document.getElementById('fBackRow').value = d.backRow || '';
+  document.getElementById('fBackCol').value = d.backCol || '';
+  document.getElementById('fWidth').value = d.width || '';
+  document.getElementById('fDepth').value = d.depth || '';
+  document.getElementById('fHeight').value = d.height || '';
+  document.getElementById('fProdSku').value = d.prodSku || '';
+  document.getElementById('fProdLabel').value = d.prodLabel || '';
+  document.getElementById('fPalletSku').value = d.palletSku || '';
+  document.getElementById('fPalletLabel').value = d.palletLabel || '';
+  document.getElementById('fRemark').value = d.remark || '';
+}
 
-/* === 모달 드래그 === */
-var dragState = { active: false, modalId: '', startX: 0, startY: 0, origX: 0, origY: 0 };
-
-function centerModal(id) {
+/* === 모달 오픈/닫기 === */
+function openModal(id) {
   var bg = document.getElementById(id);
+  bg.classList.add('open');
   var modal = bg.querySelector('.modal');
-  var w = modal.offsetWidth || parseInt(modal.style.width) || 520;
-  var h = modal.offsetHeight || 400;
-  modal.style.left = Math.max(0, (window.innerWidth - w) / 2) + 'px';
-  modal.style.top = Math.max(0, (window.innerHeight - h) / 2) + 'px';
+  var bw = bg.offsetWidth, bh = bg.offsetHeight;
+  var mw = modal.offsetWidth, mh = modal.offsetHeight;
+  modal.style.left = Math.max(0, (bw - mw) / 2) + 'px';
+  modal.style.top = Math.max(0, (bh - mh) / 2) + 'px';
+}
+function closeRule() { document.getElementById('ruleModal').classList.remove('open'); }
+function closeProdModal() { document.getElementById('prodModal').classList.remove('open'); }
+function openRule() { openModal('ruleModal'); }
+
+/* === 드래그 이동 === */
+function initDrag(bgId, headerId) {
+  var header = document.getElementById(headerId);
+  if (!header) return;
+  var modal = header.closest('.modal');
+  var isDragging = false, startX, startY, startLeft, startTop;
+  header.addEventListener('mousedown', function(e) {
+    if (e.target.classList.contains('close-btn')) return;
+    isDragging = true;
+    startX = e.clientX; startY = e.clientY;
+    startLeft = parseInt(modal.style.left) || 0;
+    startTop = parseInt(modal.style.top) || 0;
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    modal.style.left = (startLeft + e.clientX - startX) + 'px';
+    modal.style.top = (startTop + e.clientY - startY) + 'px';
+  });
+  document.addEventListener('mouseup', function() { isDragging = false; });
 }
 
-function startDrag(e, id) {
-  if (e.target.closest('.close-btn')) return;
-  var bg = document.getElementById(id);
-  var modal = bg.querySelector('.modal');
-  dragState.active = true;
-  dragState.modalId = id;
-  dragState.startX = e.clientX;
-  dragState.startY = e.clientY;
-  dragState.origX = parseInt(modal.style.left) || 0;
-  dragState.origY = parseInt(modal.style.top) || 0;
-  e.preventDefault();
+/* === 가로 스크롤 동기화 === */
+function syncHScroll() {
+  var table = document.getElementById('gridTable');
+  var inner = document.getElementById('hScrollInner');
+  var wrap = document.getElementById('hScrollWrap');
+  var gridWrap = document.getElementById('gridWrap');
+  if (!table || !inner || !wrap || !gridWrap) return;
+  inner.style.width = table.offsetWidth + 'px';
+  wrap.onscroll = function() { gridWrap.scrollLeft = wrap.scrollLeft; };
+  gridWrap.onscroll = function() { wrap.scrollLeft = gridWrap.scrollLeft; };
 }
-
-document.addEventListener('mousemove', function(e) {
-  if (!dragState.active) return;
-  var bg = document.getElementById(dragState.modalId);
-  var modal = bg.querySelector('.modal');
-  modal.style.left = (dragState.origX + e.clientX - dragState.startX) + 'px';
-  modal.style.top = (dragState.origY + e.clientY - dragState.startY) + 'px';
-});
-
-document.addEventListener('mouseup', function() { dragState.active = false; });
 
 /* === 유틸 === */
-function esc(v) { return v == null ? '' : String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function fmtNum(v) { return v == null || v === '' ? '' : String(v); }
-function pad2(n) { return n < 10 ? '0' + n : '' + n; }
-function pad4(n) { var s = '0000' + n; return s.substring(s.length - 4); }
-
-window.addEventListener('resize', function() { syncHScroll(); });
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function pad2(n) { return n < 10 ? '0'+n : String(n); }
 </script>
 </body>
 </html>

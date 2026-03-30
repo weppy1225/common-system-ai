@@ -8,24 +8,25 @@
 
 메뉴코드가 있는 경우 아래 2가지만 업로드한다.
 
-| 대상 | 로컬 경로 | 원격 경로 |
-|---|---|---|
-| 진입점 | `dist/index.html` | `/WEB_BASE/CLOUD_WMS_DOC/dist/index.html` |
-| 메뉴 화면 | `dist/$ARGUMENTS/*.html` | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/*.html` |
-| 메뉴 데이터 | `dist/$ARGUMENTS/*-data.js` | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/*-data.js` |
+| 대상        | 로컬 경로                     | 원격 경로                                   |
+| ----------- | ----------------------------- | ------------------------------------------- |
+| 진입점      | `dist/index.html`           | `/WEB_BASE/CLOUD_WMS_DOC/dist/index.html` |
+| 메뉴 화면   | `dist/$ARGUMENTS/*.html`    |                                             |
+| 메뉴 데이터 | `dist/$ARGUMENTS/*-data.js` |                                             |
+| 화면설계 문서 | `dist/$ARGUMENTS/*.md`     |                                             |
 
-메뉴코드 없이 `/deploy` 만 입력하면 **dist/ 전체**를 배포한다 (실행 전 확인 요청).
+메뉴코드 없이 `/deploy` 만 입력하면 가장최근에 메뉴코드폴더에 메뉴코드-data.js, html, md 파일 작성된 것을 git diff로 확인후 그 메뉴코드 데이터를 배포한다.
 
 ---
 
 ## FTP 서버 정보
 
-| 항목 | 값 |
-|---|---|
-| 서버 | 168.126.28.62 |
-| 포트 | 21 |
-| 계정 | zinDev01 |
-| 비밀번호 | Z1nPass01!Q2w3e4r |
+| 항목           | 값                                |
+| -------------- | --------------------------------- |
+| 서버           | 168.126.28.62                     |
+| 포트           | 21                                |
+| 계정           | zinDev01                          |
+| 비밀번호       | Z1nPass01!Q2w3e4r                 |
 | 원격 기본 경로 | `/WEB_BASE/CLOUD_WMS_DOC/dist/` |
 
 ---
@@ -67,6 +68,7 @@ mkdir $ARGUMENTS
 cd $ARGUMENTS
 put dist/$ARGUMENTS/$ARGUMENTS.html $ARGUMENTS.html
 put dist/$ARGUMENTS/$ARGUMENTS-data.js $ARGUMENTS-data.js
+put dist/$ARGUMENTS/$ARGUMENTS.md $ARGUMENTS.md
 bye
 FTPEOF
 ```
@@ -80,6 +82,7 @@ AUTH="zinDev01:Z1nPass01!Q2w3e4r"
 curl -T "dist/index.html" --user "$AUTH" "$BASE/index.html" --ftp-create-dirs -s -w "index.html: %{size_upload}bytes\n"
 curl -T "dist/$ARGUMENTS/$ARGUMENTS.html" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.html" --ftp-create-dirs -s -w "$ARGUMENTS.html: %{size_upload}bytes\n"
 curl -T "dist/$ARGUMENTS/$ARGUMENTS-data.js" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS-data.js" --ftp-create-dirs -s -w "$ARGUMENTS-data.js: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/$ARGUMENTS.md" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.md" --ftp-create-dirs -s -w "$ARGUMENTS.md: %{size_upload}bytes\n"
 ```
 
 ### 4단계 — 결과 보고
@@ -124,7 +127,7 @@ passive
 cd /WEB_BASE/CLOUD_WMS_DOC/dist
 mkdir $code
 cd $code
-$(for f in "$dir"*.html "$dir"*.js; do [ -f "$f" ] && echo "put $f $(basename $f)"; done)
+$(for f in "$dir"*.html "$dir"*.js "$dir"*.md; do [ -f "$f" ] && echo "put $f $(basename $f)"; done)
 bye
 FTPEOF2
 done
@@ -146,7 +149,7 @@ done
 for dir in dist/*/; do
   code=$(basename "$dir")
   [ "$code" = "common" ] && continue
-  for f in "$dir"*.html "$dir"*.js; do
+  for f in "$dir"*.html "$dir"*.js "$dir"*.md; do
     [ -f "$f" ] || continue
     fname=$(basename "$f")
     curl -T "$f" --user "$AUTH" "$BASE/$code/$fname" --ftp-create-dirs -s -w "$code/$fname: %{size_upload}bytes\n"
