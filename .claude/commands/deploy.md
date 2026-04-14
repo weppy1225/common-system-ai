@@ -6,16 +6,32 @@
 
 ## 배포 범위
 
-메뉴코드가 있는 경우 아래 2가지만 업로드한다.
+### 메뉴코드 지정 시 (`/deploy {메뉴코드}`)
 
-| 대상        | 로컬 경로                     | 원격 경로                                   |
-| ----------- | ----------------------------- | ------------------------------------------- |
-| 진입점      | `dist/index.html`           | `/WEB_BASE/CLOUD_WMS_DOC/dist/index.html` |
-| 메뉴 화면   | `dist/$ARGUMENTS/*.html`    |                                             |
-| 메뉴 데이터 | `dist/$ARGUMENTS/*-data.js` |                                             |
-| 화면설계 문서 | `dist/$ARGUMENTS/*.md`     |                                             |
+| 대상          | 로컬 경로                            | 원격 경로                                                    |
+| ------------- | ------------------------------------ | ------------------------------------------------------------ |
+| 진입점        | `dist/index.html`                    | `/WEB_BASE/CLOUD_WMS_DOC/dist/index.html`                    |
+| 공통 메뉴     | `dist/common/left-menu.html`         | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/left-menu.html`         |
+| 공통 CSS      | `dist/common/wms-ui.css`             | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/wms-ui.css`             |
+| 공통 JS       | `dist/common/wms-common.js`          | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/wms-common.js`          |
+| 메뉴 화면     | `dist/$ARGUMENTS/$ARGUMENTS.html`    | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS.html`    |
+| 메뉴 데이터   | `dist/$ARGUMENTS/$ARGUMENTS-data.js` | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS-data.js` |
+| 화면설계 문서 | `dist/$ARGUMENTS/$ARGUMENTS.md`      | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS.md`      |
 
-메뉴코드 없이 `/deploy` 만 입력하면 가장최근에 메뉴코드폴더에 메뉴코드-data.js, html, md 파일 작성된 것을 git diff로 확인후 그 메뉴코드 데이터를 배포한다.
+> `index.html`과 `left-menu.html`은 `/ui` 명령 실행 시 메뉴 항목이 추가되므로 항상 함께 배포한다.
+> `wms-ui.css` / `wms-common.js` 는 모든 메뉴 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
+
+### 메뉴코드 없이 호출 시 (`/deploy`)
+
+아래 순서로 처리한다.
+
+1. git diff로 최근 변경된 메뉴코드 폴더를 감지한다:
+   ```bash
+   git diff --name-only HEAD | grep -oP 'dist/\K[^/]+(?=/)' | grep -v '^common$' | sort -u
+   ```
+2. 감지된 메뉴코드가 **1개**이면 해당 코드로 메뉴코드 지정 배포를 실행한다.
+3. **여러 개**이면 목록을 사용자에게 보여주고 어느 코드를 배포할지 선택을 요청한다.
+4. **0개**이면 "변경된 메뉴코드 폴더가 없습니다. 전체 `dist/` 를 배포하시겠습니까?" 를 사용자에게 확인 요청한 뒤 실행한다.
 
 ---
 
@@ -27,7 +43,7 @@
 | 포트           | 21                                |
 | 계정           | zinDev01                          |
 | 비밀번호       | Z1nPass01!Q2w3e4r                 |
-| 원격 기본 경로 | `/WEB_BASE/CLOUD_WMS_DOC/dist/` |
+| 원격 기본 경로 | `/WEB_BASE/CLOUD_WMS_DOC/dist/`   |
 
 ---
 
@@ -49,6 +65,7 @@ which ftp 2>/dev/null && echo "USE_FTP" || echo "USE_CURL"
 ```bash
 ls -la dist/$ARGUMENTS/
 ls dist/index.html
+ls dist/common/left-menu.html
 ```
 
 ### 3단계 — 파일 업로드
@@ -58,12 +75,17 @@ ls dist/index.html
 #### ▶ ftp 방식
 
 ```bash
-ftp -n 168.126.28.62 <<'FTPEOF'
+ftp -n 168.126.28.62 <<FTPEOF
 user zinDev01 Z1nPass01!Q2w3e4r
 binary
 passive
 cd /WEB_BASE/CLOUD_WMS_DOC/dist
 put dist/index.html index.html
+cd common
+put dist/common/left-menu.html left-menu.html
+put dist/common/wms-ui.css wms-ui.css
+put dist/common/wms-common.js wms-common.js
+cd /WEB_BASE/CLOUD_WMS_DOC/dist
 mkdir $ARGUMENTS
 cd $ARGUMENTS
 put dist/$ARGUMENTS/$ARGUMENTS.html $ARGUMENTS.html
@@ -79,10 +101,13 @@ FTPEOF
 BASE="ftp://168.126.28.62/WEB_BASE/CLOUD_WMS_DOC/dist"
 AUTH="zinDev01:Z1nPass01!Q2w3e4r"
 
-curl -T "dist/index.html" --user "$AUTH" "$BASE/index.html" --ftp-create-dirs -s -w "index.html: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS.html" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.html" --ftp-create-dirs -s -w "$ARGUMENTS.html: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS-data.js" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS-data.js" --ftp-create-dirs -s -w "$ARGUMENTS-data.js: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS.md" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.md" --ftp-create-dirs -s -w "$ARGUMENTS.md: %{size_upload}bytes\n"
+curl -T "dist/index.html"                        --user "$AUTH" "$BASE/index.html"                          --ftp-create-dirs -s -w "index.html: %{size_upload}bytes\n"
+curl -T "dist/common/left-menu.html"             --user "$AUTH" "$BASE/common/left-menu.html"               --ftp-create-dirs -s -w "common/left-menu.html: %{size_upload}bytes\n"
+curl -T "dist/common/wms-ui.css"                 --user "$AUTH" "$BASE/common/wms-ui.css"                   --ftp-create-dirs -s -w "common/wms-ui.css: %{size_upload}bytes\n"
+curl -T "dist/common/wms-common.js"              --user "$AUTH" "$BASE/common/wms-common.js"                --ftp-create-dirs -s -w "common/wms-common.js: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/$ARGUMENTS.html"        --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.html"          --ftp-create-dirs -s -w "$ARGUMENTS.html: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/$ARGUMENTS-data.js"     --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS-data.js"       --ftp-create-dirs -s -w "$ARGUMENTS-data.js: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/$ARGUMENTS.md"          --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.md"            --ftp-create-dirs -s -w "$ARGUMENTS.md: %{size_upload}bytes\n"
 ```
 
 ### 4단계 — 결과 보고
@@ -94,14 +119,12 @@ curl -T "dist/$ARGUMENTS/$ARGUMENTS.md" --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUME
 
 ---
 
-## 전체 dist 배포 (`/deploy` 인수 없음)
-
-메뉴코드 없이 호출된 경우, 반드시 사용자에게 확인을 요청한 뒤 실행한다.
+## 전체 dist 배포 (사용자 확인 후 실행)
 
 #### ▶ ftp 방식 (전체)
 
 ```bash
-ftp -n 168.126.28.62 <<'FTPEOF'
+ftp -n 168.126.28.62 <<FTPEOF
 user zinDev01 Z1nPass01!Q2w3e4r
 binary
 passive
@@ -113,6 +136,8 @@ put dist/common/left-menu.html left-menu.html
 put dist/common/CPCT01_popup.html CPCT01_popup.html
 put dist/common/CPPD01_popup.html CPPD01_popup.html
 put dist/common/icon-preview.html icon-preview.html
+put dist/common/wms-ui.css wms-ui.css
+put dist/common/wms-common.js wms-common.js
 bye
 FTPEOF
 

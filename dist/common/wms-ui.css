@@ -1,0 +1,583 @@
+/* ================================================================
+   WMS 화면 프로토타입 공통 스타일
+   - 모든 메뉴 HTML은 <link rel="stylesheet" href="../common/wms-ui.css">
+   - 화면 고유 스타일만 각 HTML <style>에 최소로 추가한다.
+   ================================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-size: 12px;
+  color: #333;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ── 페이지 레이아웃 ── */
+.page-wrap {
+  padding: 6px 8px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── 헤더 ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 2px 6px 2px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.page-title { display: flex; align-items: center; gap: 4px; margin-right: 4px; }
+.page-title strong { font-size: 15px; font-weight: 700; color: #111827; }
+.page-title .arrow { font-size: 11px; color: #6b7280; font-weight: 400; }
+.btn-search {
+  border: 1px solid #a8bfd8;
+  background: #ffffff;
+  color: #3a6ea5;
+  font-weight: 500;
+  padding: 0;
+  width: 74px;
+  height: 28px;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.btn-search:hover { border-color: #7aa2c8; background: #f4f8fc; color: #2a5a8f; }
+
+/* ── 검색 영역 ── */
+.search-area {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-top: -2px;
+}
+.search-area table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.search-area th {
+  background: #f3f4f6;
+  text-align: right;
+  padding: 4px 12px 4px 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  width: 82px;
+}
+.search-area td {
+  background: #ffffff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.search-area td.empty-lbl { background: #f3f4f6; }
+.search-area input,
+.search-area select {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.search-area input:focus,
+.search-area select:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+}
+.search-area input:disabled,
+.search-area select:disabled { background: #f3f4f6; cursor: not-allowed; color: #9ca3af; }
+
+/* 팝업 연동 입력 */
+.input-with-popup { display: flex; align-items: center; gap: 2px; }
+.input-with-popup input { flex: 1; min-width: 0; width: auto; }
+.btn-popup {
+  flex-shrink: 0;
+  height: 26px;
+  width: 26px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  font-family: inherit;
+}
+.btn-popup:hover { border-color: #9ca3af; background: #f9fafb; }
+.btn-popup:disabled { cursor: not-allowed; opacity: 0.4; }
+
+/* 팝업 내부에서도 동일 스타일 필요 (스코프 스코프 주의) */
+.modal .input-with-popup { display: flex; align-items: center; gap: 2px; }
+.modal .input-with-popup input { flex: 1; min-width: 0; width: auto; }
+
+/* ── 메인 영역 ── */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+.main-area.lr { flex-direction: row; }
+.bottom-row,
+.top-row {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+.right-column,
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── 패널 ── */
+.panel {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+.panel-top    { flex: 2; }
+.panel-d1,
+.panel-d2     { flex: 1; }
+
+/* ── 툴바 ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 32px;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+.toolbar-left  { display: flex; align-items: center; gap: 3px; }
+.toolbar-right { display: flex; align-items: center; gap: 3px; }
+.btn-icon {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  font-size: 12px;
+  font-family: inherit;
+}
+.btn-icon:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-icon svg { width: 15px; height: 15px; }
+.btn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  height: 30px;
+  padding: 0 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #374151;
+  font-family: inherit;
+}
+.btn:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-excel {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.btn-excel:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+
+/* ── 결과 그리드 ── */
+.grid-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.grid-wrap::-webkit-scrollbar { width: 8px; height: 0; }
+.grid-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.grid-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.grid-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.grid-wrap::-webkit-scrollbar-corner { background: #f1f5f9; }
+.grid-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+.grid-table thead th {
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  padding: 3px 4px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 30px;
+}
+.grid-table thead tr.grp-row th {
+  background: #e0e7f0;
+  color: #304a6e;
+  font-weight: 700;
+  top: 0;
+  z-index: 11;
+}
+.grid-table thead tr.sub-row th {
+  background: #eef0f4;
+  top: 30px;
+  z-index: 10;
+}
+.grid-table tbody td {
+  height: 26px;
+  padding: 1px 4px;
+  font-size: 12px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grid-table tbody tr { cursor: pointer; }
+.grid-table tbody tr:hover td { background: #eff6ff; }
+.grid-table tbody tr.selected td { background: #dbeafe; }
+.tc { text-align: center; }
+.tl { text-align: left; }
+.tr { text-align: right; }
+
+/* 사용여부 badge (명시적으로 필요한 경우만) */
+.badge {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 16px;
+}
+.badge-on  { background: #d4efdf; color: #1e8449; }
+.badge-off { background: #fde8e8; color: #c0392b; }
+
+/* ── 가로 스크롤 ── */
+.h-scroll-wrap {
+  height: 12px;
+  border-top: 1px solid #e5e7eb;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+.h-scroll-wrap::-webkit-scrollbar { height: 8px; }
+.h-scroll-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.h-scroll-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.h-scroll-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.h-scroll-inner { height: 1px; }
+
+/* ── 그리드 푸터 (페이징) ── */
+.grid-footer {
+  flex-shrink: 0;
+  height: 40px;
+  background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  position: relative;
+}
+.pagination { display: flex; align-items: center; gap: 4px; }
+.page-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.page-btn:hover { background: #f1f5f9; }
+.page-btn.active { background: #4b5563; color: #fff; }
+.page-size-wrap { display: flex; align-items: center; margin-left: 10px; }
+.page-size-wrap select {
+  height: 28px;
+  min-width: 64px;
+  padding: 0 20px 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #374151;
+}
+.row-count { position: absolute; right: 12px; font-size: 11px; color: #6b7280; }
+
+/* ── 인라인 편집 그리드 ── */
+.multi-grid {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+.multi-grid thead th {
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  padding: 3px 4px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 30px;
+}
+.multi-grid tbody td {
+  height: 26px;
+  padding: 2px 4px;
+  font-size: 12px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+.multi-grid tbody tr:hover td { background: #eff6ff; }
+.multi-grid tbody tr.selected td { background: #dbeafe; }
+.multi-grid td input:not([type="checkbox"]),
+.multi-grid td select {
+  height: 22px;
+  width: 100%;
+  font-size: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  padding: 0 4px;
+  background: #fff;
+  font-family: inherit;
+  color: #111827;
+}
+.multi-grid td input:not([type="checkbox"]):focus,
+.multi-grid td select:focus { outline: none; border-color: #7aa2c8; }
+.multi-grid td input:not([type="checkbox"]):disabled,
+.multi-grid td select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+  color: #9ca3af;
+}
+.inline-popup-cell { display: flex; align-items: center; gap: 2px; }
+.inline-popup-cell input:not([type="checkbox"]) { flex: 1; min-width: 0; width: auto !important; }
+.btn-inline-popup {
+  flex-shrink: 0;
+  height: 22px;
+  width: 22px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  font-family: inherit;
+}
+.btn-inline-popup:hover { border-color: #9ca3af; background: #f9fafb; }
+.btn-inline-popup:disabled { cursor: not-allowed; opacity: 0.4; }
+
+/* ── 모달 공통 ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+}
+.modal-bg.open { display: block; }
+.modal {
+  position: absolute;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+.modal-header {
+  background: #304a6e;
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+.modal-header .close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  user-select: none;
+}
+.modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+.modal-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── 업무규칙 모달 ── */
+.rule-title { font-size: 13px; font-weight: 700; color: #304a6e; margin-bottom: 6px; }
+.modal-body .rule-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+.modal-body .rule-table th {
+  background: #f3f4f6; text-align: left; padding: 6px 10px;
+  border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600;
+  color: #374151; white-space: nowrap;
+}
+.modal-body .rule-table td {
+  padding: 6px 10px; border: 1px solid #e5e7eb; font-size: 12px; color: #111827;
+}
+.modal-body ol.rule-list { padding-left: 18px; }
+.modal-body ol.rule-list li {
+  font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 6px;
+}
+
+/* ── 등록/수정 폼 테이블 ── */
+.form-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.form-table th {
+  background: #f3f4f6;
+  text-align: right;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  width: 90px;
+}
+.form-table td {
+  background: #fff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.form-table input,
+.form-table select {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.form-table input:focus,
+.form-table select:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+}
+.form-table input:disabled,
+.form-table select:disabled { background: #f3f4f6; cursor: not-allowed; }
+.form-table textarea {
+  width: 100%;
+  min-height: 60px;
+  height: 60px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+.form-table textarea:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+}
+.required-mark { color: #e74c3c; font-weight: bold; }
+
+/* ── 공통 버튼 (모달 액션 등) ── */
+.btn-primary {
+  background: #304a6e; border: 1px solid #304a6e; color: #fff;
+  height: 30px; padding: 0 18px; font-size: 13px; font-weight: 500;
+  border-radius: 4px; cursor: pointer; font-family: inherit;
+}
+.btn-primary:hover { background: #263858; border-color: #263858; }
+.btn-modal-close {
+  border: 1px solid #d1d5db; background: #fff; padding: 0 18px;
+  height: 30px; font-size: 13px; font-weight: 500; border-radius: 4px;
+  cursor: pointer; color: #374151; font-family: inherit;
+}
+.btn-modal-close:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
