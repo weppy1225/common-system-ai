@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>세트해체 [STDC01]</title>
+<link rel="stylesheet" href="../common/wms-ui.css">
+<style>
+/* 화면 고유 스타일 — wms-ui.css 공통 클래스 재정의 금지 */
+.btn-proc {
+  height: 26px; padding: 0 12px;
+  border: 1px solid #304a6e; background: #304a6e; color: #fff;
+  border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;
+  font-family: inherit;
+}
+.btn-proc:hover { background: #263858; border-color: #263858; }
+.date-range { display: flex; align-items: center; gap: 3px; }
+.date-range input[type="date"] { flex: 1; min-width: 0; }
+.date-range span { color: #6b7280; }
+.grid-table td input.proc-input {
+  width: 100%; height: 22px; border: 1px solid #d1d5db; border-radius: 3px;
+  padding: 0 4px; font-size: 12px; text-align: right; background: #fff;
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── 헤더 ── -->
+  <div class="page-header">
+    <div class="page-title">
+      <strong>세트해체</strong>
+      <span class="arrow">∨</span>
+    </div>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" onclick="openRule()" style="margin-left:auto">업무규칙</button>
+  </div>
+
+  <!-- ── 검색 영역 ── -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>사업장</th>
+          <td>
+            <select id="s_site">
+              <option value="본사">본사</option>
+              <option value="물류센터A">물류센터A</option>
+              <option value="물류센터B">물류센터B</option>
+            </select>
+          </td>
+          <th>품목번호</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="s_prodNo" readonly>
+              <button type="button" class="btn-popup" onclick="openPdPopup('s_prodNo')">🔍</button>
+            </div>
+          </td>
+          <th>품목명</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="s_prodNm" readonly>
+              <button type="button" class="btn-popup" onclick="openPdPopup('s_prodNm')">🔍</button>
+            </div>
+          </td>
+          <th>대분류</th>
+          <td>
+            <select id="s_large">
+              <option value="">선택</option>
+              <option value="TOY">TOY</option>
+              <option value="HOBBY">HOBBY</option>
+              <option value="CAPSULE">CAPSULE</option>
+              <option value="CARD">CARD</option>
+            </select>
+          </td>
+          <th>상품바코드</th>
+          <td><input type="text" id="s_barcode"></td>
+        </tr>
+        <tr>
+          <th>물류센터</th>
+          <td>
+            <select id="s_center">
+              <option value="상품창고">상품창고</option>
+              <option value="반품창고">반품창고</option>
+            </select>
+          </td>
+          <th>위치</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="s_loc" readonly>
+              <button type="button" class="btn-popup" onclick="openLcPopup('s_loc')">🔍</button>
+            </div>
+          </td>
+          <th>소비기한</th>
+          <td>
+            <div class="date-range">
+              <input type="date" id="s_expFr">
+              <span>~</span>
+              <input type="date" id="s_expTo">
+            </div>
+          </td>
+          <th>재고상태</th>
+          <td>
+            <select id="s_status">
+              <option value="">선택</option>
+              <option value="정상">정상</option>
+              <option value="불량">불량</option>
+              <option value="보류">보류</option>
+            </select>
+          </td>
+          <th>SKU번호</th>
+          <td><input type="text" id="s_sku"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 메인 영역 (UI유형: 그리드 1개) ── -->
+  <div class="main-area">
+
+    <div class="panel">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn-proc" onclick="doProcess()">해체처리</button>
+        </div>
+        <div class="toolbar-right"></div>
+      </div>
+      <div class="grid-wrap" id="mainWrap">
+        <table class="grid-table" id="mainTable">
+          <colgroup>
+            <col style="width:30px">
+            <col style="width:26px">
+            <col style="width:140px">
+            <col style="width:220px">
+            <col style="width:44px">
+            <col style="width:80px">
+            <col style="width:70px">
+            <col style="width:60px">
+            <col style="width:70px">
+            <col style="width:70px">
+            <col style="width:70px">
+            <col style="width:70px">
+            <col style="width:70px">
+            <col style="width:80px">
+            <col style="width:64px">
+            <col style="width:70px">
+            <col style="width:90px">
+            <col style="width:90px">
+            <col style="width:140px">
+            <col style="width:220px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th><input type="checkbox" id="mainAllChk" onclick="toggleMainAll(this.checked)"></th>
+              <th>품목번호</th>
+              <th>품목명</th>
+              <th>단위</th>
+              <th>대분류</th>
+              <th>재고수량</th>
+              <th>입수량</th>
+              <th>BOX수량</th>
+              <th>낱개수량</th>
+              <th>묶음수량</th>
+              <th>총수량</th>
+              <th>대기재고</th>
+              <th>처리수량</th>
+              <th>재고상태</th>
+              <th>창고</th>
+              <th>위치</th>
+              <th>소비기한</th>
+              <th>품목번호(To)</th>
+              <th>품목명(To)</th>
+            </tr>
+          </thead>
+          <tbody id="mainTbody"></tbody>
+        </table>
+      </div>
+      <div class="h-scroll-wrap" id="mainHScroll"><div class="h-scroll-inner" id="mainHInner"></div></div>
+      <div class="grid-footer">
+        <div class="pagination" id="mainPaging"></div>
+        <div class="page-size-wrap">
+          <select id="mainPageSize" onchange="changeMainPageSize()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="mainRowCount"></span>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- ── 업무규칙 모달 ── -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" id="ruleHeader">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeRule()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table class="rule-table">
+        <tr><th>메뉴그룹명</th><td>재고관리</td><th>메뉴그룹코드</th><td>IV3000</td></tr>
+        <tr><th>메뉴명</th><td>세트해체</td><th>메뉴코드</th><td>STDC01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">그리드 1개</td></tr>
+        <tr><th>목적</th><td colspan="3">세트 재고 해체 처리</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol class="rule-list">
+        <li>처리 제한: 재고 수량 만큼만 처리 가능 / 정상 재고만 처리 가능</li>
+        <li>처리: 처리수량 변경시 체크박스 자동 체크</li>
+        <li>조회 조건: 상품 창고 재고만 조회. 고정로케이션 제외. 세트 구성이 되어있는 재고만 조회.</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeRule()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<script src="../common/wms-common.js"></script>
+<script src="./stdc01-data.js"></script>
+<script>
+var mainAll = [], mainView = [], mainPage = 1, mainSize = 50;
+
+window.addEventListener('DOMContentLoaded', function() {
+  mainAll = JSON.parse(JSON.stringify(STDC01_DATA.main)).map(function(r, i){ r._id = i; return r; });
+  renderMainGrid();
+  initHScroll('mainWrap', 'mainHScroll', 'mainHInner', 'mainTable');
+  initModalDrag('ruleModal', 'ruleHeader');
+});
+
+/* ── 위치 검색 팝업 (CPLC01 미구현 시 간단 입력) ── */
+function openLcPopup(targetId) {
+  var v = window.prompt('위치를 입력하세요 (예: AA-01-41)');
+  if (v !== null) {
+    var el = document.getElementById(targetId);
+    if (el) el.value = v;
+  }
+}
+
+/* ── 검색 / 초기화 ── */
+function doSearch() {
+  mainPage = 1;
+  renderMainGrid();
+}
+function doReset() {
+  ['s_site','s_prodNo','s_prodNm','s_large','s_barcode',
+   's_center','s_loc','s_expFr','s_expTo','s_status','s_sku']
+    .forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  mainPage = 1;
+  renderMainGrid();
+}
+
+function getMainFiltered() {
+  var s_site  = document.getElementById('s_site').value;
+  var s_pno   = document.getElementById('s_prodNo').value.trim();
+  var s_pnm   = document.getElementById('s_prodNm').value.trim();
+  var s_large = document.getElementById('s_large').value;
+  var s_bc    = document.getElementById('s_barcode').value.trim();
+  var s_loc   = document.getElementById('s_loc').value.trim();
+  var s_status= document.getElementById('s_status').value;
+  var s_sku   = document.getElementById('s_sku').value.trim();
+
+  return mainAll.filter(function(r) {
+    if (s_pno   && r.prodNo.indexOf(s_pno) === -1) return false;
+    if (s_pnm   && r.prodNm.indexOf(s_pnm) === -1) return false;
+    if (s_large && r.large !== s_large) return false;
+    if (s_bc    && r.prodNo.indexOf(s_bc) === -1) return false;
+    if (s_loc   && r.loc.indexOf(s_loc) === -1) return false;
+    if (s_status&& r.status !== s_status) return false;
+    if (s_sku   && (r.prodNoTo||'').indexOf(s_sku) === -1) return false;
+    return true;
+  });
+}
+
+function renderMainGrid() {
+  mainView = getMainFiltered();
+  var total = mainView.length;
+  var start = (mainPage - 1) * mainSize;
+  var pageData = mainView.slice(start, start + mainSize);
+
+  var tbody = document.getElementById('mainTbody');
+  var html = '';
+  pageData.forEach(function(r, i) {
+    html += '<tr data-id="' + r._id + '">' +
+      '<td class="tc">' + (start + i + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" class="main-chk" data-id="' + r._id + '"></td>' +
+      '<td class="tl">' + esc(r.prodNo) + '</td>' +
+      '<td class="tl">' + esc(r.prodNm) + '</td>' +
+      '<td class="tc">' + esc(r.unit) + '</td>' +
+      '<td class="tc">' + esc(r.large) + '</td>' +
+      '<td class="tr">' + fmt(r.qty) + '</td>' +
+      '<td class="tr">' + fmt(r.inq) + '</td>' +
+      '<td class="tr">' + fmt(r.boxQty) + '</td>' +
+      '<td class="tr">' + fmt(r.eaQty) + '</td>' +
+      '<td class="tr">' + fmt(r.setQty) + '</td>' +
+      '<td class="tr">' + fmt(r.totalQty) + '</td>' +
+      '<td class="tr">' + fmt(r.waitQty) + '</td>' +
+      '<td class="tr"><input type="number" class="proc-input" data-id="' + r._id + '" value="' + r.procQty + '" min="0" max="' + r.qty + '" onchange="onProcChange(' + r._id + ', this.value)"></td>' +
+      '<td class="tc">' + esc(r.status) + '</td>' +
+      '<td class="tc">' + esc(r.wh) + '</td>' +
+      '<td class="tc">' + esc(r.loc) + '</td>' +
+      '<td class="tc">' + esc(r.expDt) + '</td>' +
+      '<td class="tl">' + esc(r.prodNoTo) + '</td>' +
+      '<td class="tl">' + esc(r.prodNmTo) + '</td>' +
+    '</tr>';
+  });
+  tbody.innerHTML = html || '<tr><td colspan="20" class="tc" style="padding:20px;color:#9ca3af">조회된 데이터가 없습니다.</td></tr>';
+
+  renderPagination('mainPaging', total, mainSize, mainPage, 'goMainPage');
+  renderRowCount('mainRowCount', total, mainSize, mainPage);
+  syncHScroll('mainHInner', 'mainTable');
+}
+
+function goMainPage(p) { mainPage = p; renderMainGrid(); }
+function changeMainPageSize() {
+  mainSize = parseInt(document.getElementById('mainPageSize').value, 10);
+  mainPage = 1;
+  renderMainGrid();
+}
+function toggleMainAll(chk) {
+  document.querySelectorAll('.main-chk').forEach(function(c){ c.checked = chk; });
+}
+
+/* ── 처리수량 변경 시 체크박스 자동 체크 ── */
+function onProcChange(id, val) {
+  var row = mainAll.find(function(r){ return r._id === id; });
+  if (!row) return;
+  var n = parseInt(val, 10) || 0;
+  if (n < 0) n = 0;
+  if (n > row.qty) {
+    alert('처리수량은 재고수량(' + fmt(row.qty) + ')을 초과할 수 없습니다.');
+    n = row.qty;
+  }
+  row.procQty = n;
+  var tr  = document.querySelector('#mainTbody tr[data-id="' + id + '"]');
+  if (tr) {
+    var inp = tr.querySelector('.proc-input');
+    var chk = tr.querySelector('.main-chk');
+    if (inp) inp.value = n;
+    if (chk) chk.checked = (n > 0);
+  }
+}
+
+/* ── 해체처리 ── */
+function doProcess() {
+  var checked = Array.prototype.slice.call(document.querySelectorAll('.main-chk:checked'));
+  if (checked.length === 0) {
+    alert('처리할 행을 선택해 주세요.');
+    return;
+  }
+  var targets = [];
+  for (var i = 0; i < checked.length; i++) {
+    var id = parseInt(checked[i].getAttribute('data-id'), 10);
+    var row = mainAll.find(function(r){ return r._id === id; });
+    if (!row) continue;
+    if (row.status !== '정상') {
+      alert('정상 재고만 처리 가능합니다. (' + row.prodNo + ' · ' + row.status + ')');
+      return;
+    }
+    if (row.procQty <= 0) {
+      alert('처리수량이 0인 행이 포함되어 있습니다. (' + row.prodNo + ')');
+      return;
+    }
+    if (row.procQty > row.qty) {
+      alert('처리수량이 재고수량을 초과합니다. (' + row.prodNo + ')');
+      return;
+    }
+    targets.push(row);
+  }
+  if (!confirm(targets.length + '건을 해체처리 하시겠습니까?')) return;
+  targets.forEach(function(row) {
+    row.qty -= row.procQty;
+  });
+  mainAll = mainAll.filter(function(r){ return r.qty > 0; });
+  alert('해체처리 완료: ' + targets.length + '건');
+  renderMainGrid();
+}
+</script>
+</body>
+</html>

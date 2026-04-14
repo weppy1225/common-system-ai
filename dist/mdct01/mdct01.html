@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>거래처관리 [MDCT01]</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-size: 12px;
+  color: #333;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ── 페이지 레이아웃 ── */
+.page-wrap {
+  padding: 6px 8px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── 헤더 ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 2px 6px 2px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+}
+.page-title strong { font-size: 15px; font-weight: 700; color: #111827; }
+.page-title .arrow { font-size: 11px; color: #6b7280; font-weight: 400; }
+
+.btn-search {
+  border: 1px solid #a8bfd8;
+  background: #ffffff;
+  color: #3a6ea5;
+  font-weight: 500;
+  padding: 0;
+  width: 74px;
+  height: 28px;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.btn-search:hover { border-color: #7aa2c8; background: #f4f8fc; color: #2a5a8f; }
+
+/* ── 검색 영역 ── */
+.search-area {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-top: -2px;
+}
+.search-area table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.search-area th {
+  background: #f3f4f6;
+  text-align: right;
+  padding: 4px 12px 4px 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  width: 82px;
+}
+.search-area td {
+  background: #ffffff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.search-area input,
+.search-area select {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.search-area input:focus,
+.search-area select:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+}
+
+/* ── MultiSelect ── */
+.multiselect-wrap { position: relative; width: 100%; }
+.multiselect-btn {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.multiselect-btn:focus { outline: none; border-color: #7aa2c8; box-shadow: 0 0 0 2px rgba(122,162,200,0.15); }
+.multiselect-btn .ms-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.multiselect-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 200;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.multiselect-dropdown.open { display: block; }
+.multiselect-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: #111827;
+  cursor: pointer;
+}
+.multiselect-option:hover { background: #f3f4f6; }
+.multiselect-option input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── 툴바 ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 32px;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+.toolbar-left { display: flex; align-items: center; gap: 3px; }
+.toolbar-right { display: flex; align-items: center; gap: 3px; }
+
+.btn-icon {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  font-size: 12px;
+  font-family: inherit;
+}
+.btn-icon:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-icon svg { width: 15px; height: 15px; }
+
+.btn-excel {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.btn-excel:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-excel svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* ── 패널 ── */
+.panel {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── 그리드 ── */
+.grid-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.grid-wrap::-webkit-scrollbar { width: 8px; height: 0; }
+.grid-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.grid-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.grid-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.grid-wrap::-webkit-scrollbar-corner { background: #f1f5f9; }
+
+.grid-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+.grid-table thead th {
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  padding: 3px 4px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 30px;
+}
+.grid-table tbody td {
+  height: 26px;
+  padding: 1px 4px;
+  font-size: 12px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grid-table tbody tr { cursor: pointer; }
+.grid-table tbody tr:hover td { background: #eff6ff; }
+.grid-table tbody tr.selected td { background: #dbeafe; }
+
+.tc { text-align: center; }
+.tl { text-align: left; }
+.tr { text-align: right; }
+
+.check-icon { color: #16a34a; font-weight: bold; font-size: 13px; }
+
+/* ── 가로 스크롤 ── */
+.h-scroll-wrap {
+  height: 12px;
+  border-top: 1px solid #e5e7eb;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+.h-scroll-wrap::-webkit-scrollbar { height: 8px; }
+.h-scroll-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+.h-scroll-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.h-scroll-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.h-scroll-inner { height: 1px; }
+
+/* ── 그리드 푸터 ── */
+.grid-footer {
+  flex-shrink: 0;
+  height: 40px;
+  background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  position: relative;
+}
+.pagination { display: flex; align-items: center; gap: 4px; }
+.page-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.page-btn:hover { background: #f1f5f9; }
+.page-btn.active { background: #4b5563; color: #fff; }
+.page-size-wrap { display: flex; align-items: center; margin-left: 10px; }
+.page-size-wrap select {
+  height: 28px;
+  min-width: 64px;
+  padding: 0 20px 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #374151;
+}
+.row-count { position: absolute; right: 12px; font-size: 11px; color: #6b7280; }
+
+/* ── 모달 공통 ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+}
+.modal-bg.open { display: block; }
+.modal {
+  position: absolute;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+.modal-header {
+  background: #304a6e;
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: move;
+  user-select: none;
+  flex-shrink: 0;
+}
+.modal-header .close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  user-select: none;
+}
+.modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+.modal-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── 업무규칙 모달 테이블 ── */
+.rule-title { font-size: 13px; font-weight: 700; color: #304a6e; margin-bottom: 6px; }
+#ruleModal .modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+#ruleModal .modal-body table th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+#ruleModal .modal-body table td {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  color: #111827;
+}
+#ruleModal .modal-body ol { padding-left: 18px; }
+#ruleModal .modal-body ol li { font-size: 12px; color: #374151; line-height: 1.6; margin-bottom: 6px; }
+
+/* ── 등록/수정 폼 테이블 ── */
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.form-table th {
+  background: #f3f4f6;
+  text-align: right;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  width: 92px;
+}
+.form-table td {
+  background: #fff;
+  padding: 4px 10px;
+  border: 1px solid #e5e7eb;
+  height: 36px;
+}
+.form-table input:not([type="radio"]),
+.form-table select {
+  width: 100%;
+  height: 26px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-family: inherit;
+}
+.form-table input:not([type="radio"]):focus,
+.form-table select:focus {
+  outline: none;
+  border-color: #7aa2c8;
+  box-shadow: 0 0 0 2px rgba(122,162,200,0.15);
+}
+.form-table input[disabled]:not([type="radio"]),
+.form-table select[disabled] { background: #f3f4f6; cursor: not-allowed; }
+.form-table textarea {
+  width: 100%;
+  min-height: 60px;
+  height: 60px;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+.form-table textarea[disabled] { background: #f3f4f6; cursor: not-allowed; }
+.form-table textarea:focus { outline: none; border-color: #7aa2c8; box-shadow: 0 0 0 2px rgba(122,162,200,0.15); }
+.required-mark { color: #e74c3c; font-weight: bold; }
+
+/* 주소 행 */
+.addr-row { display: flex; gap: 4px; align-items: center; }
+.addr-row input:not([type="radio"]) { width: auto; }
+.addr-zip-input { flex: 0 0 80px !important; width: 80px !important; }
+.addr-main-input { flex: 2; min-width: 0; }
+.addr-detail-input { flex: 1; min-width: 0; }
+
+/* 라디오 그룹 */
+.radio-group { display: flex; align-items: center; gap: 14px; height: 26px; }
+.radio-group label { display: flex; align-items: center; gap: 4px; font-size: 13px; color: #111827; cursor: pointer; }
+.radio-group input[type="radio"] { width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+.radio-group input[type="radio"][disabled] { cursor: not-allowed; }
+
+/* ── 폼 공통 버튼 ── */
+.btn-primary {
+  background: #304a6e;
+  border: 1px solid #304a6e;
+  color: #fff;
+  height: 30px;
+  padding: 0 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary:hover { background: #263858; border-color: #263858; }
+.btn-modal-close {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  padding: 0 18px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #374151;
+  font-family: inherit;
+}
+.btn-modal-close:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+
+/* ── 라벨 팝업 그리드 ── */
+.popup-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.popup-grid-table th {
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  padding: 3px 4px;
+  white-space: nowrap;
+  height: 30px;
+  position: sticky;
+  top: 0;
+}
+.popup-grid-table td {
+  height: 26px;
+  padding: 1px 6px;
+  font-size: 12px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.popup-grid-table tbody tr { cursor: pointer; }
+.popup-grid-table tbody tr:hover td { background: #eff6ff; }
+.label-grid-wrap { max-height: 300px; overflow-y: auto; }
+
+.btn-sm {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #374151;
+  font-family: inherit;
+}
+.btn-sm:hover { border-color: #9ca3af; background: #f9fafb; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── 헤더 ── -->
+  <div class="page-header">
+    <div class="page-title">
+      <strong>거래처관리</strong>
+      <span class="arrow">∨</span>
+    </div>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" onclick="openRule()" style="margin-left:auto">업무규칙</button>
+  </div>
+
+  <!-- ── 검색 영역 ── -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>사업장</th>
+          <td>
+            <select id="s_site">
+              <option value="">전체</option>
+              <option value="본사">본사</option>
+              <option value="창고1">창고1</option>
+            </select>
+          </td>
+          <th>거래처번호</th>
+          <td><input type="text" id="s_cpctNo"></td>
+          <th>거래처명</th>
+          <td><input type="text" id="s_cpctNm"></td>
+          <th>거래처구분</th>
+          <td>
+            <div class="multiselect-wrap">
+              <button type="button" class="multiselect-btn" id="msBtn_cpctDiv" onclick="toggleMs('cpctDiv')">
+                <span class="ms-label" id="ms_cpctDiv_label">전체</span>
+                <span>▾</span>
+              </button>
+              <div class="multiselect-dropdown" id="ms_cpctDiv_drop">
+                <label class="multiselect-option"><input type="checkbox" value="" onchange="onMsAllChange('cpctDiv',this)"> 전체</label>
+                <label class="multiselect-option"><input type="checkbox" value="1" onchange="onMsChange('cpctDiv')"> 매입</label>
+                <label class="multiselect-option"><input type="checkbox" value="2" onchange="onMsChange('cpctDiv')"> 직영점</label>
+                <label class="multiselect-option"><input type="checkbox" value="3" onchange="onMsChange('cpctDiv')"> 할인점</label>
+                <label class="multiselect-option"><input type="checkbox" value="9" onchange="onMsChange('cpctDiv')"> 기타</label>
+                <label class="multiselect-option"><input type="checkbox" value="4" onchange="onMsChange('cpctDiv')"> 온라인</label>
+                <label class="multiselect-option"><input type="checkbox" value="5" onchange="onMsChange('cpctDiv')"> 쿠팡</label>
+                <label class="multiselect-option"><input type="checkbox" value="6" onchange="onMsChange('cpctDiv')"> 총판</label>
+              </div>
+            </div>
+          </td>
+          <th>대표업체</th>
+          <td>
+            <div class="multiselect-wrap">
+              <button type="button" class="multiselect-btn" id="msBtn_repCont" onclick="toggleMs('repCont')">
+                <span class="ms-label" id="ms_repCont_label">전체</span>
+                <span>▾</span>
+              </button>
+              <div class="multiselect-dropdown" id="ms_repCont_drop">
+                <label class="multiselect-option"><input type="checkbox" value="" onchange="onMsAllChange('repCont',this)"> 전체</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC001" onchange="onMsChange('repCont')"> 미설정</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC002" onchange="onMsChange('repCont')"> ㈜신세계이마트</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC003" onchange="onMsChange('repCont')"> 건담존</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC004" onchange="onMsChange('repCont')"> 롯데쇼핑㈜</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC005" onchange="onMsChange('repCont')"> 홈플러스</label>
+                <label class="multiselect-option"><input type="checkbox" value="RC006" onchange="onMsChange('repCont')"> GS</label>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>대표자명</th>
+          <td><input type="text" id="s_ceoNm"></td>
+          <th>사업자번호</th>
+          <td><input type="text" id="s_bizNo"></td>
+          <th>전화번호</th>
+          <td><input type="text" id="s_tel"></td>
+          <th>주소</th>
+          <td><input type="text" id="s_addr"></td>
+          <th>사용여부</th>
+          <td>
+            <select id="s_useYn">
+              <option value="">전체</option>
+              <option value="Y" selected>사용</option>
+              <option value="N">미사용</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 그리드 패널 ── -->
+  <div class="panel">
+    <!-- 툴바 -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn-icon" title="등록" onclick="openRegist()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </button>
+        <button class="btn-icon" title="수정" onclick="openModify()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn-excel" title="엑셀다운로드" onclick="doExcelDownload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <polyline points="9 15 12 18 15 15"/>
+          </svg>
+          엑셀다운로드
+        </button>
+      </div>
+    </div>
+
+    <!-- 그리드 -->
+    <div class="grid-wrap" id="gridWrap">
+      <table class="grid-table" id="mainGrid">
+        <colgroup>
+          <col style="width:30px">
+          <col style="width:26px">
+          <col style="width:60px">
+          <col style="width:120px">
+          <col>
+          <col style="width:100px">
+          <col style="width:72px">
+          <col style="width:100px">
+          <col style="width:70px">
+          <col style="width:100px">
+          <col style="width:60px">
+          <col style="width:60px">
+          <col style="width:110px">
+          <col style="width:110px">
+          <col style="width:130px">
+          <col>
+          <col style="width:64px">
+          <col style="width:100px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="tc">No.</th>
+            <th class="tc"><input type="checkbox" id="chkAll" style="width:12px;height:12px" onchange="toggleAllCheck(this)"></th>
+            <th class="tc">사업장</th>
+            <th class="tc">거래처번호</th>
+            <th class="tc">거래처명</th>
+            <th class="tc">IF거래처ID</th>
+            <th class="tc">거래처구분</th>
+            <th class="tc">대표업체</th>
+            <th class="tc">대표자</th>
+            <th class="tc">사업자번호</th>
+            <th class="tc">업태</th>
+            <th class="tc">종목</th>
+            <th class="tc">전화</th>
+            <th class="tc">팩스</th>
+            <th class="tc">이메일</th>
+            <th class="tc">주소</th>
+            <th class="tc">사용여부</th>
+            <th class="tc">비고</th>
+          </tr>
+        </thead>
+        <tbody id="mainTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- 가로 스크롤 -->
+    <div class="h-scroll-wrap" id="hScroll">
+      <div class="h-scroll-inner" id="hScrollInner"></div>
+    </div>
+
+    <!-- 페이징 푸터 -->
+    <div class="grid-footer">
+      <div class="pagination" id="pagination"></div>
+      <div class="page-size-wrap">
+        <select id="pageSize" onchange="changePageSize()">
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+      </div>
+      <div class="row-count" id="rowCount">0 rows</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     업무규칙 모달
+════════════════════════════════════════ -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" id="ruleModalHeader">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeModal('ruleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table>
+        <tr><th>메뉴그룹명</th><td>기준정보</td><th>메뉴그룹코드</th><td>MD8000</td></tr>
+        <tr><th>메뉴명</th><td>거래처관리</td><th>메뉴코드</th><td>MDCT01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">그리드 1개</td></tr>
+        <tr><th>목적</th><td colspan="3">거래처 기준정보를 조회·수정하고, 대표업체를 관리한다</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol>
+        <li>거래처번호, 거래처명, 거래처구분은 필수 입력 항목이다</li>
+        <li>수정 모드에서 거래처구분, 대표업체만 편집 가능하며 나머지 필드는 비활성(disabled) 처리된다</li>
+        <li>신규 등록 시 기본 바코드 유형과 기본 라벨용지를 서버에서 자동 조회하여 내부 데이터로 세팅한다 (UI 노출 없음)</li>
+        <li>동일 사업장 내 거래처번호는 중복될 수 없다</li>
+        <li>거래처번호는 30자리 이하여야 한다</li>
+        <li>그리드 행 더블클릭 시 수정 팝업을 오픈한다</li>
+        <li>사용여부 기본값은 "사용"(Y)이다</li>
+        <li>대표업체는 공통코드 REP_CONT_CD로 관리하며, 등록/수정 모두에서 설정 가능하다</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeModal('ruleModal')">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     거래처 등록/수정 팝업 (MDCT01P01 / MDCT01P02)
+════════════════════════════════════════ -->
+<div class="modal-bg" id="registModal">
+  <div class="modal" style="width:820px">
+    <div class="modal-header" id="registModalHeader">
+      <span id="registModalTitle">거래처 등록 [MDCT01P01]</span>
+      <button class="close-btn" onclick="closeModal('registModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <table class="form-table">
+        <colgroup>
+          <col style="width:92px"><col>
+          <col style="width:92px"><col>
+          <col style="width:92px"><col>
+        </colgroup>
+        <tbody>
+          <!-- 1행: 사업장 / 거래처번호 / 거래처명 -->
+          <tr>
+            <th>사업장</th>
+            <td>
+              <select id="f_site">
+                <option value="본사">본사</option>
+                <option value="창고1">창고1</option>
+              </select>
+            </td>
+            <th>거래처번호 <span class="required-mark">*</span></th>
+            <td><input type="text" id="f_cpctNo" maxlength="30"></td>
+            <th>거래처명 <span class="required-mark">*</span></th>
+            <td><input type="text" id="f_cpctNm"></td>
+          </tr>
+          <!-- 2행: IF거래처ID / 대표자 / 사업자번호 -->
+          <tr>
+            <th>IF거래처ID</th>
+            <td><input type="text" id="f_ifCpctId"></td>
+            <th>대표자</th>
+            <td><input type="text" id="f_ceoNm"></td>
+            <th>사업자번호</th>
+            <td><input type="text" id="f_bizNo"></td>
+          </tr>
+          <!-- 3행: 거래처구분 / 업태 / 종목 -->
+          <tr>
+            <th>거래처구분 <span class="required-mark">*</span></th>
+            <td>
+              <select id="f_cpctDiv">
+                <option value="">선택</option>
+                <option value="1">매입</option>
+                <option value="2">직영점</option>
+                <option value="3">할인점</option>
+                <option value="9">기타</option>
+                <option value="4">온라인</option>
+                <option value="5">쿠팡</option>
+                <option value="6">총판</option>
+              </select>
+            </td>
+            <th>업태</th>
+            <td><input type="text" id="f_bizType"></td>
+            <th>종목</th>
+            <td><input type="text" id="f_bizItem"></td>
+          </tr>
+          <!-- 4행: 이메일 / 전화 / 팩스 -->
+          <tr>
+            <th>이메일</th>
+            <td><input type="text" id="f_email"></td>
+            <th>전화</th>
+            <td><input type="text" id="f_tel"></td>
+            <th>팩스</th>
+            <td><input type="text" id="f_fax"></td>
+          </tr>
+          <!-- 5행: 사용여부 / (빈) / (빈) -->
+          <tr>
+            <th>사용여부</th>
+            <td>
+              <div class="radio-group">
+                <label><input type="radio" name="f_useYn" value="Y" checked> 사용</label>
+                <label><input type="radio" name="f_useYn" value="N"> 미사용</label>
+              </div>
+            </td>
+            <th></th><td></td>
+            <th></th><td></td>
+          </tr>
+          <!-- 6행: 주소 (전체 폭) -->
+          <tr>
+            <th>주소</th>
+            <td colspan="5">
+              <div class="addr-row">
+                <input type="text" id="f_zip" class="addr-zip-input">
+                <input type="text" id="f_addr" class="addr-main-input" readonly>
+                <input type="text" id="f_addrDetail" class="addr-detail-input">
+              </div>
+            </td>
+          </tr>
+          <!-- 7행: 비고 (전체 폭) -->
+          <tr>
+            <th>비고</th>
+            <td colspan="5">
+              <textarea id="f_remark"></textarea>
+            </td>
+          </tr>
+          <!-- 8행: 대표업체 / (빈) / (빈) -->
+          <tr>
+            <th>대표업체</th>
+            <td>
+              <select id="f_repCont">
+                <option value="RC001">미설정</option>
+                <option value="RC002">㈜신세계이마트</option>
+                <option value="RC003">건담존</option>
+                <option value="RC004">롯데쇼핑㈜</option>
+                <option value="RC005">홈플러스</option>
+                <option value="RC006">GS</option>
+              </select>
+            </td>
+            <th></th><td></td>
+            <th></th><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="registSubmitBtn" onclick="submitForm()">등록</button>
+      <button class="btn-modal-close" onclick="closeModal('registModal')">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     라벨용지 설정 팝업 (MDCT01L02) — 현재 UI 미연결
+════════════════════════════════════════ -->
+<div class="modal-bg" id="labelModal">
+  <div class="modal" style="width:460px">
+    <div class="modal-header" id="labelModalHeader">
+      <span>라벨용지 설정 [MDCT01L02]</span>
+      <button class="close-btn" onclick="closeModal('labelModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="label-grid-wrap">
+        <table class="popup-grid-table">
+          <colgroup>
+            <col style="width:40px">
+            <col>
+            <col style="width:80px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="tc">No.</th>
+              <th class="tl">라벨용지명</th>
+              <th class="tc">미리보기</th>
+            </tr>
+          </thead>
+          <tbody id="labelTbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeModal('labelModal')">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     공통 팝업 함수 (postMessage 방식)
+════════════════════════════════════════ -->
+<script>
+var _cpTargetId = null;
+function openCpPopup(targetId) {
+  _cpTargetId = targetId;
+  window.parent.postMessage({ type: 'OPEN_CP_LAYER' }, '*');
+}
+var _pdTargetId = null;
+function openPdPopup(targetId) {
+  _pdTargetId = targetId;
+  window.parent.postMessage({ type: 'OPEN_PD_LAYER' }, '*');
+}
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'CP_SELECTED' && _cpTargetId) {
+    var el = document.getElementById(_cpTargetId);
+    if (el) el.value = e.data.cpctNm || '';
+    _cpTargetId = null;
+  }
+  if (e.data && e.data.type === 'PD_SELECTED' && _pdTargetId) {
+    var el = document.getElementById(_pdTargetId);
+    if (el) el.value = e.data.prodNm || '';
+    _pdTargetId = null;
+  }
+});
+</script>
+
+<script src="./mdct01-data.js"></script>
+<script>
+/* ── 상태 변수 ── */
+var mainAll = [];
+var filteredData = [];
+var currentPage = 1;
+var pageSize = 50;
+var selectedRowIdx = -1;
+var _editMode = false;
+var _editRowIdx = -1;
+
+var CPCT_DIV_MAP = { '1':'매입','2':'직영점','3':'할인점','9':'기타','4':'온라인','5':'쿠팡','6':'총판' };
+var REP_CONT_MAP = { 'RC001':'미설정','RC002':'㈜신세계이마트','RC003':'건담존','RC004':'롯데쇼핑㈜','RC005':'홈플러스','RC006':'GS' };
+
+/* ── 초기화 ── */
+window.addEventListener('DOMContentLoaded', function() {
+  mainAll = JSON.parse(JSON.stringify(MDCT01_DATA.main));
+  renderLabelGrid();
+  doSearch();
+  setupScrollSync();
+  setupModalDrag('ruleModal',   'ruleModalHeader');
+  setupModalDrag('registModal', 'registModalHeader');
+  setupModalDrag('labelModal',  'labelModalHeader');
+  // 멀티셀렉트 외부 클릭 시 닫기
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.multiselect-wrap')) {
+      document.querySelectorAll('.multiselect-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+    }
+  });
+  window.addEventListener('resize', syncScrollWidth);
+});
+
+/* ── 검색 ── */
+function doSearch() {
+  var site    = document.getElementById('s_site').value;
+  var cpctNo  = document.getElementById('s_cpctNo').value.trim().toLowerCase();
+  var cpctNm  = document.getElementById('s_cpctNm').value.trim().toLowerCase();
+  var cpctDivVals = getMsValues('cpctDiv');
+  var repContVals = getMsValues('repCont');
+  var ceoNm   = document.getElementById('s_ceoNm').value.trim().toLowerCase();
+  var bizNo   = document.getElementById('s_bizNo').value.trim().toLowerCase();
+  var tel     = document.getElementById('s_tel').value.trim().toLowerCase();
+  var addr    = document.getElementById('s_addr').value.trim().toLowerCase();
+  var useYn   = document.getElementById('s_useYn').value;
+
+  filteredData = mainAll.filter(function(d) {
+    if (site && d.site !== site) return false;
+    if (cpctNo && d.cpctNo.toLowerCase().indexOf(cpctNo) < 0) return false;
+    if (cpctNm && d.cpctNm.toLowerCase().indexOf(cpctNm) < 0) return false;
+    if (cpctDivVals.length > 0 && cpctDivVals.indexOf(d.cpctDiv) < 0) return false;
+    if (repContVals.length > 0 && repContVals.indexOf(d.repCont) < 0) return false;
+    if (ceoNm && d.ceoNm.toLowerCase().indexOf(ceoNm) < 0) return false;
+    if (bizNo && d.bizNo.toLowerCase().indexOf(bizNo) < 0) return false;
+    if (tel && d.tel.toLowerCase().indexOf(tel) < 0) return false;
+    if (addr && (d.addr + ' ' + d.addrDetail).toLowerCase().indexOf(addr) < 0) return false;
+    if (useYn && d.useYn !== useYn) return false;
+    return true;
+  });
+
+  currentPage = 1;
+  selectedRowIdx = -1;
+  renderGrid();
+}
+
+/* ── 초기화 ── */
+function doReset() {
+  document.getElementById('s_site').value = '';
+  document.getElementById('s_cpctNo').value = '';
+  document.getElementById('s_cpctNm').value = '';
+  document.getElementById('s_ceoNm').value = '';
+  document.getElementById('s_bizNo').value = '';
+  document.getElementById('s_tel').value = '';
+  document.getElementById('s_addr').value = '';
+  document.getElementById('s_useYn').value = 'Y';
+  resetMs('cpctDiv');
+  resetMs('repCont');
+  doSearch();
+}
+
+/* ── 그리드 렌더링 ── */
+function renderGrid() {
+  var tbody = document.getElementById('mainTbody');
+  var ps = pageSize;
+  var start = (currentPage - 1) * ps;
+  var end = Math.min(start + ps, filteredData.length);
+  var html = '';
+
+  for (var i = start; i < end; i++) {
+    var d = filteredData[i];
+    var fullAddr = d.addr + (d.addrDetail ? ' ' + d.addrDetail : '');
+    html += '<tr data-idx="' + i + '" onclick="onRowClick(this,' + i + ')" ondblclick="onDblClick(' + i + ')">';
+    html += '<td class="tc">' + (i + 1) + '</td>';
+    html += '<td class="tc"><input type="checkbox" style="width:12px;height:12px" onclick="event.stopPropagation()" onchange="onChkChange(this,' + i + ')"></td>';
+    html += '<td class="tl">' + esc(d.site) + '</td>';
+    html += '<td class="tl">' + esc(d.cpctNo) + '</td>';
+    html += '<td class="tl">' + esc(d.cpctNm) + '</td>';
+    html += '<td class="tl">' + esc(d.ifCpctId) + '</td>';
+    html += '<td class="tc">' + esc(d.cpctDivNm) + '</td>';
+    html += '<td class="tl">' + esc(d.repContNm) + '</td>';
+    html += '<td class="tl">' + esc(d.ceoNm) + '</td>';
+    html += '<td class="tc">' + esc(d.bizNo) + '</td>';
+    html += '<td class="tc">' + esc(d.bizType) + '</td>';
+    html += '<td class="tc">' + esc(d.bizItem) + '</td>';
+    html += '<td class="tc">' + esc(d.tel) + '</td>';
+    html += '<td class="tc">' + esc(d.fax) + '</td>';
+    html += '<td class="tl">' + esc(d.email) + '</td>';
+    html += '<td class="tl">' + esc(fullAddr) + '</td>';
+    html += '<td class="tc">' + (d.useYn === 'Y' ? '<span class="check-icon">✓</span>' : '') + '</td>';
+    html += '<td class="tl">' + esc(d.remark) + '</td>';
+    html += '</tr>';
+  }
+
+  tbody.innerHTML = html;
+  updatePagination(end - start, filteredData.length, start + 1, end);
+  syncScrollWidth();
+  document.getElementById('chkAll').checked = false;
+  document.getElementById('chkAll').indeterminate = false;
+}
+
+function esc(v) {
+  if (v == null) return '';
+  return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── 행 선택 ── */
+function onRowClick(tr, idx) {
+  document.querySelectorAll('#mainTbody tr').forEach(function(r) {
+    r.classList.remove('selected');
+    var chk = r.querySelector('input[type="checkbox"]');
+    if (chk) chk.checked = false;
+  });
+  tr.classList.add('selected');
+  var chk = tr.querySelector('input[type="checkbox"]');
+  if (chk) chk.checked = true;
+  selectedRowIdx = idx;
+  updateAllChkState();
+}
+
+function onDblClick(idx) {
+  selectedRowIdx = idx;
+  openModify();
+}
+
+function onChkChange(chkEl, idx) {
+  var tr = chkEl.closest('tr');
+  if (chkEl.checked) {
+    tr.classList.add('selected');
+    selectedRowIdx = idx;
+  } else {
+    tr.classList.remove('selected');
+    if (selectedRowIdx === idx) selectedRowIdx = -1;
+  }
+  updateAllChkState();
+}
+
+function updateAllChkState() {
+  var rows = document.querySelectorAll('#mainTbody tr');
+  var checked = document.querySelectorAll('#mainTbody input[type="checkbox"]:checked');
+  var allChk = document.getElementById('chkAll');
+  if (rows.length === 0) { allChk.checked = false; allChk.indeterminate = false; return; }
+  if (checked.length === rows.length) { allChk.checked = true; allChk.indeterminate = false; }
+  else if (checked.length === 0) { allChk.checked = false; allChk.indeterminate = false; }
+  else { allChk.checked = false; allChk.indeterminate = true; }
+}
+
+function toggleAllCheck(masterChk) {
+  document.querySelectorAll('#mainTbody tr').forEach(function(r, i) {
+    var chk = r.querySelector('input[type="checkbox"]');
+    if (chk) chk.checked = masterChk.checked;
+    if (masterChk.checked) r.classList.add('selected');
+    else r.classList.remove('selected');
+  });
+  masterChk.indeterminate = false;
+}
+
+/* ── 페이징 ── */
+function updatePagination(pageCount, total, start, end) {
+  var totalPages = Math.max(1, Math.ceil(total / pageSize));
+  var html = '';
+  for (var i = 1; i <= totalPages; i++) {
+    html += '<button class="page-btn' + (i === currentPage ? ' active' : '') + '" onclick="goPage(' + i + ')">' + i + '</button>';
+  }
+  document.getElementById('pagination').innerHTML = html;
+  document.getElementById('rowCount').textContent = total > 0
+    ? (start + ' ~ ' + end + ' of ' + total + ' rows')
+    : '0 rows';
+}
+
+function goPage(p) {
+  currentPage = p;
+  selectedRowIdx = -1;
+  renderGrid();
+}
+
+function changePageSize() {
+  pageSize = parseInt(document.getElementById('pageSize').value);
+  currentPage = 1;
+  renderGrid();
+}
+
+/* ── 스크롤 동기화 ── */
+function setupScrollSync() {
+  var wrap = document.getElementById('gridWrap');
+  var hScroll = document.getElementById('hScroll');
+  var syncingFromWrap = false, syncingFromH = false;
+  wrap.addEventListener('scroll', function() {
+    if (syncingFromH) return;
+    syncingFromWrap = true;
+    hScroll.scrollLeft = wrap.scrollLeft;
+    syncingFromWrap = false;
+  });
+  hScroll.addEventListener('scroll', function() {
+    if (syncingFromWrap) return;
+    syncingFromH = true;
+    wrap.scrollLeft = hScroll.scrollLeft;
+    syncingFromH = false;
+  });
+}
+
+function syncScrollWidth() {
+  var table = document.getElementById('mainGrid');
+  if (table) document.getElementById('hScrollInner').style.width = table.offsetWidth + 'px';
+}
+
+/* ── MultiSelect ── */
+function toggleMs(key) {
+  var drop = document.getElementById('ms_' + key + '_drop');
+  var isOpen = drop.classList.contains('open');
+  document.querySelectorAll('.multiselect-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+  if (!isOpen) drop.classList.add('open');
+}
+
+function getMsValues(key) {
+  var checks = document.querySelectorAll('#ms_' + key + '_drop input[type="checkbox"]:checked');
+  var vals = [];
+  checks.forEach(function(c) { if (c.value !== '') vals.push(c.value); });
+  return vals;
+}
+
+function onMsChange(key) {
+  var allChk = document.querySelector('#ms_' + key + '_drop input[value=""]');
+  if (allChk) allChk.checked = false;
+  updateMsLabel(key);
+}
+
+function onMsAllChange(key, allChk) {
+  if (allChk.checked) {
+    document.querySelectorAll('#ms_' + key + '_drop input[type="checkbox"]').forEach(function(c) {
+      if (c !== allChk) c.checked = false;
+    });
+  }
+  updateMsLabel(key);
+}
+
+function updateMsLabel(key) {
+  var selected = [];
+  document.querySelectorAll('#ms_' + key + '_drop input[type="checkbox"]:checked').forEach(function(c) {
+    if (c.value !== '') selected.push(c.parentElement.textContent.trim());
+  });
+  document.getElementById('ms_' + key + '_label').textContent = selected.length > 0 ? selected.join(', ') : '전체';
+}
+
+function resetMs(key) {
+  document.querySelectorAll('#ms_' + key + '_drop input[type="checkbox"]').forEach(function(c) { c.checked = false; });
+  document.getElementById('ms_' + key + '_label').textContent = '전체';
+}
+
+/* ── 등록 팝업 ── */
+function openRegist() {
+  _editMode = false;
+  _editRowIdx = -1;
+  clearForm();
+  setFormReadonly(false);
+  document.getElementById('registModalTitle').textContent = '거래처 등록 [MDCT01P01]';
+  document.getElementById('registSubmitBtn').textContent = '등록';
+  openModal('registModal');
+}
+
+/* ── 수정 팝업 ── */
+function openModify() {
+  var checked = document.querySelectorAll('#mainTbody input[type="checkbox"]:checked');
+  if (checked.length === 0 && selectedRowIdx < 0) {
+    alert('수정할 거래처를 선택하세요.');
+    return;
+  }
+  if (checked.length > 1) {
+    alert('1건만 선택 후 수정하세요.');
+    return;
+  }
+  var idx = selectedRowIdx >= 0 ? selectedRowIdx : parseInt(checked[0].closest('tr').dataset.idx);
+  _editMode = true;
+  _editRowIdx = idx;
+  selectedRowIdx = idx;
+  fillForm(filteredData[idx]);
+  setFormReadonly(true);
+  document.getElementById('registModalTitle').textContent = '거래처 수정 [MDCT01P02]';
+  document.getElementById('registSubmitBtn').textContent = '수정';
+  openModal('registModal');
+}
+
+/* ── 폼 초기화 ── */
+function clearForm() {
+  document.getElementById('f_site').value = '본사';
+  document.getElementById('f_cpctNo').value = '';
+  document.getElementById('f_cpctNm').value = '';
+  document.getElementById('f_ifCpctId').value = '';
+  document.getElementById('f_ceoNm').value = '';
+  document.getElementById('f_bizNo').value = '';
+  document.getElementById('f_cpctDiv').value = '';
+  document.getElementById('f_bizType').value = '';
+  document.getElementById('f_bizItem').value = '';
+  document.getElementById('f_email').value = '';
+  document.getElementById('f_tel').value = '';
+  document.getElementById('f_fax').value = '';
+  document.querySelector('input[name="f_useYn"][value="Y"]').checked = true;
+  document.getElementById('f_zip').value = '';
+  document.getElementById('f_addr').value = '';
+  document.getElementById('f_addrDetail').value = '';
+  document.getElementById('f_remark').value = '';
+  document.getElementById('f_repCont').value = 'RC001';
+}
+
+/* ── 폼 데이터 채우기 ── */
+function fillForm(d) {
+  document.getElementById('f_site').value = d.site;
+  document.getElementById('f_cpctNo').value = d.cpctNo;
+  document.getElementById('f_cpctNm').value = d.cpctNm;
+  document.getElementById('f_ifCpctId').value = d.ifCpctId;
+  document.getElementById('f_ceoNm').value = d.ceoNm;
+  document.getElementById('f_bizNo').value = d.bizNo;
+  document.getElementById('f_cpctDiv').value = d.cpctDiv;
+  document.getElementById('f_bizType').value = d.bizType;
+  document.getElementById('f_bizItem').value = d.bizItem;
+  document.getElementById('f_email').value = d.email;
+  document.getElementById('f_tel').value = d.tel;
+  document.getElementById('f_fax').value = d.fax;
+  var radio = document.querySelector('input[name="f_useYn"][value="' + d.useYn + '"]');
+  if (radio) radio.checked = true;
+  document.getElementById('f_zip').value = '';
+  document.getElementById('f_addr').value = d.addr;
+  document.getElementById('f_addrDetail').value = d.addrDetail;
+  document.getElementById('f_remark').value = d.remark;
+  document.getElementById('f_repCont').value = d.repCont;
+}
+
+/* ── 폼 읽기전용 설정 ── */
+function setFormReadonly(isModify) {
+  var ids = ['f_site','f_cpctNo','f_cpctNm','f_ifCpctId','f_ceoNm','f_bizNo','f_bizType','f_bizItem','f_email','f_tel','f_fax','f_zip','f_addr','f_addrDetail','f_remark'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.disabled = isModify;
+  });
+  document.querySelectorAll('input[name="f_useYn"]').forEach(function(r) { r.disabled = isModify; });
+  // 수정 모드에서도 편집 가능한 필드
+  document.getElementById('f_cpctDiv').disabled = false;
+  document.getElementById('f_repCont').disabled = false;
+}
+
+/* ── 폼 제출 ── */
+function submitForm() {
+  var cpctNo  = document.getElementById('f_cpctNo').value.trim();
+  var cpctNm  = document.getElementById('f_cpctNm').value.trim();
+  var cpctDiv = document.getElementById('f_cpctDiv').value;
+  var site    = document.getElementById('f_site').value;
+
+  if (!_editMode) {
+    if (!cpctNo)   { alert('거래처번호는 필수 입력 항목입니다.'); return; }
+    if (cpctNo.length > 30) { alert('거래처번호는 30자리 이하여야 합니다.'); return; }
+    if (!cpctNm)   { alert('거래처명은 필수 입력 항목입니다.'); return; }
+    if (!cpctDiv)  { alert('거래처구분은 필수 입력 항목입니다.'); return; }
+    var dup = mainAll.some(function(d) { return d.site === site && d.cpctNo === cpctNo; });
+    if (dup) { alert('동일 사업장 내 거래처번호가 이미 존재합니다.'); return; }
+
+    var repCont = document.getElementById('f_repCont').value;
+    var useYnEl = document.querySelector('input[name="f_useYn"]:checked');
+    var newRow = {
+      site: site, cpctNo: cpctNo, cpctNm: cpctNm,
+      ifCpctId: document.getElementById('f_ifCpctId').value,
+      cpctDiv: cpctDiv, cpctDivNm: CPCT_DIV_MAP[cpctDiv] || '',
+      repCont: repCont, repContNm: REP_CONT_MAP[repCont] || '',
+      ceoNm: document.getElementById('f_ceoNm').value,
+      bizNo: document.getElementById('f_bizNo').value,
+      bizType: document.getElementById('f_bizType').value,
+      bizItem: document.getElementById('f_bizItem').value,
+      tel: document.getElementById('f_tel').value,
+      fax: document.getElementById('f_fax').value,
+      email: document.getElementById('f_email').value,
+      addr: document.getElementById('f_addr').value,
+      addrDetail: document.getElementById('f_addrDetail').value,
+      useYn: useYnEl ? useYnEl.value : 'Y',
+      remark: document.getElementById('f_remark').value
+    };
+    mainAll.push(newRow);
+    alert('등록되었습니다.');
+  } else {
+    var repCont = document.getElementById('f_repCont').value;
+    var d = filteredData[_editRowIdx];
+    d.cpctDiv = cpctDiv;
+    d.cpctDivNm = CPCT_DIV_MAP[cpctDiv] || '';
+    d.repCont = repCont;
+    d.repContNm = REP_CONT_MAP[repCont] || '';
+    // mainAll도 동기화
+    var mainIdx = mainAll.findIndex(function(m) { return m.site === d.site && m.cpctNo === d.cpctNo; });
+    if (mainIdx >= 0) {
+      mainAll[mainIdx].cpctDiv = cpctDiv;
+      mainAll[mainIdx].cpctDivNm = CPCT_DIV_MAP[cpctDiv] || '';
+      mainAll[mainIdx].repCont = repCont;
+      mainAll[mainIdx].repContNm = REP_CONT_MAP[repCont] || '';
+    }
+    alert('수정되었습니다.');
+  }
+
+  closeModal('registModal');
+  doSearch();
+}
+
+/* ── 업무규칙 ── */
+function openRule() { openModal('ruleModal'); }
+
+/* ── 엑셀 다운로드 ── */
+function doExcelDownload() { alert('엑셀 다운로드를 실행합니다.'); }
+
+/* ── 라벨 팝업 렌더링 ── */
+function renderLabelGrid() {
+  var tbody = document.getElementById('labelTbody');
+  var html = '';
+  MDCT01_DATA.labelPaper.forEach(function(d, i) {
+    html += '<tr ondblclick="selectLabel(' + i + ')">';
+    html += '<td class="tc">' + d.no + '</td>';
+    html += '<td class="tl">' + esc(d.nm) + '</td>';
+    html += '<td class="tc"><button class="btn-sm" onclick="previewLabel(' + i + ');event.stopPropagation()">미리보기</button></td>';
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function selectLabel(idx) {
+  var d = MDCT01_DATA.labelPaper[idx];
+  alert('라벨용지 선택: ' + d.nm);
+  closeModal('labelModal');
+}
+
+function previewLabel(idx) {
+  var d = MDCT01_DATA.labelPaper[idx];
+  alert('LPA 미리보기: ' + d.nm);
+}
+
+/* ── 모달 열기/닫기 ── */
+function openModal(id) {
+  var bg = document.getElementById(id);
+  bg.classList.add('open');
+  var modal = bg.querySelector('.modal');
+  setTimeout(function() {
+    var l = Math.max(0, (window.innerWidth  - modal.offsetWidth)  / 2);
+    var t = Math.max(0, (window.innerHeight - modal.offsetHeight) / 2);
+    modal.style.left = l + 'px';
+    modal.style.top  = t + 'px';
+  }, 0);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+/* ── 모달 드래그 ── */
+function setupModalDrag(bgId, headerId) {
+  var header = document.getElementById(headerId);
+  if (!header) return;
+  var modal = header.closest('.modal');
+  var dragging = false, sx, sy, sl, st;
+  header.addEventListener('mousedown', function(e) {
+    if (e.target.classList.contains('close-btn')) return;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    sl = parseInt(modal.style.left) || 0;
+    st = parseInt(modal.style.top)  || 0;
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    modal.style.left = (sl + e.clientX - sx) + 'px';
+    modal.style.top  = (st + e.clientY - sy) + 'px';
+  });
+  document.addEventListener('mouseup', function() { dragging = false; });
+}
+</script>
+</body>
+</html>
