@@ -2,7 +2,7 @@
 
 메뉴코드: **$ARGUMENTS**
 
-`dist/$ARGUMENTS/$ARGUMENTS.md` 를 읽고, **공통 CSS·JS + 스켈레톤 템플릿**을 조합해 프로토타입 HTML과 테스트 데이터 JS 파일을 생성한다.
+`dist/$ARGUMENTS/ui.md` 를 읽고, **공통 CSS·JS + 스켈레톤 템플릿**을 조합해 프로토타입 HTML과 테스트 데이터 JS 파일을 생성한다.
 
 ---
 
@@ -36,7 +36,7 @@
 
 ### 1단계 — 사전 파일 읽기
 
-1. `dist/$ARGUMENTS/$ARGUMENTS.md` — 화면요건정리 (메인 입력)
+1. `dist/$ARGUMENTS/ui.md` — 화면요건정리 (메인 입력)
 2. `dist/common/icon-preview.html` — 사용 가능한 아이콘 목록 (**이 파일에 없는 아이콘은 절대 사용 금지**)
 3. `dist/common/_template/base.html` — 베이스 스켈레톤
 4. 요건 문서의 **UI유형**에 해당하는 `_template/gridX-*.html` 1개 — 메인 영역 스켈레톤
@@ -53,7 +53,7 @@
 
 ### 3단계 — 테스트 데이터 JS 생성
 
-파일: `dist/$ARGUMENTS/$ARGUMENTS-data.js`
+파일: `dist/$ARGUMENTS/mock-data.js`
 
 - 첫 줄 주석: `/* $ARGUMENTS 테스트 데이터 */`
 - 변수명: 메뉴코드 대문자 + `_DATA` (예: `MDFG01_DATA`)
@@ -73,7 +73,23 @@ const MDFG01_DATA = {
 
 1. `base.html` 을 복사한다.
 2. UI유형에 맞는 `gridX-*.html` 내용을 `{{MAIN_AREA}}` 자리에 삽입한다.
-3. 아래 플레이스홀더를 치환한다.
+3. 파일 **최상단** (`<!DOCTYPE html>` 바로 위)에 아래 메타 주석을 삽입한다.
+
+```html
+<!--
+  purpose: wireframe-only
+  menuCode: {메뉴코드 소문자}
+  menuName: {메뉴명}
+  sourceOfTruth:
+    ui: ui.md
+  rules:
+    - This file is a static HTML wireframe for layout/UX review only.
+    - Do not copy raw HTML/CSS into production Vue components.
+    - Use project design-system components and AUIGrid in production.
+-->
+```
+
+4. 아래 플레이스홀더를 치환한다.
 
 | 토큰 | 치환 |
 |---|---|
@@ -113,11 +129,11 @@ const MDFG01_DATA = {
 
 1. `dist/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
    ```html
-   <li class="submenu-item" onclick="loadContent('$ARGUMENTS/$ARGUMENTS.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('$ARGUMENTS/wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 2. `dist/common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
    ```html
-   <li class="submenu-item" onclick="loadContent('../$ARGUMENTS/$ARGUMENTS.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('../$ARGUMENTS/wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 3. 이미 등록된 메뉴코드면 건너뛴다.
 
@@ -125,9 +141,9 @@ const MDFG01_DATA = {
 
 ### 6단계 — 완료 체크리스트
 
-- [ ] `$ARGUMENTS-data.js` 생성 (메인 10건·디테일 5건 이상)
-- [ ] `$ARGUMENTS.html` 에 `<link rel="stylesheet" href="../common/wms-ui.css">` 포함
-- [ ] `$ARGUMENTS.html` 에 `<script src="../common/wms-common.js"></script>` 포함
+- [ ] `mock-data.js` 생성 (메인 10건·디테일 5건 이상)
+- [ ] `wireframe.html` 에 `<link rel="stylesheet" href="../common/wms-ui.css">` 포함
+- [ ] `wireframe.html` 에 `<script src="../common/wms-common.js"></script>` 포함
 - [ ] 공통 클래스 CSS를 화면 `<style>` 에서 재정의하지 않음
 - [ ] `<title>` 및 헤더에 `{메뉴명} [{메뉴코드}]` 정확히 표시
 - [ ] 검색 영역 컬럼/컴포넌트가 요건과 일치

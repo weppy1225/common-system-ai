@@ -1,0 +1,339 @@
+<!--
+  purpose: wireframe-only
+  menuCode: stdc01
+  menuName: 세트해체
+  sourceOfTruth:
+    ui: ui.md
+  rules:
+    - This file is a static HTML wireframe for layout/UX review only.
+    - Do not copy raw HTML/CSS into production Vue components.
+    - Use project design-system components and AUIGrid in production.
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>세트해체 [STDC01]</title>
+<link rel="stylesheet" href="../common/wms-ui.css">
+<style>
+.proc-input {
+  width: 100%;
+  height: 22px;
+  font-size: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  padding: 0 4px;
+  text-align: right;
+  color: #111827;
+  background: #fff;
+}
+.proc-input:focus { border-color: #7aa2c8; outline: none; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 헤더 -->
+  <div class="page-header">
+    <div class="page-title">
+      <strong>세트해체</strong>
+      <span class="arrow">∨</span>
+    </div>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" onclick="openRule()" style="margin-left:auto">업무규칙</button>
+  </div>
+
+  <!-- 검색 영역 -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>사업장</th>
+          <td>
+            <select class="w-full">
+              <option value="01">YimYourBox</option>
+              <option value="02">서울센터</option>
+            </select>
+          </td>
+          <th>품목번호</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="srchProdNo" readonly>
+              <button class="btn-popup" onclick="openPdPopup('srchProdNo')">🔍</button>
+            </div>
+          </td>
+          <th>품목명</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="srchProdNm" readonly>
+              <button class="btn-popup" onclick="openPdPopup('srchProdNm')">🔍</button>
+            </div>
+          </td>
+          <th>대분류</th>
+          <td>
+            <select class="w-full">
+              <option value="">TOY</option>
+              <option value="HOBBY">HOBBY</option>
+              <option value="CAPSULE">CAPSULE</option>
+              <option value="FIGURE">FIGURE</option>
+              <option value="CARD">CARD</option>
+            </select>
+          </td>
+          <th>상품바코드</th>
+          <td><input type="text" class="w-full"></td>
+        </tr>
+        <tr>
+          <th>물류센터</th>
+          <td>
+            <select class="w-full">
+              <option value="">전체</option>
+              <option value="01">인천센터</option>
+              <option value="02">부산센터</option>
+            </select>
+          </td>
+          <th>위치</th>
+          <td><input type="text" class="w-full"></td>
+          <th>소비기한</th>
+          <td>
+            <div class="date-range">
+              <input type="date" class="date-from">
+              <span class="date-sep">~</span>
+              <input type="date" class="date-to">
+            </div>
+          </td>
+          <th>재고상태</th>
+          <td>
+            <select class="w-full">
+              <option value="">정상</option>
+              <option value="HOLD">보류</option>
+              <option value="DAMAGE">파손</option>
+            </select>
+          </td>
+          <th>SKU번호</th>
+          <td><input type="text" class="w-full"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 메인 영역 -->
+  <div class="main-area">
+    <div class="panel">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn" onclick="doDismantle()">해체처리</button>
+        </div>
+      </div>
+      <div class="grid-wrap" id="mainWrap">
+        <table class="grid-table" id="mainTable">
+          <colgroup>
+            <col style="width:30px">
+            <col style="width:26px">
+            <col style="width:130px">
+            <col>
+            <col style="width:44px">
+            <col style="width:64px">
+            <col style="width:72px">
+            <col style="width:60px">
+            <col style="width:72px">
+            <col style="width:72px">
+            <col style="width:72px">
+            <col style="width:64px">
+            <col style="width:72px">
+            <col style="width:72px">
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:86px">
+            <col style="width:130px">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="tc">No.</th>
+              <th class="tc"><input type="checkbox" id="chkAll" style="width:12px;height:12px;" onchange="toggleAll(this)"></th>
+              <th class="tc">품목번호</th>
+              <th class="tc">품목명</th>
+              <th class="tc">단위</th>
+              <th class="tc">대분류</th>
+              <th class="tc">재고수량</th>
+              <th class="tc">입수량</th>
+              <th class="tc">BOX수량</th>
+              <th class="tc">낱개수량</th>
+              <th class="tc">묶음수량</th>
+              <th class="tc">총수량</th>
+              <th class="tc">대기재고</th>
+              <th class="tc">처리수량</th>
+              <th class="tc">재고상태</th>
+              <th class="tc">창고</th>
+              <th class="tc">위치</th>
+              <th class="tc">소비기한</th>
+              <th class="tc">품목번호(To)</th>
+              <th class="tc">품목명(To)</th>
+            </tr>
+          </thead>
+          <tbody id="mainTbody"></tbody>
+        </table>
+      </div>
+      <div class="h-scroll-wrap" id="mainHScroll"><div class="h-scroll-inner" id="mainHInner"></div></div>
+      <div class="grid-footer">
+        <div class="pagination" id="mainPaging"></div>
+        <div class="page-size-wrap">
+          <select id="mainPageSize" onchange="changeMainPageSize()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="mainRowCount"></span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- 업무규칙 모달 -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" id="ruleHeader">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeRule()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table class="rule-table">
+        <tr><th>메뉴그룹명</th><td>재고관리</td><th>메뉴그룹코드</th><td>IV3000</td></tr>
+        <tr><th>메뉴명</th><td>세트해체</td><th>메뉴코드</th><td>STDC01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">그리드 1개</td></tr>
+        <tr><th>목적</th><td colspan="3">세트 재고 해체 처리</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol class="rule-list">
+        <li>재고 수량 만큼만 처리 가능 / 정상 재고만 처리 가능</li>
+        <li>처리수량 변경시 체크박스 자동 체크</li>
+        <li>상품 창고 재고만 조회. 고정로케이션 제외. 세트 구성이 되어있는 재고만 조회.</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeRule()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<script src="../common/wms-common.js"></script>
+<script src="./mock-data.js"></script>
+<script>
+var mainAll = [];
+var mainFiltered = [];
+var mainPage = 1;
+var mainSize = 50;
+
+function doSearch() {
+  mainFiltered = mainAll.slice();
+  mainPage = 1;
+  renderMainGrid();
+}
+
+function doReset() {
+  document.getElementById('srchProdNo').value = '';
+  document.getElementById('srchProdNm').value = '';
+  document.querySelectorAll('.search-area select').forEach(function(s) { s.selectedIndex = 0; });
+  document.querySelectorAll('.search-area input[type="text"]').forEach(function(i) { if (!i.readOnly) i.value = ''; });
+  document.querySelectorAll('.search-area input[type="date"]').forEach(function(i) { i.value = ''; });
+}
+
+function renderMainGrid() {
+  var tbody = document.getElementById('mainTbody');
+  var start = (mainPage - 1) * mainSize;
+  var rows = mainFiltered.slice(start, start + mainSize);
+  var html = '';
+  if (rows.length === 0) {
+    html = '<tr><td colspan="20" class="tc" style="padding:20px;color:#9ca3af;">조회된 데이터가 없습니다.</td></tr>';
+  } else {
+    rows.forEach(function(r, i) {
+      var idx = start + i;
+      html += '<tr onclick="selectRow(this)">'
+        + '<td class="tc">' + (idx + 1) + '</td>'
+        + '<td class="tc"><input type="checkbox" class="row-chk" style="width:12px;height:12px;" data-idx="' + idx + '"></td>'
+        + '<td class="tl">' + r.prodNo + '</td>'
+        + '<td class="tl">' + r.prodNm + '</td>'
+        + '<td class="tc">' + r.unit + '</td>'
+        + '<td class="tc">' + r.category + '</td>'
+        + '<td class="tr">' + fmt.num(r.stockQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.inQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.boxQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.pieceQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.bundleQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.totalQty) + '</td>'
+        + '<td class="tr">' + fmt.num(r.waitQty) + '</td>'
+        + '<td class="tc"><input type="number" class="proc-input" value="' + r.procQty + '" min="0" max="' + r.stockQty + '" onchange="onProcChange(this,' + idx + ')"></td>'
+        + '<td class="tc">' + r.stockStatus + '</td>'
+        + '<td class="tc">' + r.warehouse + '</td>'
+        + '<td class="tc">' + r.location + '</td>'
+        + '<td class="tc">' + r.expDate + '</td>'
+        + '<td class="tl">' + r.toProdNo + '</td>'
+        + '<td class="tl">' + r.toProdNm + '</td>'
+        + '</tr>';
+    });
+  }
+  tbody.innerHTML = html;
+  document.getElementById('chkAll').checked = false;
+  renderPagination('mainPaging', mainFiltered.length, mainSize, mainPage, 'goMainPage');
+  renderRowCount('mainRowCount', mainFiltered.length, mainSize, mainPage);
+  syncHScroll('mainHInner', 'mainTable');
+}
+
+function onProcChange(input, idx) {
+  var val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 0) { val = 0; input.value = 0; }
+  var max = mainFiltered[idx] ? mainFiltered[idx].stockQty : 0;
+  if (val > max) { val = max; input.value = max; }
+  mainFiltered[idx].procQty = val;
+  var chk = input.closest('tr').querySelector('.row-chk');
+  if (chk) chk.checked = val > 0;
+}
+
+function toggleAll(chk) {
+  document.querySelectorAll('.row-chk').forEach(function(c) { c.checked = chk.checked; });
+}
+
+function selectRow(tr) {
+  document.querySelectorAll('#mainTbody tr').forEach(function(r) { r.classList.remove('selected'); });
+  tr.classList.add('selected');
+}
+
+function goMainPage(p) { mainPage = p; renderMainGrid(); }
+
+function changeMainPageSize() {
+  mainSize = parseInt(document.getElementById('mainPageSize').value, 10);
+  mainPage = 1;
+  renderMainGrid();
+}
+
+function doDismantle() {
+  var checked = document.querySelectorAll('.row-chk:checked');
+  if (checked.length === 0) { alert('해체처리할 항목을 선택하세요.'); return; }
+  if (!confirm(checked.length + '건을 해체처리 하시겠습니까?')) return;
+  alert('해체처리가 완료되었습니다.');
+  doSearch();
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  mainAll = JSON.parse(JSON.stringify(STDC01_DATA.main));
+  mainFiltered = mainAll.slice();
+  renderMainGrid();
+  initHScroll('mainWrap', 'mainHScroll', 'mainHInner', 'mainTable');
+});
+
+initModalDrag('ruleModal', 'ruleHeader');
+</script>
+</body>
+</html>

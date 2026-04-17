@@ -23,9 +23,9 @@ dist/
 │   ├── CPPD01_popup.html             # 품목 검색 공통 팝업
 │   └── icon-preview.html             # 사용 가능한 SVG 아이콘 목록
 └── {메뉴코드}/                        # 메뉴별 화면 (예: mdfg01, dlvo01)
-    ├── {메뉴코드}.md                   # 화면요건정리 문서 (입력)
-    ├── {메뉴코드}.html                 # 프로토타입 HTML (산출물)
-    └── {메뉴코드}-data.js             # 테스트 데이터 JS (산출물)
+    ├── ui.md                          # 화면요건정리 문서 (입력)
+    ├── wireframe.html                 # 프로토타입 HTML (산출물)
+    └── mock-data.js                   # 테스트 데이터 JS (산출물)
 ```
 
 ### 파일 역할
@@ -37,9 +37,9 @@ dist/
 | `common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
 | `common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
 | `common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
-| `{메뉴코드}.md` | 화면요건정리 문서. `/ui {메뉴코드}` 명령어의 입력 소스 |
-| `{메뉴코드}.html` | 완성된 프로토타입. `index.html`의 iframe 안에서 로드됨 |
-| `{메뉴코드}-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
+| `ui.md` | 화면요건정리 문서. `/ui {메뉴코드}` 명령어의 입력 소스 |
+| `wireframe.html` | 완성된 프로토타입. `index.html`의 iframe 안에서 로드됨 |
+| `mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
 
 ### 팝업 통신 방식
 

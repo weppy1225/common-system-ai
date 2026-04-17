@@ -14,9 +14,9 @@
 | 공통 메뉴     | `dist/common/left-menu.html`         | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/left-menu.html`         |
 | 공통 CSS      | `dist/common/wms-ui.css`             | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/wms-ui.css`             |
 | 공통 JS       | `dist/common/wms-common.js`          | `/WEB_BASE/CLOUD_WMS_DOC/dist/common/wms-common.js`          |
-| 메뉴 화면     | `dist/$ARGUMENTS/$ARGUMENTS.html`    | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS.html`    |
-| 메뉴 데이터   | `dist/$ARGUMENTS/$ARGUMENTS-data.js` | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS-data.js` |
-| 화면설계 문서 | `dist/$ARGUMENTS/$ARGUMENTS.md`      | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/$ARGUMENTS.md`      |
+| 메뉴 화면     | `dist/$ARGUMENTS/wireframe.html`     | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/wireframe.html`     |
+| 메뉴 데이터   | `dist/$ARGUMENTS/mock-data.js`       | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/mock-data.js`       |
+| 화면설계 문서 | `dist/$ARGUMENTS/ui.md`              | `/WEB_BASE/CLOUD_WMS_DOC/dist/$ARGUMENTS/ui.md`              |
 
 > `index.html`과 `left-menu.html`은 `/ui` 명령 실행 시 메뉴 항목이 추가되므로 항상 함께 배포한다.
 > `wms-ui.css` / `wms-common.js` 는 모든 메뉴 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
@@ -88,9 +88,9 @@ put dist/common/wms-common.js wms-common.js
 cd /WEB_BASE/CLOUD_WMS_DOC/dist
 mkdir $ARGUMENTS
 cd $ARGUMENTS
-put dist/$ARGUMENTS/$ARGUMENTS.html $ARGUMENTS.html
-put dist/$ARGUMENTS/$ARGUMENTS-data.js $ARGUMENTS-data.js
-put dist/$ARGUMENTS/$ARGUMENTS.md $ARGUMENTS.md
+put dist/$ARGUMENTS/wireframe.html wireframe.html
+put dist/$ARGUMENTS/mock-data.js mock-data.js
+put dist/$ARGUMENTS/ui.md ui.md
 bye
 FTPEOF
 ```
@@ -105,9 +105,9 @@ curl -T "dist/index.html"                        --user "$AUTH" "$BASE/index.htm
 curl -T "dist/common/left-menu.html"             --user "$AUTH" "$BASE/common/left-menu.html"               --ftp-create-dirs -s -w "common/left-menu.html: %{size_upload}bytes\n"
 curl -T "dist/common/wms-ui.css"                 --user "$AUTH" "$BASE/common/wms-ui.css"                   --ftp-create-dirs -s -w "common/wms-ui.css: %{size_upload}bytes\n"
 curl -T "dist/common/wms-common.js"              --user "$AUTH" "$BASE/common/wms-common.js"                --ftp-create-dirs -s -w "common/wms-common.js: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS.html"        --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.html"          --ftp-create-dirs -s -w "$ARGUMENTS.html: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS-data.js"     --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS-data.js"       --ftp-create-dirs -s -w "$ARGUMENTS-data.js: %{size_upload}bytes\n"
-curl -T "dist/$ARGUMENTS/$ARGUMENTS.md"          --user "$AUTH" "$BASE/$ARGUMENTS/$ARGUMENTS.md"            --ftp-create-dirs -s -w "$ARGUMENTS.md: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/wireframe.html"         --user "$AUTH" "$BASE/$ARGUMENTS/wireframe.html"           --ftp-create-dirs -s -w "$ARGUMENTS/wireframe.html: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/mock-data.js"           --user "$AUTH" "$BASE/$ARGUMENTS/mock-data.js"             --ftp-create-dirs -s -w "$ARGUMENTS/mock-data.js: %{size_upload}bytes\n"
+curl -T "dist/$ARGUMENTS/ui.md"                  --user "$AUTH" "$BASE/$ARGUMENTS/ui.md"                    --ftp-create-dirs -s -w "$ARGUMENTS/ui.md: %{size_upload}bytes\n"
 ```
 
 ### 4단계 — 결과 보고
@@ -152,7 +152,9 @@ passive
 cd /WEB_BASE/CLOUD_WMS_DOC/dist
 mkdir $code
 cd $code
-$(for f in "$dir"*.html "$dir"*.js "$dir"*.md; do [ -f "$f" ] && echo "put $f $(basename $f)"; done)
+$([ -f "${dir}${code}.html"    ] && echo "put ${dir}${code}.html wireframe.html")
+$([ -f "${dir}${code}-data.js" ] && echo "put ${dir}${code}-data.js mock-data.js")
+$([ -f "${dir}${code}.md"      ] && echo "put ${dir}${code}.md ui.md")
 bye
 FTPEOF2
 done
@@ -174,10 +176,8 @@ done
 for dir in dist/*/; do
   code=$(basename "$dir")
   [ "$code" = "common" ] && continue
-  for f in "$dir"*.html "$dir"*.js "$dir"*.md; do
-    [ -f "$f" ] || continue
-    fname=$(basename "$f")
-    curl -T "$f" --user "$AUTH" "$BASE/$code/$fname" --ftp-create-dirs -s -w "$code/$fname: %{size_upload}bytes\n"
-  done
+  [ -f "${dir}wireframe.html" ] && curl -T "${dir}wireframe.html" --user "$AUTH" "$BASE/$code/wireframe.html" --ftp-create-dirs -s -w "$code/wireframe.html: %{size_upload}bytes\n"
+  [ -f "${dir}mock-data.js"  ] && curl -T "${dir}mock-data.js"  --user "$AUTH" "$BASE/$code/mock-data.js"   --ftp-create-dirs -s -w "$code/mock-data.js: %{size_upload}bytes\n"
+  [ -f "${dir}ui.md"         ] && curl -T "${dir}ui.md"          --user "$AUTH" "$BASE/$code/ui.md"          --ftp-create-dirs -s -w "$code/ui.md: %{size_upload}bytes\n"
 done
 ```
