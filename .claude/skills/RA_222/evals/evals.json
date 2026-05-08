@@ -1,0 +1,23 @@
+{
+  "skill_name": "RA_222",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/RA_222 삼성물산",
+      "expected_output": "output/02 분석(RA)/RA.222-요구사항정의서_삼성물산_{YYMMDD}.xlsx 파일 생성. 부문별(CO/MD/IW/RM/IV/OW/IF/PDA/ERR) FUR ID 체계로 요구사항 분류. 요구사항 건수 부문별 집계 출력.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "input/RA.212/ 폴더의 회의록을 분석해서 요구사항정의서 만들어줘",
+      "expected_output": "업체명을 파일명에서 자동 추출하여 요구사항정의서 생성. meeting_raw.json → requirements.json → xlsx 3단계 파이프라인 실행.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "회의록 기반으로 FUR 요건 정리해줘",
+      "expected_output": "RA_222 스킬 트리거. FUR-{코드}-{순번3자리} 형식 ID 부여. 회의록 내용 기반으로만 요구사항 도출(임의 작성 금지).",
+      "files": []
+    }
+  ]
+}
