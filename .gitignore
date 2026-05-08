@@ -1,0 +1,8 @@
+# 토큰/인증 정보
+.claude/config/
+
+# 산출물
+output/
+
+# 기타
+*.lock
