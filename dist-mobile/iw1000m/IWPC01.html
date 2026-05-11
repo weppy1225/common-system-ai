@@ -1,0 +1,177 @@
+<!--
+  wireframe-only | IWPC01 | 라벨인쇄처리 | Type B (처리형) | iw1000m
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라벨인쇄처리 [IWPC01]</title>
+<link rel="stylesheet" href="../mobile.css">
+<style>
+.print-setting{padding:12px 16px;background:#f8fafc;border-bottom:1px solid #eaecf0;flex-shrink:0}
+.print-setting-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.print-setting-row:last-child{margin-bottom:0}
+.ps-label{font-size:13px;color:#9ca3af;width:62px;flex-shrink:0;font-weight:500}
+.label-preview{
+  margin:8px 12px;border:1.5px dashed #d1d5db;border-radius:14px;
+  padding:14px 16px;background:#fff;position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.lp-barcode{font-size:11px;color:#9ca3af;margin-bottom:4px;letter-spacing:2px}
+.lp-name{font-size:16px;font-weight:700;color:#1c2333;margin-bottom:4px}
+.lp-meta{font-size:12px;color:#9ca3af}
+.lp-badge{position:absolute;top:12px;right:14px;background:#00afec;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px}
+.print-card{
+  margin:8px 12px;border-radius:14px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05);
+  background:#fff;
+}
+.print-card-hdr{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-bottom:1px solid #f0f2f5;background:#fafbfc;
+}
+.print-card-body{display:flex;align-items:center;padding:12px 14px;gap:14px}
+.pc-qty-wrap{display:flex;align-items:center;gap:8px}
+.pc-qty-lbl{font-size:12px;color:#9ca3af;font-weight:500}
+.pc-qty-num{font-size:22px;font-weight:700;color:#00afec;min-width:40px;text-align:center;border-bottom:2px solid #00afec;cursor:pointer;padding-bottom:2px}
+.pc-info{flex:1;font-size:12px;color:#9ca3af;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="pda-wrap">
+
+  <header class="pda-header">
+    <button class="header-back" onclick="history.back()">‹</button>
+    <div class="header-title">라벨인쇄처리</div>
+    <div class="header-right"></div>
+  </header>
+
+  <!-- 프린터 설정 -->
+  <div class="print-setting">
+    <div class="print-setting-row">
+      <span class="ps-label">프린터</span>
+      <select class="pda-sel" id="selPrinter" style="height:36px;font-size:15px"></select>
+    </div>
+    <div class="print-setting-row">
+      <span class="ps-label">라벨유형</span>
+      <select class="pda-sel" id="selLabelType" style="height:36px;font-size:15px"></select>
+    </div>
+  </div>
+
+  <!-- 검색 -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="search-ico"><img src="../assets/icon-search.png" alt="검색"></span>
+      <input type="text" id="itemSearch" placeholder="품목코드/바코드 스캔 및 입력" oninput="renderItems()">
+      <button class="search-act-btn" onclick="alert('[스캔]\n품목 바코드를 스캔합니다.')"><img src="../assets/icon-schBarcode.png" alt="바코드"></button>
+    </div>
+  </div>
+
+  <!-- 전체선택 -->
+  <div class="chk-all-bar">
+    <label><input type="checkbox" id="chkAll" onchange="toggleAll(this.checked)"> 전체선택</label>
+    <span class="proc-total-txt" id="totalTxt">선택: 0건</span>
+  </div>
+
+  <main class="pda-content">
+    <div id="itemList"></div>
+  </main>
+
+  <div class="footer-cta">
+    <button class="pda-btn btn-gray" onclick="previewLabel()">라벨 미리보기</button>
+    <button class="pda-btn btn-blue" onclick="doPrint()">인쇄</button>
+  </div>
+</div>
+
+<!-- 수량 키패드 -->
+<div class="numpad-overlay" id="numpadOverlay">
+  <div class="numpad-box">
+    <div class="numpad-title" id="numpadTitle">인쇄수량 입력</div>
+    <div class="numpad-out" id="numpadOut">0</div>
+    <div class="numpad-grid">
+      <button class="np-key" onclick="npInput('1')">1</button><button class="np-key" onclick="npInput('2')">2</button><button class="np-key" onclick="npInput('3')">3</button>
+      <button class="np-key" onclick="npInput('4')">4</button><button class="np-key" onclick="npInput('5')">5</button><button class="np-key" onclick="npInput('6')">6</button>
+      <button class="np-key" onclick="npInput('7')">7</button><button class="np-key" onclick="npInput('8')">8</button><button class="np-key" onclick="npInput('9')">9</button>
+      <button class="np-key np-zero" onclick="npInput('0')">0</button><button class="np-key np-del" onclick="npDel()">⌫</button>
+    </div>
+    <div class="numpad-btns">
+      <button class="pda-btn btn-gray" onclick="closeNumpad()">취소</button>
+      <button class="pda-btn btn-blue" onclick="applyNumpad()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 라벨 미리보기 시트 -->
+<div class="filter-overlay" id="previewOverlay" onclick="closePreview()"></div>
+<div class="filter-sheet" id="previewSheet">
+  <div class="filter-hdr">
+    <span class="filter-ttl">라벨 미리보기</span>
+    <button class="filter-close-btn" onclick="closePreview()">✕</button>
+  </div>
+  <div id="previewContent"></div>
+  <div class="filter-ftr">
+    <button class="pda-btn btn-gray" onclick="closePreview()">닫기</button>
+    <button class="pda-btn btn-blue" onclick="closePreview();doPrint()">인쇄</button>
+  </div>
+</div>
+
+<script src="./IWPC01-data.js"></script>
+<script>
+var items=[]; var npTargetIdx=-1; var npVal='';
+
+function initSelects(){
+  var sp=document.getElementById('selPrinter'); IWPC01_DATA.printers.forEach(function(p){var o=document.createElement('option');o.textContent=p;sp.appendChild(o);});
+  var sl=document.getElementById('selLabelType'); IWPC01_DATA.labelTypes.forEach(function(l){var o=document.createElement('option');o.textContent=l;sl.appendChild(o);});
+}
+
+function renderItems(){
+  var q=document.getElementById('itemSearch').value.toLowerCase();
+  var html='';
+  items.forEach(function(it,i){
+    if(q&&!it.code.toLowerCase().includes(q)&&!it.name.toLowerCase().includes(q)&&!it.barcode.includes(q))return;
+    html+='<div class="print-card"><div class="print-card-hdr"><input type="checkbox" '+(it.checked?'checked':'')+' onchange="toggleItem('+i+',this.checked)" style="width:18px;height:18px"><span class="proc-card-code">'+it.code+'</span><span class="proc-card-name" style="flex:1">'+it.name+'</span></div><div class="print-card-body"><div class="pc-qty-wrap"><span class="pc-qty-lbl">인쇄수량</span><span class="pc-qty-num" onclick="openNumpad('+i+')">'+it.printQty+'</span><span class="pc-qty-lbl">'+it.unit+'</span></div><div class="pc-info"><div>바코드: '+it.barcode+'</div><div>위치: '+it.loc+'</div></div></div></div>';
+  });
+  document.getElementById('itemList').innerHTML=html||'<div class="empty-msg">품목이 없습니다.</div>';
+  updateTotal();
+}
+
+function toggleItem(i,v){items[i].checked=v;updateTotal();}
+function toggleAll(v){items.forEach(function(it){it.checked=v;});renderItems();}
+function updateTotal(){var cnt=items.filter(function(it){return it.checked;}).length;document.getElementById('totalTxt').textContent='선택: '+cnt+'건';document.getElementById('chkAll').checked=items.length>0&&items.every(function(it){return it.checked;});}
+
+function openNumpad(i){npTargetIdx=i;npVal=String(items[i].printQty);document.getElementById('numpadTitle').textContent=items[i].name+' 인쇄수량';document.getElementById('numpadOut').textContent=npVal;document.getElementById('numpadOverlay').classList.add('show');}
+function closeNumpad(){document.getElementById('numpadOverlay').classList.remove('show');}
+function npInput(v){if(npVal==='0')npVal=v;else npVal+=v;document.getElementById('numpadOut').textContent=npVal;}
+function npDel(){npVal=npVal.length>1?npVal.slice(0,-1):'0';document.getElementById('numpadOut').textContent=npVal;}
+function applyNumpad(){items[npTargetIdx].printQty=parseInt(npVal)||0;closeNumpad();renderItems();}
+
+function previewLabel(){
+  var checked=items.filter(function(it){return it.checked;});
+  if(!checked.length){alert('미리볼 품목을 선택하세요.');return;}
+  var html='';
+  checked.forEach(function(it){
+    html+='<div class="label-preview"><div class="lp-badge">×'+it.printQty+'</div><div class="lp-barcode">||||| '+it.barcode+' |||||</div><div class="lp-name">'+it.name+'</div><div class="lp-meta">위치: '+it.loc+' · 단위: '+it.unit+'</div></div>';
+  });
+  document.getElementById('previewContent').innerHTML=html;
+  document.getElementById('previewOverlay').classList.add('show');
+  document.getElementById('previewSheet').classList.add('show');
+}
+function closePreview(){document.getElementById('previewOverlay').classList.remove('show');document.getElementById('previewSheet').classList.remove('show');}
+
+function doPrint(){
+  var checked=items.filter(function(it){return it.checked;});
+  if(!checked.length){alert('인쇄할 품목을 선택하세요.');return;}
+  var total=checked.reduce(function(s,it){return s+it.printQty;},0);
+  var pr=document.getElementById('selPrinter').value;
+  if(confirm('['+pr+']\n선택된 '+checked.length+'종 총 '+total+'매를 인쇄하시겠습니까?')){alert('라벨 인쇄가 완료되었습니다.');}
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  initSelects();
+  items=JSON.parse(JSON.stringify(IWPC01_DATA.items)).map(function(it){it.checked=false;return it;});
+  renderItems();
+});
+</script>
+</body>
+</html>
