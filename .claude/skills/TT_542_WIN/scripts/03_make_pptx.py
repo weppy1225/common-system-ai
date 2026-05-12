@@ -1,27 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-[TT_541] 4단계 — 사용자 매뉴얼 PPTX 생성 (템플릿 기반, python-pptx)
+[TT_542_WIN] 4단계 — 운영자 매뉴얼 PPTX 생성 (템플릿 기반, python-pptx, Windows 경로)
 
 입력:
-  output/05 이행(TT)/tmp/capture_config.json
-  output/05 이행(TT)/tmp/screens/{메뉴코드}/*.png
-  output/05 이행(TT)/tmp/screens/{메뉴코드}/coords.json
+  output/05 이행(TT)/tmp_542/capture_config.json
+  output/05 이행(TT)/tmp_542/screens/{메뉴코드}/*.png
+  output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
 
 템플릿:
-  template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx
+  template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx   ← TT_541 과 동일 파일
   - 13.33 × 7.5 인치 (16:9)
   - 제목바 #2D4B73 / 이미지영역 0~10in / 설명패널 10~13.33in / 페이지번호 우하단
-  - 색상상수: 본 스크립트 상단의 COLOR_* 와 동일
 
 출력:
-  output/05 이행(TT)/TT_541_사용자매뉴얼_{고객사명}.pptx
+  output/05 이행(TT)/TT_542_운영자매뉴얼_{고객사명}.pptx
 
-설계 원칙:
+설계 원칙 (TT_541 과 동일):
   - 라벨/테두리/배지/커넥터/설명패널은 모두 python-pptx 도형(`add_shape`)으로 PPT 안에
     직접 그린다. 이미지 합성하지 않으므로 PowerPoint 에서 자유롭게 편집 가능.
   - 이미지는 add_picture 의 width/height 직접 지정 (왜곡 방지).
   - 배지는 이미지 우측(IMG_R) ~ 설명 패널 사이 "배지 존" 에만 배치.
+
+TT_541 과의 차이점:
+  - 표지 제목 : "사용자 매뉴얼" → "운영자 매뉴얼"
+  - 출력 파일명: TT_541_사용자매뉴얼_... → TT_542_운영자매뉴얼_...
+  - TMP 디렉토리: tmp → tmp_542
+  - 카테고리 분리 표지 (시스템관리 / 마스터 / 권한 등) 선택 지원
+  - 설명 패널 디폴트 문구를 운영자 톤으로 살짝 조정
 """
 from __future__ import annotations
 
@@ -31,21 +37,27 @@ import re
 import sys
 import datetime
 from pathlib import Path
-from copy import deepcopy
 
 from pptx import Presentation
-from pptx.util import Inches, Pt, Emu
+from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR_TYPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.oxml.ns import qn
 from PIL import Image, ImageFont
 
-# ── 경로 ────────────────────────────────────────────────────────
-REPO_ROOT = Path('/mnt/c/zinide/workspace/cloud-wms-doc')
+# Vue 소스 파서 (같은 디렉토리)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from parse_vue_source import parse_menu as parse_vue_menu
+
+# ── 경로 (Windows 네이티브 + WSL 호환) ──────────────────────────
+# 본 스크립트는 .claude/skills/TT_542_WIN/scripts/ 안에 있다.
+# parents[0]=scripts  parents[1]=TT_542_WIN  parents[2]=skills
+# parents[3]=.claude  parents[4]=<프로젝트 루트>
+REPO_ROOT = Path(__file__).resolve().parents[4]
 TEMPLATE = REPO_ROOT / 'template' / '05 이행(TT)' / '사용자_매뉴얼_템플릿.pptx'
 OUTPUT_DIR = REPO_ROOT / 'output' / '05 이행(TT)'
-TMP_DIR = OUTPUT_DIR / 'tmp'
+TMP_DIR = OUTPUT_DIR / 'tmp_542'
 SCREENS_ROOT = TMP_DIR / 'screens'
 CFG_FILE = TMP_DIR / 'capture_config.json'
 
@@ -62,10 +74,10 @@ def sanitize_filename(s: str) -> str:
 
 
 CUSTOMER = sanitize_filename(cfg.get('customer') or 'WMS')
-OUT_FILE = OUTPUT_DIR / f"TT_541_사용자매뉴얼_{CUSTOMER}.pptx"
+OUT_FILE = OUTPUT_DIR / f"TT_542_운영자매뉴얼_{CUSTOMER}.pptx"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── 색상 상수 (템플릿 분석 결과와 동일) ─────────────────────────
+# ── 색상 상수 (TT_541 과 동일, 변경 금지) ───────────────────────
 COLOR_RED = RGBColor(0xDC, 0x1E, 0x1E)
 COLOR_ORANGE = RGBColor(0xC8, 0x6E, 0x00)
 COLOR_BLUE = RGBColor(0x1E, 0x64, 0xC8)
@@ -85,48 +97,41 @@ REGION_COLOR_MAP = {
     'green': COLOR_GREEN, 'gray': COLOR_GRAY, 'navy': COLOR_NAVY,
 }
 
-# ── 슬라이드 레이아웃 (템플릿과 동일) ───────────────────────────
+# ── 슬라이드 레이아웃 (TT_541 과 동일) ──────────────────────────
 SLIDE_W = 13.33
 SLIDE_H = 7.5
 TITLE_H = 0.5
-IMG_AREA_H = SLIDE_H - TITLE_H  # 7.0
-DEFAULT_IMG_COL_W = 10.0  # 템플릿 고정값 (가로형)
-PDA_IMG_COL_W = 5.6       # PDA 세로 (대략 42%)
-DESC_W_DEFAULT = SLIDE_W - DEFAULT_IMG_COL_W  # 3.33
+IMG_AREA_H = SLIDE_H - TITLE_H
+DEFAULT_IMG_COL_W = 10.0
+PDA_IMG_COL_W = 5.6
+DESC_W_DEFAULT = SLIDE_W - DEFAULT_IMG_COL_W
 FONT_NAME = '맑은 고딕'
 
 
 def img_col_w_for(viewport):
-    """뷰포트 비율로 이미지 컬럼 너비 결정 (PDA는 세로형 → 좁게)"""
     if viewport and viewport.get('height', 0) > viewport.get('width', 0):
         return PDA_IMG_COL_W
     return DEFAULT_IMG_COL_W
 
 
 # ── 헬퍼 ────────────────────────────────────────────────────────
-def png_size(path: Path):
+def png_size(p: Path):
     try:
-        with Image.open(path) as im:
-            return im.size  # (w, h)
+        with Image.open(p) as im:
+            return im.size
     except Exception:
         return None
 
 
 def remove_all_slides(prs: Presentation):
-    """템플릿 안의 기존 예제 슬라이드를 모두 제거 (마스터/레이아웃/테마는 보존).
-
-    python-pptx 의 _Relationships 는 직접 삭제를 지원하지 않으므로,
-    내부 OXML 트리에서 직접 관계 엘리먼트와 sldId 를 제거한다.
-    """
+    """템플릿 안의 기존 예제 슬라이드를 모두 제거 (마스터/레이아웃/테마는 보존)."""
     sldIdLst = prs.slides._sldIdLst
     pres_part = prs.part
     pres_rels = pres_part.rels
-    # 1) sldId 노드와 그 r:id 수집
     targets = []
     for sldId in list(sldIdLst):
         rId = sldId.get(qn('r:id'))
         targets.append((sldId, rId))
-    # 2) 관계의 _rels 딕셔너리에서 직접 pop (내부 구현에 의존)
     rels_internal = getattr(pres_rels, '_rels', None)
     for sldId, rId in targets:
         if rels_internal and rId in rels_internal:
@@ -139,7 +144,6 @@ def remove_all_slides(prs: Presentation):
 
 def set_text(tf, text: str, *, size=11, bold=False, color=COLOR_DARK,
              align=PP_ALIGN.LEFT, font=FONT_NAME):
-    """텍스트 프레임에 단일 단락을 세팅."""
     tf.clear()
     p = tf.paragraphs[0]
     p.alignment = align
@@ -153,7 +157,6 @@ def set_text(tf, text: str, *, size=11, bold=False, color=COLOR_DARK,
 
 def add_solid_rect(slide, x, y, w, h, fill=None, line=None, line_w=None,
                    no_fill=False):
-    """단순 사각형 도형 추가."""
     sh = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,
                                 Inches(x), Inches(y), Inches(w), Inches(h))
     sh.line.color.rgb = line if line else COLOR_WHITE
@@ -167,7 +170,6 @@ def add_solid_rect(slide, x, y, w, h, fill=None, line=None, line_w=None,
     else:
         if line_w is not None:
             sh.line.width = Pt(line_w)
-    # 도형 자체 텍스트는 비움 (외부에서 별도 텍스트 박스로 처리)
     sh.text_frame.text = ''
     sh.text_frame.margin_left = 0
     sh.text_frame.margin_right = 0
@@ -193,7 +195,6 @@ def add_textbox(slide, x, y, w, h, text, *, size=11, bold=False,
 
 def add_multipart_textbox(slide, x, y, w, h, parts, *, valign=MSO_ANCHOR.TOP,
                           font=FONT_NAME):
-    """parts: list of dict {text, size, bold, color, align}. 한 단락씩 추가."""
     tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     tf = tb.text_frame
     tf.word_wrap = True
@@ -223,7 +224,6 @@ def add_multipart_textbox(slide, x, y, w, h, parts, *, valign=MSO_ANCHOR.TOP,
 
 
 def add_line(slide, x1, y1, x2, y2, color, width_pt=1.0):
-    """직선(커넥터) 추가."""
     cn = slide.shapes.add_connector(MSO_CONNECTOR_TYPE.STRAIGHT,
                                     Inches(x1), Inches(y1),
                                     Inches(x2), Inches(y2))
@@ -253,15 +253,11 @@ class Geom:
         }
 
 
-# ── 영역 라벨링 (테두리 + 좌상단 원형 번호 배지) ────────────────
+# ── 영역 라벨링 (TT_541 과 동일) ────────────────────────────────
 CIRCLED_NUMS = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫'
 
 
 def _region_number(label: str, idx: int) -> str:
-    """배지에 표시할 일반 숫자 문자열(1, 2, 3 ...).
-
-    라벨 선두에 원형 숫자(①②...)나 `1.` `2.` 형식이 있으면 그 값을, 없으면 순번을 사용.
-    """
     if label:
         if label[0] in CIRCLED_NUMS:
             return str(CIRCLED_NUMS.index(label[0]) + 1)
@@ -272,31 +268,18 @@ def _region_number(label: str, idx: int) -> str:
 
 
 def add_region_labels(slide, regions, geom: Geom):
-    """regions: list of {px:[x1,y1,x2,y2], label:str, color:RGBColor}
-
-    각 영역에 색상 테두리 + 좌상단에 원형 번호 배지를 스크린샷 위에 직접 그린다.
-    - 도형: MSO_SHAPE.OVAL (정원)
-    - 채우기: 영역 색상 (region color)
-    - 테두리: 흰색 1.75pt
-    - 텍스트: 흰색 굵은 일반 숫자, 도형 크기에 맞춰 14~20pt 자동 스케일
-    번호는 우측 설명 패널의 ■ 헤딩 번호와 1:1 매칭된다.
-    """
-    BADGE_D = 0.42  # 원형 배지 지름 (in)
+    BADGE_D = 0.42
 
     for idx, r in enumerate(regions):
         sl = geom.px_rect(*r['px'])
         color = r['color']
         num = _region_number(r.get('label', ''), idx)
 
-        # 1) 영역 테두리 (투명 fill)
         add_solid_rect(slide, sl['x'], sl['y'], sl['w'], sl['h'],
                        fill=None, line=color, line_w=2.0, no_fill=True)
 
-        # 2) 좌상단 원형 번호 배지 (이미지 위에 직접 배치)
-        #    영역 좌상단 모서리에 1/4 정도 걸치도록 배치
         bx = sl['x'] - BADGE_D * 0.25
         by = sl['y'] - BADGE_D * 0.25
-        # 이미지 영역을 벗어나지 않도록 보정
         bx = max(geom.img_l + 0.02, bx)
         by = max(geom.img_t + 0.02, by)
 
@@ -316,14 +299,13 @@ def add_region_labels(slide, regions, geom: Geom):
         tf.word_wrap = False
         tf.vertical_anchor = MSO_ANCHOR.MIDDLE
 
-        # 자릿수에 따라 텍스트 사이즈 자동 스케일 (도형에 꽉 차게)
         n_len = len(num)
         text_size = 20 if n_len == 1 else (15 if n_len == 2 else 12)
         set_text(tf, num, size=text_size, bold=True, color=COLOR_WHITE,
                  align=PP_ALIGN.CENTER)
 
 
-# ── 슬라이드 헤더(제목 바) + 페이지 번호 ────────────────────────
+# ── 슬라이드 헤더 + 페이지 번호 ────────────────────────────────
 def add_title_bar(slide, title_text):
     add_solid_rect(slide, 0, 0, SLIDE_W, TITLE_H,
                    fill=COLOR_TITLE_BG, line=COLOR_TITLE_BG, line_w=1.0)
@@ -338,6 +320,7 @@ def add_page_number(slide, idx, total):
                 align=PP_ALIGN.RIGHT, valign=MSO_ANCHOR.MIDDLE)
 
 
+# ── 인라인 [버튼명] 토큰 → 버튼 PNG 치환 (TT_541 동일) ─────────
 BTN_TOKEN_RE = re.compile(r'\[([^\[\]]{1,16})\]')
 
 
@@ -347,6 +330,8 @@ def _norm_btn_name(s: str) -> str:
 
 _FONT_CACHE = {}
 _FONT_CANDIDATES = [
+    'C:/Windows/Fonts/malgun.ttf',
+    'C:/Windows/Fonts/malgunsl.ttf',
     '/mnt/c/Windows/Fonts/malgun.ttf',
     '/mnt/c/Windows/Fonts/malgunsl.ttf',
     '/usr/share/fonts/truetype/nanum/NanumGothic.ttf',
@@ -359,7 +344,6 @@ def _get_font(pt_size: float):
     key = round(pt_size, 1)
     if key in _FONT_CACHE:
         return _FONT_CACHE[key]
-    # PPT 인치 → PIL 픽셀: 96 DPI 기준 1pt = 96/72 px
     px = max(6, int(round(pt_size * 96.0 / 72.0)))
     font = None
     for p in _FONT_CANDIDATES:
@@ -374,7 +358,6 @@ def _get_font(pt_size: float):
 
 
 def _estimate_text_width(text: str, pt_size: float) -> float:
-    """텍스트 렌더 폭(in). PIL 실측 우선, 폰트 없으면 보수적 추정 fallback."""
     if not text:
         return 0.0
     f = _get_font(pt_size)
@@ -384,7 +367,6 @@ def _estimate_text_width(text: str, pt_size: float) -> float:
             return float(px_w) / 96.0
         except Exception:
             pass
-    # Fallback: 보수적 추정
     w = 0.0
     for c in text:
         if c == ' ':
@@ -410,9 +392,6 @@ def _add_seg_textbox(slide, x, y, w, h, text, *, size, bold, color):
 
 
 def _line_segments(text: str, buttons: dict) -> list:
-    """text 를 [{'kind':'text','text':...}, {'kind':'img','path':...}] 시퀀스로 분해.
-    매칭되는 [버튼명] 토큰만 img 로 치환, 매칭 안 되면 그대로 텍스트로 유지.
-    """
     if not buttons:
         return [{'kind': 'text', 'text': text}]
     btn_map = {_norm_btn_name(k): v for k, v in buttons.items()}
@@ -436,7 +415,6 @@ def _line_segments(text: str, buttons: dict) -> list:
 def _render_line(slide, x0, y, max_w, segments, *,
                  text_size, text_color, text_bold,
                  line_h, img_h):
-    """한 줄을 텍스트박스/이미지 가로 나열. 패널 너비 초과분은 잘림."""
     cx = x0
     iy = y + (line_h - img_h) / 2
     GAP = 0.02
@@ -471,16 +449,7 @@ def _render_line(slide, x0, y, max_w, segments, *,
 
 
 def add_desc_panel(slide, desc_x, desc_w, desc_lines, buttons=None):
-    """desc_lines: list of dict / str
-       - {'h': '헤딩', 'c': RGBColor} → 볼드 13pt 헤딩
-       - '· 본문' → 11pt DARK (본문에 [버튼명] 토큰이 있으면 인라인 이미지로 치환)
-       - '⚠ 경고' → 11pt WARN
-       - '' → 빈 줄
-    buttons: {버튼명: PNG 경로}. 매칭되는 토큰만 이미지로 치환.
-    """
     buttons = buttons or {}
-
-    # 패널 배경
     add_solid_rect(slide, desc_x, TITLE_H, desc_w, IMG_AREA_H,
                    fill=COLOR_WHITE, line=COLOR_PANEL_LINE, line_w=1.0)
 
@@ -550,15 +519,15 @@ def parse_ui_md(menu_code: str):
 
 # ── 슬라이드 빌더 ───────────────────────────────────────────────
 def build_cover_slide(prs, customer):
+    """표지 — 운영자 매뉴얼 (TT_541 과 다른 부분)"""
     layout = prs.slide_layouts[0]
     s = prs.slides.add_slide(layout)
-    # 배경 영역 (메인)
     add_solid_rect(s, 0, 0, SLIDE_W, SLIDE_H, fill=RGBColor(0xF4, 0xF6, 0xFA),
                    line=RGBColor(0xF4, 0xF6, 0xFA), line_w=0.5)
-    # 중앙 띠
     add_solid_rect(s, 0, 2.4, SLIDE_W, 1.4, fill=COLOR_TITLE_BG,
                    line=COLOR_TITLE_BG, line_w=0.5)
-    add_textbox(s, 0, 2.5, SLIDE_W, 0.7, '사용자 매뉴얼',
+    # ★ TT_541 과 다른 부분: 표지 제목 "운영자 매뉴얼"
+    add_textbox(s, 0, 2.5, SLIDE_W, 0.7, '운영자 매뉴얼',
                 size=40, bold=True, color=COLOR_WHITE,
                 align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
     add_textbox(s, 0, 3.15, SLIDE_W, 0.5, f'{customer} WMS',
@@ -572,14 +541,56 @@ def build_cover_slide(prs, customer):
 
 
 def build_toc_slide(prs, menus):
+    """목차 — 카테고리별로 그룹핑"""
     layout = prs.slide_layouts[0]
     s = prs.slides.add_slide(layout)
     add_title_bar(s, '목 차')
-    lines = [f"{(i + 1):02d}. {m['name']}  [{m['code'].upper()}]"
-             for i, m in enumerate(menus)]
-    parts = [{'text': line, 'size': 16, 'color': COLOR_DARK, 'space_after': 8}
-             for line in lines]
+
+    # 카테고리 → 메뉴 그룹핑
+    groups = {}
+    order = []
+    for i, m in enumerate(menus):
+        cat = m.get('category') or '운영'
+        if cat not in groups:
+            groups[cat] = []
+            order.append(cat)
+        groups[cat].append(m)
+
+    parts = []
+    idx = 1
+    for cat in order:
+        if len(order) > 1:
+            parts.append({
+                'text': f'[ {cat} ]',
+                'size': 14, 'bold': True, 'color': COLOR_TITLE_BG, 'space_after': 6,
+            })
+        for m in groups[cat]:
+            parts.append({
+                'text': f"  {idx:02d}. {m['name']}  [{m['code'].upper()}]",
+                'size': 14, 'color': COLOR_DARK, 'space_after': 4,
+            })
+            idx += 1
+        parts.append({'text': '', 'size': 6, 'color': COLOR_DARK, 'space_after': 2})
+
     add_multipart_textbox(s, 0.6, 0.9, SLIDE_W - 1.2, SLIDE_H - 1.3, parts)
+    return s
+
+
+def build_category_section_slide(prs, category_name):
+    """카테고리 섹션 표지 (시스템관리 / 마스터 / 권한 등)"""
+    layout = prs.slide_layouts[0]
+    s = prs.slides.add_slide(layout)
+    add_solid_rect(s, 0, 0, SLIDE_W, SLIDE_H,
+                   fill=RGBColor(0xE8, 0xEE, 0xF6),
+                   line=RGBColor(0xE8, 0xEE, 0xF6), line_w=0.5)
+    add_solid_rect(s, 0, 3.2, SLIDE_W, 1.0,
+                   fill=COLOR_TITLE_BG, line=COLOR_TITLE_BG, line_w=0.5)
+    add_textbox(s, 0, 3.25, SLIDE_W, 0.6, category_name,
+                size=32, bold=True, color=COLOR_WHITE,
+                align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
+    add_textbox(s, 0, 3.78, SLIDE_W, 0.4, '운영자 매뉴얼',
+                size=15, color=COLOR_SUBTITLE,
+                align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
     return s
 
 
@@ -613,7 +624,6 @@ def build_screen_slide(prs, *, title, image_path, geom, regions, desc_lines,
             width=Inches(geom.disp_w), height=Inches(geom.disp_h),
         )
     else:
-        # 이미지 없음 placeholder
         add_solid_rect(s, geom.img_l, geom.img_t, geom.disp_w, geom.disp_h,
                        fill=RGBColor(0xEE, 0xF2, 0xF7),
                        line=COLOR_PANEL_LINE, line_w=1.0)
@@ -628,10 +638,18 @@ def build_screen_slide(prs, *, title, image_path, geom, regions, desc_lines,
     return s
 
 
-# ── 메뉴별 시나리오 → regions / desc 합성 ──────────────────────
+# ── 메뉴별 시나리오 → regions / desc 합성 (Vue 소스 기반) ───────
+#
+# 정책 변경 (사용자 요구사항):
+#   - 01-main(메인 화면) 은 PPT 슬라이드에서 제외한다. 사용자가 보는 정보 가치가 낮고,
+#     검색 실행 직후 결과 화면(02-search-result) 으로 충분.
+#   - 우측 설명 패널은 일반 디폴트 문구가 아니라, Vue 소스에서 추출한 실제
+#     검색필드 / 그리드 컬럼 / 버튼 / API 를 반영하여 작성한다.
+#   - SearchSection 컴포넌트가 없거나 검색 필드가 비어 있는 메뉴는
+#     "검색 조건" 라벨을 표시하지 않고 "기능 버튼 + 그리드" 형태로 표시한다.
 SCENARIOS = [
-    {'file': '01-main.png', 'kind': 'main', 'title': '메인 화면'},
-    {'file': '02-search-result.png', 'kind': 'search', 'title': '검색 결과'},
+    # 01-main 은 의도적으로 제외
+    {'file': '02-search-result.png', 'kind': 'search', 'title': '메인 화면'},
     {'file': '03-register-popup.png', 'kind': 'register', 'title': '등록 팝업'},
     {'file': '04-row-selected.png', 'kind': 'rowSelect', 'title': '행 선택'},
     {'file': '05-edit-popup.png', 'kind': 'edit', 'title': '수정 팝업'},
@@ -645,90 +663,151 @@ def bbox_to_px(bb):
             bb['x'] + bb['width'], bb['y'] + bb['height']]
 
 
-def synth_regions_desc(kind, coords, ui):
+def _chunk_bullets(items, max_per_line=3, prefix='· '):
+    """긴 컬럼 목록을 한 줄에 N개씩 묶어 가독성을 높인다."""
+    if not items:
+        return []
+    lines = []
+    cur = []
+    for it in items:
+        cur.append(it)
+        if len(cur) >= max_per_line:
+            lines.append(prefix + ', '.join(cur))
+            cur = []
+    if cur:
+        lines.append(prefix + ', '.join(cur))
+    return lines
+
+
+def _filter_operator_buttons(buttons):
+    """운영자 매뉴얼에 의미있는 버튼만 필터링 (PC매뉴얼/매뉴얼/로그아웃 등 제외)."""
+    drop = {'PC매뉴얼', '매뉴얼', '로그아웃', '검색', '초기화', '닫기', '취소'}
+    out = []
+    for b in buttons:
+        if not b or b in drop:
+            continue
+        if b in out:
+            continue
+        out.append(b)
+    return out
+
+
+def synth_regions_desc(kind, coords, vue):
+    """Vue 소스에서 추출한 정보(vue)로 운영자 톤 설명을 생성한다.
+
+    vue 는 parse_vue_source.parse_menu() 결과:
+        has_search, search_fields, grid_columns, toolbar_buttons, apis 등.
+    """
     regions, desc = [], []
-    if kind == 'main':
-        c = coords.get('main', {})
-        sb = bbox_to_px(c.get('search'))
-        gb = bbox_to_px(c.get('grid'))
-        if sb:
-            regions.append({'px': sb, 'label': '1. 검색 조건', 'color': COLOR_RED})
-            desc.append({'h': '1. 검색 조건', 'c': COLOR_RED})
-            if ui['searchFields']:
-                desc += ['· ' + f for f in ui['searchFields']]
-            else:
-                desc.append('· 화면 상단 조건을 입력 후 [검색] 클릭')
-            desc.append('')
-        if gb:
-            regions.append({'px': gb, 'label': '2. 결과 그리드', 'color': COLOR_GRAY})
-            desc.append({'h': '2. 결과 그리드', 'c': COLOR_GRAY})
-            desc.append('· 검색 실행 전 빈 상태로 표시됩니다.')
-            desc.append('')
-        if ui['rules']:
-            desc.append({'h': '업무 규칙', 'c': COLOR_NAVY})
-            desc += ['· ' + r for r in ui['rules']]
-    elif kind == 'search':
+
+    has_search = bool(vue.get('has_search') and vue.get('search_fields'))
+    search_fields = vue.get('search_fields') or []
+    grid_cols = vue.get('grid_columns') or []
+    toolbar_buttons = _filter_operator_buttons(vue.get('toolbar_buttons') or [])
+
+    if kind == 'search':
+        # "메인 화면" 으로 표시되는 슬라이드 — 검색 후 결과 그리드 화면
         c = coords.get('search', {})
         gb = bbox_to_px(c.get('grid'))
-        if gb:
-            regions.append({'px': gb, 'label': '1. 검색 결과 그리드', 'color': COLOR_GREEN})
-            desc.append({'h': '1. 검색 결과 그리드', 'c': COLOR_GREEN})
-        else:
-            desc.append({'h': '검색 결과', 'c': COLOR_GREEN})
-        desc.append('· 입력한 조건에 해당하는 데이터가 표시됩니다.')
-        if ui['gridColumns']:
+
+        if has_search:
+            # 검색 조건이 있는 메뉴
+            if gb:
+                regions.append({'px': gb, 'label': '1. 검색 결과 그리드', 'color': COLOR_GREEN})
+            desc.append({'h': '1. 검색 영역', 'c': COLOR_RED})
+            desc += _chunk_bullets(search_fields, max_per_line=3)
+            desc.append('· 위 조건 입력 후 [검색] 버튼을 클릭하여 데이터를 조회합니다.')
             desc.append('')
-            desc.append({'h': '주요 컬럼', 'c': COLOR_NAVY})
-            desc += ['· ' + col for col in ui['gridColumns']]
+            desc.append({'h': '2. 결과 그리드', 'c': COLOR_GREEN})
+        else:
+            # 검색 조건이 없는 메뉴 (행 직접 편집형)
+            if gb:
+                regions.append({'px': gb, 'label': '1. 그리드 영역', 'color': COLOR_GREEN})
+            desc.append({'h': '1. 그리드 영역', 'c': COLOR_GREEN})
+            desc.append('· 본 메뉴는 별도 검색 조건이 없으며, 진입 시 전체 목록이 자동 조회됩니다.')
+
+        if grid_cols:
+            desc.append('· 표시 컬럼:')
+            desc += _chunk_bullets(grid_cols, max_per_line=3)
+
+        if toolbar_buttons:
+            desc.append('')
+            desc.append({'h': '기능 버튼', 'c': COLOR_NAVY})
+            desc += _chunk_bullets(toolbar_buttons, max_per_line=4, prefix='· ')
+
         desc.append('')
         desc.append({'h': '사용 방법', 'c': COLOR_NAVY})
-        desc.append('· 결과 행을 클릭하면 상세 정보가 표시됩니다.')
-        desc.append('· 페이지 하단에서 페이지 이동 / 페이지 크기를 변경할 수 있습니다.')
-    elif kind in ('register', 'edit'):
-        key = 'register' if kind == 'register' else 'edit'
-        c = coords.get(key, {})
+        if vue.get('has_popup_edit'):
+            desc.append('· 행 더블클릭 또는 [수정] 버튼 클릭 시 상세 편집 팝업이 열립니다.')
+        else:
+            desc.append('· 그리드 셀을 클릭해 인라인으로 값을 변경 후 [행저장] 버튼으로 저장합니다.')
+
+    elif kind == 'register':
+        c = coords.get('register', {})
         pp = bbox_to_px(c.get('popup'))
-        label = '등록 팝업' if kind == 'register' else '수정 팝업'
-        numbered = '1. ' + label
         if pp:
-            regions.append({'px': pp, 'label': numbered, 'color': COLOR_NAVY})
-            desc.append({'h': numbered, 'c': COLOR_NAVY})
-        else:
-            desc.append({'h': label, 'c': COLOR_NAVY})
-        if kind == 'register':
-            desc.append('· [추가] 버튼 클릭 시 표시됩니다.')
-        else:
-            desc.append('· 결과 그리드에서 행 선택 후 [수정] 클릭 시 표시됩니다.')
-        desc.append('· 필수 항목(*)을 모두 입력한 후 [저장] 버튼을 클릭합니다.')
+            regions.append({'px': pp, 'label': '1. 등록 팝업', 'color': COLOR_NAVY})
+        desc.append({'h': '1. 등록 팝업', 'c': COLOR_NAVY})
+        desc.append('· [추가] 버튼 클릭 시 신규 등록 팝업이 열립니다.')
+        if grid_cols:
+            desc.append('· 입력 항목은 그리드 컬럼과 동일합니다:')
+            desc += _chunk_bullets(grid_cols[:8], max_per_line=3)
+        desc.append('')
+        desc.append({'h': '동작', 'c': COLOR_NAVY})
+        desc.append('· 필수 항목(*)을 모두 채운 후 [저장] 버튼을 클릭하여 등록합니다.')
         desc.append('· [취소] 또는 [✕] 클릭 시 변경사항 없이 닫힙니다.')
         desc.append('')
+        desc.append('⚠ 운영자 권한 변경은 시스템 전체에 영향을 주므로 신중하게 등록하세요.')
         desc.append('⚠ 본 매뉴얼은 팝업 화면을 보여주기 위해 열기만 한 상태입니다.')
+
     elif kind == 'rowSelect':
         c = coords.get('rowSelect', {})
         gb = bbox_to_px(c.get('grid'))
         if gb:
             regions.append({'px': gb, 'label': '1. 선택된 행', 'color': COLOR_BLUE})
-            desc.append({'h': '1. 선택된 행', 'c': COLOR_BLUE})
+        desc.append({'h': '1. 행 선택', 'c': COLOR_BLUE})
+        desc.append('· 그리드에서 행을 클릭하면 해당 행이 강조되고 상세 정보가 조회됩니다.')
+        if vue.get('has_popup_edit'):
+            desc.append('· 선택된 행을 더블클릭하거나 [수정] 버튼을 클릭하면 상세 편집 팝업이 열립니다.')
         else:
-            desc.append({'h': '행 선택', 'c': COLOR_BLUE})
-        desc.append('· 그리드 행 클릭 시 해당 행이 강조 표시됩니다.')
-        desc.append('· 행 선택 후 [수정] / [삭제] / [복사] 등의 기능을 실행할 수 있습니다.')
+            desc.append('· 선택된 행은 그리드 안에서 인라인으로 수정 가능합니다.')
+        if toolbar_buttons:
+            desc.append('')
+            desc.append({'h': '실행 가능한 기능', 'c': COLOR_NAVY})
+            desc += _chunk_bullets(toolbar_buttons, max_per_line=4)
+
+    elif kind == 'edit':
+        c = coords.get('edit', {})
+        pp = bbox_to_px(c.get('popup'))
+        if pp:
+            regions.append({'px': pp, 'label': '1. 수정 팝업', 'color': COLOR_NAVY})
+        desc.append({'h': '1. 수정 팝업', 'c': COLOR_NAVY})
+        desc.append('· 결과 그리드에서 행 선택 후 [수정] 버튼 클릭 시 수정 팝업이 열립니다.')
+        if grid_cols:
+            desc.append('· 수정 가능 항목:')
+            desc += _chunk_bullets(grid_cols[:8], max_per_line=3)
+        desc.append('')
+        desc.append({'h': '동작', 'c': COLOR_NAVY})
+        desc.append('· 변경할 항목을 수정한 후 [저장] 버튼을 클릭하여 적용합니다.')
+        desc.append('· [취소] 또는 [✕] 클릭 시 변경사항 없이 닫힙니다.')
+        desc.append('')
+        desc.append('⚠ 운영자 권한 변경은 시스템 전체에 영향을 주므로 신중하게 진행하세요.')
+        desc.append('⚠ 본 매뉴얼은 팝업 화면을 보여주기 위해 열기만 한 상태입니다.')
+
     return regions, desc
 
 
 # ── 메인 ────────────────────────────────────────────────────────
 def main():
     prs = Presentation(str(TEMPLATE))
-    # 슬라이드 크기 보정 (안전상)
     prs.slide_width = Inches(SLIDE_W)
     prs.slide_height = Inches(SLIDE_H)
 
-    # 템플릿의 예제 슬라이드는 모두 제거 (마스터/레이아웃/테마는 유지)
     remove_all_slides(prs)
 
-    # 표지
+    # 표지 (운영자 매뉴얼)
     build_cover_slide(prs, CUSTOMER)
-    # 목차
+    # 목차 (카테고리별 그룹)
     build_toc_slide(prs, cfg['menus'])
 
     viewport = cfg.get('viewport', {'width': 1440, 'height': 900})
@@ -736,21 +815,47 @@ def main():
     desc_x = img_col_w
     desc_w = SLIDE_W - img_col_w
 
-    # 메뉴별 슬라이드
+    # 카테고리별 분리 표지 (한 카테고리만 있으면 생략)
+    distinct_categories = []
+    for m in cfg['menus']:
+        cat = m.get('category') or '운영'
+        if cat not in distinct_categories:
+            distinct_categories.append(cat)
+    show_category_section = len(distinct_categories) >= 2
+
+    fe_path = cfg.get('fePath')
+    if not fe_path:
+        print("[WARN] capture_config.json 에 fePath 가 없습니다. Vue 소스 파싱 생략.")
+
+    last_category = None
     for menu in cfg['menus']:
+        cat = menu.get('category') or '운영'
+        if show_category_section and cat != last_category:
+            build_category_section_slide(prs, cat)
+            last_category = cat
+
         screen_dir = SCREENS_ROOT / menu['code']
         coords_path = screen_dir / 'coords.json'
         coords = (json.loads(coords_path.read_text(encoding='utf-8'))
                   if coords_path.exists() else {})
-        ui = parse_ui_md(menu['code'])
-        # 버튼 PNG 경로 (coords.buttons 의 상대경로 → 절대경로 매핑)
+
+        # Vue 소스에서 실제 정보 추출 (검색필드/컬럼/버튼)
+        if fe_path:
+            try:
+                vue = parse_vue_menu(menu['code'], fe_path)
+            except Exception as e:
+                print(f"[WARN] {menu['code']} Vue 파싱 실패: {e}")
+                vue = {}
+        else:
+            vue = {}
+
         buttons_raw = coords.get('buttons') or {}
         buttons = {name: str(screen_dir / rel) for name, rel in buttons_raw.items()}
 
         # 메뉴 섹션 표지
         build_menu_section_slide(prs, menu)
 
-        # 시나리오별 슬라이드
+        # 시나리오별 슬라이드 (01-main 은 SCENARIOS 에서 의도적으로 제외)
         for sc in SCENARIOS:
             img_path = screen_dir / sc['file']
             if not img_path.exists():
@@ -759,7 +864,7 @@ def main():
             px_w, px_h = size if size else (viewport['width'], viewport['height'])
             geom = Geom(px_w, px_h, img_col_w)
 
-            regions, desc = synth_regions_desc(sc['kind'], coords, ui)
+            regions, desc = synth_regions_desc(sc['kind'], coords, vue)
             title = f"{menu['name']} - {sc['title']}  [{menu['code'].upper()}]"
             build_screen_slide(prs, title=title, image_path=img_path,
                                geom=geom, regions=regions,
@@ -773,9 +878,9 @@ def main():
 
     prs.save(str(OUT_FILE))
 
-    print(f"[OK] PPTX 생성 완료")
+    print(f"[OK] 운영자매뉴얼 PPTX 생성 완료")
     print(f"     {OUT_FILE}")
-    print(f"     총 슬라이드 {total}장 (메뉴 {len(cfg['menus'])}개)")
+    print(f"     총 슬라이드 {total}장 (메뉴 {len(cfg['menus'])}개, 카테고리 {len(distinct_categories)}개)")
     print(f"     템플릿     : {TEMPLATE}")
 
 

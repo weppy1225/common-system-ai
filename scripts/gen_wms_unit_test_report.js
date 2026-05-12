@@ -2,8 +2,8 @@
 const XlsxPopulate = require('xlsx-populate');
 const path = require('path');
 
-const TEMPLATE = path.join(__dirname, '../template/04 구현(PI)/PI.212-단위테스트보고서.xlsx');
-const OUTPUT   = path.join(__dirname, '../output/04 구현(PI)/PI.212-단위테스트보고서_WMS_260506.xlsx');
+const TEMPLATE = path.join(__dirname, '../template/04 구현(PI)/PI_212-단위테스트보고서.xlsx');
+const OUTPUT   = path.join(__dirname, '../output/04 구현(PI)/PI_212-단위테스트보고서_WMS_260506.xlsx');
 
 const DATE_SERIAL = 46147; // 2026-05-06
 const REPORTER = '신현규';
