@@ -1,22 +1,24 @@
 #!/usr/bin/env node
 /**
- * [TT_541] 3단계 — Playwright 헤드리스 화면 캡처
+ * [TT_542_WIN] 3단계 — Playwright 헤드리스 화면 캡처 (한국어 로케일, Windows 경로)
  *
  * 사용법:
  *   node 02_capture_screens.js
  *
- * 입력:  output/05 이행(TT)/tmp/capture_config.json
+ * 입력:  output/05 이행(TT)/tmp_542/capture_config.json
  * 출력:
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/01-main.png
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/02-search-result.png
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/03-register-popup.png  (선택)
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/04-row-selected.png    (선택)
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/05-edit-popup.png      (선택)
- *   output/05 이행(TT)/tmp/screens/{메뉴코드}/coords.json
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/01-main.png
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/02-search-result.png
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/03-register-popup.png  (선택)
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/04-row-selected.png    (선택)
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/05-edit-popup.png      (선택)
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
+ *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/buttons/*.png
  *
- * 표준 시나리오:
- *   메뉴 진입 → 메인 캡처 → 검색 → 등록 팝업 → 행 선택 → 수정 팝업
- *   (실제 데이터 변경 절대 금지: 팝업은 열기만, 취소/ESC로 닫음)
+ * 핵심:
+ *   - 브라우저 locale = ko-KR, timezone = Asia/Seoul, Accept-Language = ko-KR
+ *   - 운영자 매뉴얼이므로 실제 INSERT/UPDATE/DELETE 동작 절대 금지
+ *   - 팝업은 열기만, 취소/ESC 로 닫음
  */
 'use strict';
 
@@ -27,14 +29,16 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const REPO_ROOT = '/mnt/c/zinide/workspace/cloud-wms-doc';
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp');
+// ── 경로 (Windows 네이티브 + WSL 호환) ──────────────────────────
+const SCRIPT_DIR = __dirname;
+const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
+const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_542');
 const CFG_FILE = path.join(TMP_DIR, 'capture_config.json');
 const SCREENS_ROOT = path.join(TMP_DIR, 'screens');
 
 if (!fs.existsSync(CFG_FILE)) {
     console.error(`[ERR] config 파일이 없습니다: ${CFG_FILE}`);
-    console.error('      먼저 01_scan_project.js 를 실행하고, 사용자 입력 결과로 capture_config.json 을 작성하세요.');
+    console.error('      먼저 01_scan_admin_menus.js 를 실행하고, 사용자 입력 결과로 capture_config.json 을 작성하세요.');
     process.exit(1);
 }
 
@@ -113,7 +117,7 @@ async function hideSidebar(page) {
     await sleep(250);
 }
 
-// ── 로그인 ──────────────────────────────────────────────────────
+// ── 로그인 (관리자 계정 권장) ───────────────────────────────────
 async function login(page, login) {
     if (!login || !login.needed) return;
     const loginUrl = login.url ? (login.url.startsWith('http') ? login.url : BASE_URL + login.url) : BASE_URL;
@@ -121,7 +125,6 @@ async function login(page, login) {
     await page.waitForSelector('input[type="password"]', { timeout: 15000 }).catch(() => {});
     await sleep(800);
 
-    // 보이는 input 만 사용 (popup 의 hidden input 회피)
     if (login.originField) {
         const visibleTexts = page.locator('input[type="text"]:visible, input:not([type]):visible');
         const cnt = await visibleTexts.count().catch(() => 0);
@@ -144,7 +147,6 @@ async function login(page, login) {
     const pwInput = page.locator('input[type="password"]:visible').first();
     await pwInput.fill(login.pw || '').catch(() => {});
 
-    // 로그인 버튼 클릭 (login_btn 클래스 우선 + 가시성 보장)
     const submitCandidates = [
         'button.login_btn:visible',
         'button.btn-login:visible',
@@ -161,11 +163,9 @@ async function login(page, login) {
         }
     }
     if (!clicked) {
-        // 마지막 폴백: enter 키로 submit
         await pwInput.press('Enter').catch(() => {});
     }
 
-    // 로그인 성공 시 /login 에서 다른 URL 로 이동 — URL 변경 대기
     await page.waitForFunction(
         () => !location.pathname.startsWith('/login'),
         null,
@@ -176,7 +176,7 @@ async function login(page, login) {
     console.log(`  [LOGIN] post-login URL = ${page.url()}`);
 }
 
-// ── 셀렉터 풀 ───────────────────────────────────────────────────
+// ── 셀렉터 풀 (TT_541 과 동일) ─────────────────────────────────
 const SEL = {
     search: [
         'button.zin-button:has-text("검색")',
@@ -236,20 +236,8 @@ const SEL = {
     ],
 };
 
-// ── 팝업 좌표 픽셀 분석 (v-show / display:none 토글 fallback) ──
-const POPUP_HEADER_RGB = [48, 74, 110]; // #304a6e (cloud-wms-doc 프라이머리)
-const ALT_HEADER_RGB = [75, 104, 145];   // #4b6891 (wms-bnk-fe 팝업 헤더)
-const COLOR_TOL = 16;
-
-function findPopupBboxByPixel(pngPath) {
-    // PNG 헤더만 빠르게 파싱하여 width/height 확인 — 본격적인 PNG 디코딩은 과제 외이므로
-    // 본 함수는 stub 으로 두고, DOM 측정 실패 시 호출 측에서 null 처리한다.
-    // (실 사용 시 sharp 또는 pngjs 추가 필요)
-    return null;
-}
-
+// ── 팝업 좌표 측정 ──────────────────────────────────────────────
 async function getPopupBBox(page) {
-    // 보이는 layer-wrapper 중 가장 큰 것을 채택 (여러 팝업이 DOM 에 미리 마운트되어 있어 first() 만으로는 위험)
     const bb = await page.evaluate(() => {
         const selectors = [
             '.layer-wrapper',
@@ -273,12 +261,11 @@ async function getPopupBBox(page) {
     return bb;
 }
 
-// ── 버튼(아이콘) 캡처 ───────────────────────────────────────────
+// ── 버튼(아이콘) 캡처 (TT_541 과 동일) ─────────────────────────
 function safeBtnFileFragment(s) {
     return String(s).replace(/[\\/:*?"<>|\s]+/g, '_').slice(0, 16) || 'btn';
 }
 
-// wms-bnk-fe 컴포넌트 클래스명 → 표준 이름 매핑 (title/aria-label/textContent 없을 때)
 const BTN_CLASS_NAME_MAP = [
     ['layerPop-close', '닫기'],
     ['ZBtnRowAddImg', '행추가'],
@@ -294,7 +281,6 @@ const BTN_CLASS_NAME_MAP = [
     ['excelUp-btn', '엑셀업로드'],
 ];
 
-// 한 PNG 를 여러 토큰명으로 등록하기 위한 alias 사전 (desc 패널의 호칭 다양성 흡수)
 const BTN_NAME_ALIASES = {
     '등록': ['등록', '추가'],
     '닫기': ['닫기', '취소', '✕', 'X', 'x'],
@@ -307,7 +293,7 @@ async function captureButtonsByLocator(page, locators, dir, prefix, existingMap 
     fs.mkdirSync(btnDir, { recursive: true });
     const found = {};
     let cnt = 0;
-    const seenBoxes = []; // dedupe by bbox to avoid double-capturing the same DOM element via multiple selectors
+    const seenBoxes = [];
 
     for (const sel of locators) {
         let els = [];
@@ -316,12 +302,10 @@ async function captureButtonsByLocator(page, locators, dir, prefix, existingMap 
             if (!(await el.isVisible().catch(() => false))) continue;
             const bb = await el.boundingBox().catch(() => null);
             if (!bb || bb.width < 8 || bb.height < 8) continue;
-            // bbox 중복 거름
             const boxKey = `${Math.round(bb.x)}_${Math.round(bb.y)}_${Math.round(bb.width)}_${Math.round(bb.height)}`;
             if (seenBoxes.includes(boxKey)) continue;
             seenBoxes.push(boxKey);
 
-            // 이름 결정: title > aria-label > textContent(<=24자) > 클래스 패턴 매핑
             let name = '';
             try {
                 name = await el.evaluate((node, classMap) => {
@@ -340,16 +324,12 @@ async function captureButtonsByLocator(page, locators, dir, prefix, existingMap 
             } catch (_) {}
             name = (name || '').replace(/\s+/g, ' ').trim();
             if (!name) continue;
-            // 컨테이너 오탐 방지: 너무 긴 이름 또는 헤더/네비 버튼 제외
             if (name.length > 24) continue;
             if (['검색', '초기화', '업무규칙', 'PC매뉴얼', '매뉴얼', '로그아웃'].includes(name)) continue;
-            // 정규화 (i18n 변형 흡수)
             name = name.replace(/^row/i, '행').replace(/^ROW/, '행');
-            // forceName 지정 시 (예: 팝업 confirm 버튼은 텍스트 무관 '저장' 으로 통일)
             if (forceName) name = forceName;
 
             const aliasList = BTN_NAME_ALIASES[name] || [name];
-            // 첫 번째 alias (대표명) 이미 캡쳐돼 있으면 skip
             if (existingMap[aliasList[0]] || found[aliasList[0]]) continue;
 
             const fname = `${prefix}_${cnt++}_${safeBtnFileFragment(name)}.png`;
@@ -376,14 +356,11 @@ async function captureButtonsByLocator(page, locators, dir, prefix, existingMap 
 
 async function captureToolbarButtons(page, dir, existingMap) {
     return captureButtonsByLocator(page, [
-        // wms-bnk-fe: <div class="content-header">...<div class="addImg|modifyImg|...|ZBtnRowAddImg" title="...">
         '.content-header [class*="Img"][title]',
         '.content-header-fncL [class*="Img"]',
         '.content-header-fncR button',
         '.content-header-fncR [class*="Img"][title]',
-        // wms-bnk-fe content-warpper 우측 추가 보강
         '.content-warpper .content-header button',
-        // cloud-wms-doc wireframe fallback
         '.toolbar button[title]',
         '.toolbar button',
         '.toolbar-left button',
@@ -392,8 +369,6 @@ async function captureToolbarButtons(page, dir, existingMap) {
 }
 
 async function capturePopupButtons(page, dir, kind, existingMap) {
-    // 1) confirm 버튼은 텍스트가 "등록/수정/확인" 이라도 모두 '저장' 으로 통일
-    //    (toolbar 의 '등록' 버튼과 dedupe 충돌 방지 + desc 패널의 [저장] 토큰 매칭)
     const confirm = await captureButtonsByLocator(page, [
         '.layer-wrapper:visible .button-wrapper button.zin-button',
         '.layer-wrapper:visible .button-wrapper button',
@@ -401,7 +376,6 @@ async function capturePopupButtons(page, dir, kind, existingMap) {
         '.modal:not(.modal-bg):visible .modal-footer button',
         '.modal[role="dialog"]:visible .modal-footer button',
     ], dir, `pp_${kind}_cf`, {}, /* forceName */ '저장');
-    // 2) 헤더 X / 닫기 버튼 → alias '닫기/취소/✕/X'
     const close = await captureButtonsByLocator(page, [
         '.layer-wrapper:visible .layer-header .layerPop-close',
         '.modal:not(.modal-bg):visible .modal-header .close-btn',
@@ -433,7 +407,7 @@ async function closePopup(page) {
 async function captureMenu(page, menu) {
     const dir = path.join(SCREENS_ROOT, menu.code);
     fs.mkdirSync(dir, { recursive: true });
-    const coords = { menuCode: menu.code, menuName: menu.name };
+    const coords = { menuCode: menu.code, menuName: menu.name, category: menu.category || null };
 
     const url = menu.path?.startsWith('http') ? menu.path : (BASE_URL + (menu.path || `/${menu.code}`));
     console.log(`\n[${menu.code}] ${menu.name}  →  ${url}`);
@@ -444,17 +418,15 @@ async function captureMenu(page, menu) {
         console.log(`  [SKIP] 페이지 진입 실패: ${e.message}`);
         return { menu, captured: [], error: e.message };
     }
-    // 메뉴 화면이 SPA 라우팅 + 비동기 컴포넌트 로드를 모두 마칠 때까지 대기
     await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
-    // 검색 영역 또는 그리드 영역이 한쪽이라도 보이면 렌더 완료로 본다
     await Promise.race([
         page.waitForSelector('.search-area, .search-section, [class*="search-section"], .search-form', { timeout: 12000 }).catch(() => {}),
         page.waitForSelector('.grid-wrap, table.grid, [class*="aui-grid"]', { timeout: 12000 }).catch(() => {}),
     ]);
     await sleep(1500);
     if (page.url().includes('/login')) {
-        console.log(`  [WARN] 로그인 페이지로 리다이렉트됨: ${page.url()}`);
-        return { menu, captured: [], error: 'redirected to login' };
+        console.log(`  [WARN] 로그인 페이지로 리다이렉트됨 (관리자 권한 없음 가능성): ${page.url()}`);
+        return { menu, captured: [], error: 'redirected to login (관리자 권한 확인 필요)' };
     }
     await hideSidebar(page);
     await sleep(400);
@@ -490,7 +462,7 @@ async function captureMenu(page, menu) {
         }
     }
 
-    // 03: 등록 팝업
+    // 03: 등록 팝업 (열기만, 절대 저장하지 않음)
     if (scenarios.includes('register')) {
         const opened = await openPopup(page, SEL.register);
         if (opened) {
@@ -520,7 +492,7 @@ async function captureMenu(page, menu) {
         }
     }
 
-    // 05: 수정 팝업
+    // 05: 수정 팝업 (열기만, 절대 저장하지 않음)
     if (scenarios.includes('edit')) {
         const opened = await openPopup(page, SEL.modify);
         if (opened) {
@@ -539,15 +511,19 @@ async function captureMenu(page, menu) {
     return { menu, captured, error: null };
 }
 
-// ── 메인 실행 ──────────────────────────────────────────────────
+// ── 메인 실행 (한국어 로케일 강제) ─────────────────────────────
 (async () => {
     const browser = await chromium.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-dev-shm-usage', '--lang=ko-KR'],
     });
+    // 한국어 로케일 + 한국 타임존 + Accept-Language 헤더 강제
     const ctx = await browser.newContext({
         locale: 'ko-KR',
         timezoneId: 'Asia/Seoul',
+        extraHTTPHeaders: {
+            'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+        },
         viewport: { width: VIEWPORT.width, height: VIEWPORT.height },
     });
     const page = await ctx.newPage();
@@ -564,6 +540,7 @@ async function captureMenu(page, menu) {
         summary.push({
             code: menu.code,
             name: menu.name,
+            category: menu.category || null,
             captured: r.captured,
             error: r.error,
         });
@@ -575,7 +552,8 @@ async function captureMenu(page, menu) {
     console.log('\n[DONE] 캡처 요약');
     for (const s of summary) {
         const tag = s.error ? `[ERR ${s.error}]` : `[${s.captured.length}장]`;
-        console.log(`  ${tag} ${s.code}  ${s.name}`);
+        const cat = s.category ? `(${s.category})` : '';
+        console.log(`  ${tag} ${s.code} ${cat} ${s.name}`);
     }
     console.log(`\n캡처 결과: ${SCREENS_ROOT}`);
 })().catch(err => {

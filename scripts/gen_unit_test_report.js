@@ -1,5 +1,5 @@
 /**
- * PI.212 단위테스트 보고서 생성 스크립트
+ * PI_212 단위테스트 보고서 생성 스크립트
  * class-checkin-be / class-checkin-fe 소스 기반
  */
 const XLSX = require('../node_modules/xlsx');
@@ -13,9 +13,9 @@ const PROJ_NM  = 'ClassCheckIn';
 const TODAY    = '2026-05-06';
 const TODAY_NUM = 46147; // Excel serial date for 2026-05-06
 const MANAGER  = '신현규';
-const TMPL = path.join(__dirname, '../template/04 구현(PI)/PI.212-단위테스트보고서.xlsx');
+const TMPL = path.join(__dirname, '../template/04 구현(PI)/PI_212-단위테스트보고서.xlsx');
 const OUTDIR = path.join(__dirname, '../output/04 구현(PI)');
-const OUTFILE  = path.join(OUTDIR, `PI.212-단위테스트보고서_${PROJ_NM}_260506.xlsx`);
+const OUTFILE  = path.join(OUTDIR, `PI_212-단위테스트보고서_${PROJ_NM}_260506.xlsx`);
 
 // ───────────────────────────────────────────────────────────────────
 // 테스트 데이터 정의
