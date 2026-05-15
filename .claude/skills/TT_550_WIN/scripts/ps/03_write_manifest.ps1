@@ -1,4 +1,4 @@
-# TT_550_WIN 6단계 (POWERSHELL 모드) - manifest.json 작성
+﻿# TT_550_WIN 6단계 (POWERSHELL 모드) - manifest.json 작성
 #
 # 사용법:
 #   .\03_write_manifest.ps1 -DbTargetFile <db_target.json> -MarkersFile <markers.json> -DumpResultsFile <dump_results.json> -OutputDir <output_dir> -Customer <고객사명> [-ModeFile <mode.json>]

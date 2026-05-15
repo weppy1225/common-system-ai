@@ -1,4 +1,4 @@
-# TT_550_WIN 5단계 (POWERSHELL 모드) - pg_dump --inserts 로 INSERT SQL 생성 후 헤더/BEGIN/COMMIT/검증쿼리 wrap
+﻿# TT_550_WIN 5단계 (POWERSHELL 모드) - pg_dump --inserts 로 INSERT SQL 생성 후 헤더/BEGIN/COMMIT/검증쿼리 wrap
 #
 # 사용법:
 #   .\02_dump_data.ps1 -DbTargetFile <db_target.json> -MarkersFile <markers.json> -SelectedFile <selected_groups.json> -OutputDir <output_dir> -PgDump <pg_dump.exe> -Psql <psql.exe> [-Customer <고객사명>]

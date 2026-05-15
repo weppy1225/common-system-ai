@@ -1,4 +1,4 @@
-# TT_550_WIN 3단계 (POWERSHELL 모드) - psql 로 @migrate: 마커 + FK 의존성 수집
+﻿# TT_550_WIN 3단계 (POWERSHELL 모드) - psql 로 @migrate: 마커 + FK 의존성 수집
 #
 # 사용법:
 #   .\01_collect_markers.ps1 -DbTargetFile <db_target.json> -OutFile <markers.json> -Psql <psql.exe 경로>

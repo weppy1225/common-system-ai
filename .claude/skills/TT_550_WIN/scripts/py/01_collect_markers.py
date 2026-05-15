@@ -176,7 +176,7 @@ def main():
         JOIN pg_namespace n ON n.oid = c.relnamespace
         WHERE n.nspname = %s
           AND c.relkind = 'r'
-          AND (c.relname LIKE 'sm\_%' ESCAPE '\' OR c.relname LIKE 'mdm\_%' ESCAPE '\')
+          AND (c.relname LIKE 'sm\_%%' ESCAPE '\' OR c.relname LIKE 'mdm\_%%' ESCAPE '\')
           AND (obj_description(c.oid, 'pg_class') IS NULL
                OR obj_description(c.oid, 'pg_class') NOT LIKE %s)
         ORDER BY c.relname

@@ -1,4 +1,4 @@
-# TT_550_WIN 0단계 - 실행 모드 자동 감지
+﻿# TT_550_WIN 0단계 - 실행 모드 자동 감지
 # Python+psycopg2 우선 / pg_dump+psql 폴백
 # 결과: mode.json 파일 (PYTHON / POWERSHELL / ERROR)
 #

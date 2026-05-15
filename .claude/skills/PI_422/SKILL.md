@@ -11,8 +11,10 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 `template/04 구현(PI)/PI.214-통합테스트보고서.xlsx` 템플릿을 복사·가공하여
 `output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx` 로 저장한다.
 
-> **핵심 도구**: Node.js + xlsx 라이브러리 (`output/04 구현(PI)/node_modules/xlsx`)
+> **핵심 도구**: Node.js + **xlsx-populate** 라이브러리 (`output/04 구현(PI)/node_modules/xlsx-populate`)
 > Python은 사용하지 않는다 (환경에 설치되어 있지 않음).
+>
+> ⚠️ 기존 `xlsx`(SheetJS Community)는 셀 스타일 쓰기를 지원하지 않아 템플릿 양식(테두리/배경/정렬/폰트/병합)이 모두 손실된다. 본 스킬은 양식 보존이 검증된 `xlsx-populate`만 사용한다.
 
 ---
 
@@ -36,23 +38,23 @@ BASE         = C:\zinide\workspace_cloud\cloud-wms-doc
 DIST_DIR     = dist/
 OUTPUT_DIR   = output/04 구현(PI)
 SCRIPT       = .claude/skills/PI_422/scripts/gen_pi422.js
-TEMPLATE     = template/04 구현(PI)/PI.214-통합테스트보고서.xlsx
+TEMPLATE     = template/04 구현(PI)/PI_214-통합테스트보고서.xlsx
 OUTFILE      = output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx
-XLSX_LIB     = output/04 구현(PI)/node_modules/xlsx
+XLSX_LIB     = output/04 구현(PI)/node_modules/xlsx-populate
 ```
 
 ---
 
 ## 단계별 워크플로우
 
-### 1단계 — xlsx 라이브러리 확인
+### 1단계 — xlsx-populate 라이브러리 확인
 
 ```powershell
-node -e "require('./output/04 구현(PI)/node_modules/xlsx'); console.log('ok')"
+node -e "require('./output/04 구현(PI)/node_modules/xlsx-populate'); console.log('ok')"
 ```
 
 성공하면 바로 다음 단계로 진행한다.
-실패하면 `output/04 구현(PI)/` 로 이동 후 `npm install xlsx` 실행.
+실패하면 `output/04 구현(PI)/` 로 이동 후 `npm install xlsx-populate@^1.21.0` 실행.
 
 ### 2단계 — 스크립트 실행
 
@@ -119,9 +121,9 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 
 #### 2-4. 템플릿 복사 및 데이터 기입
 
-1. `template/04 구현(PI)/PI.214-통합테스트보고서.xlsx`를 읽어 모든 시트를 그대로 유지한다.
-2. `통합테스트 수행보고서` 시트의 2행(헤더) 이후 기존 데이터를 모두 제거한다.
-3. 3행부터 생성된 테스트 케이스를 채워 넣는다.
+1. `template/04 구현(PI)/PI_214-통합테스트보고서.xlsx`를 `xlsx-populate.fromFileAsync()`로 읽어 모든 시트와 셀 스타일을 그대로 유지한다.
+2. `통합테스트 수행보고서` 시트의 3행~218행 (템플릿 서식이 부여된 영역) 에서 **셀 값만 비우고 스타일(테두리·정렬·폰트·채우기)은 보존**한다. `delete` 가 아니라 `cell.value(undefined)` 호출.
+3. 3행부터 생성된 테스트 케이스를 `cell.value(...)`로 덮어쓴다.
 
    | 컬럼 | 값 |
    |---|---|
@@ -138,7 +140,12 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 
 4. `통합테스트-업무영역` 시트의 기존 데이터(4행~)는 손대지 않는다.
 5. 표지 시트의 고객사명·테스트 기간 등은 자동으로 업데이트하지 않는다 (수동 기입).
-6. 완성 파일을 `output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx`로 저장한다.
+6. 완성 파일을 `output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx`로 `wb.toFileAsync()` 로 저장한다.
+
+> **양식 보존 검증 결과** (벤치마크 기준):
+> - xlsx-populate: 테두리/정렬/폰트/병합/시트 7개 모두 보존, 실행 397ms, 출력 195KB.
+> - ExcelJS: 데이터 행 테두리 손실, 폰트 sz10→sz11 변경 발생 → 사용 안 함.
+> - xlsx (SheetJS Community): 모든 셀 서식 손실, 출력 5.7MB로 비대화 → 사용 안 함.
 
 ### 3단계 — 결과 확인
 
@@ -171,8 +178,10 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 
 ## 주의사항
 
-- **Node.js 전용**: Python은 사용하지 않는다. xlsx 라이브러리 경로: `output/04 구현(PI)/node_modules/xlsx`.
+- **Node.js 전용**: Python은 사용하지 않는다. 라이브러리 경로: `output/04 구현(PI)/node_modules/xlsx-populate`.
+- **xlsx (SheetJS Community) 절대 사용 금지**: 셀 스타일 쓰기를 지원하지 않아 템플릿 양식이 모두 깨진다.
 - **ui.md 없으면 건너뜀**: 해당 메뉴 폴더를 조용히 건너뛰고 마지막에 스킵된 폴더 목록을 보고한다.
-- **템플릿 필수**: `template/04 구현(PI)/PI.214-통합테스트보고서.xlsx`가 없으면 종료하고 사용자에게 안내.
+- **템플릿 필수**: `template/04 구현(PI)/PI_214-통합테스트보고서.xlsx`가 없으면 종료하고 사용자에게 안내.
 - **기존 파일 덮어쓰기**: 동일 파일명 존재 시 덮어쓴다 (별도 확인 없음).
 - **dist/ 폴더 없으면**: 스크립트가 오류 메시지를 출력하고 종료한다.
+- **케이스 수 상한**: 템플릿이 3~218행(216건)까지 서식을 갖고 있다. 케이스가 이를 초과하면 초과분은 무서식으로 출력될 수 있다 (스크립트가 WARN 로그 출력).

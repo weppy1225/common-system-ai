@@ -1,15 +1,15 @@
 {
   "name": "scripts",
   "version": "1.0.0",
-  "description": "",
-  "main": "01_scan_admin_menus.js",
+  "main": "01_scan_project.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "playwright": "^1.60.0"
+    "playwright": "^1.59.1"
   }
 }
