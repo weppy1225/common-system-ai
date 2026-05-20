@@ -20,11 +20,12 @@ const path = require('path');
 const fs   = require('fs');
 
 // ── 경로 ─────────────────────────────────────────────────────────────────────
-const BASE_DIR   = path.resolve(__dirname, '..', '..', '..', '..');
-const DIST_DIR   = path.join(BASE_DIR, 'dist');
-const TEMPLATE   = path.join(BASE_DIR, 'template', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
-const OUTPUT_DIR = path.join(BASE_DIR, 'output', '04 구현(PI)');
-const LIB_DIR    = path.join(OUTPUT_DIR, 'node_modules', 'xlsx-populate');
+const BASE_DIR        = path.resolve(__dirname, '..', '..', '..', '..');
+const DIST_DIR        = path.join(BASE_DIR, 'dist');
+const DIST_MOBILE_DIR = path.join(BASE_DIR, 'dist-mobile');
+const TEMPLATE        = path.join(BASE_DIR, 'template', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
+const OUTPUT_DIR      = path.join(BASE_DIR, 'output', '04 구현(PI)');
+const LIB_DIR         = path.join(OUTPUT_DIR, 'node_modules', 'xlsx-populate');
 
 // ── 인자 파싱 ────────────────────────────────────────────────────────────────
 const [,, clientName = '고객사', tester = '담당자',
@@ -82,7 +83,7 @@ function parseUiMd(content) {
   return meta;
 }
 
-// ── dist/ 스캔 ────────────────────────────────────────────────────────────────
+// ── dist/ 스캔 (WEB) ──────────────────────────────────────────────────────────
 function collectUiMds() {
   if (!fs.existsSync(DIST_DIR)) {
     console.error('[ERROR] dist/ 폴더가 없습니다:', DIST_DIR);
@@ -94,13 +95,52 @@ function collectUiMds() {
     const mdPath = path.join(DIST_DIR, dir, 'ui.md');
     if (!fs.existsSync(mdPath)) continue;
     const meta = parseUiMd(fs.readFileSync(mdPath, 'utf8'));
-    if (meta.menuCode) results.push({ dir, meta, mdPath });
+    if (meta.menuCode) results.push({ dir, meta, mdPath, systemVal: system });
   }
   return results;
 }
 
+// ── dist-mobile/menu.html 파싱 (PDA) ─────────────────────────────────────────
+function collectPdaMenus() {
+  const menuHtml = path.join(DIST_MOBILE_DIR, 'menu.html');
+  if (!fs.existsSync(menuHtml)) {
+    console.warn('[WARN] dist-mobile/menu.html 없음 — PDA 메뉴 건너뜀');
+    return [];
+  }
+  const html = fs.readFileSync(menuHtml, 'utf8');
+
+  // onclick="location.href='./iv3000m/IVMV01.html'" ... alt="입고예정"
+  const cellRe = /menu-cell[^>]*onclick="location\.href='\.\/([^/]+)\/([^.]+)\.html'"[\s\S]*?alt="([^"]+)"/g;
+  const pdaMenus = [];
+  let m;
+  while ((m = cellRe.exec(html)) !== null) {
+    const groupFolder = m[1];   // iv3000m
+    const menuCode    = m[2];   // IVMV01
+    const menuName    = m[3];   // 입고예정
+
+    // dist/{menuCode.toLowerCase()}/ui.md 매칭 시도
+    const mdPath = path.join(DIST_DIR, menuCode.toLowerCase(), 'ui.md');
+    let meta;
+    if (fs.existsSync(mdPath)) {
+      meta = parseUiMd(fs.readFileSync(mdPath, 'utf8'));
+      meta.menuCode = meta.menuCode || menuCode;
+      meta.menuName = meta.menuName || menuName;
+    } else {
+      meta = {
+        menuGroupName: groupFolder, menuGroupCode: '',
+        menuName, menuCode,
+        uiType: '', purpose: '',
+        bizRules: [],
+        hasAdd: false, hasEdit: false, hasDelete: false, hasSave: false,
+      };
+    }
+    pdaMenus.push({ dir: groupFolder, meta, mdPath: mdPath || null, systemVal: 'WMS(PDA)' });
+  }
+  return pdaMenus;
+}
+
 // ── 케이스 생성 ──────────────────────────────────────────────────────────────
-function genCases(meta, startNo) {
+function genCases(meta, startNo, systemVal) {
   const cases = [];
   const mn = meta.menuName;
   const mc = meta.menuCode;
@@ -114,6 +154,7 @@ function genCases(meta, startNo) {
       항목: mn,
       처리내용: proc,
       확인내용: check,
+      systemVal: systemVal || system,
     });
     no++;
   };
@@ -164,11 +205,11 @@ function writeCases(sheet, cases) {
     const r = DATA_START_ROW + i;
     const tc = cases[i];
     const row = [
-      tc.업무영역,   // A
-      tc.테스트ID,   // B
-      tc.항목,       // C
-      tc.처리내용,   // D
-      system,        // E
+      tc.업무영역,              // A
+      tc.테스트ID,              // B
+      tc.항목,                  // C
+      tc.처리내용,              // D
+      tc.systemVal || system,   // E
       tc.확인내용,   // F
       '',            // G 확인일자
       tester,        // H 확인자
@@ -205,19 +246,21 @@ function writeCases(sheet, cases) {
     process.exit(1);
   }
 
-  const menus = collectUiMds();
+  const webMenus = collectUiMds();
+  const pdaMenus = collectPdaMenus();
+  const menus = [...webMenus, ...pdaMenus];
   if (menus.length === 0) {
-    console.error('[ERROR] dist/ 폴더에서 ui.md 파일을 찾지 못했습니다.');
+    console.error('[ERROR] 메뉴를 찾지 못했습니다. dist/ ui.md 또는 dist-mobile/menu.html 확인.');
     process.exit(1);
   }
-  console.log(`[1/3] 메뉴 스캔 완료: ${menus.length}개`);
+  console.log(`[1/3] 메뉴 스캔 완료: WEB ${webMenus.length}개 / PDA ${pdaMenus.length}개`);
 
   const allCases = [];
-  for (const { meta } of menus) {
+  for (const { meta, systemVal } of menus) {
     const startNo = (allCases.filter(c => c.테스트ID.startsWith(meta.menuCode + '-')).length) + 1;
-    const cases = genCases(meta, startNo);
+    const cases = genCases(meta, startNo, systemVal);
     allCases.push(...cases);
-    console.log(`  [${meta.menuCode}] ${meta.menuName}: ${cases.length}건`);
+    console.log(`  [${systemVal}] [${meta.menuCode}] ${meta.menuName}: ${cases.length}건`);
   }
   console.log(`[2/3] 테스트 케이스 생성 완료: 총 ${allCases.length}건`);
 
@@ -248,12 +291,12 @@ function writeCases(sheet, cases) {
   console.log('  담당자:  ', tester);
   console.log('  기간:    ', startDate, '~', endDate);
   console.log('');
-  console.log(`  수집 메뉴: ${menus.length}개`);
+  console.log(`  수집 메뉴: WEB ${webMenus.length}개 / PDA ${pdaMenus.length}개 (합계 ${menus.length}개)`);
   console.log(`  총 케이스: ${allCases.length}건`);
   console.log('');
   console.log('  메뉴별 케이스:');
-  for (const { meta } of menus) {
-    const cnt = allCases.filter(c => c.항목 === meta.menuName).length;
-    console.log(`    [${meta.menuGroupName}] ${meta.menuName} [${meta.menuCode}]: ${cnt}건`);
+  for (const { meta, systemVal } of menus) {
+    const cnt = allCases.filter(c => c.테스트ID.startsWith(meta.menuCode + '-')).length;
+    console.log(`    [${systemVal}] [${meta.menuGroupName}] ${meta.menuName} [${meta.menuCode}]: ${cnt}건`);
   }
 })().catch(e => { console.error('[FATAL]', e); process.exit(1); });

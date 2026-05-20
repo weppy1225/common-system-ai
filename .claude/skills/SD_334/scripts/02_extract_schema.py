@@ -23,7 +23,7 @@ import sys
 import datetime
 from pathlib import Path
 
-BASE_DIR = Path("/mnt/c/zinide/workspace/cloud-wms-doc")
+BASE_DIR = Path(__file__).resolve().parents[4]
 TMP_DIR = BASE_DIR / "output/03 설계(SD)/tmp"
 TARGET_FILE = TMP_DIR / "db_target.json"
 SCHEMA_FILE = TMP_DIR / "schema.json"

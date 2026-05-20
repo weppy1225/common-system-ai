@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""PI_421 1단계 — JUnit 테스트 메서드 스캔.
+"""PI_421 1단계 — JUnit 테스트 메서드 스캔 (Windows 기본).
 
 사용법:
-    python3 01_scan_tests.py <백엔드_디렉토리>
+    python 01_scan_tests.py <백엔드_디렉토리>
 
 출력:
     output/04 구현(PI)/tmp/tests.json
+
+BASE_DIR을 `Path(__file__).resolve().parents[4]` 로 자동 추론하여
+Windows/WSL 어느 환경에서도 정상 동작한다.
 """
 from __future__ import annotations
 
@@ -15,8 +18,11 @@ import re
 import sys
 from pathlib import Path
 
-BASE_DIR = Path("/mnt/c/zinide/workspace/cloud-wms-doc")
-TMP_DIR = BASE_DIR / "output/04 구현(PI)/tmp"
+# .claude/skills/PI_421/scripts/01_scan_tests.py
+# parents[0]=scripts  parents[1]=PI_421  parents[2]=skills
+# parents[3]=.claude  parents[4]=<프로젝트 루트>
+BASE_DIR = Path(__file__).resolve().parents[4]
+TMP_DIR = BASE_DIR / "output" / "04 구현(PI)" / "tmp"
 OUT_JSON = TMP_DIR / "tests.json"
 
 EXCLUDE_DIRS = {
@@ -59,15 +65,10 @@ LV2_MAP = [
     ("interface", "인터페이스", "I/F"),
 ]
 
-# sif/ 또는 if9100 경로면 무조건 I/F
 INTERFACE_HINTS = ("if9100", "sif/", "/sif/", "interface")
 
-# 도메인 코드 prefix 정규식 (클래스명에서 추출)
-# ZTEST_LGER01Comp → LGER01
-# ZTEST_OBRQ01MComp → OBRQ01M
 DOMAIN_CODE_RE = re.compile(r"^(?:ZTEST_)?([A-Z]{2,5}[0-9]{2,3}M?)")
 
-# 모듈 타입 suffix → 한글 변환
 MODULE_SUFFIX_KO = {
     "Comp": "Comp",
     "Controller": "Controller",
@@ -78,7 +79,6 @@ MODULE_SUFFIX_KO = {
     "Util": "Util",
 }
 
-# method_name → 한글 휴리스틱
 METHOD_PATTERNS = [
     (re.compile(r"^findAll[_A-Z]?"), "전체 목록 조회"),
     (re.compile(r"^findById[_A-Z]?"), "단건 조회"),
@@ -105,9 +105,21 @@ METHOD_PATTERNS = [
 
 
 def normalize_path(p: str) -> str:
-    """Windows 경로(C:\\...)를 WSL 경로로 변환."""
+    """입력 경로를 현재 OS에 맞게 정규화.
+
+    Windows에서는 `/mnt/<drive>/...` 형태의 WSL 경로를 `<DRIVE>:\\...` 로 변환한다.
+    Linux/WSL에서는 `C:\\...` 형태를 `/mnt/c/...` 로 변환한다.
+    그 외는 입력 그대로 사용.
+    """
     p = p.strip().strip('"').strip("'")
-    if re.match(r"^[A-Za-z]:[\\/]", p):
+    # WSL 경로 → Windows 경로 (Windows에서 실행될 때)
+    m = re.match(r"^/mnt/([a-zA-Z])/(.*)$", p)
+    if m and os.name == "nt":
+        drive = m.group(1).upper()
+        rest = m.group(2).replace("/", "\\")
+        return f"{drive}:\\{rest}"
+    # Windows 경로 → WSL 경로 (Linux에서 실행될 때)
+    if re.match(r"^[A-Za-z]:[\\/]", p) and os.name != "nt":
         drive = p[0].lower()
         rest = p[2:].replace("\\", "/").lstrip("/")
         return f"/mnt/{drive}/{rest}"
@@ -118,13 +130,11 @@ def find_test_files(root: Path) -> list[Path]:
     """JUnit 테스트 후보 파일 수집."""
     candidates: list[Path] = []
     for dirpath, dirnames, filenames in os.walk(root):
-        # 제외 디렉토리 가지치기
         dirnames[:] = [d for d in dirnames if d not in EXCLUDE_DIRS]
         for fn in filenames:
             if not (fn.endswith(".java") or fn.endswith(".kt")):
                 continue
-            # 표준 패턴: src/test/(java|kotlin) 하위
-            rel_str = str(Path(dirpath))
+            rel_str = str(Path(dirpath)).replace("\\", "/")
             in_test_root = "/src/test/java" in rel_str or "/src/test/kotlin" in rel_str
             name_hits_test = (
                 fn.endswith("Test.java") or fn.endswith("Tests.java")
@@ -143,13 +153,11 @@ _TEST_ANN_RE = re.compile(
     re.MULTILINE,
 )
 _DISPLAY_RE = re.compile(r'@DisplayName\s*\(\s*"([^"]*)"\s*\)')
-# 단순화된 메서드 시그니처 매처: void / 타입 + 메서드명(...) { 만 캡처
 _METHOD_RE = re.compile(
     r"\b(?:void|[\w<>\[\]\.]+)\s+([A-Za-z_]\w*)\s*\([^)]*\)\s*(?:throws[^{;]*)?\s*\{",
 )
 _KEYWORDS = {"if", "for", "while", "switch", "return", "new", "catch", "synchronized", "try"}
 
-# 도메인 코드 → 한글 메뉴명 내장 사전 (WMS 표준 코드)
 BUILTIN_NAME_DICT = {
     "MDBZ01": "사업장관리",
     "MDCT01": "거래처관리",
@@ -209,10 +217,6 @@ def strip_block_comments(src: str) -> str:
 
 
 def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict], int]:
-    """파일에서 @Test 메서드를 추출. (tests, junit_version) 반환.
-
-    junit_version: 5 / 4 / 0(미정)
-    """
     try:
         raw = path.read_text(encoding="utf-8", errors="replace")
     except Exception as e:
@@ -227,7 +231,6 @@ def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict],
 
     src = strip_block_comments(raw)
 
-    # 라인 시작이 //으로 시작하는 라인을 모두 마스킹
     lines = src.split("\n")
     masked: list[str] = []
     for ln in lines:
@@ -235,7 +238,6 @@ def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict],
         if stripped.startswith("//"):
             masked.append(" " * len(ln))
         else:
-            # 라인 중간의 // 도 마스킹(거친 처리)
             idx = ln.find("//")
             if idx >= 0:
                 masked.append(ln[:idx] + " " * (len(ln) - idx))
@@ -244,7 +246,6 @@ def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict],
     src = "\n".join(masked)
 
     out: list[dict] = []
-    # 각 @Test 위치를 찾고, 그 다음에 등장하는 메서드 선언을 매칭
     test_positions = [m.start() for m in _TEST_ANN_RE.finditer(src)]
     if not test_positions:
         return [], junit_v
@@ -254,13 +255,10 @@ def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict],
     package_path = _derive_package_path(rel_file)
 
     for pos in test_positions:
-        tail = src[pos:pos + 600]  # @Test 이후 600자 윈도우면 충분
-        # @DisplayName 이 같은 윈도우 안에 있으면 사용 (Test 어노테이션 이전이 일반적이지만, 그 다음 위치에도 잡힘)
-        # → DisplayName은 @Test 전에 올 수도 있으니 -200..+600 윈도우로 따로 본다
+        tail = src[pos:pos + 600]
         ctx = src[max(0, pos - 200):pos + 600]
         d = _DISPLAY_RE.search(ctx)
         display_name = d.group(1).strip() if d else None
-        # 메서드명 추출
         method_name = None
         for m in _METHOD_RE.finditer(tail):
             cand = m.group(1)
@@ -283,7 +281,6 @@ def extract_tests_from_file(path: Path, project_root: Path) -> tuple[list[dict],
 
 def _derive_package_path(rel_file: Path) -> str:
     parts = rel_file.parts
-    # src/test/java/<...>/Foo.java 구조에서 java 이후 디렉토리만 추출
     if "java" in parts:
         i = parts.index("java")
         sub = parts[i + 1 : -1]
@@ -292,31 +289,24 @@ def _derive_package_path(rel_file: Path) -> str:
         i = parts.index("kotlin")
         sub = parts[i + 1 : -1]
         return "/".join(sub)
-    # 표준이 아닌 경우 디렉토리 그대로 사용
     return "/".join(rel_file.parts[:-1])
 
 
 def classify_menu(package_path: str, class_file: str) -> tuple[str, str]:
-    """(big_menu, platform) 반환."""
     pkg = package_path.lower()
     cf = class_file.lower()
-    # 인터페이스 우선 판정
     for h in INTERFACE_HINTS:
         if h in pkg or h in cf:
             return ("인터페이스", "I/F")
-    # fw/ 또는 test/ 시작이면 공통(프레임워크/테스트 헬퍼)
     if pkg.startswith("fw/") or pkg.startswith("test/") or pkg == "test":
         return ("공통", "WEB")
-    # bm/ 시작이면 PDA (모바일 백엔드)
     if pkg.startswith("bm/") or "/bm/" in cf:
         platform = "PDA"
     else:
         platform = "WEB"
 
-    # lv2 매핑 검색 (lv1=be|bm 인 경우 lv2 기준)
     segments = pkg.split("/")
     candidates = segments[1:3] if len(segments) >= 2 else segments
-    # bm/ 의 경우 lv2 에서 끝의 'm' 제거(예: iv3000m → iv3000)
     norm_candidates = []
     for c in candidates:
         norm_candidates.append(c)
@@ -328,7 +318,6 @@ def classify_menu(package_path: str, class_file: str) -> tuple[str, str]:
             if cand == key or cand.startswith(key):
                 return (big, platform)
 
-    # 매핑 실패: lv1 기준 fallback
     if segments and segments[0] in {"be", "bm"} and len(segments) > 1:
         return (segments[1] or "기타", platform)
     return ("기타", platform)
@@ -355,12 +344,7 @@ def make_content(test: dict) -> str:
 
 
 def load_program_name_dict() -> dict[str, str]:
-    """PI_412-프로그램목록.xlsx 에서 도메인코드→한글명 사전 학습 (선택적).
-
-    BE 시트 컬럼: Lv1(1) Lv2 ... Lv7(7) 프로그램ID(8) 프로그램명(9) 모듈명(10) ...
-    프로그램ID 는 소문자(`mdbz01`) 형태이므로 대문자로 정규화하여 저장한다.
-    """
-    tpl = BASE_DIR / "template/04 구현(PI)/PI_412-프로그램목록.xlsx"
+    tpl = BASE_DIR / "template" / "04 구현(PI)" / "PI_412-프로그램목록.xlsx"
     result: dict[str, str] = {}
     if not tpl.exists():
         return result
@@ -374,15 +358,14 @@ def load_program_name_dict() -> dict[str, str]:
             for row in ws.iter_rows(min_row=3, values_only=True):
                 if not row or len(row) < 9:
                     continue
-                pid = row[7]  # 프로그램ID
-                pnm = row[8]  # 프로그램명
+                pid = row[7]
+                pnm = row[8]
                 if not (isinstance(pid, str) and isinstance(pnm, str)):
                     continue
                 pid = pid.strip().upper()
                 pnm = pnm.strip()
                 if not pid or not pnm or pnm in {"공통"}:
                     continue
-                # 같은 program_id에 여러 한글명이 매핑될 수 있으니 첫 값 우선
                 result.setdefault(pid, pnm)
         wb.close()
     except Exception as e:
@@ -428,7 +411,6 @@ def main(argv: list[str]) -> int:
             domain_code = extract_domain_code(t["class_name"])
             if domain_code:
                 base_code = domain_code.rstrip("M") if domain_code.endswith("M") else domain_code
-                # PI_412 사전 → 내장 사전 → 클래스명 fallback
                 ko = (
                     name_dict.get(domain_code)
                     or name_dict.get(base_code)
@@ -452,7 +434,6 @@ def main(argv: list[str]) -> int:
             })
             all_tests.append(t)
 
-    # 정렬: 플랫폼(WEB→PDA→I/F) → 대메뉴 → class_name → 파일 내 등장순서
     PLAT_ORDER = {"WEB": 0, "PDA": 1, "I/F": 2}
     all_tests.sort(key=lambda t: (
         PLAT_ORDER.get(t["platform"], 9),
@@ -460,7 +441,6 @@ def main(argv: list[str]) -> int:
         t["class_name"],
     ))
 
-    # 테스트ID 채번
     for idx, t in enumerate(all_tests, start=1):
         t["test_id"] = f"WMS-BE-{idx:03d}"
 
@@ -476,7 +456,6 @@ def main(argv: list[str]) -> int:
     OUT_JSON.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"  • 추출된 @Test 메서드: {len(all_tests)}건")
     print(f"  • JUnit 4 / JUnit 5 파일: {junit4} / {junit5}")
-    # 플랫폼별 분포
     for p in ("WEB", "PDA", "I/F"):
         n = sum(1 for t in all_tests if t["platform"] == p)
         print(f"  • {p:<3}: {n}건")

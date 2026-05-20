@@ -1,6 +1,6 @@
 ---
 name: PI_412
-description: 【프로그램 목록 엑셀 생성】 사용자가 지정한 로컬 프로젝트 디렉토리를 자동 스캔하여 백엔드(API/Controller)와 프론트엔드(Component/Page/Popup) 프로그램 목록을 추출하고, output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx 엑셀 파일로 자동 저장합니다. /PI_412 형식으로 실행하며 디렉토리·고객사명은 실행 시 묻습니다. Spring Boot(Java/Kotlin), React/Vue(TS/JS), Node.js(Express/NestJS), Python(Django/FastAPI) 스택을 자동 감지하고 모노레포에서는 BE/FE를 동시에 처리합니다. 프로그램 목록 작성, 프로그램 명세 정리, API 목록 추출, 컴포넌트 목록 정리, 산출물용 프로그램 목록 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "프로그램 목록 만들어줘", "프로그램목록 엑셀 뽑아줘", "API 목록 정리해줘", "컴포넌트 목록 추출해줘", "PI_412 실행해줘", "산출물용 프로그램 목록" 이라고 말해도 이 스킬을 사용합니다.
+description: 【프로그램 목록 엑셀 생성 (Windows)】 사용자가 지정한 로컬 프로젝트 디렉토리를 자동 스캔하여 백엔드(API/Controller)와 프론트엔드(Component/Page/Popup) 프로그램 목록을 추출하고, output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx 엑셀 파일로 자동 저장합니다. /PI_412 형식으로 실행하며 디렉토리·고객사명은 실행 시 묻습니다. Spring Boot(Java/Kotlin), React/Vue(TS/JS), Node.js(Express/NestJS), Python(Django/FastAPI) 스택을 자동 감지하고 모노레포에서는 BE/FE를 동시에 처리합니다. Windows 환경에서 프로그램 목록 작성, 프로그램 명세 정리, API 목록 추출, 컴포넌트 목록 정리, 산출물용 프로그램 목록 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "프로그램 목록 만들어줘", "프로그램목록 엑셀 뽑아줘", "API 목록 정리해줘", "컴포넌트 목록 추출해줘", "PI_412 실행해줘", "산출물용 프로그램 목록" 이라고 말해도 이 스킬을 사용합니다. WSL/Linux/Mac 환경에서는 PI_412_BASH 스킬을 사용합니다.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
@@ -16,7 +16,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 > - `표지`, `개정이력`, `프로그램목록_BE`, `프로그램목록_FE`
 > - 두 데이터 시트의 3행부터 새 데이터로 교체
 
-> **핵심 도구**: Python 3 + `openpyxl`. 외부 빌드/실행 도구는 필요 없다. 라이브러리는 누락 시 자동 설치한다.
+> **핵심 도구**: Python (Windows) + `openpyxl`. 외부 빌드/실행 도구는 필요 없다. 라이브러리는 누락 시 자동 설치한다.
 
 ---
 
@@ -28,37 +28,44 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 | 입력 | 설명 |
 |---|---|
-| 디렉토리 경로 | 스캔할 프로젝트 루트의 절대경로. 모노레포면 루트, 단일 스택이면 해당 저장소 루트. (예: `/mnt/c/zinide/workspace/cloud-wms-be`) |
+| 디렉토리 경로 | 스캔할 프로젝트 루트의 절대경로. 모노레포면 루트, 단일 스택이면 해당 저장소 루트. (예: `C:\zinide\workspace\wms-bnk-be`) |
 | 고객사명 | 출력 파일명에 들어감. 한글/공백 가능. 운영체제 예약 문자(`<>:"|?*\\/`)는 자동 `_` 치환. |
 
 `$ARGUMENTS`가 1개의 토큰이면 디렉토리로 간주하고 고객사명만 별도로 묻는다.
 디렉토리가 존재하지 않거나 일반 파일이면 다시 묻는다. 고객사명이 비어 있으면 다시 묻는다.
 
-### 2) 경로 정의
+### 2) 경로 정의 (PowerShell 동적 감지)
 
-```
-BASE       = /mnt/c/zinide/workspace/cloud-wms-doc
-OUTPUT_DIR = output/04 구현(PI)
-TMP_DIR    = output/04 구현(PI)/tmp
-SCRIPTS    = .claude/skills/PI_412/scripts
-OUTFILE    = output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot = Join-Path $Workspace "wms-$ProjCode-be"
+$FeRoot = Join-Path $Workspace "wms-$ProjCode-fe"
+
+$OutputDir = Join-Path $DocRoot "output\04 구현(PI)"
+$TmpDir    = Join-Path $OutputDir "tmp"
+$Scripts   = Join-Path $DocRoot ".claude\skills\PI_412\scripts"
+$OutFile   = Join-Path $OutputDir "PI_412_프로그램목록_{고객사명}.xlsx"
 ```
 
-`OUTPUT_DIR`과 `TMP_DIR`이 없으면 `mkdir -p`로 생성한다.
+`$OutputDir`과 `$TmpDir`이 없으면 `New-Item -ItemType Directory -Force`로 생성한다.
 
 ### 3) Python 의존성 확인
 
 `openpyxl`이 import 가능한지 점검하고 누락 시 설치한다.
 
-```bash
-python3 -c "import openpyxl" 2>/dev/null || python3 -m pip install --user openpyxl
+```powershell
+python -c "import openpyxl" 2>$null
+if ($LASTEXITCODE -ne 0) { python -m pip install --user openpyxl }
 ```
 
 ---
 
 ## 단계별 워크플로우
 
-각 단계는 Bash로 스크립트를 실행하고 결과 JSON을 다음 단계가 읽는 방식으로 진행한다. 산출물 JSON이 정상 생성됐는지 확인한 뒤 다음 단계로 넘어간다.
+각 단계는 PowerShell을 통해 Python 스크립트를 실행하고 결과 JSON을 다음 단계가 읽는 방식으로 진행한다. 산출물 JSON이 정상 생성됐는지 확인한 뒤 다음 단계로 넘어간다.
 
 ---
 
@@ -68,9 +75,10 @@ python3 -c "import openpyxl" 2>/dev/null || python3 -m pip install --user openpy
 **입력**: 사용자 지정 디렉토리 경로
 **출력**: `output/04 구현(PI)/tmp/scan.json`
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/PI_412/scripts/01_scan_project.py "{디렉토리경로}"
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
+python ".claude\skills\PI_412\scripts\01_scan_project.py" "{디렉토리경로}"
 ```
 
 스크립트가 수행하는 일:
@@ -108,9 +116,10 @@ python3 .claude/skills/PI_412/scripts/01_scan_project.py "{디렉토리경로}"
 **입력**: `tmp/scan.json`
 **출력**: `tmp/programs.json`
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/PI_412/scripts/02_extract_programs.py
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
+python ".claude\skills\PI_412\scripts\02_extract_programs.py"
 ```
 
 스크립트는 각 후보 파일을 **파일 단위(1파일=1행)**로 추출한다. PI_412 템플릿이 파일별 행 구성이므로 메서드 단위로 분할하지 않는다.
@@ -159,9 +168,10 @@ python3 .claude/skills/PI_412/scripts/02_extract_programs.py
 **입력**: `tmp/programs.json`, 고객사명
 **출력**: `output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx`
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/PI_412/scripts/03_generate_excel.py "{고객사명}"
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
+python ".claude\skills\PI_412\scripts\03_generate_excel.py" "{고객사명}"
 ```
 
 스크립트가 하는 일:
@@ -186,9 +196,9 @@ python3 .claude/skills/PI_412/scripts/03_generate_excel.py "{고객사명}"
 
 Excel 생성이 성공하면 `output/04 구현(PI)/tmp/` 디렉토리를 삭제한다.
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-rm -rf "output/04 구현(PI)/tmp"
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Remove-Item -Recurse -Force (Join-Path $DocRoot "output\04 구현(PI)\tmp") -ErrorAction SilentlyContinue
 ```
 
 중간 단계에서 실패한 경우에는 디버깅을 위해 `tmp/`를 남겨둔다.
@@ -214,7 +224,7 @@ rm -rf "output/04 구현(PI)/tmp"
 
 대상 디렉토리: {디렉토리경로}
 감지된 스택:   {예: spring, react}
-출력 파일:     output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
+출력 파일:     output\04 구현(PI)\PI_412_프로그램목록_{고객사명}.xlsx
 
 수집 통계:
   - 백엔드(BE):  N건
@@ -239,3 +249,5 @@ rm -rf "output/04 구현(PI)/tmp"
 - **고객사명 정규화**: 파일명에 사용 불가능한 문자(`<>:"|?*\\/`)는 자동으로 `_`로 치환한다.
 - **템플릿 파일 필수**: `template/04 구현(PI)/PI_412-프로그램목록.xlsx`이 없으면 3단계에서 종료. 템플릿이 있어야 표지/개정이력/헤더 서식과 도메인 한글명 사전이 모두 적용된다.
 - **출력 디렉토리에 기존 파일이 있을 때**: 동일 파일명이 존재하면 덮어쓰기 전에 사용자에게 한 번 확인한다.
+- **Windows 전용**: WSL/Linux/Mac 환경에서는 PI_412_BASH 스킬을 사용한다.
+- **스크립트는 PI_412_BASH와 공유**: `scripts/` 폴더는 PI_412_BASH와 동일하게 사용된다. 스크립트 내부에서 git rev-parse로 REPO_BASE를 동적 감지하므로 경로 설정이 불필요하다.

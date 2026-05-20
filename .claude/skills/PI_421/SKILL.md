@@ -1,31 +1,59 @@
 ---
 name: PI_421
-description: 【단위테스트 보고서 엑셀 생성 (JUnit 기반)】 사용자가 지정한 로컬 백엔드(Java/Kotlin) 디렉토리를 자동 스캔하여 모든 JUnit 테스트 코드(@Test 메서드)를 추출하고, 모든 테스트가 통과(결과=O)되었다는 가정 하에 단위테스트보고서 엑셀을 자동 생성합니다. 템플릿은 `template/04 구현(PI)/PI_212-단위테스트보고서.xlsx` 를 그대로 복사해 사용하며, `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx` 로 저장합니다. /PI_421 형식으로 실행하며 디렉토리·고객사명·담당자명은 실행 시 묻습니다. JUnit 4(`org.junit.Test`) 와 JUnit 5(`org.junit.jupiter.api.Test`) 양쪽을 모두 인식하고, `@DisplayName` 이 있으면 우선 사용합니다. 주석 처리된(`//@Test`) 테스트는 제외합니다. 단위테스트 보고서 작성, JUnit 테스트 목록 정리, 백엔드 단위테스트 산출물 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "단위테스트보고서 만들어줘", "JUnit 테스트 정리해줘", "단위테스트 산출물 뽑아줘", "PI_421 실행해줘", "BE 단위테스트 엑셀" 이라고 말해도 이 스킬을 사용합니다. 단, 통합테스트(PI_214) 산출물이 필요한 경우에는 별도 스킬을 사용합니다.
+description: 【단위테스트 보고서 엑셀 생성 (JUnit 기반, Windows 기본)】 Windows 네이티브(PowerShell) 환경에서 사용자가 지정한 로컬 백엔드(Java/Kotlin) 디렉토리를 자동 스캔하여 모든 JUnit 테스트 코드(@Test 메서드)를 추출하고, 모든 테스트가 통과(결과=O)되었다는 가정 하에 단위테스트보고서 엑셀을 자동 생성합니다. 템플릿은 `template/04 구현(PI)/PI_212-단위테스트보고서.xlsx` 를 그대로 복사해 사용하며, `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx` 로 저장합니다. /PI_421 형식으로 실행하며 디렉토리·고객사명·담당자명은 실행 시 묻습니다. PowerShell에서 직접 실행 가능하도록 모든 명령은 PowerShell 문법으로 작성되어 있으며, WSL이나 Git Bash가 없어도 동작합니다. JUnit 4(`org.junit.Test`) 와 JUnit 5(`org.junit.jupiter.api.Test`) 양쪽을 모두 인식하고, `@DisplayName` 이 있으면 우선 사용합니다. 주석 처리된(`//@Test`) 테스트는 제외합니다. 단위테스트 보고서 작성, JUnit 테스트 목록 정리, 백엔드 단위테스트 산출물 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "단위테스트보고서 만들어줘", "JUnit 테스트 정리해줘", "단위테스트 산출물 뽑아줘", "PI_421 실행해줘", "BE 단위테스트 엑셀" 이라고 말해도 이 스킬을 사용합니다. 단, 통합테스트(PI_214) 산출물이 필요한 경우에는 별도 스킬을 사용합니다. WSL/Linux/macOS 환경에서는 PI_421_BASH 스킬을 사용합니다.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
-# 단위테스트 보고서 자동 생성 [PI_421]
+# 단위테스트 보고서 자동 생성 (Windows 기본) [PI_421]
 
 지정된 백엔드(Java/Kotlin) 디렉토리의 **JUnit 테스트 코드 전수(全數)**를 스캔하여,
 모든 테스트가 **통과(결과=O)** 되었다는 가정 하에 단위테스트 보고서를 엑셀로 생성한다.
 
+> **실행 환경:** Windows 네이티브 PowerShell 5.1 이상 또는 PowerShell Core(pwsh) 7+. WSL·Git Bash 불필요.
+>
 > **목적**: 고객사 인계용 산출물. 실제 테스트 실행 결과를 기록하는 것이 아니라,
 > 현재 작성되어 있는 JUnit 테스트 메서드를 모두 "통과"로 표기한 보고서를 만든다.
 
-> **템플릿**: `template/04 구현(PI)/PI_212-단위테스트보고서.xlsx`
+> **템플릿**: `template\04 구현(PI)\PI_212-단위테스트보고서.xlsx`
 > - 시트: `표지`, `개정이력`, `단위테스트 보고서`, `Sheet1`
 > - 데이터 시트(`단위테스트 보고서`) 컬럼: No. / 플랫폼 / 대메뉴 / 테스트ID / 메뉴 / 구분 / 내용 / 확인일자 / 담당자 / 결과(O,△,X) / 오류내용 / #레드마인 / 조치일자 / 조치확인결과
 > - 데이터는 3행부터 작성. `표지` / `개정이력` 시트는 손대지 않는다.
 > - `Sheet1` 의 플랫폼별 집계(WEB / PDA / I/F / 합계)도 자동 갱신한다.
 
-> **출력**: `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
+> **출력**: `output\04 구현(PI)\PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
 
 > **핵심 도구**: Python 3 + `openpyxl`. 외부 빌드/실행 도구는 필요 없다.
 > `openpyxl` 누락 시 자동 설치한다.
 
+> **Bash 도구 사용 규칙 (중요):**
+> 이 스킬은 Windows 네이티브 환경을 가정한다. Bash 도구로 명령을 실행할 때는 반드시 다음 패턴 중 하나를 사용한다.
+>
+> ```
+> powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "<PowerShell 명령>"
+> ```
+> 또는 PowerShell 7+ 이 있다면
+> ```
+> pwsh -NoProfile -Command "<PowerShell 명령>"
+> ```
+>
+> Python 자체는 cross-platform이므로 `python ...` 명령은 PowerShell에서 그대로 실행하면 된다.
+
 ---
 
 ## 사전 준비
+
+### 0) 경로 동적 감지
+
+PowerShell에서:
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot = Join-Path $Workspace "wms-$ProjCode-be"
+$FeRoot = Join-Path $Workspace "wms-$ProjCode-fe"
+```
 
 ### 1) 입력 받기
 
@@ -33,7 +61,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 | 입력 | 설명 |
 |---|---|
-| 백엔드 디렉토리 경로 | 스캔할 Java/Kotlin 프로젝트 루트의 절대경로. WSL 경로(`/mnt/c/...`) 또는 Windows 경로 모두 허용. (예: `/mnt/c/zinide/workspace_cloud/cloud-wms-be`) |
+| 백엔드 디렉토리 경로 | 스캔할 Java/Kotlin 프로젝트 루트의 절대경로. Windows 경로(`C:\...`) 또는 WSL 경로(`/mnt/c/...`) 모두 허용. 기본 제안: `$BeRoot`. 스크립트가 자동으로 정규화한다. |
 | 고객사명 | 출력 파일명에 들어감. 한글/공백 가능. 운영체제 예약 문자(`<>:"\|?*\\/`)는 자동 `_` 치환. |
 | 담당자명 | 보고서의 "담당자" 컬럼에 채워질 이름. 비어 있으면 기본값 `테스터` 사용. |
 
@@ -45,32 +73,42 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ### 2) 경로 정의
 
 ```
-BASE       = /mnt/c/zinide/workspace/cloud-wms-doc
-TEMPLATE   = template/04 구현(PI)/PI_212-단위테스트보고서.xlsx
-OUTPUT_DIR = output/04 구현(PI)
-TMP_DIR    = output/04 구현(PI)/tmp
-OUTFILE    = output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+BASE       = $DocRoot  (git rev-parse --show-toplevel로 동적 감지, 백슬래시 변환)
+TEMPLATE   = template\04 구현(PI)\PI_212-단위테스트보고서.xlsx
+OUTPUT_DIR = output\04 구현(PI)
+TMP_DIR    = output\04 구현(PI)\tmp
+OUTFILE    = output\04 구현(PI)\PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
 ```
 
-`OUTPUT_DIR` / `TMP_DIR` 이 없으면 `mkdir -p` 로 생성한다.
+`OUTPUT_DIR` / `TMP_DIR` 이 없으면 `New-Item -ItemType Directory -Force` 로 생성한다.
 `{YYMMDD}` 는 오늘 날짜(서버 로컬 시간).
+
+> **BASE_DIR 자동 추론:** Python 스크립트 내부에서 `Path(__file__).resolve().parents[4]` 로 프로젝트 루트를 자동 추론하므로, WSL/Windows 어느 환경에서 호출되어도 정상 동작한다.
 
 ### 3) Python 의존성 확인
 
-```bash
-python3 -c "import openpyxl" 2>/dev/null || python3 -m pip install --user openpyxl
+PowerShell에서 실행:
+
+```powershell
+python -c "import openpyxl" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    python -m pip install --user openpyxl
+}
 ```
+
+> Windows에서는 `python` 명령이 기본이며, `python3` 은 없을 수 있다. `py -3 -c "..."` 도 사용 가능.
+> 시스템에 따라 `python` 대신 `py` 또는 `py -3` 으로 호출해야 할 수 있으니, 한 번 실행해 보고 적절한 명령으로 통일한다.
 
 ---
 
 ## 워크플로우 (3단계)
 
-각 단계는 Bash로 `.claude/skills/PI_421/scripts/` 안의 Python 스크립트를 실행한다.
+각 단계는 Bash 도구로 PowerShell 명령을 호출하여 `.claude\skills\PI_421\scripts\` 안의 Python 스크립트를 실행한다.
 산출물 JSON이 정상 생성됐는지 확인한 뒤 다음 단계로 넘어간다.
-중간 단계에서 실패하면 `tmp/` 를 남겨 디버깅한다.
+중간 단계에서 실패하면 `tmp\` 를 남겨 디버깅한다.
 
 ```
-.claude/skills/PI_421/scripts/
+.claude\skills\PI_421\scripts\
 ├── 01_scan_tests.py     # 1단계 — JUnit @Test 메서드 스캔
 └── 02_generate_excel.py # 2단계 — 템플릿 복사 + 데이터 채우기 + Sheet1 갱신
 ```
@@ -81,13 +119,26 @@ python3 -c "import openpyxl" 2>/dev/null || python3 -m pip install --user openpy
 
 지정된 디렉토리 아래에서 JUnit 테스트 메서드를 모두 수집한다.
 
-**스크립트**: `scripts/01_scan_tests.py`
-**입력**: 사용자 지정 디렉토리 경로
-**출력**: `output/04 구현(PI)/tmp/tests.json`
+**스크립트**: `scripts\01_scan_tests.py`
+**입력**: 사용자 지정 디렉토리 경로 (Windows·WSL 형식 모두 가능)
+**출력**: `output\04 구현(PI)\tmp\tests.json`
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 -u .claude/skills/PI_421/scripts/01_scan_tests.py "{디렉토리경로}"
+PowerShell:
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
+python -u ".claude\skills\PI_421\scripts\01_scan_tests.py" "{디렉토리경로}"
+```
+
+Bash 도구를 통해 호출할 때는:
+
+```
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "
+  \$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\';
+  Set-Location \$DocRoot;
+  python -u '.claude\skills\PI_421\scripts\01_scan_tests.py' '<디렉토리>'
+"
 ```
 
 스크립트가 수행하는 일:
@@ -142,7 +193,7 @@ python3 -u .claude/skills/PI_421/scripts/01_scan_tests.py "{디렉토리경로}"
    - `class_name` 에서 도메인 코드(예: `MDBZ01`, `IVAD01M`) prefix 를 정규식으로 추출한다(`^(?:ZTEST_)?([A-Z]{2,5}[0-9]{2,3}M?)`).
    - 추출에 성공하면 메뉴 컬럼 값 = `{한글도메인명}({도메인코드})` 형식 (예: `사업장관리(MDBZ01)`).
    - 한글도메인명 조회 순서:
-     1. `template/04 구현(PI)/PI_412-프로그램목록.xlsx` 에서 학습한 사전 (프로그램ID 열 8 → 프로그램명 열 9)
+     1. `template\04 구현(PI)\PI_412-프로그램목록.xlsx` 에서 학습한 사전 (프로그램ID 열 8 → 프로그램명 열 9)
      2. 스크립트 내장 사전(`BUILTIN_NAME_DICT`) — WMS 표준 도메인 코드(MDBZ01, IVAD01, OBPC01 등)
      3. 클래스명에서 `ZTEST_` prefix 와 모듈 suffix(`Comp`/`Controller`/`Dao`/`Mapper`/`Service`/`Util`/`Suite`/`Biz`) 제거한 bare 이름
    - 모바일 코드(`IVAD01M`)는 `M` 을 떼고 베이스 코드(`IVAD01`)로도 사전 조회한다.
@@ -164,7 +215,7 @@ python3 -u .claude/skills/PI_421/scripts/01_scan_tests.py "{디렉토리경로}"
       - `*_fail` / `*_error` / `*_invalid` → `… 실패 케이스 - …`
       - 위 패턴에 해당하지 않으면 메서드명을 그대로 사용한다.
 
-7. 결과를 `tmp/tests.json` 에 저장한다. 구조:
+7. 결과를 `tmp\tests.json` 에 저장한다. 구조:
    ```json
    {
      "scanned_dir": "...",
@@ -193,13 +244,16 @@ python3 -u .claude/skills/PI_421/scripts/01_scan_tests.py "{디렉토리경로}"
 
 ### 2단계 — Excel 생성 (템플릿 복제 + 데이터 채우기)
 
-**스크립트**: `scripts/02_generate_excel.py`
-**입력**: `tmp/tests.json`, 고객사명, 담당자명
-**출력**: `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
+**스크립트**: `scripts\02_generate_excel.py`
+**입력**: `tmp\tests.json`, 고객사명, 담당자명
+**출력**: `output\04 구현(PI)\PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 -u .claude/skills/PI_421/scripts/02_generate_excel.py "{고객사명}" "{담당자명}"
+PowerShell:
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
+python -u ".claude\skills\PI_421\scripts\02_generate_excel.py" "{고객사명}" "{담당자명}"
 ```
 
 스크립트가 하는 일:
@@ -240,27 +294,31 @@ python3 -u .claude/skills/PI_421/scripts/02_generate_excel.py "{고객사명}" "
 
 ### 3단계 — 임시 파일 정리
 
-Excel 생성이 성공하면 `output/04 구현(PI)/tmp/` 를 삭제한다.
+Excel 생성이 성공하면 `output\04 구현(PI)\tmp\` 를 삭제한다.
 
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && rm -rf "output/04 구현(PI)/tmp"
+PowerShell:
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Remove-Item -Recurse -Force (Join-Path $DocRoot "output\04 구현(PI)\tmp")
 ```
 
-중간 단계에서 실패한 경우에는 `tmp/` 를 그대로 남겨둔다(디버깅용).
+중간 단계에서 실패한 경우에는 `tmp\` 를 그대로 남겨둔다(디버깅용).
 
 ---
 
 ## 완료 체크리스트
 
 - [ ] 입력(디렉토리 / 고객사명 / 담당자명) 확정
-- [ ] `openpyxl` 사용 가능 확인
-- [ ] `tmp/tests.json` 생성 — 테스트 항목 1건 이상
-- [ ] `template/04 구현(PI)/PI_212-단위테스트보고서.xlsx` 존재 확인
-- [ ] `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx` 생성
+- [ ] `python --version` 으로 Python 3 설치 확인
+- [ ] `openpyxl` 사용 가능 확인 (없으면 `pip install --user openpyxl`)
+- [ ] `tmp\tests.json` 생성 — 테스트 항목 1건 이상
+- [ ] `template\04 구현(PI)\PI_212-단위테스트보고서.xlsx` 존재 확인
+- [ ] `output\04 구현(PI)\PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx` 생성
 - [ ] `단위테스트 보고서` 시트 3행부터 데이터 채워짐
 - [ ] `Sheet1` 의 WEB / PDA / I/F 통과 건수 갱신됨
 - [ ] `표지` / `개정이력` 시트가 템플릿 그대로 보존됨
-- [ ] `tmp/` 삭제됨
+- [ ] `tmp\` 삭제됨
 
 ---
 
@@ -273,6 +331,7 @@ cd /mnt/c/zinide/workspace/cloud-wms-doc && rm -rf "output/04 구현(PI)/tmp"
 고객사:        {고객사명}
 담당자:        {담당자명}
 확인일자:      {YYYY-MM-DD}
+실행 환경:     Windows PowerShell {PSVersion} / Python {버전}
 
 스캔 결과:
   - 테스트 클래스 파일 : N개
@@ -285,13 +344,23 @@ cd /mnt/c/zinide/workspace/cloud-wms-doc && rm -rf "output/04 구현(PI)/tmp"
   - I/F : N건
   - 합계: N건  (결과: O={N} / 완료율 100.0%)
 
-출력 파일: output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+출력 파일: output\04 구현(PI)\PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
 ```
 
 ---
 
-## 주의사항
+## 주의사항 (Windows 특화)
 
+- **PowerShell 실행 정책:** 시스템 정책이 `Restricted`이면 스크립트 실행이 막힐 수 있다. 본 스킬은 Python 인터프리터만 호출하므로 정책 영향이 적지만, Bash 도구로 `powershell.exe` 를 호출할 때는 `-ExecutionPolicy Bypass` 를 함께 지정한다.
+- **`python` vs `py`:** Windows에 따라 `python` 또는 `py -3` 으로 호출해야 한다. 우선 `python --version` 으로 가능 여부를 확인하고, 실패하면 `py -3 --version` 으로 재시도한다.
+- **한글 콘솔 출력 깨짐:** Python 출력에 한글이 포함되어 있으므로 PowerShell 콘솔이 cp949면 깨질 수 있다. 실행 전에 한 번 다음 명령으로 UTF-8 모드로 전환한다.
+  ```powershell
+  $env:PYTHONUTF8 = "1"
+  [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
+  chcp 65001 | Out-Null
+  ```
+- **경로 공백·한글 처리:** "output\04 구현(PI)" 처럼 공백·한글이 포함된 경로는 반드시 큰따옴표로 감싼다. Python에서는 `pathlib.Path` 가 자동 처리한다.
+- **Windows·WSL 경로 자동 변환:** `01_scan_tests.py` 의 `normalize_path()` 가 `/mnt/c/...` → `C:\...` 로 자동 변환하므로, 사용자가 두 형식 중 어느 쪽으로 입력해도 동작한다.
 - **결과 컬럼은 항상 `O`** (모두 통과 가정). △/X 를 임의로 분배하지 않는다.
 - **확인일자는 오늘 날짜** 를 일괄 사용한다. 실제 테스트 실행 일자가 아니라는 점을 인지한다.
 - **주석 처리된 `@Test` 는 제외** 한다 (`//@Test`, `/* @Test */` 모두).
@@ -303,5 +372,5 @@ cd /mnt/c/zinide/workspace/cloud-wms-doc && rm -rf "output/04 구현(PI)/tmp"
 - **출력 파일이 이미 존재하면** 사용자에게 덮어쓸지 한 번 확인한 뒤 진행한다.
 - **JUnit이 아닌 테스트(TestNG, Spock, Kotest 등)** 는 v1 범위가 아니다. 발견되더라도 수집하지 않고 경고만 표시한다.
 - **모노레포 / 멀티 모듈 Gradle 프로젝트**: 루트 디렉토리를 받으면 하위의 모든 모듈을 재귀 탐색한다. `settings.gradle(.kts)` 의 `include` 목록을 별도로 파싱하지 않는다 (디렉토리 워크로 충분).
-- **고객사명 정규화**: 파일명에 사용 불가능한 문자(`<>:"\|?*\\/`)는 자동으로 `_` 로 치환한다.
-- **Windows / WSL 경로 혼용**: 사용자가 `C:\...` 형식으로 입력해도 내부적으로 `/mnt/c/...` 로 변환하여 처리한다.
+- **고객사명 정규화**: 파일명에 사용 불가능한 문자(`<>:"|?*\\/`)는 자동으로 `_` 로 치환한다.
+- **엑셀이 열려 있을 때 저장 실패:** 출력 파일을 PowerPoint/Excel에서 열어둔 상태에서 실행하면 openpyxl이 저장에 실패한다. 미리 닫고 실행하도록 안내한다.

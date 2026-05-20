@@ -1,6 +1,6 @@
 ---
 name: SD_334
-description: 【DB 관계도(ERD) HTML 생성 (PowerShell · 실DB)】 Windows 네이티브 PowerShell 환경에서 사용자가 지정한 백엔드 디렉토리의 `application-test.properties` 를 자동 탐색하여 PostgreSQL DB 접속정보를 파싱하고, `psql.exe` 로 `pg_catalog` 에 직접 접속해 테이블·컬럼·FK를 추출한 뒤, 기존 `output\03 설계(SD)\SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용하여 `const TABLES=[...]` 와 `const FKS=[...]` 두 섹션만 DB 최신 상태로 교체한 ERD 뷰어 HTML 파일을 생성한다. 뷰어 코드(CSS·JS 함수·SVG 마커·SUBGROUP_DEF·MAPPING_TBLS 등)는 템플릿에서 그대로 유지하므로 새 테이블 그룹이 추가될 때만 템플릿 파일을 직접 수정하면 된다. /SD_334 형식으로 실행하며 BE 경로·업체명은 실행 시 묻는다. 산출물은 `output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html` 단일 HTML 파일로 떨어지며 브라우저에서 바로 열어 노드 드래그·줌·검색·계층 레이아웃 토글이 가능하다. DB 관계도 작성, ERD HTML 생성·갱신, 테이블 관계 시각화, 산출물용 ERD 뷰어 만들기 요청 시 반드시 이 스킬을 사용한다. 사용자가 "DB 관계도 만들어줘", "ERD 뽑아줘", "ERD 갱신해줘", "테이블 관계 시각화", "ERD 뷰어 만들어줘", "SD_334 실행해줘", "관계도 산출물 만들어줘" 라고 말해도 이 스킬을 사용한다. 단, 엑셀 형태의 테이블정의서가 필요하면 /SD_331 을 사용한다.
+description: 【DB 관계도(ERD) HTML 생성 (Windows · PowerShell · 실DB)】 Windows 네이티브 PowerShell 환경에서 사용자가 지정한 백엔드 디렉토리의 `application-test.properties` 를 자동 탐색하여 PostgreSQL DB 접속정보를 파싱하고, `psql.exe` 로 `pg_catalog` 에 직접 접속해 테이블·컬럼·FK를 추출한 뒤, 기존 `output\03 설계(SD)\SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용하여 `const TABLES=[...]` 와 `const FKS=[...]` 두 섹션만 DB 최신 상태로 교체한 ERD 뷰어 HTML 파일을 생성한다. 뷰어 코드(CSS·JS 함수·SVG 마커·SUBGROUP_DEF·MAPPING_TBLS 등)는 템플릿에서 그대로 유지하므로 새 테이블 그룹이 추가될 때만 템플릿 파일을 직접 수정하면 된다. /SD_334 형식으로 실행하며 BE 경로·업체명은 실행 시 묻는다. 산출물은 `output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html` 단일 HTML 파일로 떨어지며 브라우저에서 바로 열어 노드 드래그·줌·검색·계층 레이아웃 토글이 가능하다. DB 관계도 작성, ERD HTML 생성·갱신, 테이블 관계 시각화, 산출물용 ERD 뷰어 만들기 요청 시 반드시 이 스킬을 사용한다. 사용자가 "DB 관계도 만들어줘", "ERD 뽑아줘", "ERD 갱신해줘", "테이블 관계 시각화", "ERD 뷰어 만들어줘", "SD_334 실행해줘", "관계도 산출물 만들어줘" 라고 말해도 이 스킬을 사용한다. 단, 엑셀 형태의 테이블정의서가 필요하면 /SD_331 을 사용한다. WSL/Linux/macOS 환경에서는 SD_334_BASH 스킬을 사용한다.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -26,15 +26,23 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 1. **BE 경로** — 사용자에게 백엔드 프로젝트 루트를 묻는다. 입력 예: `C:\zinide\workspace_cloud\cloud-wms-be`. 경로가 존재하지 않거나 그 아래에 `src\main\resource\prop\application-test.properties` 파일이 없으면 다시 묻는다.
 2. **업체명** — 출력 파일명(`SD.211-ERD_{업체명}_{YYMMDD}.html`)에 들어가는 식별자. 윈도우 파일명에서 사용 불가능한 문자(`\ / : * ? " < > |`)는 스크립트가 자동으로 `_` 로 치환한다.
 
-### 경로 정의
+### 경로 정의 (동적)
 
+```powershell
+$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName  = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
 ```
-BASE         = C:\zinide\workspace\cloud-wms-doc
+
+경로:
+```
 PROP_FILE    = {BE경로}\src\main\resource\prop\application-test.properties
 PSQL         = C:\Program Files\PostgreSQL\10\bin\psql.exe
-OUTPUT_DIR   = output\03 설계(SD)
-TEMPLATE     = output\03 설계(SD)\SD.211-ERD_*.html (최신 LastWriteTime)
-OUT_FILE     = output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
+OUTPUT_DIR   = $DocRoot\output\03 설계(SD)
+TEMPLATE     = $DocRoot\output\03 설계(SD)\SD.211-ERD_*.html (최신 LastWriteTime)
+OUT_FILE     = $DocRoot\output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
 ```
 
 `OUTPUT_DIR` 이 없으면 생성한다. 템플릿 파일이 없으면 즉시 에러로 종료하고 사용자에게 안내한다 (기존 ERD 뷰어 파일이 한 번은 작성되어 있어야 한다는 의미).
@@ -228,7 +236,7 @@ Write-Host "FKS 추출: $($fkRows.Count) 건"
 ### 4단계 — 출력 파일 준비 & 템플릿 로드
 
 ```powershell
-$projectRoot = "C:\zinide\workspace\cloud-wms-doc"
+$projectRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 $outputDir   = "$projectRoot\output\03 설계(SD)"
 $yymmdd      = (Get-Date).ToString("yyMMdd")
 $safeName    = $ARGUMENTS -replace '[\\/:*?"<>|]', '_'

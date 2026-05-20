@@ -1,7 +1,7 @@
 ---
 name: PI_422
-description: 【통합테스트보고서 엑셀 생성】 dist/ 폴더의 ui.md 파일을 스캔하여 메뉴별 통합테스트 시나리오를 자동 생성하고, template/04 구현(PI)/PI.214-통합테스트보고서.xlsx 템플릿에 채워 output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx 로 저장합니다. /PI_422 형식으로 실행하며 고객사명·담당자·테스트 기간은 실행 시 묻습니다. 통합테스트 보고서 작성, 테스트 시나리오 정리, 통합테스트 결과 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다.
-allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
+description: 【통합테스트보고서 엑셀 생성 (Windows)】 dist/ 폴더의 ui.md 파일을 스캔하여 메뉴별 통합테스트 시나리오를 자동 생성하고, template/04 구현(PI)/PI.214-통합테스트보고서.xlsx 템플릿에 채워 output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx 로 저장합니다. /PI_422 형식으로 실행하며 고객사명·담당자·테스트 기간은 실행 시 묻습니다. 통합테스트 보고서 작성, 테스트 시나리오 정리, 통합테스트 결과 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다. WSL/Linux/Mac 환경에서는 PI_422_BASH 스킬을 사용합니다.
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
 # 통합테스트보고서 자동 생성 [PI_422]
@@ -31,10 +31,17 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 | 테스트 기간 | 시작일 ~ 종료일 (예: 2026-05-12 ~ 2026-05-23) |
 | SYSTEM | WMS(WEB), WMS(PDA) 등 기입할 시스템명 (기본값: WMS(WEB)) |
 
-### 2) 경로 정의
+### 2) 경로 정의 (PowerShell 동적 감지)
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+```
 
 ```
-BASE         = C:\zinide\workspace_cloud\cloud-wms-doc
+BASE         = $DocRoot  (동적 감지)
 DIST_DIR     = dist/
 OUTPUT_DIR   = output/04 구현(PI)
 SCRIPT       = .claude/skills/PI_422/scripts/gen_pi422.js
@@ -50,6 +57,8 @@ XLSX_LIB     = output/04 구현(PI)/node_modules/xlsx-populate
 ### 1단계 — xlsx-populate 라이브러리 확인
 
 ```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
 node -e "require('./output/04 구현(PI)/node_modules/xlsx-populate'); console.log('ok')"
 ```
 
@@ -59,15 +68,22 @@ node -e "require('./output/04 구현(PI)/node_modules/xlsx-populate'); console.l
 ### 2단계 — 스크립트 실행
 
 ```powershell
-cd "C:\zinide\workspace_cloud\cloud-wms-doc"
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+Set-Location $DocRoot
 node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}" "{테스트시작일}" "{테스트종료일}" "{SYSTEM}"
 ```
 
 스크립트가 수행하는 일:
 
-#### 2-1. dist/ 폴더 스캔
+#### 2-1. dist/ 폴더 스캔 + dist-mobile/menu.html 스캔
 
-- `dist/` 하위 모든 폴더에서 `ui.md` 파일을 재귀 탐색한다.
+- `dist/` 하위 모든 폴더에서 `ui.md` 파일을 탐색한다 (WEB 메뉴).
+- `dist-mobile/menu.html`에서 `.menu-cell` href 파싱하여 PDA 메뉴 목록 추출.
+  - 메뉴코드: href 경로에서 추출 (예: `iv3000m/IVMV01.html` → `IVMV01`)
+  - 메뉴명: `<img alt="...">` 값 사용
+  - `dist/{menuCode.toLowerCase()}/ui.md` 존재 시 해당 메타(업무그룹명·업무규칙·버튼) 활용
+  - ui.md 없으면 그룹 폴더명(예: iv3000m)을 업무영역으로, 조회 4건만 생성
+  - SYSTEM 컬럼은 PDA 메뉴는 `WMS(PDA)` 고정 (WEB 메뉴는 입력받은 값 사용)
 - 각 `ui.md`에서 아래 정보를 파싱한다:
 
 | 파싱 대상 | 위치 |
