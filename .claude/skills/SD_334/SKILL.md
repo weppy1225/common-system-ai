@@ -1,25 +1,21 @@
 ---
 name: SD_334
-description: 【DB 관계도(ERD) HTML 생성】 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔해 실제 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 직접 접속하고, 시스템 카탈로그에서 테이블·컬럼·FK를 추출하여 vis-network 기반의 인터랙티브 DB 관계도(ERD) HTML 파일을 자동 생성합니다. /SD_334 형식으로 실행하며 디렉토리·고객사명은 실행 시 묻습니다. 산출물은 단일 HTML 파일로 떨어지며 브라우저에서 바로 열어 노드 드래그·줌·검색·계층 레이아웃 토글이 가능합니다. DB 관계도 작성, ERD HTML 생성, 테이블 관계 시각화, 산출물용 DB 관계도 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "DB 관계도 만들어줘", "ERD 뽑아줘", "테이블 관계 시각화", "DB 다이어그램 HTML로", "SD_334 실행해줘", "관계도 산출물 만들어줘" 라고 말해도 이 스킬을 사용합니다. 단, 사용자가 엑셀 형태의 테이블정의서를 원하면 /SD_331, 정적 ERD 뷰어가 이미 있으면 /SD_211 쪽이 맞을 수 있으니 산출물 형식(HTML 관계도/엑셀/뷰어)을 먼저 확인해 분기합니다.
+description: 【DB 관계도(ERD) HTML 생성 (Windows · PowerShell · 실DB)】 Windows 네이티브 PowerShell 환경에서 사용자가 지정한 백엔드 디렉토리의 `application-test.properties` 를 자동 탐색하여 PostgreSQL DB 접속정보를 파싱하고, `psql.exe` 로 `pg_catalog` 에 직접 접속해 테이블·컬럼·FK를 추출한 뒤, 기존 `output\03 설계(SD)\SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용하여 `const TABLES=[...]` 와 `const FKS=[...]` 두 섹션만 DB 최신 상태로 교체한 ERD 뷰어 HTML 파일을 생성한다. 뷰어 코드(CSS·JS 함수·SVG 마커·SUBGROUP_DEF·MAPPING_TBLS 등)는 템플릿에서 그대로 유지하므로 새 테이블 그룹이 추가될 때만 템플릿 파일을 직접 수정하면 된다. /SD_334 형식으로 실행하며 BE 경로·업체명은 실행 시 묻는다. 산출물은 `output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html` 단일 HTML 파일로 떨어지며 브라우저에서 바로 열어 노드 드래그·줌·검색·계층 레이아웃 토글이 가능하다. DB 관계도 작성, ERD HTML 생성·갱신, 테이블 관계 시각화, 산출물용 ERD 뷰어 만들기 요청 시 반드시 이 스킬을 사용한다. 사용자가 "DB 관계도 만들어줘", "ERD 뽑아줘", "ERD 갱신해줘", "테이블 관계 시각화", "ERD 뷰어 만들어줘", "SD_334 실행해줘", "관계도 산출물 만들어줘" 라고 말해도 이 스킬을 사용한다. 단, 엑셀 형태의 테이블정의서가 필요하면 /SD_331 을 사용한다. WSL/Linux/macOS 환경에서는 SD_334_BASH 스킬을 사용한다.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
-# DB 관계도 HTML 자동 생성 (실 DB 접속) [SD_334]
+# DB 관계도(ERD) HTML 자동 생성 (실DB · PowerShell) [SD_334]
 
-대상 디렉토리: **$ARGUMENTS**
+`{BE경로}\src\main\resource\prop\application-test.properties` 에서 PostgreSQL 접속정보를 파싱하고, `psql.exe` 로 `pg_catalog` 를 조회하여 테이블·컬럼·FK 데이터를 추출한 뒤, 기존 `output\03 설계(SD)\SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용해서
+`output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html` ERD 뷰어 파일을 생성(또는 갱신)한다.
 
-`$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일을 자동 스캔하고, 검출된 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 **직접 접속**하여 시스템 카탈로그(information_schema/pg_catalog/sys.\*/user_\*)에서 테이블·컬럼·FK를 추출한 뒤,
-**vis-network** 기반 인터랙티브 ER 다이어그램 HTML을
-`output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html` 파일로 생성한다.
+> **재사용 방식**: 기존 HTML 파일의 `const TABLES=[...]` 와 `const FKS=[...]` 두 섹션만 DB 최신 상태로 교체한다. 뷰어 코드(CSS·JS 함수·SVG 마커·`SUBGROUP_DEF`·`MAPPING_TBLS`·`PARENT_GROUPS`·`getSubGroup`·`relayoutBySubGroup`·`drawLines`)는 템플릿 파일에 고정 보관되며 그대로 유지된다.
 
-> 같은 DB를 보는 다른 산출물:
-> - `/SD_331` — 동일 추출 로직으로 SD.212-테이블정의서 **엑셀** 생성
-> - `/SD_211` — 정적 ERD 뷰어 생성
-> 이 스킬(`/SD_334`)은 **단일 HTML 파일 하나**로 떨어지며 브라우저에서 바로 열어 노드 드래그·줌·검색·계층 레이아웃 전환이 가능한 인터랙티브 관계도를 만든다.
+> **Windows 전용**: PowerShell 직접 실행 방식이며 `psql.exe` (PostgreSQL 클라이언트)와 Windows 경로 (`C:\Program Files\PostgreSQL\10\bin\psql.exe`) 를 사용한다. WSL/Linux/macOS에서는 동작하지 않는다.
 
-> **클라이언트 도구 불필요**: psql/mysql/sqlcmd/sqlplus 같은 OS 클라이언트가 설치되지 않은 환경을 가정한다. Python 라이브러리(psycopg2-binary / pymysql / pymssql / oracledb)만으로 직접 접속한다. 라이브러리는 필요할 때 `pip install --user`로 자동 설치한다.
-
-> **CDN 의존**: 결과 HTML은 `vis-network` JS를 jsDelivr CDN에서 로드한다. 오프라인 환경에서 사용해야 한다면 사용자에게 안내한다.
+> **같은 DB를 보는 다른 산출물**:
+> - `/SD_331` — 동일 DB에서 SD.212-테이블정의서 **엑셀** 생성
+> - `/SD_333_WIN` — 동일 DB에서 DDL SQL 스크립트 생성
 
 ---
 
@@ -27,247 +23,394 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 
 ### 인자 확정
 
-`$ARGUMENTS`가 비어 있으면 사용자에게 디렉토리 경로를 물어본다. 비어 있지 않더라도 경로가 존재하지 않으면 다시 물어본다.
+1. **BE 경로** — 사용자에게 백엔드 프로젝트 루트를 묻는다. 입력 예: `C:\zinide\workspace_cloud\cloud-wms-be`. 경로가 존재하지 않거나 그 아래에 `src\main\resource\prop\application-test.properties` 파일이 없으면 다시 묻는다.
+2. **업체명** — 출력 파일명(`SD.211-ERD_{업체명}_{YYMMDD}.html`)에 들어가는 식별자. 윈도우 파일명에서 사용 불가능한 문자(`\ / : * ? " < > |`)는 스크립트가 자동으로 `_` 로 치환한다.
 
-추가로 **고객사명**을 사용자에게 묻는다. 이미 동일 워크스페이스에서 다른 SD/PI 산출물을 만들 때 사용된 이름이 있으면 그것을 기본값으로 제시한다. 고객사명은 출력 파일명(`SD_334_DB관계도_{고객사명}.html`)에 그대로 들어가므로 윈도우 파일명에서 사용 불가능한 문자(`\ / : * ? " < > |`)는 스크립트가 자동으로 `_`로 치환한다.
+### 경로 정의 (동적)
 
-### 경로 정의
-
+```powershell
+$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName  = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
 ```
-BASE       = /mnt/c/zinide/workspace/cloud-wms-doc
-OUTPUT_DIR = output/03 설계(SD)
-TMP_DIR    = output/03 설계(SD)/tmp
-SCRIPTS    = .claude/skills/SD_334/scripts
-OUT_FILE   = output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html
+
+경로:
+```
+PROP_FILE    = {BE경로}\src\main\resource\prop\application-test.properties
+PSQL         = C:\Program Files\PostgreSQL\10\bin\psql.exe
+OUTPUT_DIR   = $DocRoot\output\03 설계(SD)
+TEMPLATE     = $DocRoot\output\03 설계(SD)\SD.211-ERD_*.html (최신 LastWriteTime)
+OUT_FILE     = $DocRoot\output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
 ```
 
-`OUTPUT_DIR`과 `TMP_DIR`이 없으면 생성한다.
+`OUTPUT_DIR` 이 없으면 생성한다. 템플릿 파일이 없으면 즉시 에러로 종료하고 사용자에게 안내한다 (기존 ERD 뷰어 파일이 한 번은 작성되어 있어야 한다는 의미).
 
 ---
 
-## 단계별 워크플로우
+## 출력 HTML 파일 구조 (핵심 섹션)
 
-각 단계는 Bash로 스크립트를 실행하고, 그 결과 JSON을 다음 단계가 읽는 방식으로 진행된다. 각 단계 완료 후 다음 단계로 진행하기 전에 산출물(`tmp/*.json`)이 존재하는지 확인한다.
-
-> 1·2단계의 스크립트는 `/SD_331`과 동일한 로직(라벨만 `[SD_334]`)이므로, schema 추출 결과 포맷도 SD_331과 동일하다.
-
----
-
-### 1단계 — 디렉토리 스캔으로 DB 접속정보 후보 추출
-
-**스크립트**: `scripts/01_scan_config.py`
-
-**입력**: 사용자 지정 디렉토리 경로
-**출력**: `output/03 설계(SD)/tmp/db_candidates.json`
-
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/SD_334/scripts/01_scan_config.py "{디렉토리경로}"
+```
+<title>ERD - {업체명} WMS ({YYMMDD})</title>
+...
+<div id="sidebar-header">ERD Viewer · {업체명} WMS</div>
+...
+<script>
+  const MAPPING_TBLS = new Set([...]);   ← 커넥터 테이블 목록 (템플릿 유지)
+  const SUBGROUP_DEF = [...];            ← 서브그룹 정의 (템플릿 유지)
+  const PARENT_GROUPS = {...};           ← 부모 그룹 정의 (템플릿 유지)
+  const TABLES = [...];                  ← ★ DB에서 갱신
+  const FKS = [...];                     ← ★ DB에서 갱신
+  ...
+</script>
 ```
 
-스크립트는 디렉토리(하위 포함)에서 다음 패턴의 파일을 찾아 DB 접속정보 후보를 모은다.
-
-| 패턴 | 추출 키 |
-|---|---|
-| `*.env`, `.env*` | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL`, `DB_DRIVER` 등 |
-| `application.yml` / `application.yaml` (Spring) | `spring.datasource.url/username/password/driver-class-name` |
-| `application.properties` (Spring) | `spring.datasource.url/username/password/driver-class-name` |
-| `database.yml` (Rails) | `adapter`, `host`, `port`, `database`, `username`, `password` |
-| `settings.py` (Django) | `DATABASES['default']` |
-| `knexfile.js` / `knexfile.ts` | `client`, `connection` |
-| `appsettings*.json` (.NET) | `ConnectionStrings.*` |
-| `web.config` (.NET) | `<connectionStrings>` |
-| `config.json` / `db.config.json` / `database.json` 등 일반 JSON | host/port/database/user/password 키 자동 인식 |
-| `docker-compose.yml` / `docker-compose.yaml` | `services.*.environment` (POSTGRES_USER 등) |
-| `prisma/schema.prisma` | `datasource db { url = ... }` |
-
-**중복 후보 제거 규칙**: `(driver, host, port, database)` 조합이 동일하면 같은 후보로 간주한다. user/password는 더 풍부한 쪽을 채택한다.
-
 ---
 
-### 2단계 — 사용자 확인 및 누락 정보 보강
+## TABLES 항목 구조
 
-스크립트가 만든 `db_candidates.json`을 Read 툴로 읽어 후보 목록을 확인한다.
-
-1. **후보가 0개**: AskUserQuestion으로 DB 종류와 접속정보(host, port, database, user, password)를 직접 입력 받아 가상의 후보 1개를 만든다.
-2. **후보가 1개**: 사용자에게 해당 정보로 진행할지, password가 누락되었으면 password를 입력할지 묻는다.
-3. **후보가 2개 이상**: AskUserQuestion으로 어떤 후보를 사용할지 선택 받는다.
-
-선택된 후보의 password가 비어 있다면 **AskUserQuestion으로 password를 별도 질문한다.**
-> 보안: 비밀번호는 화면에 그대로 표시되므로, 사용자가 직접 입력하기 전에 "쉘 히스토리·로그에 남을 수 있다"는 점을 안내한다.
-
-확정된 접속정보를 `output/03 설계(SD)/tmp/db_target.json`로 저장한다.
-
-```json
+```javascript
 {
-  "driver": "postgresql",
-  "host": "localhost",
-  "port": 5432,
-  "database": "wms_db",
-  "user": "wms",
-  "password": "...",
-  "schema": "public"
+  "id": "wms_inbiz",           // phys와 동일
+  "phys": "wms_inbiz",         // 물리 테이블명
+  "logi": "WMS_입하",           // pg_description 코멘트 → 없으면 phys 그대로
+  "grp": "wms",                // 접두사 파생 (아래 표 참조)
+  "x": 0,                      // 초기 좌표 (relayoutBySubGroup이 자동 계산)
+  "y": 0,
+  "cols": [
+    {
+      "pkfk": "PK",            // "PK" | "FK" | "PK FK" | ""
+      "phys": "inbiz_seq",
+      "type": "integer",
+      "nn": "N",               // N = NOT NULL, Y = Nullable
+      "logi": "입하 SEQ"       // 컬럼 코멘트 → 없으면 phys 그대로
+    }
+  ]
 }
 ```
 
-> `driver` 값은 `postgresql` / `mysql` / `mssql` / `oracle` 중 하나로 정규화한다. (`mariadb` → `mysql`, `postgres` → `postgresql`, `sqlserver` / `mssql` 모두 → `mssql`)
+## FKS 항목 구조
 
-> `schema`는 PostgreSQL/MSSQL에서 의미가 있다. 없으면 PostgreSQL은 `public`, MSSQL은 `dbo`, MySQL은 database 자체, Oracle은 사용자명 대문자.
+```javascript
+{"ft": "wms_inbiz_prod", "fc": "inbiz_seq", "tt": "wms_inbiz", "tc": "inbiz_seq"}
+// ft=child 테이블, fc=child 컬럼, tt=parent 테이블, tc=parent 컬럼
+// 복합 FK → 컬럼 쌍마다 별도 항목 (unnest 처리)
+```
 
 ---
 
-### 3단계 — 의존성 확인 및 자동 설치
+## grp 파생 규칙
 
-선택된 driver에 대응하는 Python 라이브러리가 import 가능한지 점검하고, 없으면 자동 설치한다.
+| 테이블 접두사 | grp |
+|---|---|
+| `wms_*` | `wms` |
+| `mdm_*` | `mdm` |
+| `sm_*` | `sm` |
+| `sif_*` | `sif` |
+| `wes_*` | `wes` |
+| 그 외 | `sm` |
 
-| driver | Python 라이브러리 | 설치 명령 |
+---
+
+## 실행 절차 (PowerShell 단일 블록)
+
+전 단계를 하나의 PowerShell 블록 안에서 실행한다 (변수가 단계 간에 유지되어야 함). Bash 도구에서 `powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "..."` 패턴으로 호출한다.
+
+### 1단계 — DB 접속 정보 파싱
+
+```powershell
+param([string]$BE_PATH, [string]$ARGUMENTS)
+
+$propFile = "$BE_PATH\src\main\resource\prop\application-test.properties"
+if (-not (Test-Path $propFile)) {
+    Write-Error "DB 접속 설정 파일 없음: $propFile"
+    return
+}
+
+$props = @{}
+Get-Content $propFile -Encoding UTF8 | Where-Object { $_ -match "^[^#].*=" } | ForEach-Object {
+    $k, $v = $_ -split "=", 2
+    $props[$k.Trim()] = $v.Trim()
+}
+$dbUrl = $props["db.url"] -replace "jdbc:log4jdbc:", "jdbc:"
+if ($dbUrl -match "jdbc:postgresql://([^:]+):(\d+)/(.+)") {
+    $dbHost = $Matches[1]; $dbPort = $Matches[2]; $dbName = $Matches[3]
+}
+$dbUser = $props["db.username"]
+$dbPass = $props["db.password"]
+$env:PGPASSWORD = $dbPass
+$psql = "C:\Program Files\PostgreSQL\10\bin\psql.exe"
+$psqlArgs = @("-h", $dbHost, "-p", $dbPort, "-U", $dbUser, "-d", $dbName, "-t", "-A")
+
+function Invoke-PSQL([string]$sql) {
+    return & $psql @psqlArgs -c $sql 2>&1
+}
+
+Write-Host "DB 접속: $dbHost`:$dbPort/$dbName (user=$dbUser)"
+```
+
+### 2단계 — TABLES 데이터 추출
+
+SQL이 JavaScript 객체 문자열을 직접 생성한다.
+
+```powershell
+$tablesSql = @"
+SELECT
+  '{\"id\":\"' || c.relname || '\",\"phys\":\"' || c.relname || '\",\"logi\":\"' ||
+  replace(replace(COALESCE(d.description, c.relname), chr(10), ' '), '"', '\"') ||
+  '\",\"grp\":\"' ||
+  CASE
+    WHEN c.relname LIKE 'wms_%' THEN 'wms'
+    WHEN c.relname LIKE 'mdm_%' THEN 'mdm'
+    WHEN c.relname LIKE 'sm_%'  THEN 'sm'
+    WHEN c.relname LIKE 'sif_%' THEN 'sif'
+    WHEN c.relname LIKE 'wes_%' THEN 'wes'
+    ELSE 'sm'
+  END || '\",\"x\":0,\"y\":0,\"cols\":[' ||
+  (
+    SELECT string_agg(
+      '{\"pkfk\":\"' ||
+      CASE
+        WHEN EXISTS(SELECT 1 FROM pg_constraint pk WHERE pk.conrelid=c.oid AND pk.contype='p' AND a.attnum=ANY(pk.conkey))
+         AND EXISTS(SELECT 1 FROM pg_constraint fk WHERE fk.conrelid=c.oid AND fk.contype='f' AND a.attnum=ANY(fk.conkey))
+        THEN 'PK FK'
+        WHEN EXISTS(SELECT 1 FROM pg_constraint pk WHERE pk.conrelid=c.oid AND pk.contype='p' AND a.attnum=ANY(pk.conkey))
+        THEN 'PK'
+        WHEN EXISTS(SELECT 1 FROM pg_constraint fk WHERE fk.conrelid=c.oid AND fk.contype='f' AND a.attnum=ANY(fk.conkey))
+        THEN 'FK'
+        ELSE ''
+      END ||
+      '\",\"phys\":\"' || a.attname ||
+      '\",\"type\":\"' || pg_catalog.format_type(a.atttypid, a.atttypmod) ||
+      '\",\"nn\":\"'   || CASE WHEN a.attnotnull THEN 'N' ELSE 'Y' END ||
+      '\",\"logi\":\"' || replace(replace(COALESCE(d2.description, a.attname), chr(10), ' '), '"', '\"') ||
+      '\"}',
+      ',' ORDER BY a.attnum
+    )
+    FROM pg_attribute a
+    LEFT JOIN pg_description d2 ON d2.objoid = c.oid AND d2.objsubid = a.attnum
+    WHERE a.attrelid = c.oid AND a.attnum > 0 AND NOT a.attisdropped
+  ) || ']}'
+FROM pg_class c
+JOIN pg_namespace n ON n.oid = c.relnamespace
+LEFT JOIN pg_description d ON d.objoid = c.oid AND d.objsubid = 0
+WHERE c.relkind = 'r' AND n.nspname = 'public'
+ORDER BY c.relname;
+"@
+
+$tableRows = Invoke-PSQL $tablesSql
+$tableRows = $tableRows | Where-Object { $_ -and $_.Trim() -ne "" -and $_ -notmatch "^(ERROR|FATAL|WARNING)" }
+$tablesJS = "const TABLES=[" + ($tableRows -join ",") + "];"
+Write-Host "TABLES 추출: $($tableRows.Count) 건"
+```
+
+### 3단계 — FKS 데이터 추출
+
+복합 FK는 `unnest` 로 컬럼 쌍마다 분리한다.
+
+```powershell
+$fksSql = @"
+SELECT
+  '{\"ft\":\"' || tc.relname ||
+  '\",\"fc\":\"' || a_from.attname ||
+  '\",\"tt\":\"' || pc.relname ||
+  '\",\"tc\":\"' || a_to.attname || '\"}'
+FROM pg_constraint con
+JOIN pg_class tc ON tc.oid = con.conrelid
+JOIN pg_class pc ON pc.oid = con.confrelid
+JOIN pg_namespace ns ON ns.oid = tc.relnamespace
+JOIN LATERAL unnest(con.conkey, con.confkey) AS u(fk_col, pk_col) ON true
+JOIN pg_attribute a_from ON a_from.attrelid = tc.oid AND a_from.attnum = u.fk_col
+JOIN pg_attribute a_to   ON a_to.attrelid   = pc.oid AND a_to.attnum   = u.pk_col
+WHERE con.contype = 'f' AND ns.nspname = 'public'
+ORDER BY tc.relname, con.conname, u.fk_col;
+"@
+
+$fkRows = Invoke-PSQL $fksSql
+$fkRows = $fkRows | Where-Object { $_ -and $_.Trim() -ne "" -and $_ -notmatch "^(ERROR|FATAL|WARNING)" }
+$fksJS = "const FKS=[" + ($fkRows -join ",") + "];"
+Write-Host "FKS 추출: $($fkRows.Count) 건"
+```
+
+### 4단계 — 출력 파일 준비 & 템플릿 로드
+
+```powershell
+$projectRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$outputDir   = "$projectRoot\output\03 설계(SD)"
+$yymmdd      = (Get-Date).ToString("yyMMdd")
+$safeName    = $ARGUMENTS -replace '[\\/:*?"<>|]', '_'
+$outputFile  = "$outputDir\SD.211-ERD_${safeName}_${yymmdd}.html"
+
+if (-not (Test-Path $outputDir)) { New-Item -ItemType Directory -Path $outputDir -Force | Out-Null }
+
+# 최신 기존 ERD 파일을 템플릿으로 사용
+$templateFile = Get-ChildItem $outputDir -Filter "SD.211-ERD_*.html" |
+    Sort-Object LastWriteTime -Descending | Select-Object -First 1
+
+if (-not $templateFile) {
+    Write-Error "ERD 템플릿 파일 없음. output\03 설계(SD)\SD.211-ERD_*.html 파일이 최소 1개 필요합니다."
+    return
+}
+
+$html = Get-Content $templateFile.FullName -Raw -Encoding UTF8
+Write-Host "템플릿: $($templateFile.Name)"
+```
+
+### 5단계 — TABLES / FKS 교체
+
+`IndexOf` 로 정확한 블록 경계를 찾아 교체한다.
+
+```powershell
+# const TABLES=[...]; 교체
+$startTbl = $html.IndexOf('const TABLES=[')
+if ($startTbl -lt 0) { Write-Error "const TABLES=[ 블록을 찾지 못했습니다."; return }
+$endTbl   = $html.IndexOf('];', $startTbl) + 2
+$html = $html.Substring(0, $startTbl) + $tablesJS + $html.Substring($endTbl)
+
+# const FKS=[...]; 교체
+$startFks = $html.IndexOf('const FKS=[')
+if ($startFks -lt 0) { Write-Error "const FKS=[ 블록을 찾지 못했습니다."; return }
+$endFks   = $html.IndexOf('];', $startFks) + 2
+$html = $html.Substring(0, $startFks) + $fksJS + $html.Substring($endFks)
+```
+
+### 6단계 — 제목 · 헤더 업체명 교체
+
+```powershell
+# <title> 교체
+$html = [regex]::Replace($html, '<title>ERD - [^<]+</title>',
+    "<title>ERD - $safeName WMS ($yymmdd)</title>")
+
+# sidebar 헤더 교체
+$html = [regex]::Replace($html, 'ERD Viewer · [^<]+',
+    "ERD Viewer · $safeName WMS")
+```
+
+### 7단계 — 파일 저장
+
+```powershell
+[System.IO.File]::WriteAllText($outputFile, $html, [System.Text.Encoding]::UTF8)
+
+$size   = [math]::Round((Get-Item $outputFile).Length / 1KB, 1)
+$tblCnt = ([regex]::Matches($tablesJS, '"id":"')).Count
+$fkCnt  = ([regex]::Matches($fksJS, '"ft":"')).Count
+Write-Host "출력: $outputFile (${size} KB) — TABLES=$tblCnt, FKS=$fkCnt"
+```
+
+---
+
+## SUBGROUP_DEF / getSubGroup 관리 규칙
+
+`SUBGROUP_DEF` 와 `getSubGroup` 함수는 템플릿 파일에 고정 보관된다.
+새 테이블 그룹(서브그룹)이 추가될 때만 템플릿 파일을 직접 수정한다.
+
+### 현재 서브그룹 prefix 매핑 (getSubGroup 기준)
+
+| prefix (startsWith) | sub-group id | 비고 |
 |---|---|---|
-| postgresql | psycopg2 | `python3 -m pip install --user psycopg2-binary` |
-| mysql | pymysql | `python3 -m pip install --user pymysql` |
-| mssql | pymssql | `python3 -m pip install --user pymssql` |
-| oracle | oracledb | `python3 -m pip install --user oracledb` |
+| `wms_inbiz` | `wms-inbiz` | 입하 |
+| `wms_inwh` | `wms-inwh` | 입고 |
+| `wms_inven_ad` | `wms-inven-ad` | 재고조정 |
+| `wms_inven_etc` | `wms-inven-etc` | 예외출고 |
+| `wms_inven_mv` | `wms-inven-mv` | 재고이동 |
+| `wms_inven_st` | `wms-inven-st` | 세트작업 |
+| `wms_inven_rp` | `wms-inven-rp` | 품목전환 |
+| `wms_inven` | `wms-inven` | 재고(기타) |
+| `wms_outbiz` | `wms-outbiz` | 출하 |
+| `wms_outwh` | `wms-outwh` | 출고 |
+| `wms_invoice` | `wms-invoice` | 송장 |
+| `wms_load` | `wms-load` | 상차 |
+| `wms_return` | `wms-return` | 반품 |
+| `wms_st` | `wms-st` | 재고실사 |
+| `mdm_biz` | `mdm-biz` | 사업장 |
+| `mdm_cont` | `mdm-cont` | 거래처 |
+| `mdm_prod`, `mdm_rp` | `mdm-prod` | 품목 |
+| `mdm_st` | `mdm-st` | 세트 |
+| `mdm_wh`, `mdm_loc` | `mdm-wh` | 창고/위치 |
+| `mdm_user` | `mdm-user` | 사용자 |
+| `mdm_*` (기타) | `mdm-etc` | 기타(MDM) |
+| `sm_comm` | `sm-comm` | 공통코드 |
+| `sm_menu` | `sm-menu` | 메뉴 |
+| `sm_log` | `sm-log` | 로그 |
+| `sm_alarm`, `sm_push` | `sm-alarm` | 알람/푸시 |
+| `sm_qrtz` | `sm-qrtz` | 스케줄러 |
+| `sm_api`, `sm_biz`, `sm_dlv`, `sm_ob_proc`, `sm_opt`, `sm_prod_opt` | `sm-config` | 설정 |
+| `sm_*` (기타) | `sm-etc` | 기타(SM) |
+| `sif_` | `sif` | SIF 연동 |
+| `wes_` | `wes` | WES |
 
-> openpyxl 등 엑셀 라이브러리는 이 스킬에서는 필요하지 않다.
+### 커넥터 테이블 (MAPPING_TBLS / BEFORE_SG)
 
-자동 점검:
+그룹 간 연결을 나타내는 매핑 테이블. 레이아웃 시 해당 그룹 직전에 별도 행으로 배치된다.
 
-```bash
-python3 .claude/skills/SD_334/scripts/02_extract_schema.py --check-only
-```
+| 테이블 | 앞에 배치되는 서브그룹 |
+|---|---|
+| `wms_inbiz_inwh` | `wms-inwh` |
+| `wms_outbiz_outwh` | `wms-outwh` |
+| `wms_outbiz_invoice` | `wms-invoice` |
+| `wms_outbiz_load` | `wms-load` |
 
-`--check-only`는 import 시도만 수행하고 누락된 라이브러리 목록을 출력한다. 누락된 라이브러리를 `pip install --user`로 설치한 뒤 다시 `--check-only`로 검증한다.
-
----
-
-### 4단계 — DB 접속 및 스키마 추출
-
-**스크립트**: `scripts/02_extract_schema.py`
-**입력**: `output/03 설계(SD)/tmp/db_target.json`
-**출력**: `output/03 설계(SD)/tmp/schema.json`
-
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/SD_334/scripts/02_extract_schema.py
-```
-
-스크립트가 driver별로 적절한 카탈로그(`information_schema`, `pg_catalog`, `sys.*`, `user_*`)를 조회해 다음 정보를 수집한다.
-
-- 테이블 목록 (logical/physical name, schema, comment)
-- 테이블별 컬럼 (logical/physical name, data type, not null, default, comment)
-- 테이블별 인덱스 (이름, 컬럼 목록, **PK 여부**, Unique 여부) — HTML에서 PK 컬럼 마킹에 사용
-- 테이블별 **FK 제약조건** — HTML 엣지 생성에 사용
-- 테이블별 PK Side FK (참조 받는 쪽)
-
-**관계 추정 정책**: 이 스킬은 **DB에 정의된 FK 제약조건만** 사용해 엣지를 그린다. 컬럼명 기반 휴리스틱 추정은 하지 않는다. FK가 거의 없는 레거시 스키마에서는 관계도가 비어 보일 수 있는데, 이 경우 사용자에게 "DB에 FK 제약이 적어 관계도가 비어 보일 수 있다"고 안내한다.
-
-연결 실패·권한 부족 시 명확한 에러 메시지(시도한 쿼리, 응답 메시지)를 출력하고 종료한다.
-
----
-
-### 5단계 — 인터랙티브 HTML 생성
-
-**스크립트**: `scripts/03_generate_html.py`
-**입력**: `output/03 설계(SD)/tmp/schema.json`, 사용자가 입력한 고객사명
-**출력**: `output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html`
-
-```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
-python3 .claude/skills/SD_334/scripts/03_generate_html.py "{고객사명}"
-```
-
-스크립트가 하는 일:
-
-1. `schema.json`에서 테이블 목록을 읽는다.
-2. 각 테이블의 PK 컬럼 집합과 FK 컬럼 집합을 만든다 (PK는 인덱스 `is_pk`로, FK는 `fks[].columns`로).
-3. 테이블마다 **vis-network 노드** 1개를 만든다. 노드 라벨은 multi-line 텍스트로 다음과 같이 구성된다.
-
-   ```
-   <b>물리테이블명</b>
-   <i>논리테이블명</i>
-   ──────────────────────────
-   🔑   id : BIGINT *
-   🔗   customer_id : BIGINT *
-        name : VARCHAR(100)
-   ```
-
-   - `🔑` PK / `🔗` FK / `*` NOT NULL
-4. FK 제약조건마다 **엣지** 1개를 만든다 (`from = 자식 테이블, to = 부모 테이블, 화살표 방향 = to`). 엣지 hover 시 `테이블.(컬럼) → 부모테이블.(부모컬럼)`이 툴팁으로 노출된다.
-5. 노드/엣지 데이터를 JSON으로 직렬화해 단일 HTML 템플릿에 삽입한다.
-6. 결과 HTML 한 파일로 저장. CDN(`vis-network@9.x`)에서 라이브러리 로드.
-
-#### HTML이 제공하는 인터랙션
-
-- **사이드바 검색**: 물리/논리명으로 즉시 필터링. 클릭하면 해당 노드로 포커싱.
-- **드래그 + 줌**: 마우스/휠/터치패드.
-- **레이아웃 전환**: 물리 시뮬레이션 / 계층(좌→우) / 계층(위→아래).
-- **물리 ON/OFF 토글**: 노드 위치 고정.
-- **전체보기 버튼**: 다이어그램 전체가 화면에 들어오도록 fit.
-- **범례**: 🔑 PK · 🔗 FK · `*` NOT NULL · 박스=테이블 · 화살표=FK.
-- **테이블 통계**: 사이드바 각 항목 아래 "컬럼 N · FK→ N · ←FK N".
-
-#### 파일명 안전 처리
-
-`{고객사명}`에 윈도우 파일명에서 사용 불가능한 문자(`\ / : * ? " < > |`)가 있으면 스크립트가 `_`로 치환한다.
+새 커넥터 테이블이 생기면 HTML 파일의 `MAPPING_TBLS`, `BEFORE_SG` 양쪽에 모두 추가한다.
 
 ---
 
-### 6단계 — 임시 파일 정리 (필수)
+## 레이아웃 자동 배치 규칙 (참고)
 
-HTML이 정상 생성되어 5단계가 성공한 직후, 비밀번호 노출을 막기 위해 `tmp/` 폴더를 **반드시** 삭제한다.
+`relayoutBySubGroup()` 함수가 아래 규칙으로 테이블을 배치한다.
 
-```bash
-rm -rf "/mnt/c/zinide/workspace/cloud-wms-doc/output/03 설계(SD)/tmp"
-```
+- 부모 그룹 순서: `wms → mdm → sm → sif → wes`
+- 각 서브그룹 내 테이블은 이름 길이 → 알파벳 순으로 정렬 후 1행으로 배치
+- 서브그룹 간격: 50px / 부모 그룹 간격: 80px / 커넥터 행 간격: 24px
+- 테이블 폭: 320px (CSS) / 배치 계산 폭: 300px / 간격: 28px
 
-- `tmp/db_target.json`에는 DB 비밀번호가 평문으로 저장되므로 보관하지 않는다.
-- 5단계가 실패한 경우(HTML 생성 실패)에는 디버깅을 위해 `tmp/` 폴더를 남겨두고, 사용자에게 원인을 보고한 뒤 작업이 완료되거나 사용자가 포기하는 시점에 동일 명령으로 삭제한다.
-- 삭제 결과(성공/실패)를 사용자에게 한 줄로 보고한다.
+FK 관계선은 `drawLines()` 함수가 담당한다.
+- 인접 테이블(gap < 60px): 아래 방향으로 U자 우회 (`loopY = max_bottom + 80`)
+- 원거리 테이블: S자 베지어 커브 (수평 연결)
+- 선 색상: 주황색(`#f97316`) / 굵기: 2.5px / `vector-effect: non-scaling-stroke`
 
 ---
 
 ## 완료 체크리스트
 
-- [ ] `$ARGUMENTS` 또는 사용자 입력으로 디렉토리 확정
-- [ ] 사용자에게 고객사명 확인
-- [ ] `tmp/db_candidates.json` 생성 (스캔 결과)
-- [ ] 사용자가 후보 1개 확정 (`tmp/db_target.json` 저장)
-- [ ] 누락된 password 확인 후 보강
-- [ ] 필요한 Python 라이브러리 import 가능 (`--check-only` 통과)
-- [ ] DB 연결 성공 및 `tmp/schema.json` 생성
-- [ ] 출력 파일 `output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html` 생성
-- [ ] 브라우저에서 열어 노드/엣지가 보이는지(또는 FK가 없으면 노드만이라도 보이는지) 확인 권장
-- [ ] **`output/03 설계(SD)/tmp/` 폴더 삭제 완료** (비밀번호 노출 방지)
+- [ ] BE 경로 확정 및 `application-test.properties` 존재 확인
+- [ ] DB 접속 정보 파싱 완료 (host / port / dbname / user)
+- [ ] `psql.exe` 연결 정상
+- [ ] TABLES 추출 완료 (행 수 = 실제 테이블 수)
+- [ ] FKS 추출 완료 (행 수 = FK 총 컬럼 쌍 수)
+- [ ] 추출된 JSON 형식 오류 없음 (ERROR/FATAL 메시지 없음)
+- [ ] 템플릿 파일 확인 (`SD.211-ERD_*.html` 최신 파일 존재)
+- [ ] `const TABLES=[...]` 교체 완료
+- [ ] `const FKS=[...]` 교체 완료
+- [ ] 제목·헤더 업체명 교체 완료
+- [ ] 출력 파일 경로·파일명 규칙 준수 (`SD.211-ERD_{업체명}_{YYMMDD}.html`)
+- [ ] 파일 크기 150KB 이상 (뷰어 코드 + 데이터)
 
 ---
 
 ## 완료 보고 형식
 
 ```
-✓ DB 관계도 HTML 생성 완료 [SD_334]
+✓ ERD 뷰어 생성 완료
 
-대상 디렉토리: {디렉토리경로}
-고객사:        {고객사명}
-DB:            {driver} {host}:{port}/{database} (schema={schema})
-출력파일:      output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html
+업체명  : {업체명}
+DB      : {host}:{port}/{dbname}
+템플릿  : SD.211-ERD_{이전업체}_{이전날짜}.html
+출력파일: output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
+파일크기: {N} KB
 
-수집 통계:
-  - 테이블:     N개
-  - 컬럼:       N개
-  - FK 엣지:    N개
+데이터 현황:
+  - 테이블 : N 건
+  - FK 관계 : N 건
 
-스캔된 설정 파일: {파일 목록}
-임시 파일 정리:   tmp/ 삭제 완료
-
-브라우저에서 위 HTML 파일을 열어 확인하세요. (vis-network는 jsDelivr CDN에서 로드됩니다.)
+주요 서브그룹 테이블 수:
+  - wms-inbiz: N / wms-inwh: N / wms-inven: N
+  - wms-outbiz: N / wms-outwh: N / wms-return: N / wms-st: N
+  - mdm: N / sm: N / sif: N / wes: N
 ```
 
 ---
 
-## 주의사항
+## 참고: scripts 폴더
 
-- **비밀번호 노출**: AskUserQuestion으로 받은 비밀번호는 `tmp/db_target.json`에 평문으로 저장된다. **6단계에서 `tmp/` 폴더를 자동 삭제**하므로 별도 안내 없이 정리되지만, 작업이 비정상 종료되어 폴더가 남아 있으면 즉시 수동 삭제한다.
-- **FK 없는 스키마**: 레거시·일부 ORM 환경처럼 FK 제약을 설정하지 않은 DB에서는 엣지가 거의 없거나 0개가 된다. 사용자가 의외라 느낄 수 있으므로 완료 보고에 FK 개수를 명시하고, 0개이면 "DB에 FK 제약이 정의되어 있지 않아 관계선이 그려지지 않았다"는 점을 한 줄 보강한다.
-- **대형 DB 보호**: 테이블이 200개를 넘으면 vis-network 물리 시뮬레이션이 무거워져 초기 렌더링이 느릴 수 있다. 사용자에게 "처음 열 때 안정화에 몇 초 걸린다"는 점과, 사이드바에서 계층 레이아웃으로 전환하면 빨라진다는 점을 안내한다.
-- **CDN 의존**: 결과 HTML은 `https://cdn.jsdelivr.net`에서 vis-network을 로드한다. 폐쇄망 등 인터넷이 차단된 환경에서는 사용자가 별도로 vis-network을 로컬에 두고 `<script src="...">`를 수정해야 한다.
-- **라벨에 HTML 태그 직접 입력 금지**: vis-network 노드 라벨은 `<b>`/`<i>`만 지원하며, `<script>` 등 임의 HTML은 의미가 없다. 컬럼 코멘트에 HTML 비슷한 문자가 들어 있으면 그대로 텍스트로 표시된다.
-- **권한 부족**: 시스템 카탈로그 조회 권한이 없으면 일부 정보(예: comment, FK)가 누락될 수 있다. 누락되면 빈 값으로 두고 나머지를 채운다.
+`.claude\skills\SD_334\scripts\` 의 Python 스크립트들(`01_scan_config.py`, `02_extract_schema.py`, `03_generate_html.py`)은 이전 vis-network 기반 구현의 참고용으로 보존되어 있으며, 현재 이 스킬에서는 호출하지 않는다. 모든 처리는 위 PowerShell 절차로 진행된다.

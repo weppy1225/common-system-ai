@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""PI_421 2단계 — 템플릿 복사 + 데이터 채우기 + Sheet1 통계 갱신.
+"""PI_421 2단계 — 템플릿 복사 + 데이터 채우기 + Sheet1 통계 갱신 (Windows 기본).
 
 사용법:
-    python3 02_generate_excel.py <고객사명> <담당자명>
+    python 02_generate_excel.py <고객사명> <담당자명>
 
 입력: output/04 구현(PI)/tmp/tests.json
 출력: output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+
+BASE_DIR을 `Path(__file__).resolve().parents[4]` 로 자동 추론하여
+Windows/WSL 어느 환경에서도 정상 동작한다.
 """
 from __future__ import annotations
 
@@ -20,18 +23,17 @@ from pathlib import Path
 import openpyxl
 from openpyxl.utils import get_column_letter
 
-BASE_DIR = Path("/mnt/c/zinide/workspace/cloud-wms-doc")
-TEMPLATE = BASE_DIR / "template/04 구현(PI)/PI_212-단위테스트보고서.xlsx"
-TMP_JSON = BASE_DIR / "output/04 구현(PI)/tmp/tests.json"
-OUT_DIR = BASE_DIR / "output/04 구현(PI)"
+# .claude/skills/PI_421/scripts/02_generate_excel.py
+# parents[4] = 프로젝트 루트
+BASE_DIR = Path(__file__).resolve().parents[4]
+TEMPLATE = BASE_DIR / "template" / "04 구현(PI)" / "PI_212-단위테스트보고서.xlsx"
+TMP_JSON = BASE_DIR / "output" / "04 구현(PI)" / "tmp" / "tests.json"
+OUT_DIR = BASE_DIR / "output" / "04 구현(PI)"
 
 DATA_SHEET = "단위테스트 보고서"
 STAT_SHEET = "Sheet1"
 DATA_START_ROW = 3
-# 템플릿 원본에서 서식(테두리 등)이 실제로 적용된 마지막 행.
-# 이 행을 넘으면 3행의 셀 스타일을 복제하여 서식을 이어 붙인다.
 TEMPLATE_STYLE_LAST_ROW = 183
-# 템플릿에서 데이터 영역으로 비워둘 마지막 행 (서식 없는 잔여 셀까지 포함).
 TEMPLATE_LAST_ROW = 191
 NUM_COLS = 14
 INVALID_FILENAME_CHARS = re.compile(r'[<>:"|?*\\/]')
@@ -42,7 +44,6 @@ def sanitize_filename(s: str) -> str:
 
 
 def copy_row_style(ws, src_row: int, dst_row: int) -> None:
-    """src_row 의 셀 스타일을 dst_row 로 복제."""
     for c in range(1, NUM_COLS + 1):
         src_cell = ws.cell(row=src_row, column=c)
         dst_cell = ws.cell(row=dst_row, column=c)
@@ -53,7 +54,6 @@ def copy_row_style(ws, src_row: int, dst_row: int) -> None:
             dst_cell.alignment = copy(src_cell.alignment)
             dst_cell.number_format = src_cell.number_format
             dst_cell.protection = copy(src_cell.protection)
-    # 행 높이도 복제
     src_h = ws.row_dimensions[src_row].height
     if src_h is not None:
         ws.row_dimensions[dst_row].height = src_h
@@ -66,15 +66,12 @@ def clear_template_data_rows(ws) -> None:
 
 
 def write_test_rows(ws, tests: list[dict], reporter: str, check_date: dt.date) -> None:
-    # 스타일 복제 기준: 3행 (템플릿에서 첫 데이터 행)
     style_src = DATA_START_ROW
     for idx, t in enumerate(tests):
         row = DATA_START_ROW + idx
-        # 템플릿에서 서식이 실제로 적용된 마지막 행(183)을 넘으면 3행 스타일을 복제.
         if row > TEMPLATE_STYLE_LAST_ROW:
             copy_row_style(ws, style_src, row)
-        # 값 기록
-        ws.cell(row=row, column=1).value = idx + 1                    # No.
+        ws.cell(row=row, column=1).value = idx + 1
         ws.cell(row=row, column=2).value = t["platform"]
         ws.cell(row=row, column=3).value = t["big_menu"]
         ws.cell(row=row, column=4).value = t["test_id"]
@@ -84,17 +81,14 @@ def write_test_rows(ws, tests: list[dict], reporter: str, check_date: dt.date) -
         ws.cell(row=row, column=8).value = check_date
         ws.cell(row=row, column=9).value = reporter
         ws.cell(row=row, column=10).value = t["result"]
-        # 11~14는 빈 칸 유지
 
 
 def update_stat_sheet(ws, tests: list[dict]) -> None:
-    """Sheet1의 D열(완료(O))만 갱신. C/G의 수식과 합계 행은 손대지 않는다."""
     plat_counts = {"WEB": 0, "PDA": 0, "I/F": 0}
     for t in tests:
         if t["platform"] in plat_counts:
             plat_counts[t["platform"]] += 1
 
-    # B열에 플랫폼 라벨이 있는 행을 찾는다.
     max_r = min(ws.max_row, 30)
     for r in range(1, max_r + 1):
         label = ws.cell(row=r, column=2).value
@@ -102,9 +96,9 @@ def update_stat_sheet(ws, tests: list[dict]) -> None:
             continue
         label = label.strip()
         if label in plat_counts:
-            ws.cell(row=r, column=4).value = plat_counts[label]  # 완료(O)
-            ws.cell(row=r, column=5).value = 0  # 수정필요(△)
-            ws.cell(row=r, column=6).value = 0  # 오류&미진행
+            ws.cell(row=r, column=4).value = plat_counts[label]
+            ws.cell(row=r, column=5).value = 0
+            ws.cell(row=r, column=6).value = 0
 
 
 def main(argv: list[str]) -> int:
@@ -145,7 +139,6 @@ def main(argv: list[str]) -> int:
     clear_template_data_rows(ws)
     write_test_rows(ws, tests, reporter, today)
 
-    # 인쇄 영역을 데이터 마지막 행까지 확장
     last_row = DATA_START_ROW + len(tests) - 1
     last_col = get_column_letter(NUM_COLS)
     try:
@@ -162,14 +155,13 @@ def main(argv: list[str]) -> int:
     wb.save(outfile)
     wb.close()
 
-    # 요약
     plat = {"WEB": 0, "PDA": 0, "I/F": 0}
     for t in tests:
         if t["platform"] in plat:
             plat[t["platform"]] += 1
 
     print()
-    print("✓ 단위테스트 보고서 생성 완료 [PI_421]")
+    print("✓ 단위테스트 보고서 생성 완료 [PI_421_WIN]")
     print()
     print(f"대상 디렉토리: {data.get('scanned_dir', '-')}")
     print(f"고객사:        {customer}")

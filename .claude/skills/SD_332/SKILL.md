@@ -1,6 +1,6 @@
 ---
 name: SD_332
-description: 【공통코드정의서 엑셀 생성】 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔하여 DB(PostgreSQL/MSSQL/MySQL/MariaDB)에 직접 접속하고, sm_comm_h/sm_comm_d 공통코드를 추출하여 PI_113-공통코드정의서 엑셀 파일을 자동 생성합니다. /SD_332 {디렉토리경로} 형식으로 실행합니다. 공통코드정의서 작성, 공통코드 테일러링, 공통코드 엑셀 추출, DB 공통코드를 산출물로 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "PI_113 산출물 만들어줘", "공통코드 테일러링 해줘", "SD_332 실행해줘" 라고 말해도 이 스킬을 사용합니다.
+description: 【공통코드정의서 엑셀 생성 (Windows)】 Windows 네이티브(PowerShell) 환경에서 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔하여 DB(PostgreSQL/MSSQL/MySQL/MariaDB)에 직접 접속하고, sm_comm_h/sm_comm_d 공통코드를 추출하여 PI_113-공통코드정의서 엑셀 파일을 자동 생성합니다. /SD_332 {디렉토리경로} 형식으로 실행합니다. 공통코드정의서 작성, 공통코드 테일러링, 공통코드 엑셀 추출, DB 공통코드를 산출물로 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "PI_113 산출물 만들어줘", "공통코드 테일러링 해줘", "SD_332 실행해줘" 라고 말해도 이 스킬을 사용합니다. WSL/Linux/macOS 환경에서는 SD_332_BASH 스킬을 사용합니다.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -24,10 +24,18 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 `$ARGUMENTS`가 비어 있으면 사용자에게 디렉토리 경로를 물어본다.
 경로가 존재하지 않으면 다시 물어본다.
 
-### 경로 정의
+### 경로 정의 (동적)
 
+```powershell
+$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName  = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
 ```
-BASE       = /mnt/c/zinide/workspace/cloud-wms-doc
+
+경로 (상대경로는 `$DocRoot` 기준):
+```
 TEMPLATE   = template/04 구현(PI)/PI_113-공통코드정의서.xlsx
 OUTPUT_DIR = output/04 구현(PI)
 TMP_DIR    = output/04 구현(PI)/tmp
@@ -53,7 +61,7 @@ SCRIPTS    = .claude/skills/SD_332/scripts
 **출력**: `output/04 구현(PI)/tmp/db_candidates.json`
 
 ```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
+cd "$(git rev-parse --show-toplevel)" && \
 python3 .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}"
 ```
 
@@ -114,7 +122,7 @@ python3 .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}
 | (공통) | openpyxl | `python3 -m pip install --user openpyxl` |
 
 ```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
+cd "$(git rev-parse --show-toplevel)" && \
 python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py --check-only
 ```
 
@@ -129,7 +137,7 @@ python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py --check-only
 **출력**: `output/04 구현(PI)/tmp/common_codes.json`
 
 ```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
+cd "$(git rev-parse --show-toplevel)" && \
 python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py
 ```
 
@@ -170,7 +178,7 @@ JSON 구조:
 **출력**: `output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx`
 
 ```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
+cd "$(git rev-parse --show-toplevel)" && \
 python3 .claude/skills/SD_332/scripts/03_generate_excel.py
 ```
 
@@ -233,7 +241,7 @@ E=ref_h_cd  F=ref_d_cd    G=disp_no     H=disp_yn   I=use_yn
 **Excel 산출물이 정상적으로 생성된 직후** `output/04 구현(PI)/tmp/` 폴더를 즉시 삭제한다. 이 폴더에는 DB 비밀번호가 평문으로 저장된 `db_target.json`이 포함되어 있으므로 작업 종료 시점에 반드시 제거해야 한다.
 
 ```bash
-cd /mnt/c/zinide/workspace/cloud-wms-doc && \
+cd "$(git rev-parse --show-toplevel)" && \
 rm -rf "output/04 구현(PI)/tmp"
 ```
 

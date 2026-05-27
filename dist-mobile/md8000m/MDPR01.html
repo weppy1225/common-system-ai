@@ -1,0 +1,257 @@
+<!--
+  wireframe-only | MDPR01 | 사은품관리 | Type A (목록형) | md8000m
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사은품관리 [MDPR01]</title>
+<link rel="stylesheet" href="../mobile.css">
+<style>
+/* 사은품관리 고유 상태 (적용여부) */
+.sts-Y  { background: #4caf50; }
+.sts-N  { background: #b0b8c1; }
+
+/* 금액 포맷 강조 */
+.card-qty { font-size: 12px; color: #00afec; font-weight: 600; }
+
+/* 날짜 범위 행 */
+.card-date-range { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="pda-wrap">
+
+  <!-- ── 헤더 ── -->
+  <header class="pda-header">
+    <div class="header-spacer"></div>
+    <div class="header-title">사은품관리</div>
+    <div class="header-right"></div>
+  </header>
+
+  <!-- ── 검색바 ── -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="search-ico"><img src="../assets/icon-search.png" alt="검색"></span>
+      <input type="text" id="searchInput" placeholder="프로모션명 입력" oninput="renderCards()">
+      <button class="search-act-btn" title="바코드 스캔" onclick="alert('[스캔]\n바코드 스캐너를 실행합니다.')">
+        <img src="../assets/icon-schBarcode.png" alt="바코드">
+      </button>
+      <button class="search-act-btn" title="필터" onclick="openFilter()">
+        <img src="../assets/icon-filter.png" alt="필터">
+      </button>
+    </div>
+  </div>
+
+  <!-- ── 프로모션유형 빠른 필터 칩 ── -->
+  <div style="overflow-x:auto;white-space:nowrap;padding:8px 12px;flex-shrink:0;scrollbar-width:none">
+    <div class="chip-wrap" id="quickTypeChips" style="display:inline-flex;gap:8px">
+      <button class="chip on" data-v="">전체</button>
+      <button class="chip" data-v="금액">금액</button>
+      <button class="chip" data-v="수량">수량</button>
+    </div>
+  </div>
+
+  <!-- ── 건수 표시 ── -->
+  <div style="padding:2px 16px 6px;font-size:12px;color:#999;flex-shrink:0" id="resultCount"></div>
+
+  <!-- ── 카드 목록 ── -->
+  <main class="pda-content">
+    <div class="card-list" id="cardList"></div>
+  </main>
+
+  <!-- ── 하단 탭바 (메뉴 활성) ── -->
+  <nav class="tab-bar">
+    <button class="tab-item" onclick="location.href='../main.html'">
+      <img src="../assets/icon-footerLogo.png" alt="메인화면">
+    </button>
+    <button class="tab-item" onclick="location.href='../iv3000m/IVMV01.html'">
+      <img src="../assets/icon-footer02.png" alt="입고">
+    </button>
+    <button class="tab-item" onclick="location.href='../ow5000m/OWRQ01.html'">
+      <img src="../assets/icon-footer01.png" alt="피킹">
+    </button>
+    <button class="tab-item" onclick="location.href='../iv3200m/STRG01.html'">
+      <img src="../assets/icon-footer03.png" alt="재고이동">
+    </button>
+    <button class="tab-item on" onclick="location.href='../menu.html'">
+      <img src="../assets/icon-mobileMenu.png" alt="메뉴">
+    </button>
+  </nav>
+
+</div>
+
+<!-- ── 필터 시트 ── -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
+<div class="filter-sheet" id="filterSheet">
+  <div class="filter-hdr">
+    <span class="filter-ttl">사은품 검색</span>
+    <button class="filter-close-btn" onclick="closeFilter()">✕</button>
+  </div>
+
+  <div class="filter-sec">
+    <div class="filter-lbl">적용여부</div>
+    <div class="chip-wrap" id="useYnChips">
+      <button class="chip on" data-v="">전체</button>
+      <button class="chip" data-v="Y">적용</button>
+      <button class="chip" data-v="N">미적용</button>
+    </div>
+  </div>
+
+  <div class="filter-sec">
+    <div class="filter-lbl">프로모션유형</div>
+    <div class="chip-wrap" id="promoTypeChips">
+      <button class="chip on" data-v="">전체</button>
+      <button class="chip" data-v="금액">금액</button>
+      <button class="chip" data-v="수량">수량</button>
+    </div>
+  </div>
+
+  <div class="filter-sec">
+    <div class="filter-lbl">증정유형</div>
+    <div class="chip-wrap" id="giftTypeChips">
+      <button class="chip on" data-v="">전체</button>
+      <button class="chip" data-v="한번만">한번만</button>
+      <button class="chip" data-v="여러번">여러번</button>
+    </div>
+  </div>
+
+  <div class="filter-ftr">
+    <button class="pda-btn btn-gray" onclick="resetFilter()">초기화</button>
+    <button class="pda-btn btn-blue" onclick="applyFilter()">적용</button>
+  </div>
+</div>
+
+<script src="./MDPR01-data.js"></script>
+<script>
+var allData = [];
+var filterUseYn    = '';
+var filterPromoType = '';
+var filterGiftType  = '';
+
+/* ── 필터 시트 오픈/닫기 ── */
+function openFilter() {
+  document.getElementById('filterOverlay').classList.add('show');
+  document.getElementById('filterSheet').classList.add('show');
+}
+function closeFilter() {
+  document.getElementById('filterOverlay').classList.remove('show');
+  document.getElementById('filterSheet').classList.remove('show');
+}
+function resetFilter() {
+  filterUseYn = '';
+  filterPromoType = '';
+  filterGiftType = '';
+  ['useYnChips','promoTypeChips','giftTypeChips','quickTypeChips'].forEach(function(id) {
+    var w = document.getElementById(id);
+    if (!w) return;
+    w.querySelectorAll('.chip').forEach(function(c) {
+      c.classList.toggle('on', c.dataset.v === '');
+    });
+  });
+}
+function applyFilter() {
+  closeFilter();
+  renderCards();
+}
+
+/* ── 칩 클릭 이벤트 ── */
+function bindChips(wrapId, setter) {
+  var w = document.getElementById(wrapId);
+  if (!w) return;
+  w.addEventListener('click', function(e) {
+    var btn = e.target.closest('.chip');
+    if (!btn) return;
+    w.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('on'); });
+    btn.classList.add('on');
+    setter(btn.dataset.v);
+    if (wrapId === 'quickTypeChips') {
+      /* 필터 시트 promoTypeChips 도 동기화 */
+      var syncWrap = document.getElementById('promoTypeChips');
+      if (syncWrap) syncWrap.querySelectorAll('.chip').forEach(function(c) {
+        c.classList.toggle('on', c.dataset.v === btn.dataset.v);
+      });
+      renderCards();
+    }
+  });
+}
+
+/* ── 카드 렌더링 ── */
+function renderCards() {
+  var q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  var data = allData.filter(function(r) {
+    if (filterUseYn     && r.useYn     !== filterUseYn)     return false;
+    if (filterPromoType && r.promoType !== filterPromoType) return false;
+    if (filterGiftType  && r.giftType  !== filterGiftType)  return false;
+    if (q && JSON.stringify(r).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+
+  document.getElementById('resultCount').textContent = data.length + '건';
+
+  var html = '';
+  if (!data.length) {
+    html = '<div class="empty-msg">조회된 데이터가 없습니다.</div>';
+  } else {
+    data.forEach(function(r) {
+      var useNm  = r.useYn === 'Y' ? '적용' : '미적용';
+      var qtyTxt = r.promoType === '금액'
+        ? Number(r.targetQty).toLocaleString() + '원'
+        : r.targetQty + '개';
+      var tags = (r.tags || []).map(function(t) {
+        return '<span class="c-tag">' + t + '</span>';
+      }).join('');
+
+      html += '<div class="card-row" onclick="goDetail(\'' + r.no + '\')">'
+        + '<div class="card-sts sts-' + r.useYn + '">' + useNm + '</div>'
+        + '<div class="card-body">'
+        + '<div class="card-tags">' + tags + '</div>'
+        + '<div class="card-r1">'
+        +   '<span style="font-size:14px;font-weight:700;color:#1c2333">' + r.promoNm + '</span>'
+        + '</div>'
+        + '<div class="card-date-range">' + r.startDt + ' ~ ' + r.endDt + '</div>'
+        + '<div class="card-r2">'
+        +   '<span style="font-size:12px;color:#6b7280">기준 ' + qtyTxt + '</span>'
+        +   '<span class="card-cnt">상세 ›</span>'
+        + '</div>'
+        + '</div></div>';
+    });
+  }
+  document.getElementById('cardList').innerHTML = html;
+}
+
+function goDetail(no) {
+  var r = allData.find(function(d) { return d.no === no; });
+  if (!r) return;
+  var qtyTxt = r.promoType === '금액'
+    ? Number(r.targetQty).toLocaleString() + '원'
+    : r.targetQty + '개';
+  alert('[상세]\n프로모션: ' + r.promoNm
+    + '\n유형: ' + r.promoType + ' / ' + r.giftType
+    + '\n기준: ' + qtyTxt
+    + '\n기간: ' + r.startDt + ' ~ ' + r.endDt
+    + '\n적용여부: ' + (r.useYn === 'Y' ? '적용' : '미적용'));
+}
+
+/* ── 초기화 ── */
+window.addEventListener('DOMContentLoaded', function() {
+  allData = JSON.parse(JSON.stringify(MDPR01_DATA.list));
+
+  bindChips('quickTypeChips',  function(v) { filterPromoType = v; });
+  bindChips('useYnChips',      function(v) { filterUseYn    = v; });
+  bindChips('promoTypeChips',  function(v) {
+    filterPromoType = v;
+    /* 빠른 필터 칩도 동기화 */
+    var qw = document.getElementById('quickTypeChips');
+    if (qw) qw.querySelectorAll('.chip').forEach(function(c) {
+      c.classList.toggle('on', c.dataset.v === v);
+    });
+  });
+  bindChips('giftTypeChips',   function(v) { filterGiftType  = v; });
+
+  renderCards();
+});
+</script>
+</body>
+</html>

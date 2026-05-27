@@ -18,7 +18,7 @@ import datetime
 import re
 from pathlib import Path
 
-BASE_DIR = Path("/mnt/c/zinide/workspace/cloud-wms-doc")
+BASE_DIR = Path(__file__).resolve().parents[4]
 TMP_DIR = BASE_DIR / "output/03 설계(SD)/tmp"
 OUTPUT_DIR = BASE_DIR / "output/03 설계(SD)"
 SCHEMA_FILE = TMP_DIR / "schema.json"

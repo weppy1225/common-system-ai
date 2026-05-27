@@ -5,13 +5,13 @@
 사용법: python scripts/03_generate_excel.py
 작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
 """
-import openpyxl, json, shutil, os, glob, math
+import openpyxl, json, shutil, os, glob, math, subprocess
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from datetime import datetime
 from collections import Counter
 
-BASE  = "/mnt/c/zinide/workspace/cloud-wms-doc"
+BASE  = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
 TODAY = datetime.now().strftime("%y%m%d")
 
 # ── 경로 탐색 (한/중 혼용 인코딩 대응) ──────────────────────────────

@@ -1,6 +1,6 @@
 ---
 name: RA_222
-description: 【요구사항정의서 엑셀 생성】 회의록 엑셀파일을 분석하여 요구사항정의서 엑셀 파일을 자동 생성합니다. /RA_222 {고객사명} 형식으로 실행합니다. 요구사항정의서, 요구사항 도출, 회의록 분석, FUR 요건 정리, WMS 요구사항 작성 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘" 라고 말해도 이 스킬을 사용합니다.
+description: 【요구사항정의서 엑셀 생성 (Windows)】 회의록 엑셀파일을 분석하여 요구사항정의서 엑셀 파일을 자동 생성합니다. /RA_222 {고객사명} 형식으로 실행합니다. Windows 환경에서 요구사항정의서, 요구사항 도출, 회의록 분석, FUR 요건 정리, WMS 요구사항 작성 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘" 라고 말해도 이 스킬을 사용합니다. WSL/Linux/Mac 환경에서는 RA_222_BASH 스킬을 사용합니다.
 allowed-tools: Bash, Read, Write, Edit, Agent
 ---
 
@@ -9,11 +9,20 @@ allowed-tools: Bash, Read, Write, Edit, Agent
 업체명: **$ARGUMENTS**
 
 `input/RA.212/` 폴더의 회의록 Excel 파일들을 3-에이전트 파이프라인으로 분석하여
-`output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 파일을 생성한다.
+`output/02 분析(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
 ---
 
 ## 사전 준비
+
+### 경로 동적 감지 (PowerShell)
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+```
 
 ### 업체명 확정
 
@@ -23,11 +32,11 @@ allowed-tools: Bash, Read, Write, Edit, Agent
 ### 출력 경로
 
 ```
-BASE       = /mnt/c/zinide/workspace/cloud-wms-doc
-OUTPUT_DIR = output/02 분석(RA)
-TMP_DIR    = output/02 분석(RA)/tmp
-OUTPUT_FILE = output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
-TEMPLATE   = template/02 분석(RA)/RA.314-요구사항정의서.xlsx
+DocRoot    = (git rev-parse --show-toplevel) (동적 감지)
+OUTPUT_DIR = output\02 분析(RA)
+TMP_DIR    = output\02 분析(RA)\tmp
+OUTPUT_FILE = output\02 분析(RA)\RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
+TEMPLATE   = template\02 분析(RA)\RA.314-요구사항정의서.xlsx
 ```
 
 `OUTPUT_DIR`과 `TMP_DIR` 폴더가 없으면 생성한다.
@@ -49,11 +58,11 @@ TEMPLATE   = template/02 분석(RA)/RA.314-요구사항정의서.xlsx
 **에이전트 프롬프트**:
 
 ```
-작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
-스킬 경로: .claude/skills/RA_222
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+스킬 경로: .claude\skills\RA_222
 
 아래 명령을 Bash로 실행하라:
-  cd /mnt/c/zinide/workspace/cloud-wms-doc && python .claude/skills/RA_222/scripts/01_read_meetings.py
+  Set-Location $DocRoot; python ".claude\skills\RA_222\scripts\01_read_meetings.py"
 
 실행 후 "저장 완료" 메시지와 파일 목록을 확인하고 결과를 반환하라.
 스크립트가 없거나 실행 오류 시 스크립트 내용을 Read 툴로 읽어 직접 실행하라.
@@ -68,10 +77,10 @@ TEMPLATE   = template/02 분석(RA)/RA.314-요구사항정의서.xlsx
 **에이전트 프롬프트**:
 
 ```
-작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 업체명: {$ARGUMENTS 또는 파일명 자동 추출값}
 
-output/02 분석(RA)/tmp/meeting_raw.json 파일을 Read 툴로 읽어 회의록 내용을 분석하라.
+output\02 분析(RA)\tmp\meeting_raw.json 파일을 Read 툴로 읽어 회의록 내용을 분석하라.
 
 [회의록 구조 파싱 힌트]
 - 각 sheet_name = 회의 날짜 (예: "20260319(목)") → 작성일자 추출
@@ -111,7 +120,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 - 메뉴현황에만 있고 회의록 협의 내용이 없으면 "메뉴 존재 확인" 수준으로만 기재
 - 부문 순서: CO → MD → IW → RM → IV → OW → IF → PDA → ERR
 
-분석 결과를 아래 JSON 구조로 output/02 분석(RA)/tmp/requirements.json 에 저장하라:
+분석 결과를 아래 JSON 구조로 output\02 분析(RA)\tmp\requirements.json 에 저장하라:
 
 {
   "company": "{업체명}",
@@ -144,11 +153,11 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 **에이전트 프롬프트**:
 
 ```
-작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
-스킬 경로: .claude/skills/RA_222
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+스킬 경로: .claude\skills\RA_222
 
 아래 명령을 Bash로 실행하라:
-  cd /mnt/c/zinide/workspace/cloud-wms-doc && python .claude/skills/RA_222/scripts/03_generate_excel.py
+  Set-Location $DocRoot; python ".claude\skills\RA_222\scripts\03_generate_excel.py"
 
 실행 후 "생성 완료" 메시지와 부문별 건수를 확인하고 결과를 반환하라.
 스크립트가 없거나 실행 오류 시 스크립트 내용을 Read 툴로 읽어 직접 실행하라.
@@ -165,7 +174,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 - [ ] 부문 순서: CO → MD → IW → RM → IV → OW → IF → PDA → ERR
 - [ ] 요구처: I/F 항목은 IT솔루션팀, 나머지는 물류팀
 - [ ] 작성일자: 해당 협의가 이루어진 회의 날짜 기준
-- [ ] `output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 생성 확인
+- [ ] `output\02 분析(RA)\RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 생성 확인
 
 ---
 
@@ -175,7 +184,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 ✓ 요구사항정의서 생성 완료 [RA_222]
 
 업체명: {업체명}
-출력파일: output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
+출력파일: output\02 분析(RA)\RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
 
 요구사항 현황:
   - 공통(CO):   N건
@@ -192,3 +201,9 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 
 회의록 파일: {읽은 파일 목록}
 ```
+
+## 주의사항
+
+- **Windows 전용**: WSL/Linux/Mac 환경에서는 RA_222_BASH 스킬을 사용한다.
+- **python (Windows)**: WSL의 `python3` 대신 `python`을 사용한다.
+- **경로**: Windows 경로 형식(`\`)을 사용한다.

@@ -5,10 +5,10 @@ output/02 분석(RA)/tmp/meeting_raw.json 에 저장한다.
 사용법: python scripts/01_read_meetings.py
 작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
 """
-import openpyxl, json, os, glob
+import openpyxl, json, os, glob, subprocess
 from datetime import datetime
 
-base = "/mnt/c/zinide/workspace/cloud-wms-doc"
+base = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
 input_dir = os.path.join(base, "input/RA.212")
 out_dir = os.path.join(base, "output/02 분석(RA)/tmp")
 os.makedirs(out_dir, exist_ok=True)
