@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI-test-all 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: #f4f6fb; min-height: 100vh; padding: 32px 24px; }
+    .page-header { max-width: 960px; margin: 0 auto 28px; display: flex; align-items: baseline; gap: 12px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card { max-width: 960px; margin: 0 auto 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+    .card-header { background: #304a6e; color: #fff; padding: 12px 20px; font-size: 14px; font-weight: 600; }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th { background: #f1f5f9; color: #374151; font-weight: 600; padding: 9px 14px; border: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+    .step-table td { padding: 9px 14px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-test    { background: #fdf4ff; color: #7e22ce; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 3px; padding: 1px 5px; font-size: 12px; font-family: 'Consolas', monospace; color: #334155; }
+    .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
+    .scenario-box { border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px; }
+    .scenario-box-title { font-size: 12px; font-weight: 700; color: #304a6e; margin-bottom: 6px; }
+    .scenario-box li { font-size: 12px; color: #64748b; line-height: 1.6; }
+    .scenario-box ul { padding-left: 14px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+<div class="page-header">
+  <h1>PI-test-all 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #20 · ZIN AI Framework</span>
+</div>
+
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/PI-test-all {메뉴코드} 실행"]):::trigger
+
+  subgraph SCAN ["자동 스캔"]
+    direction LR
+    S1["api.md\nAPI 설계서"]:::process
+    S2["FE 소스\n{menu}.vue\n{menu}Edt.vue"]:::process
+    S3["BE 소스\nController.java"]:::process
+  end
+
+  B{"FE · BE 서버\n기동 여부"}:::decision
+  C["오류: 서버 미기동\nFE / BE 서버 시작 후 재실행"]:::warn
+
+  D["Playwright 테스트 시나리오 생성\napi.md 기반 E2E 시나리오 작성"]:::process
+
+  subgraph E2E ["Playwright E2E 테스트 실행"]
+    direction TB
+    T1["목록 조회 시나리오\n검색 → 그리드 데이터 확인"]:::test
+    T2["등록 시나리오\n팝업 오픈 → 입력 → 저장 → 목록 반영"]:::test
+    T3["수정 시나리오\n행 클릭 → 수정 → 저장 → 목록 반영"]:::test
+    T4["삭제 시나리오\n행 선택 → 삭제 → 목록 갱신"]:::test
+  end
+
+  G["전체 결과 보고\n스크린샷 + 통과/실패 상세"]:::output
+
+  A --> SCAN --> B
+  B -- "미기동" --> C
+  B -- "기동 중" --> D --> E2E
+  T1 --> T2 --> T3 --> T4
+  E2E --> G
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef test     fill:#fdf4ff,stroke:#d8b4fe,color:#7e22ce
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup><col style="width:40px"><col style="width:100px"><col style="width:200px"><col><col style="width:190px"></colgroup>
+      <thead><tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td><td><span class="badge badge-trigger">트리거</span></td><td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/PI-test-all {메뉴코드}</code> 입력<br>예: <code>/PI-test-all mdpd01</code></td>
+          <td>FE · BE 모두 기동된 상태 필요</td>
+        </tr>
+        <tr>
+          <td>2</td><td><span class="badge badge-process">처리</span></td><td>소스 자동 스캔</td>
+          <td>
+            ① <code>api.md</code> — E2E 시나리오 기반<br>
+            ② FE 소스 (<code>{menu}.vue</code>, <code>{menu}Edt.vue</code>)<br>
+            ③ BE 소스 (<code>{menu}Controller.java</code>)
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td><td><span class="badge badge-process">처리</span></td><td>서버 기동 확인</td>
+          <td>
+            FE 서버(<code>localhost:5173</code>) 헬스체크<br>
+            BE 서버(<code>localhost:8080</code>) 헬스체크<br>
+            미기동 시 안내 메시지 출력 후 중단
+          </td>
+          <td>실제 FE + BE 연동 필수</td>
+        </tr>
+        <tr>
+          <td>4</td><td><span class="badge badge-process">처리</span></td><td>Playwright 시나리오 생성</td>
+          <td>
+            <code>api.md</code> 기반으로 E2E 시나리오 자동 작성<br>
+            각 기능별 테스트 스텝 정의<br>
+            선택자(selector) 자동 추론
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>5</td><td><span class="badge badge-test">테스트</span></td><td>목록 조회 E2E</td>
+          <td>
+            브라우저 오픈 → 메뉴 접속<br>
+            검색 조건 입력 → 검색 버튼 클릭<br>
+            그리드에 데이터 표시 확인
+          </td>
+          <td>Playwright 자동화</td>
+        </tr>
+        <tr>
+          <td>6</td><td><span class="badge badge-test">테스트</span></td><td>등록 E2E</td>
+          <td>
+            등록 버튼 클릭 → 팝업 오픈 확인<br>
+            필수 필드 입력 → 저장 버튼 클릭<br>
+            목록에 등록 데이터 반영 확인
+          </td>
+          <td>실제 DB 저장 검증</td>
+        </tr>
+        <tr>
+          <td>7</td><td><span class="badge badge-test">테스트</span></td><td>수정 E2E</td>
+          <td>
+            목록 행 클릭 → 수정 팝업 오픈<br>
+            폼 데이터 채워짐 확인 → 값 변경 → 저장<br>
+            목록 변경 내용 반영 확인
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>8</td><td><span class="badge badge-test">테스트</span></td><td>삭제 E2E</td>
+          <td>
+            행 체크박스 선택 → 삭제 버튼 클릭<br>
+            확인 다이얼로그 → 확인 클릭<br>
+            목록에서 해당 행 제거 확인
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9</td><td><span class="badge badge-report">완료 보고</span></td><td>결과 보고</td>
+          <td>
+            시나리오별 통과/실패 결과<br>
+            실패 시 스크린샷 첨부<br>
+            오류 원인 분석 및 수정 가이드
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">E2E 테스트 시나리오</div>
+  <div class="card-body">
+    <div class="scenario-grid">
+      <div class="scenario-box">
+        <div class="scenario-box-title">목록 조회</div>
+        <ul>
+          <li>페이지 접속</li>
+          <li>기본 조회 데이터 표시</li>
+          <li>검색 조건 필터 동작</li>
+          <li>페이징 이동</li>
+        </ul>
+      </div>
+      <div class="scenario-box">
+        <div class="scenario-box-title">등록</div>
+        <ul>
+          <li>등록 버튼 클릭</li>
+          <li>팝업 정상 오픈</li>
+          <li>필수값 미입력 시 경고</li>
+          <li>저장 → 목록 반영</li>
+        </ul>
+      </div>
+      <div class="scenario-box">
+        <div class="scenario-box-title">수정</div>
+        <ul>
+          <li>행 클릭 → 팝업 오픈</li>
+          <li>기존 데이터 폼 채움</li>
+          <li>값 변경 후 저장</li>
+          <li>목록 변경 반영</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:#64748b;">
+      비고: PI_422 통합테스트와 통합하거나 제거 가능 (WBS 협의 항목)
+    </p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead><tr><th style="width:100px">구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>api.md</code> — API 설계서<br>
+            FE 소스 (<code>{menu}.vue</code>, <code>{menu}Edt.vue</code>)<br>
+            BE 서버 (<code>localhost:8080</code>) + FE 서버 (<code>localhost:5173</code>)
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            Playwright E2E 테스트 결과 (조회 / 등록 / 수정 / 삭제)<br>
+            실패 시 스크린샷 + 오류 원인 분석
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif", fontSize: '13px' }, flowchart: { curve: 'basis', padding: 20 } });
+</script>
+</body>
+</html>

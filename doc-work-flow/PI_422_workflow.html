@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI_422 통합테스트보고서 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: #f4f6fb; min-height: 100vh; padding: 32px 24px; }
+    .page-header { max-width: 960px; margin: 0 auto 28px; display: flex; align-items: baseline; gap: 12px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card { max-width: 960px; margin: 0 auto 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+    .card-header { background: #304a6e; color: #fff; padding: 12px 20px; font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th { background: #f1f5f9; color: #374151; font-weight: 600; padding: 9px 14px; border: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+    .step-table td { padding: 9px 14px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-pass    { background: #dcfce7; color: #166534; }
+    .badge-fail    { background: #ffe4e6; color: #9f1239; }
+    code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 3px; padding: 1px 5px; font-size: 12px; font-family: 'Consolas', monospace; color: #334155; }
+    .io-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .io-table th { background: #f1f5f9; padding: 8px 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151; text-align: left; }
+    .io-table td { padding: 8px 12px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .progress-bar { background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; margin-top: 4px; }
+    .progress-fill { height: 100%; border-radius: 8px; background: #3b82f6; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>PI_422 통합테스트보고서 워크플로우</h1>
+  <span class="meta">산출물자동화모듈 · 구현 단계 · Node.js (Playwright + xlsx-populate) · 완료율 60%</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["Node.js 스크립트 실행\nPI_422_generator.js {업체명}"]):::trigger
+
+  subgraph INPUT ["입력"]
+    direction LR
+    I1["ui.md\n화면 요건 / 메뉴 목록"]:::input
+    I2["FE/PDA 서버\n(실행 중 필요)"]:::input
+  end
+
+  B{"서버 응답\n확인"}:::decision
+  C["오류: 서버 미기동\nFE / PDA 서버 기동 후 재실행"]:::warn
+
+  D["ui.md 파싱\n통합테스트 시나리오 생성\n(화면별 조회·등록·수정·삭제)"]:::process
+
+  subgraph PW ["Playwright E2E 자동화 (화면별 반복)"]
+    direction TB
+    P1["조회 시나리오\n검색 조건 입력 → 결과 확인"]:::loop
+    P2["등록 시나리오\n입력 폼 작성 → 저장 확인"]:::loop
+    P3["수정 시나리오\n행 선택 → 수정 → 저장 확인"]:::loop
+    P4["삭제 시나리오\n행 선택 → 삭제 → 목록 확인"]:::loop
+  end
+
+  E["테스트 결과 수집\nPASS / FAIL + 스크린샷"]:::process
+
+  F["PI_422_통합테스트보고서_{업체명}.xlsx\nxlsx-populate로 Excel 생성"]:::output
+
+  G["완료 보고\n총 시나리오 / PASS / FAIL 출력"]:::output
+
+  A --> INPUT --> B
+  B -- "미기동" --> C --> A
+  B -- "응답" --> D --> PW --> E --> F --> G
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef input    fill:#fef3c7,stroke:#f59e0b,color:#78350f
+classDef process  fill:#dcfce7,stroke:#22c55e,color:#14532d
+classDef loop     fill:#e0f2fe,stroke:#38bdf8,color:#0c4a6e
+classDef output   fill:#f3e8ff,stroke:#a855f7,color:#581c87
+classDef decision fill:#fff7ed,stroke:#fb923c,color:#7c2d12
+classDef warn     fill:#ffe4e6,stroke:#f43f5e,color:#881337
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 단계별 상세 -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th>#</th><th>단계</th><th>유형</th><th>설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>서버 확인</td><td><span class="badge badge-input">INPUT</span></td><td>FE·PDA 서버 응답 여부 확인 — 미기동 시 실행 안내 메시지 출력</td></tr>
+        <tr><td>2</td><td>시나리오 생성</td><td><span class="badge badge-process">PROCESS</span></td><td><code>ui.md</code> 파싱하여 화면별 조회/등록/수정/삭제 4대 시나리오 자동 구성</td></tr>
+        <tr><td>3</td><td>조회 테스트</td><td><span class="badge badge-loop">LOOP</span></td><td>Playwright로 검색 조건 입력 → 그리드 결과 건수 확인</td></tr>
+        <tr><td>4</td><td>등록 테스트</td><td><span class="badge badge-loop">LOOP</span></td><td>필수 입력값 폼 작성 → 저장 → 목록 반영 확인</td></tr>
+        <tr><td>5</td><td>수정 테스트</td><td><span class="badge badge-loop">LOOP</span></td><td>목록 행 선택 → 수정 팝업 → 값 변경 → 저장 확인</td></tr>
+        <tr><td>6</td><td>삭제 테스트</td><td><span class="badge badge-loop">LOOP</span></td><td>목록 행 선택 → 삭제 → 목록에서 제거 확인</td></tr>
+        <tr><td>7</td><td>결과 수집</td><td><span class="badge badge-process">PROCESS</span></td><td>각 시나리오 PASS/FAIL + 실패 시 스크린샷 저장</td></tr>
+        <tr><td>8</td><td>Excel 생성</td><td><span class="badge badge-output">OUTPUT</span></td><td>xlsx-populate로 통합테스트보고서 Excel 생성 (스크린샷 삽입 가능)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 테스트 시나리오 구조 -->
+<div class="card">
+  <div class="card-header">테스트 시나리오 구조</div>
+  <div class="card-body">
+    <table class="io-table">
+      <thead>
+        <tr><th>시나리오</th><th>전제조건</th><th>검증 항목</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>조회</td><td>FE 서버 기동, 데이터 존재</td><td>그리드 결과 행 수 ≥ 1</td></tr>
+        <tr><td>등록</td><td>필수 입력값 정의</td><td>등록 후 목록에 신규 행 존재</td></tr>
+        <tr><td>수정</td><td>조회 후 행 선택</td><td>수정값이 목록에 반영됨</td></tr>
+        <tr><td>삭제</td><td>조회 후 행 선택</td><td>삭제 후 해당 행 목록 미존재</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 입출력 요약 -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="io-table">
+      <thead>
+        <tr><th>구분</th><th>항목</th><th>경로 / 설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="badge badge-input">INPUT</span></td><td>화면 요건</td><td><code>ui.md</code></td></tr>
+        <tr><td><span class="badge badge-input">INPUT</span></td><td>FE/PDA 서버</td><td>로컬 실행 중인 FE · PDA 서버</td></tr>
+        <tr><td><span class="badge badge-output">OUTPUT</span></td><td>통합테스트보고서</td><td><code>output/PI_422_통합테스트보고서_{업체명}.xlsx</code></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;">
+      <div style="font-size:13px;color:#64748b;margin-bottom:4px;">완료율 60%</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+</body>
+</html>

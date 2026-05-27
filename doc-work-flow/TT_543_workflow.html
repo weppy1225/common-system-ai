@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TT_543 운영자매뉴얼 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: #f4f6fb; min-height: 100vh; padding: 32px 24px; }
+    .page-header { max-width: 960px; margin: 0 auto 28px; display: flex; align-items: baseline; gap: 12px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card { max-width: 960px; margin: 0 auto 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+    .card-header { background: #304a6e; color: #fff; padding: 12px 20px; font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th { background: #f1f5f9; color: #374151; font-weight: 600; padding: 9px 14px; border: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+    .step-table td { padding: 9px 14px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-warn    { background: #ffe4e6; color: #9f1239; }
+    code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 3px; padding: 1px 5px; font-size: 12px; font-family: 'Consolas', monospace; color: #334155; }
+    .io-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .io-table th { background: #f1f5f9; padding: 8px 12px; border: 1px solid #e2e8f0; font-weight: 600; color: #374151; text-align: left; }
+    .io-table td { padding: 8px 12px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .progress-bar { background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; margin-top: 4px; }
+    .progress-fill { height: 100%; border-radius: 8px; background: #3b82f6; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>TT_543 운영자매뉴얼 워크플로우</h1>
+  <span class="meta">산출물자동화모듈 · 이행 단계 · Node.js + Python (Playwright + Vue 파서 + python-pptx) · 완료율 50%</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["스크립트 실행\nTT_543_generator.js + make_pptx.py {업체명}"]):::trigger
+
+  subgraph INPUT ["입력"]
+    direction LR
+    I1["FE + BE 소스\n(로컬 또는 클론)"]:::input
+    I2["운영자메뉴리스트\n(admin_menu.md)"]:::input
+    I3["FE 서버\n(실행 중 필요)"]:::input
+  end
+
+  B{"서버 응답 /\n소스 경로 확인"}:::decision
+  C["오류: 누락 항목 확인\n소스 경로 또는 서버 기동 필요"]:::warn
+
+  subgraph PARSE ["소스 분석"]
+    direction TB
+    PA1["Vue 소스 파서\n운영자 전용 메뉴 컴포넌트 추출"]:::loop
+    PA2["BE 소스 파서\n권한 체크 로직 / 설정 파일 추출"]:::loop
+  end
+
+  D["운영자메뉴리스트 파싱\n메뉴 계층 + 기능 설명 추출"]:::process
+
+  subgraph CAPTURE ["Playwright 운영자 화면 캡처"]
+    direction TB
+    P1["운영자 계정 로그인"]:::loop
+    P2["시스템 설정 화면\n(코드관리·권한관리·사용자관리)"]:::loop
+    P3["스크린샷 저장 (PNG)"]:::loop
+  end
+
+  E["python-pptx 처리\n운영자 매뉴얼 슬라이드 구성"]:::process
+
+  F["TT_543_운영자매뉴얼_{업체명}.pptx\nPPTX 파일 생성"]:::output
+
+  G["완료 보고\n슬라이드 수 / 파일 경로 출력"]:::output
+
+  A --> INPUT --> B
+  B -- "누락" --> C --> A
+  B -- "정상" --> PARSE --> D --> CAPTURE --> E --> F --> G
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef input    fill:#fef3c7,stroke:#f59e0b,color:#78350f
+classDef process  fill:#dcfce7,stroke:#22c55e,color:#14532d
+classDef loop     fill:#e0f2fe,stroke:#38bdf8,color:#0c4a6e
+classDef output   fill:#f3e8ff,stroke:#a855f7,color:#581c87
+classDef decision fill:#fff7ed,stroke:#fb923c,color:#7c2d12
+classDef warn     fill:#ffe4e6,stroke:#f43f5e,color:#881337
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 단계별 상세 -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th>#</th><th>단계</th><th>유형</th><th>설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>입력 확인</td><td><span class="badge badge-input">INPUT</span></td><td>FE/BE 소스 경로, admin_menu.md, FE 서버 응답 동시 확인</td></tr>
+        <tr><td>2</td><td>Vue 소스 파싱</td><td><span class="badge badge-loop">LOOP</span></td><td>운영자 전용 Vue 컴포넌트 추출 — <code>admin/</code> 경로 파일, 권한 코드 정리</td></tr>
+        <tr><td>3</td><td>BE 소스 파싱</td><td><span class="badge badge-loop">LOOP</span></td><td>권한 체크 어노테이션(<code>@Auth</code>), 시스템 설정 Controller 목록 추출</td></tr>
+        <tr><td>4</td><td>메뉴 파싱</td><td><span class="badge badge-process">PROCESS</span></td><td><code>admin_menu.md</code>에서 운영자 메뉴 계층 및 기능 설명 추출</td></tr>
+        <tr><td>5</td><td>운영자 로그인</td><td><span class="badge badge-loop">LOOP</span></td><td>Playwright로 운영자 계정(ADMIN 권한) 로그인 자동화</td></tr>
+        <tr><td>6</td><td>관리 화면 캡처</td><td><span class="badge badge-loop">LOOP</span></td><td>코드관리, 권한관리, 사용자관리, 시스템설정 화면 스크린샷</td></tr>
+        <tr><td>7</td><td>PPTX 구성</td><td><span class="badge badge-process">PROCESS</span></td><td>python-pptx로 운영자 매뉴얼 슬라이드 — 기능별 캡처 + 권한 설명 텍스트</td></tr>
+        <tr><td>8</td><td>PPTX 저장</td><td><span class="badge badge-output">OUTPUT</span></td><td>운영자매뉴얼 PPTX 파일 저장</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 운영자 매뉴얼 포함 섹션 -->
+<div class="card">
+  <div class="card-header">운영자매뉴얼 구성 섹션</div>
+  <div class="card-body">
+    <table class="io-table">
+      <thead>
+        <tr><th>섹션</th><th>내용</th><th>출처</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>시스템 개요</td><td>시스템 구성 및 관리자 역할 설명</td><td>admin_menu.md</td></tr>
+        <tr><td>사용자·권한 관리</td><td>사용자 등록/수정/삭제, 권한 그룹 설정</td><td>Vue 소스 + 캡처</td></tr>
+        <tr><td>공통코드 관리</td><td>코드 그룹 등록, 코드값 관리</td><td>캡처</td></tr>
+        <tr><td>메뉴 권한 설정</td><td>메뉴별 역할 매핑, 접근 제어</td><td>BE 소스 + 캡처</td></tr>
+        <tr><td>시스템 설정</td><td>환경 파라미터, 배치 스케줄 설정</td><td>캡처</td></tr>
+        <tr><td>로그 조회</td><td>접속 로그, 작업 이력 조회</td><td>캡처</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 입출력 요약 -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="io-table">
+      <thead>
+        <tr><th>구분</th><th>항목</th><th>경로 / 설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="badge badge-input">INPUT</span></td><td>FE + BE 소스</td><td>로컬 클론 또는 unzip 소스</td></tr>
+        <tr><td><span class="badge badge-input">INPUT</span></td><td>운영자 메뉴 목록</td><td><code>admin_menu.md</code></td></tr>
+        <tr><td><span class="badge badge-input">INPUT</span></td><td>FE 서버</td><td>로컬 실행 중인 FE 서버</td></tr>
+        <tr><td><span class="badge badge-output">OUTPUT</span></td><td>운영자매뉴얼</td><td><code>output/TT_543_운영자매뉴얼_{업체명}.pptx</code></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;">
+      <div style="font-size:13px;color:#64748b;margin-bottom:4px;">완료율 50%</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+</body>
+</html>

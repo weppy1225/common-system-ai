@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI-be-all 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f4f6fb;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #304a6e;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 720px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th {
+      background: #f1f5f9; color: #374151; font-weight: 600;
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      text-align: left; white-space: nowrap;
+    }
+    .step-table td {
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      color: #374151; vertical-align: top;
+    }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-test    { background: #fdf4ff; color: #7e22ce; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    code {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 3px; padding: 1px 5px;
+      font-size: 12px; font-family: 'Consolas', monospace; color: #334155;
+    }
+    .layer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .layer-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .layer-card-header {
+      background: #304a6e;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .layer-card-body {
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.8;
+    }
+    .layer-card-body code {
+      display: block;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 12px;
+      color: #334155;
+    }
+    .sub-label {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+
+<a class="back-btn" href="index.html">&#8592; 목록</a>
+
+<div class="page-header">
+  <h1>PI-be-all 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #9 · ZIN AI Framework</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/PI-be-all {메뉴코드} 실행"]):::trigger
+
+  subgraph SCAN ["자동 스캔"]
+    direction LR
+    S1["api.md\nAPI 설계서"]:::process
+    S2["db.md\nDB 설계서"]:::process
+  end
+
+  B{"스캔 파일\n존재 여부"}:::decision
+  C["오류: 파일 없음\n경로 확인 요청"]:::warn
+
+  subgraph MAPPER ["① Mapper 레이어 생성 (PI-be-mapper)"]
+    direction TB
+    M1["{menu}Mapper.java\nMyBatis XML Mapper"]:::loop
+    M2["ZTEST_{menu}Mapper.java\nMapper 단위 테스트"]:::loop
+  end
+
+  subgraph DAO ["② Dao 레이어 생성 (PI-be-dao)"]
+    direction TB
+    D1["{menu}Dao.java\nDAO 인터페이스 + 구현"]:::loop
+    D2["ZTEST_{menu}Dao.java\nDao 단위 테스트"]:::loop
+  end
+
+  subgraph COMP ["③ Comp·Controller 레이어 생성 (PI-be-comp)"]
+    direction TB
+    C1["{menu}Search / VO / Response.java"]:::loop
+    C2["{menu}CompUtil / TxComp / Comp.java"]:::loop
+    C3["{menu}Controller.java"]:::loop
+    C4["ZTEST_{menu}CompUtil / Comp / Controller.java"]:::loop
+  end
+
+  subgraph BRUNO ["④ Bruno 파일 생성 + 테스트"]
+    direction TB
+    B1["bruno.json / search.bru\ninsert.bru / delete.bru"]:::loop
+    B2["Bruno 테스트 실행\nAPI 통신 검증"]:::test
+  end
+
+  G["완료 보고\n생성 파일 목록\n테스트 결과 요약"]:::output
+
+  A --> SCAN --> B
+  B -- "없음" --> C --> A
+  B -- "있음" --> MAPPER --> DAO --> COMP --> BRUNO --> G
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef loop     fill:#e0f2fe,stroke:#7dd3fc,color:#0369a1
+classDef test     fill:#fdf4ff,stroke:#d8b4fe,color:#7e22ce
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- step detail -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup>
+        <col style="width:40px">
+        <col style="width:100px">
+        <col style="width:180px">
+        <col>
+        <col style="width:210px">
+      </colgroup>
+      <thead>
+        <tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><span class="badge badge-trigger">트리거</span></td>
+          <td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/PI-be-all {메뉴코드}</code> 입력<br>예: <code>/PI-be-all mdpd01</code></td>
+          <td>PI-be-mapper → dao → comp 순차 실행</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>설계 문서 자동 스캔</td>
+          <td>
+            ① <code>DEV_DOC/.../80-spec/{메뉴코드}/api.md</code> — API 설계서<br>
+            ② <code>DEV_DOC/.../80-spec/{메뉴코드}/db.md</code> — DB 설계서
+          </td>
+          <td>파일 없으면 오류 출력 후 중단</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span class="badge badge-loop">생성 ①</span></td>
+          <td>Mapper 레이어 생성</td>
+          <td>
+            DB 설계서 기반 MyBatis XML Mapper 생성<br>
+            <code>{menu}Mapper.java</code> — Mapper 인터페이스<br>
+            <code>ZTEST_{menu}Mapper.java</code> — Mapper 단위 테스트
+          </td>
+          <td>SQL SELECT / INSERT / UPDATE / DELETE</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span class="badge badge-loop">생성 ②</span></td>
+          <td>Dao 레이어 생성</td>
+          <td>
+            API 설계서 + Mapper 소스 기반 Dao 생성<br>
+            <code>{menu}Dao.java</code> — Dao 인터페이스 + 구현체<br>
+            <code>ZTEST_{menu}Dao.java</code> — Dao 단위 테스트
+          </td>
+          <td>Mapper 레이어 완료 후 실행</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><span class="badge badge-loop">생성 ③</span></td>
+          <td>Comp·Controller 레이어 생성</td>
+          <td>
+            API 설계서 + Dao 소스 기반 비즈니스 레이어 생성<br>
+            <code>{menu}Search.java</code> — 검색 조건 VO<br>
+            <code>{menu}VO.java</code> — 데이터 VO<br>
+            <code>{menu}Response.java</code> — API 응답 모델<br>
+            <code>{menu}CompUtil.java</code> — 공통 유틸<br>
+            <code>{menu}TxComp.java</code> — 트랜잭션 처리<br>
+            <code>{menu}Comp.java</code> — 비즈니스 로직<br>
+            <code>{menu}Controller.java</code> — REST 컨트롤러<br>
+            <code>ZTEST_{menu}CompUtil / Comp / Controller.java</code> — 테스트
+          </td>
+          <td>Controller는 Comp 없으면 컴파일 불가<br>→ 함께 생성</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><span class="badge badge-loop">생성 ④</span></td>
+          <td>Bruno 파일 생성</td>
+          <td>
+            API 테스트용 Bruno 파일 생성:<br>
+            <code>bruno/{group}/{menu}/bruno.json</code> — 컬렉션 설정<br>
+            <code>search.bru</code> — 목록 조회 요청<br>
+            <code>insert.bru</code> — 등록 요청<br>
+            <code>delete.bru</code> — 삭제 요청
+          </td>
+          <td>Bruno CLI / GUI에서 실행</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><span class="badge badge-test">테스트</span></td>
+          <td>Bruno 테스트 실행</td>
+          <td>
+            생성된 Bruno 파일로 API 통신 자동 검증<br>
+            각 엔드포인트 응답 코드·데이터 구조 확인
+          </td>
+          <td>테스트 실패 시 원인 분석 후 소스 수정</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><span class="badge badge-report">완료 보고</span></td>
+          <td>결과 보고</td>
+          <td>
+            생성된 전체 파일 목록 출력<br>
+            Bruno 테스트 결과 요약 (성공 / 실패 건수)
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- layer structure -->
+<div class="card">
+  <div class="card-header">레이어별 생성 파일 구조</div>
+  <div class="card-body">
+    <div class="layer-grid">
+      <div class="layer-card">
+        <div class="layer-card-header">① Mapper 레이어</div>
+        <div class="layer-card-body">
+          <code>{menu}Mapper.java</code>
+          <code>ZTEST_{menu}Mapper.java</code>
+          <p class="sub-label">DB 설계서 기반<br>MyBatis SQL Mapper</p>
+        </div>
+      </div>
+      <div class="layer-card">
+        <div class="layer-card-header">② Dao 레이어</div>
+        <div class="layer-card-body">
+          <code>{menu}Dao.java</code>
+          <code>ZTEST_{menu}Dao.java</code>
+          <p class="sub-label">API 설계서 + Mapper 기반<br>데이터 접근 객체</p>
+        </div>
+      </div>
+      <div class="layer-card">
+        <div class="layer-card-header">③ Comp · Controller 레이어</div>
+        <div class="layer-card-body">
+          <code>{menu}Search.java</code>
+          <code>{menu}VO.java</code>
+          <code>{menu}Response.java</code>
+          <code>{menu}CompUtil.java</code>
+          <code>{menu}TxComp.java</code>
+          <code>{menu}Comp.java</code>
+          <code>{menu}Controller.java</code>
+          <code>ZTEST_{menu}CompUtil.java</code>
+          <code>ZTEST_{menu}Comp.java</code>
+          <code>ZTEST_{menu}Controller.java</code>
+          <p class="sub-label">API 설계서 + Dao 기반<br>비즈니스 로직 + REST API</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 12px;">
+      <table class="step-table">
+        <thead>
+          <tr><th>④ Bruno 테스트 파일</th><th>내용</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>bruno/{group}/{menu}/bruno.json</code></td>
+            <td>Bruno 컬렉션 메타 설정 (환경 변수, baseUrl 등)</td>
+          </tr>
+          <tr>
+            <td><code>search.bru</code></td>
+            <td>목록 조회 API 테스트 요청</td>
+          </tr>
+          <tr>
+            <td><code>insert.bru</code></td>
+            <td>등록 API 테스트 요청</td>
+          </tr>
+          <tr>
+            <td><code>delete.bru</code></td>
+            <td>삭제 API 테스트 요청</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- io summary -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th style="width:100px">구분</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>DEV_DOC/.../80-spec/{메뉴코드}/api.md</code> — API 설계서<br>
+            <code>DEV_DOC/.../80-spec/{메뉴코드}/db.md</code> — DB 설계서
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            Mapper 레이어 2개 파일 (<code>{menu}Mapper.java</code> + 테스트)<br>
+            Dao 레이어 2개 파일 (<code>{menu}Dao.java</code> + 테스트)<br>
+            Comp·Controller 레이어 10개 파일 (VO·비즈니스·컨트롤러·테스트)<br>
+            Bruno 테스트 파일 4개 (<code>bruno.json</code>, <code>search/insert/delete.bru</code>)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif",
+      fontSize: '13px'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+  });
+</script>
+</body>
+</html>

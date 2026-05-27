@@ -1,0 +1,383 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI-be-dao 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f4f6fb;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #304a6e;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th {
+      background: #f1f5f9; color: #374151; font-weight: 600;
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      text-align: left; white-space: nowrap;
+    }
+    .step-table td {
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      color: #374151; vertical-align: top;
+    }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-test    { background: #fdf4ff; color: #7e22ce; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    code {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 3px; padding: 1px 5px;
+      font-size: 12px; font-family: 'Consolas', monospace; color: #334155;
+    }
+    .layer-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 4px;
+      overflow-x: auto;
+    }
+    .layer-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 16px;
+      text-align: center;
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+    .layer-box.active {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    .layer-box.done {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #94a3b8;
+    }
+    .layer-box .lname {
+      font-size: 13px;
+      font-weight: 700;
+      color: #304a6e;
+    }
+    .layer-box.done .lname { color: #94a3b8; }
+    .layer-box .lfile {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+      font-family: 'Consolas', monospace;
+    }
+    .layer-arrow {
+      font-size: 20px;
+      color: #94a3b8;
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+
+<a class="back-btn" href="index.html">&#8592; 목록</a>
+
+<div class="page-header">
+  <h1>PI-be-dao 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #11 · ZIN AI Framework</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/PI-be-dao {메뉴코드} 실행"]):::trigger
+
+  subgraph SCAN ["자동 스캔"]
+    direction LR
+    S1["api.md\nAPI 설계서"]:::process
+    S2["{menu}Mapper.java\nMapper 인터페이스 소스"]:::process
+  end
+
+  B{"스캔 파일\n존재 여부"}:::decision
+  C["오류: 파일 없음\nPI-be-mapper 먼저 실행 요청"]:::warn
+
+  D["Dao 메서드 목록 도출\nMapper 메서드 + API 명세 기반"]:::process
+
+  E["{menu}Dao.java 생성\nDao 인터페이스 + 구현체"]:::loop
+
+  F["ZTEST_{menu}Dao.java 생성\nDao 단위 테스트"]:::loop
+
+  G["테스트 실행\nMapper 연동 검증"]:::test
+
+  H["완료 보고\n생성 파일 목록\n테스트 결과 출력"]:::output
+
+  A --> SCAN --> B
+  B -- "없음" --> C --> A
+  B -- "있음" --> D --> E --> F --> G --> H
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef loop     fill:#e0f2fe,stroke:#7dd3fc,color:#0369a1
+classDef test     fill:#fdf4ff,stroke:#d8b4fe,color:#7e22ce
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- step detail -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup>
+        <col style="width:40px">
+        <col style="width:100px">
+        <col style="width:200px">
+        <col>
+        <col style="width:200px">
+      </colgroup>
+      <thead>
+        <tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><span class="badge badge-trigger">트리거</span></td>
+          <td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/PI-be-dao {메뉴코드}</code> 입력<br>예: <code>/PI-be-dao mdpd01</code></td>
+          <td>단독 실행 또는 PI-be-all 내부 호출</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>설계 문서 + Mapper 소스 자동 스캔</td>
+          <td>
+            ① <code>DEV_DOC/.../80-spec/{메뉴코드}/api.md</code> — API 설계서<br>
+            ② <code>src/{그룹}/{메뉴코드}/{MENU}Mapper.java</code> — Mapper 인터페이스
+          </td>
+          <td>Mapper 파일 없으면<br>PI-be-mapper 먼저 실행 안내</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>Dao 메서드 목록 도출</td>
+          <td>
+            Mapper 인터페이스의 메서드를 분석하여<br>
+            Dao에서 제공할 메서드 목록 결정<br>
+            API 명세의 비즈니스 흐름 반영
+          </td>
+          <td>Mapper 메서드 1:1 위임 또는 조합</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span class="badge badge-loop">생성</span></td>
+          <td>{menu}Dao.java 생성</td>
+          <td>
+            Dao 인터페이스 선언 + 구현체 생성<br>
+            <code>@Repository</code> 어노테이션 적용<br>
+            Mapper 주입 후 메서드 위임 구현<br>
+            예외 처리 및 트랜잭션 경계 설정
+          </td>
+          <td>패키지: <code>src/{그룹}/{메뉴코드}/</code></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><span class="badge badge-loop">생성</span></td>
+          <td>ZTEST_{menu}Dao.java 생성</td>
+          <td>
+            Dao 단위 테스트 클래스 생성<br>
+            각 Dao 메서드별 테스트 케이스 작성<br>
+            조회 결과 건수 / 데이터 정합성 검증
+          </td>
+          <td>JUnit5 + <code>@SpringBootTest</code></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><span class="badge badge-test">테스트</span></td>
+          <td>단위 테스트 실행</td>
+          <td>
+            <code>ZTEST_{menu}Dao.java</code> 실행<br>
+            Mapper → DB 연동 전체 흐름 검증<br>
+            데이터 반환 타입 / null 처리 확인
+          </td>
+          <td>테스트 실패 시 Dao 수정 후 재실행</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><span class="badge badge-report">완료 보고</span></td>
+          <td>결과 보고</td>
+          <td>
+            생성된 파일 2개 목록 출력<br>
+            테스트 통과 / 실패 결과 요약
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- layer position -->
+<div class="card">
+  <div class="card-header">BE 레이어 구조 내 위치</div>
+  <div class="card-body">
+    <div class="layer-flow">
+      <div class="layer-box done">
+        <div class="lname">Mapper</div>
+        <div class="lfile">{menu}Mapper.java<br>{menu}Mapper.xml</div>
+      </div>
+      <div class="layer-arrow">→</div>
+      <div class="layer-box active">
+        <div class="lname">Dao ← 현재</div>
+        <div class="lfile">{menu}Dao.java<br>ZTEST_{menu}Dao.java</div>
+      </div>
+      <div class="layer-arrow">→</div>
+      <div class="layer-box">
+        <div class="lname">Comp</div>
+        <div class="lfile">{menu}Comp.java<br>{menu}TxComp.java</div>
+      </div>
+      <div class="layer-arrow">→</div>
+      <div class="layer-box">
+        <div class="lname">Controller</div>
+        <div class="lfile">{menu}Controller.java</div>
+      </div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:#64748b;">
+      Mapper 레이어 완료 후 실행. Dao 완료 후 PI-be-comp 실행 가능.
+    </p>
+  </div>
+</div>
+
+<!-- output files -->
+<div class="card">
+  <div class="card-header">생성 파일 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th>파일명</th><th>유형</th><th>주요 내용</th><th>경로</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>{menu}Dao.java</code></td>
+          <td>Dao 인터페이스 + 구현체</td>
+          <td>
+            <code>@Repository</code> 어노테이션<br>
+            Mapper 의존성 주입 (<code>@Autowired</code>)<br>
+            비즈니스 단위 메서드 제공<br>
+            (목록조회 / 단건조회 / 등록 / 수정 / 삭제)
+          </td>
+          <td><code>src/{그룹}/{메뉴코드}/</code></td>
+        </tr>
+        <tr>
+          <td><code>ZTEST_{menu}Dao.java</code></td>
+          <td>단위 테스트</td>
+          <td>
+            각 Dao 메서드 테스트 케이스<br>
+            조회 결과 건수 / 데이터 정합성 검증<br>
+            테스트 데이터 setup / rollback
+          </td>
+          <td><code>test/.../{그룹}/{메뉴코드}/</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- io summary -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th style="width:100px">구분</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>DEV_DOC/.../80-spec/{메뉴코드}/api.md</code> — API 설계서<br>
+            <code>src/{그룹}/{메뉴코드}/{MENU}Mapper.java</code> — Mapper 인터페이스 소스
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            <code>{menu}Dao.java</code> — Dao 인터페이스 + 구현체<br>
+            <code>ZTEST_{menu}Dao.java</code> — Dao 단위 테스트
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif",
+      fontSize: '13px'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+  });
+</script>
+</body>
+</html>

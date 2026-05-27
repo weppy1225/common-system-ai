@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SD-ui 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f4f6fb;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #304a6e;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th {
+      background: #f1f5f9; color: #374151; font-weight: 600;
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      text-align: left; white-space: nowrap;
+    }
+    .step-table td {
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      color: #374151; vertical-align: top;
+    }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    code {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 3px; padding: 1px 5px;
+      font-size: 12px; font-family: 'Consolas', monospace; color: #334155;
+    }
+    .grid-type-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .grid-type-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .grid-type-card .type-name {
+      font-weight: 700;
+      color: #304a6e;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .grid-type-card .type-diagram {
+      font-family: monospace;
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.5;
+      white-space: pre;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+
+<a class="back-btn" href="index.html">&#8592; 목록</a>
+
+<div class="page-header">
+  <h1>SD-ui 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #5 · ZIN AI Framework</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/SD-ui {메뉴코드} 실행"]):::trigger
+
+  subgraph SCAN ["자동 스캔"]
+    direction LR
+    S1["ui.md\n화면요건정리"]:::process
+    S2["공통 리소스\nwms-ui.css\nwms-common.js"]:::process
+    S3["레이아웃 템플릿\nbase.html\ngrid 유형별 html"]:::process
+  end
+
+  B{"ui.md\n존재 여부"}:::decision
+  C["오류: ui.md 없음\n경로 확인 요청"]:::warn
+
+  D["UI 유형 결정\ngrid1 / grid2-tb / grid2-lr\ngrid3-lrt / grid3-tlb"]:::process
+
+  E["wireframe.html 생성\nbase.html + grid 템플릿\n+ ui.md 요건 적용"]:::loop
+
+  F["mock-data.js 생성\n그리드별 더미 데이터\n10건 이상"]:::loop
+
+  G["index.html 메뉴 등록\n좌측 메뉴 트리 자동 추가"]:::process
+
+  H["완료 보고\n생성 파일 목록 출력"]:::output
+
+  A --> SCAN --> B
+  B -- "없음" --> C --> A
+  B -- "있음" --> D --> E --> F --> G --> H
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef loop     fill:#e0f2fe,stroke:#7dd3fc,color:#0369a1
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- step detail -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup>
+        <col style="width:40px">
+        <col style="width:90px">
+        <col style="width:170px">
+        <col>
+        <col style="width:230px">
+      </colgroup>
+      <thead>
+        <tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><span class="badge badge-trigger">트리거</span></td>
+          <td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/SD-ui {메뉴코드}</code> 입력<br>예: <code>/SD-ui mdpd01</code></td>
+          <td>Claude Code 슬래시 커맨드</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>입력 파일 자동 스캔</td>
+          <td>
+            메뉴코드 기반으로 3가지 리소스 자동 탐색:<br>
+            ① <code>{메뉴코드}/ui.md</code> — 화면요건정리 (메인 입력)<br>
+            ② <code>common/wms-ui.css</code>, <code>wms-common.js</code> — 공통 리소스<br>
+            ③ <code>common/_template/base.html</code> + 그리드 유형별 템플릿
+          </td>
+          <td><code>ui.md</code> 없으면 오류 출력 후 중단</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>UI 유형 결정</td>
+          <td>
+            <code>ui.md</code>의 화면 구성 정보를 파악하여<br>
+            그리드 레이아웃 유형 결정:<br>
+            <code>grid1</code> / <code>grid2-tb</code> / <code>grid2-lr</code> / <code>grid3-lrt</code> / <code>grid3-tlb</code>
+          </td>
+          <td>유형별 템플릿 html 선택</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span class="badge badge-loop">생성</span></td>
+          <td>wireframe.html 생성</td>
+          <td>
+            <code>base.html</code> + 선택된 그리드 유형 템플릿을 기반으로<br>
+            <code>ui.md</code>의 검색 조건·컬럼·업무규칙을 적용하여<br>
+            <code>{메뉴코드}/wireframe.html</code> 생성
+          </td>
+          <td>공통 UI 규칙 (.claude/rules) 자동 적용</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><span class="badge badge-loop">생성</span></td>
+          <td>mock-data.js 생성</td>
+          <td>
+            그리드별 더미 데이터 10건 이상 생성<br>
+            <code>const {MENUCODE}_DATA = { ... }</code> 형태<br>
+            <code>{메뉴코드}/mock-data.js</code> 저장
+          </td>
+          <td>wireframe.html에서 <code>&lt;script src&gt;</code>로 로드</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>index.html 메뉴 등록</td>
+          <td>
+            <code>dist/index.html</code>의 좌측 메뉴 트리에<br>
+            해당 메뉴코드 항목 자동 추가
+          </td>
+          <td>이미 등록된 경우 건너뜀</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><span class="badge badge-report">완료 보고</span></td>
+          <td>결과 보고</td>
+          <td>
+            생성된 파일 목록 출력:<br>
+            <code>{메뉴코드}/wireframe.html</code><br>
+            <code>{메뉴코드}/mock-data.js</code>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- grid types -->
+<div class="card">
+  <div class="card-header">UI 그리드 유형 (5종)</div>
+  <div class="card-body">
+    <div class="grid-type-grid">
+      <div class="grid-type-card">
+        <div class="type-name">grid1</div>
+        <div class="type-diagram">┌────────┐
+│검색조건│
+├────────┤
+│        │
+│ 그리드 │
+│        │
+└────────┘</div>
+        <div style="font-size:11px; color:#64748b; margin-top:6px;">그리드 1개</div>
+      </div>
+      <div class="grid-type-card">
+        <div class="type-name">grid2-tb</div>
+        <div class="type-diagram">┌────────┐
+│검색조건│
+├────────┤
+│상단그리│
+├────────┤
+│하단그리│
+└────────┘</div>
+        <div style="font-size:11px; color:#64748b; margin-top:6px;">그리드 2개 상하</div>
+      </div>
+      <div class="grid-type-card">
+        <div class="type-name">grid2-lr</div>
+        <div class="type-diagram">┌────────┐
+│검색조건│
+├───┬────┤
+│좌 │ 우 │
+│그 │ 그 │
+│리 │ 리 │
+└───┴────┘</div>
+        <div style="font-size:11px; color:#64748b; margin-top:6px;">그리드 2개 좌우</div>
+      </div>
+      <div class="grid-type-card">
+        <div class="type-name">grid3-lrt</div>
+        <div class="type-diagram">┌────────┐
+│검색조건│
+├───┬────┤
+│   │ 우상│
+│좌 ├────┤
+│   │ 우하│
+└───┴────┘</div>
+        <div style="font-size:11px; color:#64748b; margin-top:6px;">좌 · 우상 · 우하</div>
+      </div>
+      <div class="grid-type-card">
+        <div class="type-name">grid3-tlb</div>
+        <div class="type-diagram">┌────────┐
+│검색조건│
+├────────┤
+│ 상단   │
+├───┬────┤
+│하좌│하우│
+└───┴────┘</div>
+        <div style="font-size:11px; color:#64748b; margin-top:6px;">상단 · 하좌 · 하우</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- io summary -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th style="width:100px">구분</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>dist/{메뉴코드}/ui.md</code> — 화면요건정리 문서 (메인 입력)<br>
+            <code>dist/common/wms-ui.css</code>, <code>wms-common.js</code> — 공통 리소스<br>
+            <code>dist/common/_template/base.html</code> — 공통 레이아웃 템플릿<br>
+            <code>dist/common/_template/{grid유형}.html</code> — 그리드 유형별 템플릿
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            <code>dist/{메뉴코드}/wireframe.html</code> — 프로토타입 화면설계서<br>
+            <code>dist/{메뉴코드}/mock-data.js</code> — 그리드 더미 데이터<br>
+            <code>dist/index.html</code> — 좌측 메뉴 트리 항목 추가
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif",
+      fontSize: '13px'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+  });
+</script>
+</body>
+</html>

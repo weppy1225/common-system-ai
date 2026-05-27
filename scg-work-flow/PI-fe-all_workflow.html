@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI-fe-all 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: #f4f6fb; min-height: 100vh; padding: 32px 24px; }
+    .page-header { max-width: 960px; margin: 0 auto 28px; display: flex; align-items: baseline; gap: 12px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card { max-width: 960px; margin: 0 auto 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+    .card-header { background: #304a6e; color: #fff; padding: 12px 20px; font-size: 14px; font-weight: 600; }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th { background: #f1f5f9; color: #374151; font-weight: 600; padding: 9px 14px; border: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+    .step-table td { padding: 9px 14px; border: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 3px; padding: 1px 5px; font-size: 12px; font-family: 'Consolas', monospace; color: #334155; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+<div class="page-header">
+  <h1>PI-fe-all 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #16 · ZIN AI Framework</span>
+</div>
+
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/PI-fe-all {메뉴코드} 실행"]):::trigger
+
+  subgraph SCAN ["자동 스캔 (4개 파일)"]
+    direction LR
+    S1["api.md"]:::process
+    S2["ui.md"]:::process
+    S3["wireframe.html"]:::process
+    S4["mock-data.js"]:::process
+  end
+
+  B{"스캔 파일\n존재 여부"}:::decision
+  C["오류: 파일 없음\nSD-ui / SD-api 먼저 실행 요청"]:::warn
+
+  subgraph LIST ["① PI-fe-list 실행\n목록 화면"]
+    L1["{menu}.vue\nSearchSection + 그리드"]:::loop
+  end
+
+  subgraph EDIT ["② PI-fe-edit 실행\n등록·수정 팝업"]
+    E1["{menu}Edt.vue\nLayerPopup + 폼"]:::loop
+  end
+
+  R["router/index.js 메뉴 등록\n라우트 경로 자동 추가"]:::loop
+
+  G["완료 보고\n생성 파일 목록 출력"]:::output
+
+  A --> SCAN --> B
+  B -- "없음" --> C --> A
+  B -- "있음" --> LIST --> EDIT --> R --> G
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef loop     fill:#e0f2fe,stroke:#7dd3fc,color:#0369a1
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup><col style="width:40px"><col style="width:100px"><col style="width:190px"><col><col style="width:200px"></colgroup>
+      <thead><tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td><td><span class="badge badge-trigger">트리거</span></td><td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/PI-fe-all {메뉴코드}</code> 입력<br>예: <code>/PI-fe-all mdpd01</code></td>
+          <td>PI-fe-list → PI-fe-edit 순차 실행</td>
+        </tr>
+        <tr>
+          <td>2</td><td><span class="badge badge-process">처리</span></td><td>설계 문서 자동 스캔</td>
+          <td>
+            ① <code>api.md</code> — API 설계서<br>
+            ② <code>ui.md</code> — 화면요건정리<br>
+            ③ <code>wireframe.html</code> — 화면 설계서<br>
+            ④ <code>mock-data.js</code> — 더미 데이터
+          </td>
+          <td>파일 없으면 오류 출력 후 중단</td>
+        </tr>
+        <tr>
+          <td>3</td><td><span class="badge badge-loop">생성 ①</span></td><td>{menu}.vue 생성 (PI-fe-list)</td>
+          <td>
+            검색 조건 영역 (SearchSection) + 그리드 목록<br>
+            API 조회 연동, 페이징 처리 포함
+          </td>
+          <td>목록 화면 전체</td>
+        </tr>
+        <tr>
+          <td>4</td><td><span class="badge badge-loop">생성 ②</span></td><td>{menu}Edt.vue 생성 (PI-fe-edit)</td>
+          <td>
+            LayerPopup 기반 등록·수정 폼<br>
+            등록 / 수정 모드 전환, API 연동
+          </td>
+          <td>팝업 화면</td>
+        </tr>
+        <tr>
+          <td>5</td><td><span class="badge badge-loop">생성 ③</span></td><td>router 등록</td>
+          <td>
+            <code>router/index.js</code>에 메뉴 라우트 경로 자동 추가<br>
+            이미 등록된 경우 건너뜀
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>6</td><td><span class="badge badge-report">완료 보고</span></td><td>결과 보고</td>
+          <td>생성된 파일 목록 출력 (<code>{menu}.vue</code>, <code>{menu}Edt.vue</code>, router)</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead><tr><th style="width:100px">구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>api.md</code> / <code>ui.md</code> / <code>wireframe.html</code> / <code>mock-data.js</code>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            <code>src/views/{그룹}/{메뉴코드}/{menu}.vue</code> — 목록 화면<br>
+            <code>src/views/{그룹}/{메뉴코드}/{menu}Edt.vue</code> — 등록·수정 팝업<br>
+            <code>src/router/index.js</code> — 라우트 경로 추가
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif", fontSize: '13px' }, flowchart: { curve: 'basis', padding: 20 } });
+</script>
+</body>
+</html>

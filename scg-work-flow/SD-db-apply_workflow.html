@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SD-db-apply 워크플로우</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f4f6fb;
+      min-height: 100vh;
+      padding: 32px 24px;
+    }
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1e293b; }
+    .page-header .meta { font-size: 13px; color: #94a3b8; }
+    .card {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #304a6e;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .card-body { padding: 24px 20px; }
+    .diagram-wrap { display: flex; justify-content: center; overflow-x: auto; }
+    .mermaid { min-width: 700px; }
+    .step-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .step-table th {
+      background: #f1f5f9; color: #374151; font-weight: 600;
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      text-align: left; white-space: nowrap;
+    }
+    .step-table td {
+      padding: 9px 14px; border: 1px solid #e2e8f0;
+      color: #374151; vertical-align: top;
+    }
+    .step-table tr:hover td { background: #f8fafc; }
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 12px; font-size: 11px; font-weight: 600;
+    }
+    .badge-trigger { background: #dbeafe; color: #1d4ed8; }
+    .badge-input   { background: #fef3c7; color: #92400e; }
+    .badge-process { background: #dcfce7; color: #166534; }
+    .badge-loop    { background: #e0f2fe; color: #0369a1; }
+    .badge-output  { background: #f3e8ff; color: #7e22ce; }
+    .badge-report  { background: #ffe4e6; color: #9f1239; }
+    code {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 3px; padding: 1px 5px;
+      font-size: 12px; font-family: 'Consolas', monospace; color: #334155;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 960px;
+      margin: 0 auto 16px;
+      color: #304a6e;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #304a6e;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-btn:hover { background: #304a6e; color: #fff; }
+  </style>
+<body>
+
+<a class="back-btn" href="index.html">&#8592; 목록</a>
+
+<div class="page-header">
+  <h1>SD-db-apply 워크플로우</h1>
+  <span class="meta">개발자동화모듈 #7 · ZIN AI Framework</span>
+</div>
+
+<!-- flowchart -->
+<div class="card">
+  <div class="card-header">플로우차트</div>
+  <div class="card-body">
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+  A(["/SD-db-apply 실행"]):::trigger
+
+  B["Flyway SQL 파일 자동 스캔\nsrc/main/resource/db/migration/*.sql"]:::process
+
+  C{"SQL 파일\n존재 여부"}:::decision
+  C_ERR["오류: SQL 파일 없음\n경로 확인 요청"]:::warn
+
+  D["flyway_schema_history 조회\n이미 적용된 버전 확인"]:::process
+
+  E{"미적용\nSQL 존재"}:::decision
+  E_NONE["안내: 모두 적용 완료\n추가 작업 없음"]:::warn
+
+  F["미적용 파일 목록 미리보기\nV번호 · 파일명 · DDL 요약"]:::process
+
+  G{"적용 진행\n확인"}:::decision
+
+  subgraph LOOP ["미적용 SQL 순차 실행"]
+    direction TB
+    H1["V{N}.sql 실행\nCREATE / ALTER 구문"]:::loop
+    H2["실행 결과 확인\n성공 / 실패"]:::loop
+    H3["flyway_schema_history\n기록 업데이트"]:::loop
+  end
+
+  I["전체 적용 결과 보고\n성공 N건 / 실패 건 상세"]:::output
+
+  A --> B --> C
+  C -- "없음" --> C_ERR --> A
+  C -- "있음" --> D --> E
+  E -- "없음" --> E_NONE
+  E -- "있음" --> F --> G
+  G -- "취소" --> END([종료])
+  G -- "확인" --> LOOP
+  H1 --> H2 --> H3 --> H1
+  LOOP --> I --> END2([완료])
+
+classDef trigger  fill:#304a6e,stroke:#1e3a5f,color:#fff
+classDef process  fill:#f0fdf4,stroke:#86efac,color:#166534
+classDef decision fill:#f5f3ff,stroke:#c4b5fd,color:#5b21b6
+classDef warn     fill:#fff7ed,stroke:#fdba74,color:#9a3412
+classDef loop     fill:#e0f2fe,stroke:#7dd3fc,color:#0369a1
+classDef output   fill:#eff6ff,stroke:#93c5fd,color:#1e40af
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- step detail -->
+<div class="card">
+  <div class="card-header">단계별 상세</div>
+  <div class="card-body">
+    <table class="step-table">
+      <colgroup>
+        <col style="width:40px">
+        <col style="width:90px">
+        <col style="width:170px">
+        <col>
+        <col style="width:230px">
+      </colgroup>
+      <thead>
+        <tr><th>#</th><th>구분</th><th>단계명</th><th>처리 내용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><span class="badge badge-trigger">트리거</span></td>
+          <td>슬래시 명령 실행</td>
+          <td>사용자가 <code>/SD-db-apply</code> 입력</td>
+          <td>Claude Code 슬래시 커맨드</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>Flyway SQL 파일 자동 스캔</td>
+          <td>
+            migration 폴더 내 SQL 파일 전체 탐색<br>
+            <code>src/main/resource/db/migration/V*.sql</code><br>
+            버전 번호(V{N}) 기준으로 정렬
+          </td>
+          <td>파일 없으면 오류 출력 후 중단</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>적용 이력 조회</td>
+          <td>
+            로컬 개발 DB의 <code>flyway_schema_history</code> 테이블 조회<br>
+            이미 적용 완료된 버전 목록 확인<br>
+            스캔 파일과 대조하여 미적용 파일만 추출
+          </td>
+          <td>DB 연결 정보: <code>.claude/config/db.json</code></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span class="badge badge-process">처리</span></td>
+          <td>미적용 파일 미리보기</td>
+          <td>
+            적용 예정 SQL 파일 목록을 테이블로 출력:<br>
+            버전 번호 · 파일명 · DDL 구문 요약<br>
+            사용자가 내용 확인 후 진행 여부 결정
+          </td>
+          <td>모두 적용 완료 상태면 완료 안내 후 종료</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><span class="badge badge-loop">반복 처리</span></td>
+          <td>SQL 순차 실행</td>
+          <td>
+            미적용 SQL을 버전 번호 오름차순으로 1건씩 실행<br>
+            <code>CREATE TABLE</code> / <code>ALTER TABLE</code> DDL 적용
+          </td>
+          <td>버전 순서 보장 필수 (V1 → V2 → V3 …)</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><span class="badge badge-loop">반복 처리</span></td>
+          <td>실행 결과 확인</td>
+          <td>
+            SQL 실행 성공 시 <code>flyway_schema_history</code>에 이력 기록<br>
+            실패 시 오류 내용 수집 후 후속 SQL 실행 중단
+          </td>
+          <td>실패 시 전체 중단 (후속 버전 실행 금지)</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><span class="badge badge-report">완료 보고</span></td>
+          <td>결과 보고</td>
+          <td>
+            성공 N건 / 실패 건 상세 출력<br>
+            실패 시 SQL 오류 메시지 및 수정 가이드 제공
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- flyway naming rule -->
+<div class="card">
+  <div class="card-header">Flyway SQL 파일 명명 규칙</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th>구성 요소</th><th>규칙</th><th>예시</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>버전 접두어</td>
+          <td><code>V{N}__</code> — N은 자동 채번 정수, 구분자는 언더바 2개</td>
+          <td><code>V1__</code>, <code>V2__</code></td>
+        </tr>
+        <tr>
+          <td>메뉴코드</td>
+          <td>대상 화면의 메뉴코드 소문자</td>
+          <td><code>mdpd01</code>, <code>iwrq01</code></td>
+        </tr>
+        <tr>
+          <td>테이블명</td>
+          <td>변경 대상 테이블명 (snake_case)</td>
+          <td><code>mdm_prod</code>, <code>wms_inbiz_h</code></td>
+        </tr>
+        <tr>
+          <td>작업 유형</td>
+          <td><code>create</code> / <code>add_col</code> / <code>modify_col</code></td>
+          <td><code>add_col</code>, <code>create</code></td>
+        </tr>
+        <tr>
+          <td>전체 예시</td>
+          <td colspan="2">
+            <code>V1__mdpd01_mdm_prod_add_col.sql</code><br>
+            <code>V2__iwrq01_wms_inbiz_h_create.sql</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- io summary -->
+<div class="card">
+  <div class="card-header">입출력 요약</div>
+  <div class="card-body">
+    <table class="step-table">
+      <thead>
+        <tr><th style="width:100px">구분</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-input">입력</span></td>
+          <td>
+            <code>src/main/resource/db/migration/V*.sql</code> — Flyway 마이그레이션 SQL 파일<br>
+            로컬 개발 DB (<code>flyway_schema_history</code> 적용 이력)<br>
+            DB 연결 정보: <code>.claude/config/db.json</code>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-output">출력</span></td>
+          <td>
+            로컬 개발 DB에 DDL 변경 사항 반영 (테이블 생성 / 컬럼 추가·변경)<br>
+            <code>flyway_schema_history</code> 적용 이력 업데이트<br>
+            성공 N건 / 실패 건 결과 보고
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "'Segoe UI', 'Malgun Gothic', sans-serif",
+      fontSize: '13px'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+  });
+</script>
+</body>
+</html>
