@@ -1,14 +1,14 @@
 ---
 name: PI_422
-description: 【통합테스트보고서 엑셀 생성 (Windows)】 dist/ 폴더의 ui.md 파일을 스캔하여 메뉴별 통합테스트 시나리오를 자동 생성하고, template/04 구현(PI)/PI.214-통합테스트보고서.xlsx 템플릿에 채워 output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx 로 저장합니다. /PI_422 형식으로 실행하며 고객사명·담당자·테스트 기간은 실행 시 묻습니다. 통합테스트 보고서 작성, 테스트 시나리오 정리, 통합테스트 결과 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다. WSL/Linux/Mac 환경에서는 PI_422_BASH 스킬을 사용합니다.
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
+description: 【통합테스트보고서 엑셀 생성 (Windows/WSL/Linux/Mac 통합)】 dist/ 폴더의 ui.md 파일을 스캔하여 메뉴별 통합테스트 시나리오를 자동 생성하고, template/04 구현(PI)/PI.214-통합테스트보고서.xlsx 템플릿에 채워 output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx 로 저장합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. /PI_422 형식으로 실행하며 고객사명·담당자·테스트 기간은 실행 시 묻습니다. 통합테스트 보고서 작성, 테스트 시나리오 정리, 통합테스트 결과 엑셀 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "통합테스트보고서 만들어줘", "통합테스트 엑셀 만들어줘", "PI_422 실행해줘", "WSL에서 통합테스트보고서 만들어줘", "Linux에서 테스트 시나리오 엑셀로" 라고 말해도 이 스킬을 사용합니다.
+allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
-# 통합테스트보고서 자동 생성 [PI_422]
+# 통합테스트보고서 자동 생성 (Windows/WSL/Linux/Mac 통합) [PI_422]
 
 `dist/` 폴더 내 `ui.md` 파일을 모두 스캔하여 메뉴 목록을 추출하고,
 메뉴별 표준 테스트 시나리오를 생성한 뒤
-`template/04 구현(PI)/PI.214-통합테스트보고서.xlsx` 템플릿을 복사·가공하여
+`template/04 구현(PI)/PI_214-통합테스트보고서.xlsx` 템플릿을 복사·가공하여
 `output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx` 로 저장한다.
 
 > **핵심 도구**: Node.js + **xlsx-populate** 라이브러리 (`output/04 구현(PI)/node_modules/xlsx-populate`)
@@ -18,7 +18,20 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 ---
 
-## 사전 준비
+## OS 분기 — 가장 먼저 실행
+
+```
+- Windows 네이티브 (PowerShell): $env:OS == 'Windows_NT' && uname 없음
+  → [Windows 섹션]의 PowerShell 블록 사용.
+- WSL / Linux / macOS (Bash):    uname 존재 (Linux/Darwin)
+  → [Bash 섹션]의 bash 블록 사용.
+```
+
+> Node.js 스크립트(`scripts/gen_pi422.js`)는 양쪽에서 동일하게 호출한다. 스크립트 내부에서 `path.resolve(__dirname, '..', '..', '..', '..')` 패턴으로 BASE_DIR을 동적 감지하므로 OS와 무관하다.
+
+---
+
+## 사전 준비 (공통)
 
 ### 1) 입력 받기
 
@@ -31,7 +44,24 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 | 테스트 기간 | 시작일 ~ 종료일 (예: 2026-05-12 ~ 2026-05-23) |
 | SYSTEM | WMS(WEB), WMS(PDA) 등 기입할 시스템명 (기본값: WMS(WEB)) |
 
-### 2) 경로 정의 (PowerShell 동적 감지)
+### 2) 경로 정의
+
+상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
+
+```
+DIST_DIR    = dist/
+OUTPUT_DIR  = output/04 구현(PI)
+SCRIPT      = .claude/skills/PI_422/scripts/gen_pi422.js
+TEMPLATE    = template/04 구현(PI)/PI_214-통합테스트보고서.xlsx
+OUTFILE     = output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx
+XLSX_LIB    = output/04 구현(PI)/node_modules/xlsx-populate
+```
+
+---
+
+# === Windows 섹션 (PowerShell) ===
+
+### W-0) 경로 동적 감지
 
 ```powershell
 $DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
@@ -40,45 +70,66 @@ $RepoName = Split-Path $DocRoot -Leaf
 if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
 ```
 
-```
-BASE         = $DocRoot  (동적 감지)
-DIST_DIR     = dist/
-OUTPUT_DIR   = output/04 구현(PI)
-SCRIPT       = .claude/skills/PI_422/scripts/gen_pi422.js
-TEMPLATE     = template/04 구현(PI)/PI_214-통합테스트보고서.xlsx
-OUTFILE      = output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx
-XLSX_LIB     = output/04 구현(PI)/node_modules/xlsx-populate
-```
-
----
-
-## 단계별 워크플로우
-
-### 1단계 — xlsx-populate 라이브러리 확인
+### W-1) xlsx-populate 라이브러리 확인
 
 ```powershell
-$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 Set-Location $DocRoot
 node -e "require('./output/04 구현(PI)/node_modules/xlsx-populate'); console.log('ok')"
 ```
 
-성공하면 바로 다음 단계로 진행한다.
 실패하면 `output/04 구현(PI)/` 로 이동 후 `npm install xlsx-populate@^1.21.0` 실행.
 
-### 2단계 — 스크립트 실행
+### W-2) 스크립트 실행
 
 ```powershell
-$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 Set-Location $DocRoot
 node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}" "{테스트시작일}" "{테스트종료일}" "{SYSTEM}"
 ```
 
-스크립트가 수행하는 일:
+---
 
-#### 2-1. dist/ 폴더 스캔 + dist-mobile/menu.html 스캔
+# === Bash 섹션 (WSL/Linux/Mac) ===
+
+### B-0) 경로 동적 감지
+
+```bash
+DOC_ROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=$(dirname "$DOC_ROOT")
+REPO_NAME=$(basename "$DOC_ROOT")
+if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
+
+DIST_DIR="$DOC_ROOT/dist"
+OUTPUT_DIR="$DOC_ROOT/output/04 구현(PI)"
+SCRIPT="$DOC_ROOT/.claude/skills/PI_422/scripts/gen_pi422.js"
+TEMPLATE="$DOC_ROOT/template/04 구현(PI)/PI_214-통합테스트보고서.xlsx"
+XLSX_LIB="$OUTPUT_DIR/node_modules/xlsx-populate"
+```
+
+### B-1) xlsx-populate 라이브러리 확인
+
+```bash
+node -e "require('$DOC_ROOT/output/04 구현(PI)/node_modules/xlsx-populate'); console.log('ok')"
+```
+
+실패하면 `output/04 구현(PI)/` 로 이동 후 `npm install xlsx-populate@^1.21.0` 실행.
+
+### B-2) 스크립트 실행
+
+```bash
+cd "$DOC_ROOT"
+node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}" "{테스트시작일}" "{테스트종료일}" "{SYSTEM}"
+```
+
+---
+
+## 스크립트 동작 상세 (공통)
+
+`gen_pi422.js` 가 수행하는 일.
+
+### 2-1. dist/ 폴더 스캔 + dist-mobile/menu.html 스캔
 
 - `dist/` 하위 모든 폴더에서 `ui.md` 파일을 탐색한다 (WEB 메뉴).
-- `dist-mobile/menu.html`에서 `.menu-cell` href 파싱하여 PDA 메뉴 목록 추출.
+- `dist-mobile/menu.html` 에서 `.menu-cell` href 파싱하여 PDA 메뉴 목록 추출.
   - 메뉴코드: href 경로에서 추출 (예: `iv3000m/IVMV01.html` → `IVMV01`)
   - 메뉴명: `<img alt="...">` 값 사용
   - `dist/{menuCode.toLowerCase()}/ui.md` 존재 시 해당 메타(업무그룹명·업무규칙·버튼) 활용
@@ -96,9 +147,7 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 | 업무규칙 | `공통 업무규칙` 섹션의 번호 목록 |
 | 버튼 기능 | `기능 버튼` 섹션 (추가/수정/삭제/저장 등 키워드 탐지) |
 
-#### 2-2. 테스트 시나리오 자동 생성
-
-메뉴별로 아래 패턴으로 테스트 케이스를 생성한다.
+### 2-2. 테스트 시나리오 자동 생성
 
 **기본 시나리오 (모든 메뉴 공통)**:
 
@@ -122,23 +171,20 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 | 저장 | {메뉴명} 저장 | 저장 후 데이터 반영은 정상 구현 되는지? |
 
 **업무규칙별 시나리오** (ui.md 업무규칙 섹션에서 자동 추출):
-
-- 각 업무규칙 항목을 `확인내용`으로 변환하여 테스트 케이스 1건씩 추가한다.
+- 각 업무규칙 항목을 `확인내용`으로 변환하여 테스트 케이스 1건씩 추가.
 - `처리내용`은 `{메뉴명} 업무규칙`으로 고정.
 
-#### 2-3. 테스트 ID 채번
+### 2-3. 테스트 ID 채번
 
 ```
 {메뉴코드}-{순번3자리}
 예: MDCT01-001, MDCT01-002 ...
 ```
 
-메뉴 순서는 `dist/` 폴더 탐색 순서(알파벳 오름차순)를 따른다.
-
-#### 2-4. 템플릿 복사 및 데이터 기입
+### 2-4. 템플릿 복사 및 데이터 기입
 
 1. `template/04 구현(PI)/PI_214-통합테스트보고서.xlsx`를 `xlsx-populate.fromFileAsync()`로 읽어 모든 시트와 셀 스타일을 그대로 유지한다.
-2. `통합테스트 수행보고서` 시트의 3행~218행 (템플릿 서식이 부여된 영역) 에서 **셀 값만 비우고 스타일(테두리·정렬·폰트·채우기)은 보존**한다. `delete` 가 아니라 `cell.value(undefined)` 호출.
+2. `통합테스트 수행보고서` 시트의 3행~218행에서 **셀 값만 비우고 스타일은 보존**한다 (`cell.value(undefined)`).
 3. 3행부터 생성된 테스트 케이스를 `cell.value(...)`로 덮어쓴다.
 
    | 컬럼 | 값 |
@@ -146,10 +192,10 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
    | A (업무영역) | 메뉴그룹명 |
    | B (테스트ID) | MDCT01-001 형식 |
    | C (항목) | 메뉴명 |
-   | D (처리내용) | 처리내용 (예: 거래처관리 조회) |
-   | E (SYSTEM) | 입력받은 SYSTEM값 (예: WMS(WEB)) |
+   | D (처리내용) | 처리내용 |
+   | E (SYSTEM) | 입력받은 SYSTEM값 |
    | F (확인내용) | 확인내용 |
-   | G (확인일자) | 빈값 (테스트 수행 시 기입) |
+   | G (확인일자) | 빈값 |
    | H (확인자) | 입력받은 담당자명 |
    | I (확인결과) | 빈값 |
    | J~L | 빈값 |
@@ -163,7 +209,7 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 > - ExcelJS: 데이터 행 테두리 손실, 폰트 sz10→sz11 변경 발생 → 사용 안 함.
 > - xlsx (SheetJS Community): 모든 셀 서식 손실, 출력 5.7MB로 비대화 → 사용 안 함.
 
-### 3단계 — 결과 확인
+### 3) 결과 확인
 
 스크립트 종료 후 아래를 확인한다:
 - 출력 파일 존재 여부
@@ -177,6 +223,7 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 ```
 ✓ 통합테스트보고서 생성 완료 [PI_422]
 
+실행 환경: Windows PowerShell  또는  Bash on Linux/Mac/WSL
 출력 파일: output/04 구현(PI)/PI.422_통합테스트보고서_{고객사명}.xlsx
 담당자:   {담당자}
 기간:     {시작일} ~ {종료일}
@@ -192,7 +239,7 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자}"
 
 ---
 
-## 주의사항
+## 주의사항 (공통)
 
 - **Node.js 전용**: Python은 사용하지 않는다. 라이브러리 경로: `output/04 구현(PI)/node_modules/xlsx-populate`.
 - **xlsx (SheetJS Community) 절대 사용 금지**: 셀 스타일 쓰기를 지원하지 않아 템플릿 양식이 모두 깨진다.

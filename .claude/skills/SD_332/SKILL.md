@@ -1,10 +1,10 @@
 ---
 name: SD_332
-description: 【공통코드정의서 엑셀 생성 (Windows)】 Windows 네이티브(PowerShell) 환경에서 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔하여 DB(PostgreSQL/MSSQL/MySQL/MariaDB)에 직접 접속하고, sm_comm_h/sm_comm_d 공통코드를 추출하여 PI_113-공통코드정의서 엑셀 파일을 자동 생성합니다. /SD_332 {디렉토리경로} 형식으로 실행합니다. 공통코드정의서 작성, 공통코드 테일러링, 공통코드 엑셀 추출, DB 공통코드를 산출물로 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "PI_113 산출물 만들어줘", "공통코드 테일러링 해줘", "SD_332 실행해줘" 라고 말해도 이 스킬을 사용합니다. WSL/Linux/macOS 환경에서는 SD_332_BASH 스킬을 사용합니다.
-allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
+description: 【공통코드정의서 엑셀 생성 (Windows/WSL/Linux/Mac 통합)】 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔하여 DB(PostgreSQL/MSSQL/MySQL/MariaDB)에 직접 접속하고, sm_comm_h/sm_comm_d 공통코드를 추출하여 PI_113-공통코드정의서 엑셀 파일을 자동 생성합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. /SD_332 {디렉토리경로} 형식으로 실행합니다. 공통코드정의서 작성, 공통코드 테일러링, 공통코드 엑셀 추출, DB 공통코드를 산출물로 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "PI_113 산출물 만들어줘", "공통코드 테일러링 해줘", "SD_332 실행해줘", "WSL에서 공통코드정의서 만들어줘", "Linux에서 공통코드 뽑아줘" 라고 말해도 이 스킬을 사용합니다.
+allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 
-# 공통코드정의서 자동 생성 [SD_332]
+# 공통코드정의서 자동 생성 (Windows/WSL/Linux/Mac 통합) [SD_332]
 
 대상 디렉토리: **$ARGUMENTS**
 
@@ -17,24 +17,29 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 
 ---
 
-## 사전 준비
+## OS 분기 — 가장 먼저 실행
+
+```
+- Windows 네이티브 (PowerShell): $env:OS == 'Windows_NT' && uname 없음
+  → [Windows 섹션] — `python` 실행.
+- WSL / Linux / macOS (Bash):    uname 존재 (Linux/Darwin)
+  → [Bash 섹션] — `python3` 실행.
+```
+
+> Python 스크립트(`scripts/*.py`)는 양쪽에서 공유. 차이는 `python` vs `python3` 명령뿐.
+
+---
+
+## 사전 준비 (공통)
 
 ### 인자 확정
 
-`$ARGUMENTS`가 비어 있으면 사용자에게 디렉토리 경로를 물어본다.
-경로가 존재하지 않으면 다시 물어본다.
+`$ARGUMENTS`가 비어 있으면 사용자에게 디렉토리 경로를 물어본다. 경로가 존재하지 않으면 다시 물어본다.
 
-### 경로 정의 (동적)
+### 경로 정의
 
-```powershell
-$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
-$Workspace = Split-Path $DocRoot -Parent
-$RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
-```
+상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
-경로 (상대경로는 `$DocRoot` 기준):
 ```
 TEMPLATE   = template/04 구현(PI)/PI_113-공통코드정의서.xlsx
 OUTPUT_DIR = output/04 구현(PI)
@@ -42,34 +47,110 @@ TMP_DIR    = output/04 구현(PI)/tmp
 SCRIPTS    = .claude/skills/SD_332/scripts
 ```
 
-`OUTPUT_DIR`과 `TMP_DIR`이 없으면 생성한다.
+`OUTPUT_DIR` 과 `TMP_DIR` 이 없으면 생성한다.
 
 ---
 
-## 단계별 워크플로우
+# === Windows 섹션 (PowerShell) ===
 
-각 단계는 Bash로 스크립트를 실행하고, 결과 JSON을 다음 단계가 읽는 방식으로 진행된다.
-각 단계 완료 후 산출물(`tmp/*.json`)이 존재하는지 확인한 뒤 다음 단계로 진행한다.
+### W-0) 경로 동적 감지
+
+```powershell
+$DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot = Join-Path $Workspace "wms-$ProjCode-be"
+```
+
+### W-1) DB 접속정보 스캔
+
+```powershell
+Set-Location $DocRoot
+python .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}"
+```
+
+### W-2) 의존성 확인
+
+```powershell
+python .claude/skills/SD_332/scripts/02_extract_common_codes.py --check-only
+```
+
+### W-3) 공통코드 추출
+
+```powershell
+python .claude/skills/SD_332/scripts/02_extract_common_codes.py
+```
+
+### W-4) Excel 생성
+
+```powershell
+python .claude/skills/SD_332/scripts/03_generate_excel.py
+```
+
+### W-5) 임시 파일 정리
+
+```powershell
+Remove-Item -Recurse -Force "$DocRoot\output\04 구현(PI)\tmp"
+```
 
 ---
 
-### 1단계 — DB 접속정보 스캔
+# === Bash 섹션 (WSL/Linux/Mac) ===
 
-**스크립트**: `scripts/01_scan_db_config.py`
-
-**입력**: 사용자 지정 디렉토리 경로
-**출력**: `output/04 구현(PI)/tmp/db_candidates.json`
+### B-0) 경로 동적 감지
 
 ```bash
-cd "$(git rev-parse --show-toplevel)" && \
+DOC_ROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=$(dirname "$DOC_ROOT")
+REPO_NAME=$(basename "$DOC_ROOT")
+if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
+BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
+```
+
+### B-1) DB 접속정보 스캔
+
+```bash
+cd "$DOC_ROOT"
 python3 .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}"
 ```
 
-스크립트는 디렉토리(하위 포함)에서 다음 패턴을 인식하여 DB 접속 후보를 추출한다.
+### B-2) 의존성 확인
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py --check-only
+```
+
+### B-3) 공통코드 추출
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py
+```
+
+### B-4) Excel 생성
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_332/scripts/03_generate_excel.py
+```
+
+### B-5) 임시 파일 정리
+
+```bash
+rm -rf "$DOC_ROOT/output/04 구현(PI)/tmp"
+```
+
+---
+
+## 1단계 스캔 — DB 접속정보 후보 (공통)
+
+`scripts/01_scan_db_config.py` 가 디렉토리(하위 포함)에서 다음 패턴을 인식하여 DB 접속 후보를 추출한다.
 
 | 패턴 | 추출 키 |
 |---|---|
-| `application-{profile}.properties` | `db.url`, `db.username`, `db.password`, `db.driverClassName` 그리고 Spring 표준 `spring.datasource.*` |
+| `application-{profile}.properties` | `db.url`, `db.username`, `db.password`, `db.driverClassName`, `spring.datasource.*` |
 | `application-{profile}.yml` / `.yaml` | `spring.datasource.url/username/password` |
 | `application.properties` / `application.yml` | 위와 동일 |
 | `*.env`, `.env.*` | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL` |
@@ -83,13 +164,13 @@ python3 .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}
 
 ---
 
-### 2단계 — 사용자 확인 및 비밀번호 보강
+## 1.5단계 — 사용자 확인 및 비밀번호 보강 (공통)
 
-`db_candidates.json`을 Read 툴로 읽어 후보 목록을 확인한다.
+`db_candidates.json` 을 Read 툴로 읽어 후보 목록을 확인한다.
 
-1. **후보가 0개**: AskUserQuestion으로 DB 종류·host·port·database·user·password를 직접 입력 받는다.
-2. **후보가 1개**: 추천 정보로 진행할지 사용자에게 한 번 확인한다. password가 비어 있으면 별도로 묻는다.
-3. **후보가 2개 이상**: AskUserQuestion으로 어떤 후보(profile)를 사용할지 선택받는다. local/dev 모두 추출됐다면 local 우선 추천.
+1. **후보 0개**: AskUserQuestion으로 DB 종류·host·port·database·user·password를 직접 입력 받는다.
+2. **후보 1개**: 추천 정보로 진행할지 사용자에게 한 번 확인. password가 비어 있으면 별도로 묻는다.
+3. **후보 2개 이상**: AskUserQuestion으로 어떤 후보(profile)를 사용할지 선택받는다.
 
 확정된 접속정보를 `output/04 구현(PI)/tmp/db_target.json`로 저장한다.
 
@@ -106,42 +187,26 @@ python3 .claude/skills/SD_332/scripts/01_scan_db_config.py "{디렉토리경로}
 }
 ```
 
-> 비밀번호는 평문으로 임시 저장된다. 5단계 Excel 생성이 성공하면 6단계에서 `tmp/` 폴더를 자동 삭제한다.
+> 비밀번호는 평문으로 임시 저장된다. Excel 생성이 성공하면 마지막 단계에서 `tmp/` 폴더를 자동 삭제한다.
 
 ---
 
-### 3단계 — Python 의존성 자동 설치
-
-선택된 driver에 맞는 Python 라이브러리가 import 가능한지 점검한다. 누락 시 `pip install --user`로 설치한다.
+## 의존성 매핑 (공통)
 
 | driver | Python 라이브러리 | 설치 명령 |
 |---|---|---|
-| postgresql | psycopg2 | `python3 -m pip install --user psycopg2-binary` |
-| mysql | pymysql | `python3 -m pip install --user pymysql` |
-| mssql | pymssql | `python3 -m pip install --user pymssql` |
-| (공통) | openpyxl | `python3 -m pip install --user openpyxl` |
+| postgresql | psycopg2 | `pip install --user psycopg2-binary` |
+| mysql | pymysql | `pip install --user pymysql` |
+| mssql | pymssql | `pip install --user pymssql` |
+| (공통) | openpyxl | `pip install --user openpyxl` |
 
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py --check-only
-```
-
-`--check-only`는 import 시도만 수행하고 누락된 라이브러리 목록을 출력한다. 누락 발견 시 즉시 설치 후 재검증.
+`--check-only` 옵션은 import 시도만 수행하고 누락된 라이브러리 목록을 출력. 누락 발견 시 즉시 설치 후 재검증.
 
 ---
 
-### 4단계 — 공통코드 추출
+## 공통코드 추출 상세 (공통)
 
-**스크립트**: `scripts/02_extract_common_codes.py`
-**입력**: `output/04 구현(PI)/tmp/db_target.json`
-**출력**: `output/04 구현(PI)/tmp/common_codes.json`
-
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-python3 .claude/skills/SD_332/scripts/02_extract_common_codes.py
-```
-
-스크립트가 수집하는 정보:
+`scripts/02_extract_common_codes.py` 가 수집하는 정보:
 
 - **그룹(`sm_comm_h`)**: `biz_seq, comm_h_cd, comm_h_nm, user_cd_yn, inout_cd, use_yn` (전체 행, USE_YN 무관)
 - **상세(`sm_comm_d`)**: `biz_seq, comm_h_cd, comm_d_cd, comm_d_nm, ref_h_cd, ref_d_cd, disp_no, disp_yn, use_yn`
@@ -171,55 +236,29 @@ JSON 구조:
 
 ---
 
-### 5단계 — Excel 생성
+## Excel 생성 상세 (공통)
 
-**스크립트**: `scripts/03_generate_excel.py`
-**입력**: `output/04 구현(PI)/tmp/common_codes.json`, `template/04 구현(PI)/PI_113-공통코드정의서.xlsx`
-**출력**: `output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx`
-
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-python3 .claude/skills/SD_332/scripts/03_generate_excel.py
-```
-
-스크립트가 하는 일:
+`scripts/03_generate_excel.py` 가 수행하는 일:
 
 1. 템플릿을 출력 경로로 복사. 파일명: `PI_113-공통코드정의서_{YYMMDD}.xlsx`.
-2. **`3.코드그룹` 시트**:
-   - 헤더: 7행 (사업장/그룹코드/코드그룹명/코드설명/.../사용자코드여부/수불유형여부/비고)
-   - 데이터 시작: 8행
+2. **`3.코드그룹` 시트** (헤더: 7행, 데이터: 8행~):
    - 기존 샘플 데이터(8행 이후) 모두 비움.
    - DB에서 추출한 그룹 데이터를 8행부터 채움:
      - A: `biz_seq` (정수)
      - B: `comm_h_cd`
      - C: `comm_h_nm`
-     - D: 코드설명 — DB에는 없으므로 빈 값으로 둠 (사용자가 채우는 자유 칼럼)
+     - D: 코드설명 — 빈 값 (사용자 자유 칼럼)
      - G: `user_cd_yn`
      - H: `inout_cd`
-     - I: `use_yn` 이 'N'이면 "미사용", 'Y'면 빈 값(또는 기존 비고 패턴 유지). 단순화하여 `inout_cd`가 비고 역할을 하지 않으므로 use_yn='N'인 그룹만 "미사용" 표시.
-3. **`4.상세코드` 시트**:
-   - 헤더: 2~3행 (한글/영문 헤더), 데이터 시작: 4행
+     - I: `use_yn` 이 'N'이면 "미사용", 'Y'면 빈 값
+3. **`4.상세코드` 시트** (헤더: 2~3행, 데이터: 4행~):
    - 기존 샘플 데이터(4행 이후) 모두 비움.
    - DB에서 추출한 상세 데이터를 4행부터 채움:
-     - A: `biz_seq`(문자 또는 정수, 템플릿이 문자형이므로 문자열로)
-     - B: `comm_h_cd`
-     - C: `comm_d_cd`
-     - D: `comm_d_nm`
-     - E: `ref_h_cd`
-     - F: `ref_d_cd`
-     - G: `disp_no`
-     - H: `disp_yn`
-     - I: `use_yn`
-4. **`그룹SQL` / `상세SQL` 시트**:
-   - 기존에 정의된 INSERT 수식이 그대로 동작하도록, 데이터 행 수만큼 수식을 복제·확장한다.
-   - 기존 수식은 `'3.코드그룹'!A8`, `'3.코드그룹'!A9`, ... 식으로 연속 참조. 수식 row index를 데이터 끝까지 자동 채움.
-5. **`표지` / `개정이력` / `3.코드그룹` 메타정보**:
-   - `3.코드그룹` 시트의 작성일자(E4)는 **오늘 날짜(시간 제외)** 로 갱신하며, 셀 형식을 `yyyy-mm-dd`로 강제한다.
-   - 그 외 표지·개정이력은 템플릿 그대로 둠.
-6. **데이터 행 스타일 일관성**: DB에서 추출한 행 수가 템플릿의 데이터 영역 행 수보다 많을 때, 템플릿 한계를 넘어선 새 행에는 첫 데이터 행(코드그룹=8행, 상세코드=4행, SQL 시트=1행)의 폰트·테두리·채움·정렬·셀 서식·행 높이를 복사하여 적용한다. (예: 4.상세코드 템플릿 1609행 한도를 넘는 1610행 이후 행도 동일한 테두리·`fmt=@`·폰트로 채워진다.)
+     - A=biz_seq, B=comm_h_cd, C=comm_d_cd, D=comm_d_nm, E=ref_h_cd, F=ref_d_cd, G=disp_no, H=disp_yn, I=use_yn
+4. **`그룹SQL` / `상세SQL` 시트**: 기존 INSERT 수식이 그대로 동작하도록 데이터 행 수만큼 수식을 복제·확장.
+5. **`표지` / `개정이력`**: 템플릿 그대로. `3.코드그룹` E4 작성일자는 오늘 날짜로 갱신.
+6. **데이터 행 스타일 일관성**: 템플릿 한계를 넘는 새 행에 첫 데이터 행의 폰트·테두리·채움·정렬·셀 서식·행 높이를 복사 적용.
 7. 저장.
-
-#### 시트별 헤더·데이터 매핑 요약
 
 ```
 [3.코드그룹]  (헤더: 7행, 데이터: 8행~)
@@ -236,23 +275,18 @@ E=ref_h_cd  F=ref_d_cd    G=disp_no     H=disp_yn   I=use_yn
 
 ---
 
-### 6단계 — 임시 파일 정리 (필수)
+## 임시 파일 정리 (필수)
 
-**Excel 산출물이 정상적으로 생성된 직후** `output/04 구현(PI)/tmp/` 폴더를 즉시 삭제한다. 이 폴더에는 DB 비밀번호가 평문으로 저장된 `db_target.json`이 포함되어 있으므로 작업 종료 시점에 반드시 제거해야 한다.
-
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-rm -rf "output/04 구현(PI)/tmp"
-```
+Excel 산출물이 정상적으로 생성된 직후 `output/04 구현(PI)/tmp/` 폴더를 즉시 삭제한다. 이 폴더에는 DB 비밀번호가 평문으로 저장된 `db_target.json` 이 포함되어 있으므로 작업 종료 시점에 반드시 제거해야 한다.
 
 **규칙**:
-- 5단계(Excel 생성)가 성공한 경우에만 자동 삭제한다. 중간 단계에서 실패하면 디버깅을 위해 `tmp/`를 남겨둔다.
-- 사용자에게 별도로 묻지 않고 자동 정리한다. (이전에는 권유만 했으나, 비밀번호 평문 노출을 막기 위해 자동 삭제로 강제한다.)
-- 정리 결과는 완료 보고에 한 줄로 명시한다 (예: `임시 파일 정리: tmp/ 삭제 완료`).
+- Excel 생성이 성공한 경우에만 자동 삭제한다. 중간 단계에서 실패하면 디버깅을 위해 `tmp/`를 남겨둔다.
+- 사용자에게 별도로 묻지 않고 자동 정리한다.
+- 정리 결과는 완료 보고에 한 줄로 명시한다.
 
 ---
 
-## 완료 체크리스트
+## 완료 체크리스트 (공통)
 
 - [ ] `$ARGUMENTS` 또는 사용자 입력으로 디렉토리 확정
 - [ ] `tmp/db_candidates.json` 생성 (스캔 결과)
@@ -272,6 +306,7 @@ rm -rf "output/04 구현(PI)/tmp"
 ```
 ✓ 공통코드정의서 생성 완료 [SD_332]
 
+실행 환경:     Windows PowerShell   또는   Bash on Linux/Mac/WSL
 대상 디렉토리: {디렉토리경로}
 DB:           {driver} {host}:{port}/{database} (profile={profile})
 출력파일:     output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx
@@ -288,10 +323,20 @@ DB:           {driver} {host}:{port}/{database} (profile={profile})
 
 ---
 
-## 주의사항
+## 주의사항 (공통)
 
-- **비밀번호 노출 방지 (필수)**: AskUserQuestion으로 받은 비밀번호와 `tmp/db_target.json`은 평문이므로, 5단계(Excel 생성) 성공 직후 6단계에서 `tmp/` 폴더를 자동 삭제한다. 사용자에게 묻지 않고 즉시 제거하며, 중간 단계 실패 시에만 디버깅 목적으로 남겨둔다.
+- **비밀번호 노출 방지 (필수)**: AskUserQuestion으로 받은 비밀번호와 `tmp/db_target.json`은 평문이므로, Excel 생성 성공 직후 `tmp/` 폴더를 자동 삭제한다.
 - **driver 자동 감지 실패**: JDBC URL의 prefix가 비표준(`jdbc:log4jdbc:...`)이면 1단계 스크립트가 wrapper prefix를 벗긴다. 그래도 인식이 안 되면 사용자에게 직접 driver를 선택하도록 묻는다.
 - **테이블명/컬럼명 대소문자**: PostgreSQL은 lowercase, MSSQL은 대소문자 무관, MySQL은 OS에 따라 다름. 스크립트는 모두 lowercase 식별자로 접근한다.
-- **권한 부족**: `sm_comm_h`/`sm_comm_d`에 SELECT 권한이 없으면 명확한 에러로 종료한다. 권한 보강 후 재실행하도록 안내한다.
-- **수식 보존**: `그룹SQL`/`상세SQL` 시트의 수식은 row index만 갱신하여 복제한다. 셀 수식 문자열을 직접 파싱·재생성하지 않고 openpyxl `cell.value` 그대로 두면서 새 행에 동일 수식의 row 부분만 치환한다.
+- **권한 부족**: `sm_comm_h`/`sm_comm_d`에 SELECT 권한이 없으면 명확한 에러로 종료한다.
+- **수식 보존**: `그룹SQL`/`상세SQL` 시트의 수식은 row index만 갱신하여 복제한다.
+
+### Windows 특화
+
+- **Python 실행 명령**: `python` (PATH 등록 필요). `py -3` 도 가능.
+- **한글 콘솔 출력**: `chcp 65001` + `$env:PYTHONUTF8 = "1"` 권장.
+
+### Bash 특화
+
+- **Python 실행 명령**: `python3`.
+- **WSL 경로**: `/mnt/c/...` 형태로 입력 가능.

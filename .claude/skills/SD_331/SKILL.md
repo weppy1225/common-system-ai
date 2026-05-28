@@ -1,10 +1,10 @@
 ---
 name: SD_331
-description: 【테이블정의서 엑셀 생성 (실DB 접속, Windows)】 Windows 네이티브(PowerShell) 환경에서 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔해 실제 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 직접 접속하고, 시스템 카탈로그에서 스키마를 추출하여 SD.212-테이블정의서 엑셀 파일을 자동 생성합니다. /SD_331 {디렉토리경로} 형식으로 실행합니다. 기존 /SD_212(테이블 MD 파싱)와 /SD_212_DDL(DDL 파일 파싱)과 달리, 살아있는 DB에 직접 붙어 information_schema/pg_catalog/sys.*/user_* 등을 조회해 테이블·컬럼·인덱스·제약조건·FK를 뽑아낸다는 점이 다릅니다. 사용자가 "DB에서 직접 테이블정의서 뽑아줘", "라이브 DB 스키마 엑셀로", "운영 DB 접속해서 테이블 명세서", "DB 카탈로그 추출", "SD_331 실행해줘" 라고 말하면 이 스킬을 사용합니다. 단, 사용자가 단순히 "테이블정의서 만들어줘"라고만 말하고 DB 접속을 원치 않는 정황(MD 파일이나 DDL 파일을 언급)이면 /SD_212나 /SD_212_DDL 쪽이 맞을 수 있으니, 입력 소스(MD/DDL/실DB)를 먼저 확인하여 분기합니다. WSL/Linux/macOS 환경에서는 SD_331_BASH 스킬을 사용합니다.
-allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
+description: 【테이블정의서 엑셀 생성 (실DB 접속, Windows/WSL/Linux/Mac 통합)】 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔해 실제 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 직접 접속하고, 시스템 카탈로그에서 스키마를 추출하여 SD.212-테이블정의서 엑셀 파일을 자동 생성합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. /SD_331 {디렉토리경로} 형식으로 실행합니다. 기존 /SD_212(테이블 MD 파싱)와 /SD_212_DDL(DDL 파일 파싱)과 달리, 살아있는 DB에 직접 붙어 information_schema/pg_catalog/sys.*/user_* 등을 조회해 테이블·컬럼·인덱스·제약조건·FK를 뽑아낸다는 점이 다릅니다. 사용자가 "DB에서 직접 테이블정의서 뽑아줘", "라이브 DB 스키마 엑셀로", "운영 DB 접속해서 테이블 명세서", "DB 카탈로그 추출", "SD_331 실행해줘", "WSL에서 테이블정의서 뽑아줘", "Linux에서 라이브 DB 스키마 엑셀로" 라고 말하면 이 스킬을 사용합니다. 단, 사용자가 단순히 "테이블정의서 만들어줘"라고만 말하고 DB 접속을 원치 않는 정황(MD 파일이나 DDL 파일을 언급)이면 /SD_212나 /SD_212_DDL 쪽이 맞을 수 있으니, 입력 소스(MD/DDL/실DB)를 먼저 확인하여 분기합니다.
+allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 
-# 테이블정의서 자동 생성 (실 DB 접속) [SD_331]
+# 테이블정의서 자동 생성 (실 DB 접속, Windows/WSL/Linux/Mac 통합) [SD_331]
 
 대상 디렉토리: **$ARGUMENTS**
 
@@ -21,23 +21,31 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 
 ---
 
-## 사전 준비
+## OS 분기 — 가장 먼저 실행
+
+스킬 시작 시 환경 변수 `OS` / `uname` 로 실행 환경을 판별하고, 이후 단계에서 **해당 OS 섹션의 블록만** 실행한다.
+
+```
+- Windows 네이티브 (PowerShell): $env:OS == 'Windows_NT' && uname 명령 없음
+  → [Windows 섹션]의 PowerShell 블록 사용. `PowerShell` 도구 또는 `powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "..."` 패턴.
+- WSL / Linux / macOS (Bash):    uname 명령 존재 (Linux/Darwin)
+  → [Bash 섹션]의 bash 블록 사용. `Bash` 도구 그대로 사용.
+```
+
+> 두 섹션의 로직(디렉토리 스캔 → 후보 확정 → 의존성 확인 → DB 접속 → 스키마 추출 → 엑셀 생성 → tmp 삭제)은 동일하며, OS 셸 문법만 다르다. Python 스크립트(`scripts/*.py`)는 양쪽에서 그대로 공유한다.
+
+---
+
+## 사전 준비 (공통)
 
 ### 인자 확정
 
 `$ARGUMENTS`가 비어 있으면 사용자에게 디렉토리 경로를 물어본다. 비어 있지 않더라도 경로가 존재하지 않으면 다시 물어본다.
 
-### 경로 정의 (동적)
+### 경로 정의
 
-```powershell
-$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
-$Workspace = Split-Path $DocRoot -Parent
-$RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
-```
+상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
-경로 (상대경로는 `$DocRoot` 기준):
 ```
 TEMPLATE   = template/03 설계(SD)/SD.212-테이블정의서.xlsx
 OUTPUT_DIR = output/03 설계(SD)
@@ -49,25 +57,134 @@ SCRIPTS    = .claude/skills/SD_331/scripts
 
 ---
 
-## 단계별 워크플로우
+# === Windows 섹션 (PowerShell) ===
 
-각 단계는 Bash로 스크립트를 실행하고, 그 결과 JSON을 다음 단계가 읽는 방식으로 진행된다. 각 단계 완료 후 다음 단계로 진행하기 전에 산출물(`tmp/*.json`)이 존재하는지 확인한다.
+### W-0) 경로 동적 감지
 
----
+```powershell
+$DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
+$Workspace = Split-Path $DocRoot -Parent
+$RepoName  = Split-Path $DocRoot -Leaf
+if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
+```
 
-### 1단계 — 디렉토리 스캔으로 DB 접속정보 후보 추출
+### W-1) 디렉토리 스캔으로 DB 접속정보 후보 추출
 
 **스크립트**: `scripts/01_scan_config.py`
-
 **입력**: 사용자 지정 디렉토리 경로
 **출력**: `output/03 설계(SD)/tmp/db_candidates.json`
 
+```powershell
+Set-Location $DocRoot
+python .claude/skills/SD_331/scripts/01_scan_config.py "{디렉토리경로}"
+```
+
+### W-2) 사용자 확인 및 누락 정보 보강
+
+`db_candidates.json` 을 Read 툴로 읽어 후보 목록을 확인한다.
+
+1. **후보가 0개**: AskUserQuestion으로 DB 종류와 접속정보(host, port, database, user, password)를 직접 입력받아 가상의 후보 1개를 만든다.
+2. **후보가 1개**: 사용자에게 해당 정보로 진행할지, password가 누락되었으면 password를 입력할지 묻는다.
+3. **후보가 2개 이상**: AskUserQuestion으로 어떤 후보를 사용할지 선택받는다.
+
+선택된 후보의 password가 비어 있다면 **AskUserQuestion으로 password를 별도 질문한다.**
+
+확정된 접속정보를 `output/03 설계(SD)/tmp/db_target.json`로 저장한다.
+
+### W-3) 의존성 확인 및 자동 설치
+
+```powershell
+python .claude/skills/SD_331/scripts/02_extract_schema.py --check-only
+```
+
+누락된 라이브러리를 `python -m pip install --user <pkg>`로 설치한 뒤 재검증.
+
+### W-4) DB 접속 및 스키마 추출
+
+```powershell
+python .claude/skills/SD_331/scripts/02_extract_schema.py
+```
+
+**출력**: `output/03 설계(SD)/tmp/schema.json`
+
+### W-5) Excel 생성
+
+```powershell
+python .claude/skills/SD_331/scripts/03_generate_excel.py
+```
+
+**출력**: `output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx`
+
+### W-6) 임시 파일 정리 (필수)
+
+```powershell
+Remove-Item -Recurse -Force "$DocRoot\output\03 설계(SD)\tmp"
+```
+
+---
+
+# === Bash 섹션 (WSL/Linux/Mac) ===
+
+### B-0) 경로 동적 감지
+
 ```bash
-cd "$(git rev-parse --show-toplevel)" && \
+DOC_ROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=$(dirname "$DOC_ROOT")
+REPO_NAME=$(basename "$DOC_ROOT")
+if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
+BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
+FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
+
+TEMPLATE="$DOC_ROOT/template/03 설계(SD)/SD.212-테이블정의서.xlsx"
+OUTPUT_DIR="$DOC_ROOT/output/03 설계(SD)"
+TMP_DIR="$DOC_ROOT/output/03 설계(SD)/tmp"
+SCRIPTS="$DOC_ROOT/.claude/skills/SD_331/scripts"
+```
+
+### B-1) 디렉토리 스캔으로 DB 접속정보 후보 추출
+
+```bash
+cd "$DOC_ROOT"
 python3 .claude/skills/SD_331/scripts/01_scan_config.py "{디렉토리경로}"
 ```
 
-스크립트는 디렉토리(하위 포함)에서 다음 패턴의 파일을 찾아 DB 접속정보 후보를 모은다.
+### B-2) 사용자 확인 및 누락 정보 보강
+
+(W-2 와 동일 — `tmp/db_candidates.json` Read → 후보 확정 → `tmp/db_target.json` 저장)
+
+### B-3) 의존성 확인 및 자동 설치
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_331/scripts/02_extract_schema.py --check-only
+```
+
+누락된 라이브러리를 `python3 -m pip install --user <pkg>`로 설치한 뒤 재검증.
+
+### B-4) DB 접속 및 스키마 추출
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_331/scripts/02_extract_schema.py
+```
+
+### B-5) Excel 생성
+
+```bash
+cd "$DOC_ROOT"
+python3 .claude/skills/SD_331/scripts/03_generate_excel.py
+```
+
+### B-6) 임시 파일 정리 (필수)
+
+```bash
+rm -rf "$DOC_ROOT/output/03 설계(SD)/tmp"
+```
+
+---
+
+## 스캔 대상 파일 패턴 (공통, Python 스크립트가 처리)
 
 | 패턴 | 추출 키 |
 |---|---|
@@ -87,18 +204,7 @@ python3 .claude/skills/SD_331/scripts/01_scan_config.py "{디렉토리경로}"
 
 ---
 
-### 2단계 — 사용자 확인 및 누락 정보 보강
-
-스크립트가 만든 `db_candidates.json`을 Read 툴로 읽어 후보 목록을 확인한다.
-
-1. **후보가 0개**: AskUserQuestion으로 DB 종류와 접속정보(host, port, database, user, password)를 직접 입력 받아 가상의 후보 1개를 만든다.
-2. **후보가 1개**: 사용자에게 해당 정보로 진행할지, password가 누락되었으면 password를 입력할지 묻는다.
-3. **후보가 2개 이상**: AskUserQuestion으로 어떤 후보를 사용할지 선택 받는다.
-
-선택된 후보의 password가 비어 있다면 **AskUserQuestion으로 password를 별도 질문한다.**
-> 보안: 비밀번호는 화면에 그대로 표시되므로, 사용자가 직접 입력하기 전에 "쉘 히스토리·로그에 남을 수 있다"는 점을 안내한다.
-
-확정된 접속정보를 `output/03 설계(SD)/tmp/db_target.json`로 저장한다.
+## db_target.json 스키마 (공통)
 
 ```json
 {
@@ -118,66 +224,21 @@ python3 .claude/skills/SD_331/scripts/01_scan_config.py "{디렉토리경로}"
 
 ---
 
-### 3단계 — 의존성 확인 및 자동 설치
+## 의존성 매핑 (공통)
 
-선택된 driver에 대응하는 Python 라이브러리가 import 가능한지 점검하고, 없으면 자동 설치한다.
-
-| driver | Python 라이브러리 | 설치 명령 |
+| driver | Python 라이브러리 | 설치 명령 (Win/Bash 공통, `python`/`python3` 만 차이) |
 |---|---|---|
-| postgresql | psycopg2 | `python3 -m pip install --user psycopg2-binary` |
-| mysql | pymysql | `python3 -m pip install --user pymysql` |
-| mssql | pymssql | `python3 -m pip install --user pymssql` |
-| oracle | oracledb | `python3 -m pip install --user oracledb` |
-| (공통) | openpyxl | `python3 -m pip install --user openpyxl` |
-
-자동 설치 명령:
-
-```bash
-python3 .claude/skills/SD_331/scripts/02_extract_schema.py --check-only
-```
-
-`--check-only`는 import 시도만 수행하고 누락된 라이브러리 목록을 출력한다. 누락된 라이브러리를 `pip install --user`로 설치한 뒤 다시 `--check-only`로 검증한다.
+| postgresql | psycopg2 | `pip install --user psycopg2-binary` |
+| mysql | pymysql | `pip install --user pymysql` |
+| mssql | pymssql | `pip install --user pymssql` |
+| oracle | oracledb | `pip install --user oracledb` |
+| (공통) | openpyxl | `pip install --user openpyxl` |
 
 ---
 
-### 4단계 — DB 접속 및 스키마 추출
+## 5단계 Excel 생성 상세 (공통)
 
-**스크립트**: `scripts/02_extract_schema.py`
-**입력**: `output/03 설계(SD)/tmp/db_target.json`
-**출력**: `output/03 설계(SD)/tmp/schema.json`
-
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-python3 .claude/skills/SD_331/scripts/02_extract_schema.py
-```
-
-스크립트는 driver별로 적절한 카탈로그(`information_schema`, `pg_catalog`, `sys.*`, `user_*`)를 조회하여 다음 정보를 수집한다.
-
-- 테이블 목록 (logical/physical name, schema, comment)
-- 테이블별 컬럼 (logical name, physical name, data type, not null, default, comment)
-- 테이블별 인덱스 (이름, 컬럼 목록, PK 여부, Unique 여부)
-- 테이블별 제약조건 (이름, 종류, 정의)
-- 테이블별 FK (FK 이름, 컬럼 목록, 참조 테이블, 참조 컬럼)
-- 테이블별 PK Side FK (이 테이블을 참조하는 다른 테이블의 FK)
-
-**logical name 휴리스틱**: 컬럼/테이블의 comment(설명)가 있으면 그것을 logical name으로 사용한다. 없으면 physical name을 그대로 둔다.
-
-연결 실패·권한 부족 시 명확한 에러 메시지(시도한 쿼리, 응답 메시지)를 출력하고 종료한다. 사용자가 후보를 다른 것으로 바꾸거나 권한을 보강한 뒤 다시 실행할 수 있게 한다.
-
----
-
-### 5단계 — Excel 생성
-
-**스크립트**: `scripts/03_generate_excel.py`
-**입력**: `output/03 설계(SD)/tmp/schema.json`, `template/03 설계(SD)/SD.212-테이블정의서.xlsx`
-**출력**: `output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx`
-
-```bash
-cd "$(git rev-parse --show-toplevel)" && \
-python3 .claude/skills/SD_331/scripts/03_generate_excel.py
-```
-
-스크립트가 하는 일:
+`scripts/03_generate_excel.py`가 수행하는 일:
 
 1. 템플릿 복사본 작성.
 2. 첫 번째 테이블 시트(MDM_사업장)를 **블루프린트**로 사용. 데이터 행을 비우고 헤더·섹션 라벨만 남긴 뒤, 시트 이름을 `__BLUEPRINT__`로 변경.
@@ -188,28 +249,13 @@ python3 .claude/skills/SD_331/scripts/03_generate_excel.py
    - Table info 채움: System Name(DB명), Schema Name, Logical Table Name, Pyshical Table Name, Author(현재 OS 사용자), Created On(오늘), RDBMS(driver).
    - Column info: 추출된 컬럼 채움. 행이 부족하면 `insert_rows`로 확장.
    - Index info / Constraint info / FK info / FK info (PK Side): 각 섹션별 동일한 방식.
-   - 섹션 간 간격은 블루프린트 기본 간격을 유지하되, 행 추가 시 섹션 라벨이 밀리는 점에 주의(아래 행 위치를 동적으로 추적).
 6. `Table List` 시트 채움: No, Logical Table Name, Pyshical Table Name, Remark(테이블 comment).
 7. `__BLUEPRINT__` 시트 삭제.
 8. 최종 파일 저장.
 
 ---
 
-### 6단계 — 임시 파일 정리 (필수)
-
-Excel 파일이 정상 생성되어 5단계가 성공한 직후, 비밀번호 노출을 막기 위해 `tmp/` 폴더를 **반드시** 삭제한다.
-
-```bash
-rm -rf "$(git rev-parse --show-toplevel)/output/03 설계(SD)/tmp"
-```
-
-- `tmp/db_target.json`에는 DB 비밀번호가 평문으로 저장되므로 보관하지 않는다.
-- 5단계가 실패한 경우(Excel 생성 실패)에는 디버깅을 위해 `tmp/` 폴더를 남겨두고, 사용자에게 원인을 보고한 뒤 작업이 완료되거나 사용자가 포기하는 시점에 동일한 명령으로 삭제한다.
-- 삭제 결과(성공/실패)를 사용자에게 한 줄로 보고한다.
-
----
-
-## 완료 체크리스트
+## 완료 체크리스트 (공통)
 
 - [ ] `$ARGUMENTS` 또는 사용자 입력으로 디렉토리 확정
 - [ ] `tmp/db_candidates.json` 생성 (스캔 결과)
@@ -229,6 +275,7 @@ rm -rf "$(git rev-parse --show-toplevel)/output/03 설계(SD)/tmp"
 ```
 ✓ 테이블정의서 생성 완료 [SD_331]
 
+실행 환경:   Windows PowerShell   또는   Bash on Linux/Mac/WSL
 대상 디렉토리: {디렉토리경로}
 DB: {driver} {host}:{port}/{database} (schema={schema})
 출력파일: output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
@@ -245,10 +292,23 @@ DB: {driver} {host}:{port}/{database} (schema={schema})
 
 ---
 
-## 주의사항
+## 주의사항 (공통)
 
-- **비밀번호 노출**: AskUserQuestion으로 받은 비밀번호는 `tmp/db_target.json`에 평문으로 저장된다. **6단계에서 `tmp/` 폴더를 자동 삭제**하므로 별도 안내 없이 정리되지만, 작업이 비정상 종료되어 폴더가 남아 있으면 즉시 수동 삭제한다.
+- **비밀번호 노출**: AskUserQuestion으로 받은 비밀번호는 `tmp/db_target.json`에 평문으로 저장된다. **마지막 단계에서 `tmp/` 폴더를 자동 삭제**하므로 별도 안내 없이 정리되지만, 작업이 비정상 종료되어 폴더가 남아 있으면 즉시 수동 삭제한다.
 - **대형 DB 보호**: 테이블 수가 1000개를 넘으면 진행 전에 사용자에게 한 번 확인한다(완료 시간이 길고 결과 파일이 커진다).
 - **Excel 시트명 제한**: 31자, `: \ / ? * [ ]` 사용 불가. 자동으로 안전한 형태로 변환한다.
 - **시트명 중복**: logical name이 같은 테이블이 둘 이상이면 `_2`, `_3` … 접미사를 붙인다.
 - **권한 부족**: 시스템 카탈로그 조회 권한이 없으면 일부 정보(예: comment, FK)가 누락될 수 있다. 누락되면 빈 값으로 두고 나머지를 채운다.
+
+### Windows 특화
+
+- **Python 실행 명령**: `python` (PATH에 등록된 Windows Python). `py -3` 도 가능.
+- **경로 구분자**: PowerShell은 `\` 와 `/` 모두 허용. `Join-Path` 사용을 권장.
+- **한글 콘솔 깨짐**: `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` 로 UTF-8 강제.
+- **pip --user 위치**: `%APPDATA%\Python\Python3X\Scripts` — PATH 추가 안내가 필요할 수 있음.
+
+### Bash 특화
+
+- **Python 실행 명령**: `python3` (WSL/Linux/macOS 기본).
+- **pip --user 위치**: `~/.local/bin` — PATH 추가 안내가 필요할 수 있음.
+- **WSL 경로**: Windows 드라이브는 `/mnt/c/...` 형태. `wslpath` 명령으로 변환 가능.
