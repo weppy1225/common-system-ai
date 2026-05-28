@@ -1,0 +1,531 @@
+<!--
+  purpose: wireframe-only
+  menuCode: mdcr01
+  menuName: 차량관리
+  sourceOfTruth:
+    ui: ui.md
+  rules:
+    - This file is a static HTML wireframe for layout/UX review only.
+    - Do not copy raw HTML/CSS into production Vue components.
+    - Use project design-system components and AUIGrid in production.
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>차량관리 [MDCR01]</title>
+<link rel="stylesheet" href="../common/wms-ui.css">
+<style>
+.btn-icon:disabled { opacity: 0.4; cursor: not-allowed; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── 헤더 ── -->
+  <div class="page-header">
+    <div class="page-title">
+      <strong>차량관리</strong>
+      <span class="arrow">∨</span>
+    </div>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" onclick="openRule()" style="margin-left:auto">업무규칙</button>
+  </div>
+
+  <!-- ── 검색 영역 ── -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <th>사업장</th>
+          <td>
+            <select id="sBizp">
+              <option value="">전체</option>
+              <option>본사</option>
+              <option>부산지점</option>
+              <option>인천지점</option>
+            </select>
+          </td>
+          <th>차량번호</th>
+          <td><input type="text" id="sVhclNo"></td>
+          <th>차량구분</th>
+          <td>
+            <select id="sVhclGb">
+              <option value="">전체</option>
+              <option>자차</option>
+              <option>용차</option>
+            </select>
+          </td>
+          <th>차량유형</th>
+          <td>
+            <select id="sVhclTy">
+              <option value="">전체</option>
+              <option>1톤</option>
+              <option>2.5톤</option>
+              <option>5톤</option>
+              <option>11톤</option>
+            </select>
+          </td>
+          <th>온도구분</th>
+          <td>
+            <select id="sTmpGb">
+              <option value="">전체</option>
+              <option>상온</option>
+              <option>냉장</option>
+              <option>냉동</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>운전자</th>
+          <td><input type="text" id="sDrvr"></td>
+          <th>전화번호</th>
+          <td><input type="text" id="sTel"></td>
+          <th>운행가능여부</th>
+          <td>
+            <select id="sOpYn">
+              <option value="">전체</option>
+              <option value="Y">가능</option>
+              <option value="N">불가</option>
+            </select>
+          </td>
+          <th>중량</th>
+          <td><input type="number" id="sWgt"></td>
+          <th></th>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 메인 영역 ── -->
+  <div class="main-area">
+    <div class="panel">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn-icon" title="추가" onclick="openRegModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </button>
+          <button class="btn-icon" title="수정" id="btnEdit" onclick="openEditModal()" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="toolbar-right"></div>
+      </div>
+      <div class="grid-wrap" id="mainWrap">
+        <table class="grid-table" id="mainTable">
+          <colgroup>
+            <col style="width:30px">
+            <col style="width:26px">
+            <col>
+            <col style="width:100px">
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:70px">
+            <col style="width:110px">
+            <col style="width:100px">
+            <col style="width:60px">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th><input type="checkbox" id="allCheck" style="width:12px;height:12px" onchange="toggleAllCheck(this)"></th>
+              <th>사업장명</th>
+              <th>차량번호</th>
+              <th>차량구분</th>
+              <th>차량유형</th>
+              <th>온도구분</th>
+              <th>운전자</th>
+              <th>전화번호</th>
+              <th>운행가능여부</th>
+              <th>중량</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody id="mainTbody"></tbody>
+        </table>
+      </div>
+      <div class="h-scroll-wrap" id="mainHScroll"><div class="h-scroll-inner" id="mainHInner"></div></div>
+      <div class="grid-footer">
+        <div class="pagination" id="mainPaging"></div>
+        <div class="page-size-wrap">
+          <select id="mainPageSize" onchange="changeMainPageSize()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="mainRowCount"></span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- ── 등록/수정 팝업 MDCR01P01 ── -->
+<div class="modal-bg" id="p01Modal">
+  <div class="modal" style="width:680px">
+    <div class="modal-header" id="p01Header">
+      <span id="p01Title">차량 등록 [MDCR01P01]</span>
+      <button class="close-btn" onclick="closeP01Modal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <table class="form-table">
+        <colgroup>
+          <col style="width:90px"><col>
+          <col style="width:90px"><col>
+          <col style="width:90px"><col>
+        </colgroup>
+        <tbody>
+          <tr>
+            <th>사업장 <span class="required-mark">*</span></th>
+            <td>
+              <select id="fBizp">
+                <option value="">선택</option>
+                <option>본사</option>
+                <option>부산지점</option>
+                <option>인천지점</option>
+              </select>
+            </td>
+            <th>차량번호 <span class="required-mark">*</span></th>
+            <td><input type="text" id="fVhclNo"></td>
+            <th>차량구분 <span class="required-mark">*</span></th>
+            <td>
+              <select id="fVhclGb">
+                <option value="">선택</option>
+                <option>자차</option>
+                <option>용차</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>차량유형 <span class="required-mark">*</span></th>
+            <td>
+              <select id="fVhclTy">
+                <option value="">선택</option>
+                <option>1톤</option>
+                <option>2.5톤</option>
+                <option>5톤</option>
+                <option>11톤</option>
+              </select>
+            </td>
+            <th>온도구분 <span class="required-mark">*</span></th>
+            <td>
+              <select id="fTmpGb">
+                <option value="">선택</option>
+                <option>상온</option>
+                <option>냉장</option>
+                <option>냉동</option>
+              </select>
+            </td>
+            <th>운전자</th>
+            <td><input type="text" id="fDrvr"></td>
+          </tr>
+          <tr>
+            <th>전화번호</th>
+            <td><input type="text" id="fTel"></td>
+            <th>중량 <span class="required-mark">*</span></th>
+            <td><input type="number" id="fWgt"></td>
+            <th></th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>비고</th>
+            <td colspan="5"><textarea id="fRmk"></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="p01SaveBtn" onclick="saveP01()">등록</button>
+      <button class="btn-modal-close" onclick="closeP01Modal()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 업무규칙 모달 ── -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" id="ruleHeader">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeRule()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table class="rule-table">
+        <tr><th>메뉴그룹명</th><td>기준정보</td><th>메뉴그룹코드</th><td>MD8000</td></tr>
+        <tr><th>메뉴명</th><td>차량관리</td><th>메뉴코드</th><td>MDCR01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">단일 그리드</td></tr>
+        <tr><th>목적</th><td colspan="3">배송 기사님들의 차량을 관리하는 메뉴화면</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol class="rule-list">
+        <li>없음</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeRule()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<script src="../common/wms-common.js"></script>
+<script src="./mock-data.js"></script>
+<script>
+var mainAll = [];
+var filteredMain = [];
+var selectedRow = -1;
+var currentPage = 1;
+var pageSize = 50;
+var editMode = false;
+
+/* ── 검색 ── */
+function doSearch() {
+  var sBizp  = document.getElementById('sBizp').value;
+  var sVhclNo = document.getElementById('sVhclNo').value.trim();
+  var sVhclGb = document.getElementById('sVhclGb').value;
+  var sVhclTy = document.getElementById('sVhclTy').value;
+  var sTmpGb  = document.getElementById('sTmpGb').value;
+  var sDrvr   = document.getElementById('sDrvr').value.trim();
+  var sTel    = document.getElementById('sTel').value.trim();
+  var sOpYn   = document.getElementById('sOpYn').value;
+  var sWgt    = document.getElementById('sWgt').value;
+
+  filteredMain = mainAll.filter(function(r) {
+    if (sBizp   && r.bizpNm !== sBizp) return false;
+    if (sVhclNo && r.vhclNo.indexOf(sVhclNo) < 0) return false;
+    if (sVhclGb && r.vhclGb !== sVhclGb) return false;
+    if (sVhclTy && r.vhclTy !== sVhclTy) return false;
+    if (sTmpGb  && r.tmpGb  !== sTmpGb)  return false;
+    if (sDrvr   && r.drvr.indexOf(sDrvr) < 0) return false;
+    if (sTel    && r.tel.indexOf(sTel)   < 0) return false;
+    if (sOpYn   && r.opYn !== sOpYn) return false;
+    if (sWgt    && r.wgt != parseInt(sWgt)) return false;
+    return true;
+  });
+  currentPage = 1;
+  setSelectedRow(-1);
+  renderMainGrid();
+}
+
+/* ── 초기화 ── */
+function doReset() {
+  ['sBizp','sVhclGb','sVhclTy','sTmpGb','sOpYn'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  ['sVhclNo','sDrvr','sTel','sWgt'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  filteredMain = mainAll.slice();
+  currentPage = 1;
+  setSelectedRow(-1);
+  renderMainGrid();
+}
+
+/* ── 그리드 렌더 ── */
+function renderMainGrid() {
+  var total  = filteredMain.length;
+  var start  = (currentPage - 1) * pageSize;
+  var rows   = filteredMain.slice(start, Math.min(start + pageSize, total));
+  var tbody  = document.getElementById('mainTbody');
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:20px;color:#9ca3af;">조회된 데이터가 없습니다.</td></tr>';
+    renderPagination('mainPaging', total, pageSize, currentPage, 'goMainPage');
+    renderRowCount('mainRowCount', total, pageSize, currentPage);
+    syncHScroll('mainHInner', 'mainTable');
+    return;
+  }
+
+  var html = '';
+  rows.forEach(function(r, i) {
+    var absIdx = start + i;
+    var opText = r.opYn === 'Y' ? '가능' : '불가';
+    var sel    = absIdx === selectedRow ? ' class="selected"' : '';
+    html +=
+      '<tr' + sel + ' onclick="selectMainRow(' + absIdx + ')">' +
+      '<td class="tc">' + (absIdx + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" style="width:12px;height:12px" onclick="event.stopPropagation()"></td>' +
+      '<td class="tl">' + esc(r.bizpNm) + '</td>' +
+      '<td class="tc">' + esc(r.vhclNo) + '</td>' +
+      '<td class="tc">' + esc(r.vhclGb) + '</td>' +
+      '<td class="tc">' + esc(r.vhclTy) + '</td>' +
+      '<td class="tc">' + esc(r.tmpGb)  + '</td>' +
+      '<td class="tl">' + esc(r.drvr)   + '</td>' +
+      '<td class="tc">' + esc(r.tel)    + '</td>' +
+      '<td class="tc">' + esc(opText)   + '</td>' +
+      '<td class="tr">' + fmt(r.wgt)    + '</td>' +
+      '<td class="tl">' + esc(r.rmk)   + '</td>' +
+      '</tr>';
+  });
+  tbody.innerHTML = html;
+  document.getElementById('allCheck').checked = false;
+
+  renderPagination('mainPaging', total, pageSize, currentPage, 'goMainPage');
+  renderRowCount('mainRowCount', total, pageSize, currentPage);
+  syncHScroll('mainHInner', 'mainTable');
+}
+
+/* ── 행 선택 ── */
+function selectMainRow(absIdx) {
+  setSelectedRow(absIdx);
+  document.querySelectorAll('#mainTbody tr').forEach(function(tr, i) {
+    var start = (currentPage - 1) * pageSize;
+    tr.classList.toggle('selected', (start + i) === absIdx);
+  });
+}
+
+function setSelectedRow(idx) {
+  selectedRow = idx;
+  document.getElementById('btnEdit').disabled = (idx < 0);
+}
+
+function toggleAllCheck(cb) {
+  document.getElementById('mainTbody').querySelectorAll('input[type="checkbox"]')
+    .forEach(function(c) { c.checked = cb.checked; });
+}
+
+/* ── 페이징 ── */
+function goMainPage(page) {
+  currentPage = page;
+  setSelectedRow(-1);
+  renderMainGrid();
+}
+
+function changeMainPageSize() {
+  pageSize = parseInt(document.getElementById('mainPageSize').value);
+  currentPage = 1;
+  renderMainGrid();
+}
+
+/* ── 등록 팝업 오픈 ── */
+function openRegModal() {
+  editMode = false;
+  document.getElementById('p01Title').textContent = '차량 등록 [MDCR01P01]';
+  document.getElementById('p01SaveBtn').textContent = '등록';
+  clearP01Form();
+  document.getElementById('fBizp').disabled  = false;
+  document.getElementById('fVhclNo').disabled = false;
+  var bg = document.getElementById('p01Modal');
+  bg.classList.add('open');
+  centerModal(bg);
+}
+
+/* ── 수정 팝업 오픈 ── */
+function openEditModal() {
+  if (selectedRow < 0) return;
+  var r = filteredMain[selectedRow];
+  editMode = true;
+  document.getElementById('p01Title').textContent = '차량 수정 [MDCR01P01]';
+  document.getElementById('p01SaveBtn').textContent = '저장';
+  clearP01Form();
+  document.getElementById('fBizp').value  = r.bizpNm;
+  document.getElementById('fVhclNo').value = r.vhclNo;
+  document.getElementById('fVhclGb').value = r.vhclGb;
+  document.getElementById('fVhclTy').value = r.vhclTy;
+  document.getElementById('fTmpGb').value  = r.tmpGb;
+  document.getElementById('fDrvr').value   = r.drvr;
+  document.getElementById('fTel').value    = r.tel;
+  document.getElementById('fWgt').value    = r.wgt;
+  document.getElementById('fRmk').value    = r.rmk || '';
+  document.getElementById('fBizp').disabled  = true;
+  document.getElementById('fVhclNo').disabled = true;
+  var bg = document.getElementById('p01Modal');
+  bg.classList.add('open');
+  centerModal(bg);
+}
+
+/* ── 팝업 닫기 ── */
+function closeP01Modal() {
+  document.getElementById('p01Modal').classList.remove('open');
+}
+
+/* ── 폼 초기화 ── */
+function clearP01Form() {
+  ['fBizp','fVhclGb','fVhclTy','fTmpGb'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  ['fVhclNo','fDrvr','fTel','fWgt','fRmk'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+}
+
+/* ── 저장 ── */
+function saveP01() {
+  var bizp   = document.getElementById('fBizp').value;
+  var vhclNo = document.getElementById('fVhclNo').value.trim();
+  var vhclGb = document.getElementById('fVhclGb').value;
+  var vhclTy = document.getElementById('fVhclTy').value;
+  var tmpGb  = document.getElementById('fTmpGb').value;
+  var wgt    = document.getElementById('fWgt').value;
+
+  if (!bizp)   { alert('사업장을 선택하세요.');   return; }
+  if (!vhclNo) { alert('차량번호를 입력하세요.');  return; }
+  if (!vhclGb) { alert('차량구분을 선택하세요.'); return; }
+  if (!vhclTy) { alert('차량유형을 선택하세요.'); return; }
+  if (!tmpGb)  { alert('온도구분을 선택하세요.'); return; }
+  if (!wgt)    { alert('중량을 입력하세요.');     return; }
+
+  if (editMode) {
+    var r = filteredMain[selectedRow];
+    r.vhclGb = vhclGb;
+    r.vhclTy = vhclTy;
+    r.tmpGb  = tmpGb;
+    r.drvr   = document.getElementById('fDrvr').value;
+    r.tel    = document.getElementById('fTel').value;
+    r.wgt    = parseInt(wgt);
+    r.rmk    = document.getElementById('fRmk').value;
+    alert('저장되었습니다.');
+  } else {
+    mainAll.push({
+      id:     mainAll.length + 1,
+      bizpNm: bizp,
+      vhclNo: vhclNo,
+      vhclGb: vhclGb,
+      vhclTy: vhclTy,
+      tmpGb:  tmpGb,
+      drvr:   document.getElementById('fDrvr').value,
+      tel:    document.getElementById('fTel').value,
+      opYn:   'Y',
+      wgt:    parseInt(wgt),
+      rmk:    document.getElementById('fRmk').value
+    });
+    filteredMain = mainAll.slice();
+    alert('등록되었습니다.');
+  }
+
+  closeP01Modal();
+  renderMainGrid();
+}
+
+/* ── 초기화 ── */
+initModalDrag('p01Modal',   'p01Header');
+initModalDrag('ruleModal',  'ruleHeader');
+initHScroll('mainWrap', 'mainHScroll', 'mainHInner', 'mainTable');
+
+window.addEventListener('DOMContentLoaded', function() {
+  mainAll      = JSON.parse(JSON.stringify(MDCR01_DATA.main));
+  filteredMain = mainAll.slice();
+  renderMainGrid();
+});
+</script>
+</body>
+</html>
