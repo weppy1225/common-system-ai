@@ -19,14 +19,15 @@ BE spec.md 기반으로 목록 화면(`{메뉴코드}.vue`)과 등록/수정 팝
 
 ## 실행 절차
 
-### STEP 1. 프로젝트 코드 추출
+### STEP 1. 레포 경로 결정 (BLOCKING)
 
-현재 워킹 디렉토리명(`wms-{code}-fe`)에서 `{code}` 추출.
-BE 경로: `../{code}-be` 또는 `../wms-{code}-be` (존재하는 쪽 사용)
+스킬은 AI 허브(`wms-{code}-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$FE_DIR`(생성 대상 FE 레포)와 `$BE_DIR`(spec 읽기 대상 BE 레포)를 결정한다.
+- FE 코드 생성: `$FE_DIR/src/views/...` — 작업 시작 시 **`cd "$FE_DIR"`** 하면 본문의 `src/views/...`·`ai-docs/...` 상대경로가 그대로 동작한다.
+- BE spec 읽기: `$BE_DIR/DEV_DOC/ai-docs/20-backend/80-spec/{메뉴코드}/` (읽기 전용)
 
 ### STEP 2. BE spec 파일 확인
 
-경로: `../wms-{코드}-be/DEV_DOC/ai-docs/20-backend/80-spec/{메뉴코드}/`
+경로: `$BE_DIR/DEV_DOC/ai-docs/20-backend/80-spec/{메뉴코드}/`
 
 우선순위:
 1. `{YYYYMMDD}_output.md` (날짜 최신 파일)
@@ -128,5 +129,5 @@ API 연결:
 - BE spec에 없는 정보는 추측 말고 `// TODO:` 주석으로 표시
 - `regBizSeq` URL 포함 금지
 - 라우터 등록·메뉴 DB는 이 스킬 범위 밖
-- BE 저장소(`../cloud-wms-be/`) 파일은 읽기만 함, 수정 금지
+- BE 저장소(`$BE_DIR`) 파일은 읽기만 함, 수정 금지
 - 영어 주석 금지 — 한글 유지

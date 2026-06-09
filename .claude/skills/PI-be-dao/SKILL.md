@@ -12,6 +12,11 @@ model: claude-sonnet-4-6
 
 > **일반 메뉴 기능 개발용** — SIF 인터페이스 개발은 별도 스킬 사용
 
+## STEP 0 — 레포 경로 결정 (BLOCKING)
+
+`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
+이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../wms-{code}-be`) 기준이다.
+
 ## 전제 조건 확인 (BLOCKING)
 
 Dao 개발 전 아래가 완료되어 있어야 한다:

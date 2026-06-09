@@ -24,6 +24,13 @@ model: claude-sonnet-4-6
 
 ---
 
+## Step 0 — 레포 경로 결정 (BLOCKING)
+
+`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
+이 스킬 본문의 모든 상대경로(`./gradlew`, `build/test-results/...`, `src/main/java/...`)는 `$BE_DIR`(= 형제 `../wms-{code}-be`) 기준이다.
+
+---
+
 ## Step 1 — 실행 환경 및 빌드 도구 감지
 
 OS를 먼저 감지한다:

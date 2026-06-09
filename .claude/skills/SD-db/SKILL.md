@@ -25,31 +25,32 @@ model: claude-opus-4-7
 
 ---
 
-## 프로젝트 경로 도출 (자동)
+## 레포 경로 도출 (자동)
 
-현재 BE 레포명에서 프로젝트 코드를 추출하여 DOC 레포 경로를 도출한다:
+스킬은 AI 허브(`wms-{code}-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(화면설계 보유 허브 = CWD)와 `$BE_DIR`(db.md·DEV_DOC 대상 BE 레포 = 형제 `../wms-{code}-be`)을 결정한다.
 
 ```bash
-REPO_ROOT=$(git rev-parse --show-toplevel)
-PROJECT_CODE=$(basename "$REPO_ROOT" | sed 's/^wms-//' | sed 's/-be$//')
-DOC_DIR="$(dirname "$REPO_ROOT")/wms-${PROJECT_CODE}-doc"
+# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD) / BE_DIR(형제 ../wms-{code}-be)
+AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+# BE_DIR 은 repo-paths.md 규칙으로 결정
 
-# ui.md는 PC·모바일 공통으로 30-domain/ 에 위치
-UI_MD="$DOC_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-ui.md"
+# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 30-domain/ 에 위치
+UI_MD="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-ui.md"
 
 # wireframe: PC / PDA 모바일 자동 분기
-if [ -f "$DOC_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
+if [ -f "$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
   # PC 화면
-  WIREFRAME="$DOC_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html"
-  MOCK_DATA="$DOC_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-mock-data.js"
+  WIREFRAME="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html"
+  MOCK_DATA="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-mock-data.js"
 else
   # PDA 모바일 화면 — 50-prototype/20-mobile/ 하위 그룹 폴더 검색
-  WIREFRAME=$(find "$DOC_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
-  MOCK_DATA=$(find "$DOC_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}-data.js" 2>/dev/null | head -1)
+  WIREFRAME=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
+  MOCK_DATA=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}-data.js" 2>/dev/null | head -1)
 fi
 ```
 
-단, DOC 레포가 없거나 `30-domain/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> 이 스킬에서 `DEV_DOC/...`, `db.md`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`, `$BE_DIR/.../db.md`).
+> `$BE_DIR` 또는 허브의 `30-domain/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ---
 

@@ -1,181 +1,185 @@
-﻿---
+---
 name: SD-api
-description: ?륚PI 紐낆꽭???ㅺ퀎???붾㈃?ㅺ퀎쨌DB ?ㅺ퀎 湲곕컲?쇰줈 api.md(API ?ㅺ퀎+湲곕뒫紐낆꽭 ?듯빀臾몄꽌)瑜??묒꽦?쒕떎. API 紐⑸줉쨌VO쨌DTO쨌鍮꾩쫰?덉뒪 濡쒖쭅쨌寃利?洹쒖튃 ?뺤쓽. /design-db ?꾨즺 ???ㅽ뻾. /SD-api {硫붾돱肄붾뱶} ?뺤떇?쇰줈 ?ㅽ뻾?쒕떎. ?ъ슜?먭? "api.md ?묒꽦?댁쨾", "API ?ㅺ퀎??留뚮뱾?댁쨾", "湲곕뒫紐낆꽭 留뚮뱾?댁쨾", "SD-api ?ㅽ뻾?댁쨾", "design-spec ?ㅽ뻾?댁쨾" ?쇨퀬 留먰빐?????ㅽ궗???ъ슜?쒕떎.
+description: 【API 명세서 설계】 화면설계·DB 설계 기반으로 api.md(API 설계+기능명세 통합문서)를 작성한다. API 목록·VO·DTO·비즈니스 로직·검증 규칙 정의. /SD-db 완료 후 실행. /SD-api {메뉴코드} 형식으로 실행한다. 사용자가 "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "SD-api 실행해줘", "design-spec 실행해줘" 라고 말해도 이 스킬을 사용한다.
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep
 model: claude-opus-4-7
 ---
 
-# API 紐낆꽭???ㅺ퀎 [SD-api]
+# API 명세서 설계 [SD-api]
 
-?ㅼ쓬 吏?쒖뿉 ?곕씪 湲곕뒫 紐낆꽭??api.md)瑜??묒꽦?쒕떎.
+다음 지시에 따라 기능 명세서(`api.md`)를 작성한다.
 
-## ?ㅽ뻾 ?덉감
+## 실행 절차
 
-### Step 0 ???꾨줈?앺듃 寃쎈줈 ?꾩텧 (?먮룞)
+### Step 0 — 레포 경로 결정 (BLOCKING)
 
-?꾩옱 BE ?덊룷紐낆뿉???꾨줈?앺듃 肄붾뱶瑜?異붿텧?섏뿬 DOC ?덊룷 寃쎈줈瑜??꾩텧?쒕떎:
+스킬은 AI 허브(`wms-{code}-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(화면설계 보유 허브 = CWD)와 `$BE_DIR`(api.md·DEV_DOC 대상 BE 레포 = 형제 `../wms-{code}-be`)을 결정한다.
 
 ```bash
-REPO_ROOT=$(git rev-parse --show-toplevel)
-PROJECT_CODE=$(basename "$REPO_ROOT" | sed 's/^wms-//' | sed 's/-be$//')
-DOC_DIR="$(dirname "$REPO_ROOT")/wms-${PROJECT_CODE}-doc"
+# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD) / BE_DIR(형제 ../wms-{code}-be)
+AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+# BE_DIR 은 repo-paths.md 규칙으로 결정
 
-# ui.md??PC쨌紐⑤컮??怨듯넻?쇰줈 30-domain/ ???꾩튂
-UI_MD="$DOC_DIR/30-domain/{硫붾돱肄붾뱶}/ui.md"
+# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 30-domain/ 에 위치
+UI_MD="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-ui.md"
 
-# wireframe: PC / PDA 紐⑤컮???먮룞 遺꾧린
-if [ -f "$DOC_DIR/30-domain/{硫붾돱肄붾뱶}/wireframe.html" ]; then
-  # PC ?붾㈃
-  WIREFRAME="$DOC_DIR/30-domain/{硫붾돱肄붾뱶}/wireframe.html"
+# wireframe: PC / PDA 모바일 자동 분기
+if [ -f "$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
+  # PC 화면
+  WIREFRAME="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html"
 else
-  # PDA 紐⑤컮???붾㈃ ??50-prototype/20-mobile/ ?섏쐞 洹몃９ ?대뜑 寃??  WIREFRAME=$(find "$DOC_DIR/50-prototype/20-mobile" -iname "{硫붾돱肄붾뱶?臾몄옄}.html" 2>/dev/null | head -1)
+  # PDA 모바일 화면 — 50-prototype/20-mobile/ 하위 그룹 폴더 검색
+  WIREFRAME=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
 fi
 ```
 
-?? DOC ?덊룷媛 ?녾굅??`30-domain/{硫붾돱肄붾뱶}/` ?대뜑媛 ?놁쑝硫??ъ슜?먯뿉寃?寃쎈줈瑜?吏곸젒 臾삳뒗??
+> 이 스킬에서 `api.md`, `db.md`, `DEV_DOC/...`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`).
+> `$BE_DIR` 또는 허브의 `30-domain/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
-### Step 1 ??湲곕뒫 ?뺣낫 ?뚯븙
+### Step 1 — 기능 정보 파악
 
-?ъ슜?먭? ?쒓났??湲곕뒫紐??먮뒗 ?꾩옱 ???而⑦뀓?ㅽ듃?먯꽌 ?꾨옒 ?뺣낫瑜??뺤씤?쒕떎:
+사용자가 지정한 기능명 또는 현재 대화 컨텍스트에서 아래 정보를 확인한다:
 
-- 湲곕뒫紐?(?? "?낃퀬?붿껌 愿由?, "?덈ぉ ?쇰꺼 異쒕젰")
-- 硫붾돱肄붾뱶 (?덈떎硫?
-- ?꾨찓??(MDM/IW/OW/IV/RT/SIF 以?
+- 기능명 (예: "입고요청 관리", "품목 목록 출력")
+- 메뉴코드 (있다면)
+- 도메인 (MDM / IW / OW / IV / RT / SIF 중)
 
-### Step 2 ??湲곗〈 ?대뜑 ?뺤씤
+### Step 2 — 기존 폴더 확인
 
-`DEV_DOC/ai-docs/20-backend/80-spec/` ?섏쐞 ?대뜑瑜??뺤씤?쒕떎.
+`$BE_DIR/DEV_DOC/ai-docs/20-backend/80-spec/` 하위 폴더를 확인한다.
 
-耳?댁뒪???곕씪 ?꾨옒? 媛숈씠 泥섎━?쒕떎:
+케이스에 따라 아래와 같이 처리한다:
 
-| 耳?댁뒪                                | 議곌굔                            | 泥섎━ 諛⑸쾿                                                                                                                   |
-| ------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **A. 湲곗〈 湲곕뒫 + api.md ?덉쓬** | ?대떦 ?대뜑 + api.md 議댁옱        | api.md瑜??댁뼱 ?댁슜???낅뜲?댄듃?쒕떎                                                                                          |
-| **B. 湲곗〈 湲곕뒫 + api.md ?놁쓬** | ?대떦 ?대뜑???덉쑝??api.md ?놁쓬 | `src/main/java/` ?섏쐞 ?대떦 ?⑦궎吏??湲곗〈 肄붾뱶瑜??쎌뼱 援ы쁽 ?곹깭瑜??뚯븙???? ?대떦 ?대뜑??api.md瑜?**?좉퇋 ?묒꽦**?쒕떎 |
-| **C. ?좉퇋 湲곕뒫**                | ?대뜑 ?먯껜媛 ?놁쓬                | `{硫붾돱肄붾뱶}` ?뺤떇?쇰줈 ???대뜑瑜??앹꽦?섍퀬 api.md瑜??묒꽦?쒕떎                                                               |
+| 케이스 | 조건 | 처리 방법 |
+| --- | --- | --- |
+| **A. 기존 기능 + api.md 있음** | 해당 폴더 + api.md 존재 | api.md를 읽어 내용을 업데이트한다 |
+| **B. 기존 기능 + api.md 없음** | 해당 폴더는 있으나 api.md 없음 | `$BE_DIR/src/main/java/` 하위 해당 패키지의 기존 코드를 읽어 구현 상태를 분석한 뒤, 해당 폴더에 api.md를 **신규 작성**한다 |
+| **C. 신규 기능** | 폴더 자체가 없음 | `{메뉴코드}` 형식으로 새 폴더를 생성하고 api.md를 작성한다 |
 
-> ?대뜑紐??덉떆: `mdpd01`, `iwrq01`, `owpk01`
+> 폴더명 예시: `mdpd01`, `iwrq01`, `owpk01`
 
-### Step 3 ??愿??臾몄꽌 ?쎄린 (BLOCKING)
+### Step 3 — 관련 문서 읽기 (BLOCKING)
 
-肄붾뱶 ?묒꽦 ??諛섎뱶???꾨옒 臾몄꽌瑜??쎈뒗??
+코드 작성 전 반드시 아래 문서를 읽는다:
 
-1. `DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` ??硫붾돱肄붾뱶 洹쒖튃
-2. 湲곕뒫 ?대뜑 ??`db.md` ??DB ?ㅺ퀎 寃곌낵 (議댁옱?섎뒗 寃쎌슦 **?곗꽑 李몄“**)
-3. `$UI_MD` (`30-domain/{硫붾돱肄붾뱶}/ui.md`) ???붾㈃?ㅺ퀎 UI 紐낆꽭 (Step 0?먯꽌 ?꾩텧??蹂???ъ슜)
-4. `$WIREFRAME` ???붾㈃ ?꾨줈?좏???(PC: `30-domain/{硫붾돱肄붾뱶}/wireframe.html` / PDA: `50-prototype/20-mobile/??{硫붾돱肄붾뱶?臾몄옄}.html`)
-5. `DEV_DOC/ai-docs/10-database/00-database-overview.md` ??愿???뚯씠釉??뚯븙
-6. ?대떦 ?꾨찓???뚯씠釉?而щ읆 紐낆꽭 (`DEV_DOC/ai-docs/10-database/90-schema/20-tables/`)
-7. `DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` ??肄붾뵫 ?⑦꽩
+1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` — 메뉴코드·네이밍 규칙
+2. 기능 폴더의 `db.md` — DB 설계 결과 (존재하는 경우 **우선 참조**)
+3. `$UI_MD` (`30-domain/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
+4. `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `50-prototype/20-mobile/…/{메뉴코드대문자}.html`)
+5. `$BE_DIR/DEV_DOC/ai-docs/10-database/00-database-overview.md` — 관련 테이블 분석
+6. 해당 도메인 테이블 컬럼 명세 (`$BE_DIR/DEV_DOC/ai-docs/10-database/90-schema/20-tables/`)
+7. `$BE_DIR/DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` — 코딩 컨벤션
 
-### Step 4 ??api.md ?묒꽦
+### Step 4 — api.md 작성
 
-?꾨옒 ?쒗뵆由우쑝濡?`api.md`瑜??묒꽦?쒕떎:
+아래 템플릿으로 `$BE_DIR/DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` 를 작성한다:
 
 ```markdown
-# {湲곕뒫紐? API 紐낆꽭??
-> ?묒꽦?? {YYYY-MM-DD} | ?묒꽦?? AI | ?곹깭: 珥덉븞
+# {기능명} API 명세서
+> 작성일: {YYYY-MM-DD} | 작성자: AI | 상태: 초안
 
 ---
 
-## 1. 湲곕낯 ?뺣낫
+## 1. 기본 정보
 
-| ??ぉ | ?댁슜 |
+| 항목 | 내용 |
 |---|---|
-| 硫붾돱肄붾뱶 | {硫붾돱肄붾뱶} |
-| 硫붾돱紐?| {硫붾돱紐? |
-| 硫붾돱洹몃９ | {硫붾돱洹몃９} |
-| ?⑦궎吏 | `be.{洹몃９}.{硫붾돱肄붾뱶}/` |
-| URL prefix | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼???뚮Ц??` |
-| ?대떦 ?꾨찓??| MDM / IW / OW / IV / RT / SIF |
+| 메뉴코드 | {메뉴코드} |
+| 메뉴명 | {메뉴명} |
+| 메뉴그룹 | {메뉴그룹} |
+| 패키지 | `be.{그룹}.{메뉴코드}/` |
+| URL prefix | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}` |
+| 해당 도메인 | MDM / IW / OW / IV / RT / SIF |
 
 ---
 
-## 2. 湲곕뒫 媛쒖슂
+## 2. 기능 개요
 
-{湲곕뒫?????2-3臾몄옣 ?ㅻ챸}
+{기능에 대한 2-3문장 설명}
 
 ---
 
-## 3. API 紐⑸줉
+## 3. API 목록
 
-| Interface ID | HTTP Method | URL | ?ㅻ챸 |
+| Interface ID | HTTP Method | URL | 설명 |
 |---|---|---|---|
-| {硫붾돱肄붾뱶}_POST_{由ъ냼??S | POST | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼??s` | 紐⑸줉 議고쉶 |
-| {硫붾돱肄붾뱶}_POST_INSERT | POST | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼??s/insert` | ?④굔 ?깅줉 |
-| {硫붾돱肄붾뱶}_GET_{由ъ냼?? | GET | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼??s/{seq}` | ?④굔 議고쉶 |
-| {硫붾돱肄붾뱶}_POST_UPDATE | POST | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼??s/update` | ?④굔 ?섏젙 |
-| {硫붾돱肄붾뱶}_DELETE_{由ъ냼??S | DELETE | `/{bizSeq}/{硫붾돱肄붾뱶_?몄뒪?댁뒪}/{由ъ냼??s` | ??젣 |
+| {메뉴코드}_POST_{리소스}S | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 목록 조회 |
+| {메뉴코드}_POST_INSERT | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/insert` | 단건 등록 |
+| {메뉴코드}_GET_{리소스} | GET | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/{seq}` | 단건 조회 |
+| {메뉴코드}_POST_UPDATE | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/update` | 단건 수정 |
+| {메뉴코드}_DELETE_{리소스}S | DELETE | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 삭제 |
 
 ---
 
-## 4. ?ъ슜 ?뚯씠釉?
-| ?뚯씠釉붾챸 | ?⑸룄 | 二쇱슂 而щ읆 |
+## 4. 사용 테이블
+
+| 테이블명 | 용도 | 주요 컬럼 |
 |---|---|---|
-| `{?뚯씠釉붾챸}` | {?⑸룄} | `{而щ읆1}`, `{而щ읆2}` |
+| `{테이블명}` | {용도} | `{컬럼1}`, `{컬럼2}` |
 
 ---
 
-## 5. Bean ?ㅺ퀎
+## 5. Bean 설계
 
-### {硫붾돱肄붾뱶}Response (?묐떟 DTO)
+### {메뉴코드}Response (응답 DTO)
 ```java
 extends ResponseData
-- List<{硫붾돱肄붾뱶}Search> post{由ъ냼??s  // 紐⑸줉
-- {硫붾돱肄붾뱶}{由ъ냼?? {由ъ냼???뚮Ц??    // ?④굔
+- List<{메뉴코드}Search> post{리소스}s  // 목록
+- {메뉴코드}{리소스} {리소스_인스턴스}    // 단건
 ```
 
-### Search (議고쉶 ?뚮씪誘명꽣 + 寃곌낵)
+### Search (조회 파라미터 + 결과)
 
 ```java
 extends BaseParam
 - Integer bizSeq
 - String searchKeyword
-// ... 寃?됱“嫄?諛?寃곌낵 而щ읆
+// ... 검색조건 및 결과 컬럼
 ```
 
-### (?꾨찓??DTO)
+### (도메인 DTO)
 
 ```java
 implements Serializable
-// 二쇱슂 ?꾨뱶 紐⑸줉
+// 주요 필드 목록
 ```
 
 ---
 
-## 6. 鍮꾩쫰?덉뒪 洹쒖튃
+## 6. 비즈니스 규칙
 
-1. {洹쒖튃1}
-2. {洹쒖튃2}
-3. {洹쒖튃3}
-
----
-
-## 7. ?좏슚??寃利?
-| 寃利???ぉ               | 諛⑸쾿                      | ?ㅻ쪟 硫붿떆吏                |
-| ----------------------- | ------------------------- | -------------------------- |
-| {?꾨뱶紐? 以묐났           | `checkDuplicate*No()`   | "以묐났??{?꾨뱶紐??낅땲??    |
-| {?꾨뱶紐? ?곌? ??젣 諛⑹? | `check*SeqInOtherTbl()` | "?곌? ?곗씠?곌? 議댁옱?⑸땲?? |
+1. {규칙1}
+2. {규칙2}
+3. {규칙3}
 
 ---
 
-## 8. 愿??臾몄꽌
+## 7. 유효성 검증
 
-- DB ?ㅺ퀎: `db.md` (議댁옱?섎뒗 寃쎌슦)
-- DB 紐낆꽭: `DEV_DOC/ai-docs/10-database/90-schema/20-tables/{?뚯씠釉붾챸}.md`
-- 肄붾뵫 而⑤깽?? `DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md`
-- 媛쒕컻 媛?대뱶: `DEV_DOC/ai-docs/20-backend/80-spec/02-new-backend-api-addition-procedure.md`
+| 검증 항목 | 방법 | 오류 메시지 |
+|---|---|---|
+| {필드명} 중복 | `checkDuplicate*No()` | "중복된 {필드명}입니다" |
+| {필드명} 연관 삭제 방지 | `check*SeqInOtherTbl()` | "연관 데이터가 존재합니다" |
+
+---
+
+## 8. 관련 문서
+
+- DB 설계: `db.md` (존재하는 경우)
+- DB 명세: `DEV_DOC/ai-docs/10-database/90-schema/20-tables/{테이블명}.md`
+- 코딩 컨벤션: `DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md`
+- 개발 가이드: `DEV_DOC/ai-docs/20-backend/80-spec/02-new-backend-api-addition-procedure.md`
 ```
 
 ---
 
-### Step 5 ???꾨즺 ?덈궡
+### Step 5 — 완료 안내
 
-?앹꽦???곗텧臾?紐⑸줉怨??ㅼ쓬 ?④퀎瑜??덈궡?쒕떎:
+생성된 산출물 목록과 다음 단계를 안내한다:
 
 ```
-??api.md ?앹꽦 ?꾨즺
+✅ api.md 생성 완료
 
-?ㅼ쓬 ?④퀎: /PI-be-all (?먮뒗 /PI-be-mapper ??/PI-be-dao ??/PI-be-comp ?쒖꽌)
+다음 단계: /PI-be-all (또는 /PI-be-mapper → /PI-be-dao → /PI-be-comp 순서)
 ```

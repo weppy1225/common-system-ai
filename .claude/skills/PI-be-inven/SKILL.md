@@ -10,6 +10,11 @@ model: claude-opus-4-7
 
 다음 지시에 따라 **입출고 확정 TxComp (InvenManager 연동)**를 개발한다.
 
+## STEP 0 — 레포 경로 결정 (BLOCKING)
+
+`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
+이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../wms-{code}-be`) 기준이다.
+
 ## 적용 대상
 
 - **입고 확정** (IW): `InvenManager.iw(InvenDTO)` — 재고 증가

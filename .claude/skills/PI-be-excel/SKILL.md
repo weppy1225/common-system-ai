@@ -10,6 +10,11 @@ model: claude-sonnet-4-6
 
 다음 지시에 따라 **엑셀 업로드 서브패키지**를 개발한다.
 
+## STEP 0 — 레포 경로 결정 (BLOCKING)
+
+`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
+이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../wms-{code}-be`) 기준이다.
+
 ## 전제 조건 확인 (BLOCKING)
 
 - 메인 레이어(Mapper/Dao/Comp) 완료 또는 별도 엑셀 기능 개발 확인
