@@ -1,96 +1,95 @@
 ---
 name: TT_543
-description: 【운영자매뉴얼 PPTX 생성 (Windows/WSL/Linux/Mac 통합)】 사용자가 지정한 프론트엔드 + 백엔드 디렉토리를 자동 스캔하여 "운영자(관리자)가 시스템·사용자·권한·메뉴·공통코드·사업장·센터·창고 등을 설정하는 관리성 메뉴"만 자동 식별합니다. 식별된 메뉴들을 실제 dev/배포 서버에 Playwright(헤드리스, 한국어 로케일 ko-KR)로 접속하여 화면 캡처한 뒤, `template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx`를 base로 python-pptx 기반의 운영자매뉴얼 PPTX를 자동 생성합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. PPT 양식·레이아웃·색상·도형 라벨링은 모두 TT_541(PC 사용자매뉴얼) 스킬과 동일한 양식을 따르며, 차이점은 (1) 대상 메뉴를 운영자/관리자 메뉴로만 필터링, (2) 표지 제목이 "운영자 매뉴얼" 입니다. 라벨·테두리·배지·커넥터·설명패널은 모두 PPT 안의 도형(add_shape)으로 그려 PowerPoint 내부에서 직접 편집할 수 있도록 합니다. /TT_543 형식으로 실행하며 FE 경로·BE 경로·고객사명·BASE_URL·로그인 정보는 실행 시 묻습니다. 산출물은 `output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx` 단일 파일로 떨어집니다. 운영자 매뉴얼 작성, 관리자 매뉴얼 작성, 시스템 설정 매뉴얼, 운영자용 PPT 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "운영자매뉴얼 만들어줘", "관리자 매뉴얼 PPT 뽑아줘", "TT_543 실행해줘", "관리자 화면 캡쳐해서 PPT 만들어줘", "운영자 매뉴얼 산출물 만들어줘", "WSL에서 운영자 매뉴얼 만들어줘", "Linux에서 관리자 매뉴얼 캡쳐해줘" 라고 말해도 이 스킬을 사용합니다. 단, PC 사용자 매뉴얼(입출고·재고 등 업무 화면)이 필요한 경우는 `/TT_541`, PDA 사용자 매뉴얼이 필요한 경우는 `/TT_542` 을 사용합니다.
+description: ?먯슫?곸옄留ㅻ돱??PPTX ?앹꽦 (Windows/WSL/Linux/Mac ?듯빀)???ъ슜?먭? 吏?뺥븳 ?꾨줎?몄뿏??+ 諛깆뿏???붾젆?좊━瑜??먮룞 ?ㅼ틪?섏뿬 "?댁쁺??愿由ъ옄)媛 ?쒖뒪?쑣룹궗?⑹옄쨌沅뚰븳쨌硫붾돱쨌怨듯넻肄붾뱶쨌?ъ뾽?Β룹꽱?걔룹갹怨??깆쓣 ?ㅼ젙?섎뒗 愿由ъ꽦 硫붾돱"留??먮룞 ?앸퀎?⑸땲?? ?앸퀎??硫붾돱?ㅼ쓣 ?ㅼ젣 dev/諛고룷 ?쒕쾭??Playwright(?ㅻ뱶由ъ뒪, ?쒓뎅??濡쒖???ko-KR)濡??묒냽?섏뿬 ?붾㈃ 罹≪쿂???? `template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx`瑜?base濡?python-pptx 湲곕컲???댁쁺?먮ℓ?댁뼹 PPTX瑜??먮룞 ?앹꽦?⑸땲?? ?ㅽ뻾 ?섍꼍(Windows PowerShell vs WSL/Linux/macOS Bash)???먮룞 媛먯??섏뿬 ?대떦 OS 遺꾧린 釉붾줉留??ㅽ뻾?⑸땲?? PPT ?묒떇쨌?덉씠?꾩썐쨌?됱긽쨌?꾪삎 ?쇰꺼留곸? 紐⑤몢 TT_541(PC ?ъ슜?먮ℓ?댁뼹) ?ㅽ궗怨??숈씪???묒떇???곕Ⅴ硫? 李⑥씠?먯? (1) ???硫붾돱瑜??댁쁺??愿由ъ옄 硫붾돱濡쒕쭔 ?꾪꽣留? (2) ?쒖? ?쒕ぉ??"?댁쁺??留ㅻ돱?? ?낅땲?? ?쇰꺼쨌?뚮몢由?룸같吏쨌而ㅻ꽖?걔룹꽕紐낇뙣?먯? 紐⑤몢 PPT ?덉쓽 ?꾪삎(add_shape)?쇰줈 洹몃젮 PowerPoint ?대??먯꽌 吏곸젒 ?몄쭛?????덈룄濡??⑸땲?? /TT_543 ?뺤떇?쇰줈 ?ㅽ뻾?섎ŉ FE 寃쎈줈쨌BE 寃쎈줈쨌怨좉컼?щ챸쨌BASE_URL쨌濡쒓렇???뺣낫???ㅽ뻾 ??臾살뒿?덈떎. ?곗텧臾쇱? `output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx` ?⑥씪 ?뚯씪濡??⑥뼱吏묐땲?? ?댁쁺??留ㅻ돱???묒꽦, 愿由ъ옄 留ㅻ돱???묒꽦, ?쒖뒪???ㅼ젙 留ㅻ돱?? ?댁쁺?먯슜 PPT 留뚮뱾湲??붿껌 ??諛섎뱶?????ㅽ궗???ъ슜?⑸땲?? ?ъ슜?먭? "?댁쁺?먮ℓ?댁뼹 留뚮뱾?댁쨾", "愿由ъ옄 留ㅻ돱??PPT 戮묒븘以?, "TT_543 ?ㅽ뻾?댁쨾", "愿由ъ옄 ?붾㈃ 罹≪퀜?댁꽌 PPT 留뚮뱾?댁쨾", "?댁쁺??留ㅻ돱???곗텧臾?留뚮뱾?댁쨾", "WSL?먯꽌 ?댁쁺??留ㅻ돱??留뚮뱾?댁쨾", "Linux?먯꽌 愿由ъ옄 留ㅻ돱??罹≪퀜?댁쨾" ?쇨퀬 留먰빐?????ㅽ궗???ъ슜?⑸땲?? ?? PC ?ъ슜??留ㅻ돱???낆텧怨졖룹옱怨????낅Т ?붾㈃)???꾩슂??寃쎌슦??`/TT_541`, PDA ?ъ슜??留ㅻ돱?쇱씠 ?꾩슂??寃쎌슦??`/TT_542` ???ъ슜?⑸땲??
 type: skill
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
-# 운영자 매뉴얼 PPTX 자동 생성 스킬 (Windows/WSL/Linux/Mac 통합) [TT_543]
+# ?댁쁺??留ㅻ돱??PPTX ?먮룞 ?앹꽦 ?ㅽ궗 (Windows/WSL/Linux/Mac ?듯빀) [TT_543]
 
-대상 FE/BE 프로젝트: **$ARGUMENTS**
+???FE/BE ?꾨줈?앺듃: **$ARGUMENTS**
 
-`$ARGUMENTS` 디렉토리(프론트엔드 + 백엔드)에서 **운영자가 시스템/사용자/권한/메뉴/공통코드/사업장/센터/창고 등을 설정하는 관리성 메뉴**를 자동 식별하고, **Playwright 헤드리스 모드(한국어 로케일)** 로 메뉴별 화면을 캡처한 뒤, `template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx` 를 base로 **python-pptx** 로 운영자매뉴얼 PPTX 를 `output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx` 파일로 생성한다.
+`$ARGUMENTS` ?붾젆?좊━(?꾨줎?몄뿏??+ 諛깆뿏???먯꽌 **?댁쁺?먭? ?쒖뒪???ъ슜??沅뚰븳/硫붾돱/怨듯넻肄붾뱶/?ъ뾽???쇳꽣/李쎄퀬 ?깆쓣 ?ㅼ젙?섎뒗 愿由ъ꽦 硫붾돱**瑜??먮룞 ?앸퀎?섍퀬, **Playwright ?ㅻ뱶由ъ뒪 紐⑤뱶(?쒓뎅??濡쒖???** 濡?硫붾돱蹂??붾㈃??罹≪쿂???? `template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx` 瑜?base濡?**python-pptx** 濡??댁쁺?먮ℓ?댁뼹 PPTX 瑜?`output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx` ?뚯씪濡??앹꽦?쒕떎.
 
 ---
 
-## OS 분기 — 가장 먼저 실행
+## OS 遺꾧린 ??媛??癒쇱? ?ㅽ뻾
 
 ```
-- Windows 네이티브 (PowerShell): $env:OS == 'Windows_NT' && uname 없음
-  → [Windows 섹션] — `python`/`node` 실행, Windows 경로(`\`).
-- WSL / Linux / macOS (Bash):    uname 존재 (Linux/Darwin)
-  → [Bash 섹션] — `python3`/`node` 실행, POSIX 경로(`/`).
+- Windows ?ㅼ씠?곕툕 (PowerShell): $env:OS == 'Windows_NT' && uname ?놁쓬
+  ??[Windows ?뱀뀡] ??`python`/`node` ?ㅽ뻾, Windows 寃쎈줈(`\`).
+- WSL / Linux / macOS (Bash):    uname 議댁옱 (Linux/Darwin)
+  ??[Bash ?뱀뀡] ??`python3`/`node` ?ㅽ뻾, POSIX 寃쎈줈(`/`).
 ```
 
-> Node.js/Python 스크립트(`scripts/*.{js,py}`)는 양쪽에서 동일하게 동작.
+> Node.js/Python ?ㅽ겕由쏀듃(`scripts/*.{js,py}`)???묒そ?먯꽌 ?숈씪?섍쾶 ?숈옉.
 
 ---
 
-## 자동 스캔
-- FE 프로젝트 경로 — `C:\zinide\workspace\wms-{업체코드}-fe` (Win) 또는 `/mnt/c/...` (WSL)
-- BE 프로젝트 경로 — `C:\zinide\workspace\wms-{업체코드}-be`
-- ex) BASE_URL — `localhost:5173`
-- 로그인 정보 — `admin / 1111` (반드시 관리자 권한 계정)
-- 전체메뉴 / 옵션-단일메뉴 : `smus01`
-- 뷰포트: 데스크탑 1440×900
+## ?먮룞 ?ㅼ틪
+- FE ?꾨줈?앺듃 寃쎈줈 ??`C:\zinide\workspace\wms-{?낆껜肄붾뱶}-fe` (Win) ?먮뒗 `/mnt/c/...` (WSL)
+- BE ?꾨줈?앺듃 寃쎈줈 ??`C:\zinide\workspace\wms-{?낆껜肄붾뱶}-be`
+- ex) BASE_URL ??`localhost:5173`
+- 濡쒓렇???뺣낫 ??`admin / 1111` (諛섎뱶??愿由ъ옄 沅뚰븳 怨꾩젙)
+- ?꾩껜硫붾돱 / ?듭뀡-?⑥씪硫붾돱 : `smus01`
+- 酉고룷?? ?곗뒪?ы깙 1440횞900
 
-## 실행 스크립트
-1. `.claude/skills/TT_543/scripts/01_scan_admin_menus.js` (Node.js) — FE+BE 스캔 + 운영자 메뉴 필터
-2. `.claude/skills/TT_543/scripts/02_capture_screens.js` (Node.js + Playwright chromium 헤드리스, ko-KR) — 메뉴별 캡처
-3. `.claude/skills/TT_543/scripts/03_make_pptx.py` (Python + python-pptx + Pillow) — PPTX 생성
-4. `.claude/skills/TT_543/scripts/parse_vue_source.py` (Python) — 우측 설명 패널을 채우기 위한 Vue 소스 파서
+## ?ㅽ뻾 ?ㅽ겕由쏀듃
+1. `.claude/skills/TT_543/scripts/01_scan_admin_menus.js` (Node.js) ??FE+BE ?ㅼ틪 + ?댁쁺??硫붾돱 ?꾪꽣
+2. `.claude/skills/TT_543/scripts/02_capture_screens.js` (Node.js + Playwright chromium ?ㅻ뱶由ъ뒪, ko-KR) ??硫붾돱蹂?罹≪쿂
+3. `.claude/skills/TT_543/scripts/03_make_pptx.py` (Python + python-pptx + Pillow) ??PPTX ?앹꽦
+4. `.claude/skills/TT_543/scripts/parse_vue_source.py` (Python) ???곗륫 ?ㅻ챸 ?⑤꼸??梨꾩슦湲??꾪븳 Vue ?뚯뒪 ?뚯꽌
 
-## 템플릿
-- `template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx`
-
----
-
-> **PPT 양식 (BLOCKING)**
-> PPTX 의 레이아웃 · 색상 · 도형 라벨링 · 배지 · 커넥터 · 설명 패널 · 페이지 번호 규칙은 모두 **TT_541(PC 사용자매뉴얼) 스킬과 동일한 양식**을 따른다. 차이점은 (1) 표지 제목 "운영자 매뉴얼", (2) 대상 메뉴를 운영자/관리자 메뉴로만 필터링 두 가지뿐.
-
-> **PC/PDA 사용자 매뉴얼은 본 스킬의 범위가 아니다.** 입고·출고·재고 등 일반 업무 화면의 매뉴얼은 `/TT_541`(PC) 또는 `/TT_542`(PDA) 을 사용한다.
-
-> **PPT 내 편집 가능 원칙 (BLOCKING)**
-> 라벨 박스·테두리·배지·커넥터·설명 패널은 모두 python-pptx `add_shape` / `add_textbox` / `add_connector` 도형으로 PPT 안에 직접 그린다.
-
-> **클라이언트 도구**: 캡처는 Node.js + Playwright, PPTX 생성은 Python + python-pptx + Pillow.
+## ?쒗뵆由?- `template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx`
 
 ---
 
-## 사전 준비 (공통)
+> **PPT ?묒떇 (BLOCKING)**
+> PPTX ???덉씠?꾩썐 쨌 ?됱긽 쨌 ?꾪삎 ?쇰꺼留?쨌 諛곗? 쨌 而ㅻ꽖??쨌 ?ㅻ챸 ?⑤꼸 쨌 ?섏씠吏 踰덊샇 洹쒖튃? 紐⑤몢 **TT_541(PC ?ъ슜?먮ℓ?댁뼹) ?ㅽ궗怨??숈씪???묒떇**???곕Ⅸ?? 李⑥씠?먯? (1) ?쒖? ?쒕ぉ "?댁쁺??留ㅻ돱??, (2) ???硫붾돱瑜??댁쁺??愿由ъ옄 硫붾돱濡쒕쭔 ?꾪꽣留???媛吏肉?
 
-### 인자 확정 (AskUserQuestion 활용)
+> **PC/PDA ?ъ슜??留ㅻ돱?쇱? 蹂??ㅽ궗??踰붿쐞媛 ?꾨땲??** ?낃퀬쨌異쒓퀬쨌?ш퀬 ???쇰컲 ?낅Т ?붾㈃??留ㅻ돱?쇱? `/TT_541`(PC) ?먮뒗 `/TT_542`(PDA) ???ъ슜?쒕떎.
 
-| 입력 | 설명 | 예시 |
+> **PPT ???몄쭛 媛???먯튃 (BLOCKING)**
+> ?쇰꺼 諛뺤뒪쨌?뚮몢由?룸같吏쨌而ㅻ꽖?걔룹꽕紐??⑤꼸? 紐⑤몢 python-pptx `add_shape` / `add_textbox` / `add_connector` ?꾪삎?쇰줈 PPT ?덉뿉 吏곸젒 洹몃┛??
+
+> **?대씪?댁뼵???꾧뎄**: 罹≪쿂??Node.js + Playwright, PPTX ?앹꽦? Python + python-pptx + Pillow.
+
+---
+
+## ?ъ쟾 以鍮?(怨듯넻)
+
+### ?몄옄 ?뺤젙 (AskUserQuestion ?쒖슜)
+
+| ?낅젰 | ?ㅻ챸 | ?덉떆 |
 |---|---|---|
-| **FE 프로젝트 경로** | 프론트엔드 소스 루트. router 자동 스캔 | `C:\zinide\workspace\wms-cloud-fe` 또는 `/mnt/c/...` |
-| **BE 프로젝트 경로** | 백엔드 소스 루트. Controller / @RequestMapping 추출 | `C:\zinide\workspace\wms-cloud-be` |
-| **BASE_URL** | 이미 떠 있는 dev/스테이징 서버 | `http://localhost:5173` |
-| **고객사명** | 출력 파일명. OS 금지문자 자동 `_` 치환 | `반다이남코` |
-| **로그인 필요 여부** | Y면 로그인 정보 추가. **운영자 매뉴얼은 관리자 권한 계정** 필수 | Y/N |
-| **운영자 메뉴 확정** | 1단계 자동 스캔 후보 다중 선택 + 직접 입력 보강 | `smus01, smmn01, smcd01, ...` |
-| **뷰포트** | 데스크탑 고정 (1440×900) | `1440x900` |
+| **FE ?꾨줈?앺듃 寃쎈줈** | ?꾨줎?몄뿏???뚯뒪 猷⑦듃. router ?먮룞 ?ㅼ틪 | `C:\zinide\workspace\wms-cloud-fe` ?먮뒗 `/mnt/c/...` |
+| **BE ?꾨줈?앺듃 寃쎈줈** | 諛깆뿏???뚯뒪 猷⑦듃. Controller / @RequestMapping 異붿텧 | `C:\zinide\workspace\wms-cloud-be` |
+| **BASE_URL** | ?대? ???덈뒗 dev/?ㅽ뀒?댁쭠 ?쒕쾭 | `http://localhost:5173` |
+| **怨좉컼?щ챸** | 異쒕젰 ?뚯씪紐? OS 湲덉?臾몄옄 ?먮룞 `_` 移섑솚 | `諛섎떎?대궓肄? |
+| **濡쒓렇???꾩슂 ?щ?** | Y硫?濡쒓렇???뺣낫 異붽?. **?댁쁺??留ㅻ돱?쇱? 愿由ъ옄 沅뚰븳 怨꾩젙** ?꾩닔 | Y/N |
+| **?댁쁺??硫붾돱 ?뺤젙** | 1?④퀎 ?먮룞 ?ㅼ틪 ?꾨낫 ?ㅼ쨷 ?좏깮 + 吏곸젒 ?낅젰 蹂닿컯 | `smus01, smmn01, smcd01, ...` |
+| **酉고룷??* | ?곗뒪?ы깙 怨좎젙 (1440횞900) | `1440x900` |
 
-### 경로 정의
+### 寃쎈줈 ?뺤쓽
 
-상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
+?곷?寃쎈줈??git ??μ냼 猷⑦듃(`$DocRoot` / `$DOC_ROOT`) 湲곗?.
 
 ```
-BASE      = $DocRoot / $DOC_ROOT (동적 감지)
-TEMPLATE  = template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx
-OUT_DIR   = output/05 이행(TT)
-TMP_DIR   = output/05 이행(TT)/tmp_543
+BASE      = $DocRoot / $DOC_ROOT (?숈쟻 媛먯?)
+TEMPLATE  = template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx
+OUT_DIR   = output/05 ?댄뻾(TT)
+TMP_DIR   = output/05 ?댄뻾(TT)/tmp_543
 SCRIPTS   = .claude/skills/TT_543/scripts
-OUT_FILE  = output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx
+OUT_FILE  = output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx
 ```
 
-> **TMP 디렉토리 분리:** TT_541 은 `tmp_541`, TT_542 는 `tmp_542`, TT_543 는 `tmp_543` 사용.
+> **TMP ?붾젆?좊━ 遺꾨━:** TT_541 ? `tmp_541`, TT_542 ??`tmp_542`, TT_543 ??`tmp_543` ?ъ슜.
 
 ---
 
-# === Windows 섹션 (PowerShell) ===
+# === Windows ?뱀뀡 (PowerShell) ===
 
-### W-0) 경로 동적 감지
+### W-0) 寃쎈줈 ?숈쟻 媛먯?
 
 ```powershell
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
@@ -101,7 +100,7 @@ $FeRoot    = Join-Path $Workspace "wms-$ProjCode-fe"
 $BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
 ```
 
-### W-1) 의존성 자동 설치
+### W-1) ?섏〈???먮룞 ?ㅼ튂
 
 ```powershell
 $env:PYTHONUTF8 = "1"
@@ -117,38 +116,38 @@ python -c "from pptx import Presentation; from PIL import Image" 2>$null
 if ($LASTEXITCODE -ne 0) { python -m pip install --user python-pptx Pillow }
 ```
 
-### W-2) FE+BE 스캔 (운영자 메뉴 후보)
+### W-2) FE+BE ?ㅼ틪 (?댁쁺??硫붾돱 ?꾨낫)
 
 ```powershell
 Set-Location $DocRoot
-node ".claude\skills\TT_543\scripts\01_scan_admin_menus.js" "{FE경로}" "{BE경로}"
+node ".claude\skills\TT_543\scripts\01_scan_admin_menus.js" "{FE寃쎈줈}" "{BE寃쎈줈}"
 ```
 
-### W-3) 화면 캡처
+### W-3) ?붾㈃ 罹≪쿂
 
 ```powershell
 Set-Location $DocRoot
 node ".claude\skills\TT_543\scripts\02_capture_screens.js"
 ```
 
-### W-4) PPTX 생성
+### W-4) PPTX ?앹꽦
 
 ```powershell
 Set-Location $DocRoot
 python ".claude\skills\TT_543\scripts\03_make_pptx.py"
 ```
 
-### W-5) 임시 파일 정리
+### W-5) ?꾩떆 ?뚯씪 ?뺣━
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\05 이행(TT)\tmp_543"
+Remove-Item -Recurse -Force "$DocRoot\output\05 ?댄뻾(TT)\tmp_543"
 ```
 
 ---
 
-# === Bash 섹션 (WSL/Linux/Mac) ===
+# === Bash ?뱀뀡 (WSL/Linux/Mac) ===
 
-### B-0) 경로 동적 감지
+### B-0) 寃쎈줈 ?숈쟻 媛먯?
 
 ```bash
 DOC_ROOT=$(git rev-parse --show-toplevel)
@@ -159,7 +158,7 @@ FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
 BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
 ```
 
-### B-1) 의존성 자동 설치
+### B-1) ?섏〈???먮룞 ?ㅼ튂
 
 ```bash
 cd "$DOC_ROOT/.claude/skills/TT_543/scripts"
@@ -170,97 +169,97 @@ npx playwright install chromium 2>/dev/null
 python3 -c "from pptx import Presentation; from PIL import Image" 2>/dev/null || pip3 install --user python-pptx Pillow
 ```
 
-### B-2) FE+BE 스캔
+### B-2) FE+BE ?ㅼ틪
 
 ```bash
 cd "$DOC_ROOT"
-node .claude/skills/TT_543/scripts/01_scan_admin_menus.js "{FE경로}" "{BE경로}"
+node .claude/skills/TT_543/scripts/01_scan_admin_menus.js "{FE寃쎈줈}" "{BE寃쎈줈}"
 ```
 
-### B-3) 화면 캡처
+### B-3) ?붾㈃ 罹≪쿂
 
 ```bash
 cd "$DOC_ROOT"
 node .claude/skills/TT_543/scripts/02_capture_screens.js
 ```
 
-### B-4) PPTX 생성
+### B-4) PPTX ?앹꽦
 
 ```bash
 cd "$DOC_ROOT"
 python3 .claude/skills/TT_543/scripts/03_make_pptx.py
 ```
 
-### B-5) 임시 파일 정리
+### B-5) ?꾩떆 ?뚯씪 ?뺣━
 
 ```bash
-rm -rf "$DOC_ROOT/output/05 이행(TT)/tmp_543"
+rm -rf "$DOC_ROOT/output/05 ?댄뻾(TT)/tmp_543"
 ```
 
 ---
 
-## 운영자 메뉴 자동 식별 기준 (공통, 핵심)
+## ?댁쁺??硫붾돱 ?먮룞 ?앸퀎 湲곗? (怨듯넻, ?듭떖)
 
-### A. FE 라우트 경로 패턴 (우선순위 高)
+### A. FE ?쇱슦??寃쎈줈 ?⑦꽩 (?곗꽑?쒖쐞 遙?
 
-| 패턴 | 의미 |
+| ?⑦꽩 | ?섎? |
 |---|---|
-| `/sm/...` | System Management — 시스템 관리 메뉴 그룹 |
-| `/admin/...` | 관리자 전용 |
-| `/mgmt/...`, `/manage/...` | 관리 메뉴 |
-| `/system/...` | 시스템 설정 |
-| `/setting/...`, `/config/...` | 설정 |
-| `/master/...`, `/md/.../mdm*` | 마스터 데이터 |
-| `/permission/...`, `/role/...`, `/auth/...` | 권한 관리 |
+| `/sm/...` | System Management ???쒖뒪??愿由?硫붾돱 洹몃９ |
+| `/admin/...` | 愿由ъ옄 ?꾩슜 |
+| `/mgmt/...`, `/manage/...` | 愿由?硫붾돱 |
+| `/system/...` | ?쒖뒪???ㅼ젙 |
+| `/setting/...`, `/config/...` | ?ㅼ젙 |
+| `/master/...`, `/md/.../mdm*` | 留덉뒪???곗씠??|
+| `/permission/...`, `/role/...`, `/auth/...` | 沅뚰븳 愿由?|
 
-### B. 메뉴 코드 접두사 패턴
+### B. 硫붾돱 肄붾뱶 ?묐몢???⑦꽩
 
-| 패턴 | 메뉴 종류 |
+| ?⑦꽩 | 硫붾돱 醫낅쪟 |
 |---|---|
-| `sm*` (예: `smus01`, `smmn01`, `smcd01`, `smgr01`) | 시스템 관리 |
-| `mdm*` (예: `mdmbz01`, `mdmce01`, `mdmwh01`, `mdmlc01`) | 마스터 데이터 |
-| `adm*`, `sys*`, `cfg*` | 관리/시스템/설정 |
-| `usr*`, `mn*`, `rl*` | 사용자/메뉴/권한 |
+| `sm*` (?? `smus01`, `smmn01`, `smcd01`, `smgr01`) | ?쒖뒪??愿由?|
+| `mdm*` (?? `mdmbz01`, `mdmce01`, `mdmwh01`, `mdmlc01`) | 留덉뒪???곗씠??|
+| `adm*`, `sys*`, `cfg*` | 愿由??쒖뒪???ㅼ젙 |
+| `usr*`, `mn*`, `rl*` | ?ъ슜??硫붾돱/沅뚰븳 |
 
-### C. 메뉴명 키워드 (보조)
+### C. 硫붾돱紐??ㅼ썙??(蹂댁“)
 
-`관리자`, `사용자관리`, `권한`, `메뉴관리`, `공통코드`, `시스템 파라미터`, `시스템 설정`, `사업장`, `센터`, `창고`, `로케이션`, `그룹 관리`
+`愿由ъ옄`, `?ъ슜?먭?由?, `沅뚰븳`, `硫붾돱愿由?, `怨듯넻肄붾뱶`, `?쒖뒪???뚮씪誘명꽣`, `?쒖뒪???ㅼ젙`, `?ъ뾽??, `?쇳꽣`, `李쎄퀬`, `濡쒖??댁뀡`, `洹몃９ 愿由?
 
-### D. BE Controller / @RequestMapping 보강
+### D. BE Controller / @RequestMapping 蹂닿컯
 
-| 패턴 | 추출 |
+| ?⑦꽩 | 異붿텧 |
 |---|---|
-| `package ...sm.controller.*` 또는 `package ...admin.controller.*` | URL prefix `/sm`, `/admin` |
-| `@RequestMapping("/sm/...")` | `/sm/...` 라우트 발견 |
-| `@RequestMapping("/mdm/...")` | `/mdm/...` 라우트 발견 |
-| `@RequestMapping("/system/...")` | `/system/...` 라우트 발견 |
-| 클래스명 `SmUserController`, `MdmBizController` 등 | 명명규칙 기반 메뉴 코드 추정 |
+| `package ...sm.controller.*` ?먮뒗 `package ...admin.controller.*` | URL prefix `/sm`, `/admin` |
+| `@RequestMapping("/sm/...")` | `/sm/...` ?쇱슦??諛쒓껄 |
+| `@RequestMapping("/mdm/...")` | `/mdm/...` ?쇱슦??諛쒓껄 |
+| `@RequestMapping("/system/...")` | `/system/...` ?쇱슦??諛쒓껄 |
+| ?대옒?ㅻ챸 `SmUserController`, `MdmBizController` ??| 紐낅챸洹쒖튃 湲곕컲 硫붾돱 肄붾뱶 異붿젙 |
 
-### E. 제외 기준 (자동 필터)
+### E. ?쒖쇅 湲곗? (?먮룞 ?꾪꽣)
 
-- `/pda/...` 또는 메뉴코드 끝이 `m` (PDA)
-- 입고/출고/재고/반품/피킹/배송 (`iw*`, `ob*`, `iv*`, `rt*`, `pk*`, `dl*`)
-- 로그인·헬프·404 등 인증/공통 페이지
+- `/pda/...` ?먮뒗 硫붾돱肄붾뱶 ?앹씠 `m` (PDA)
+- ?낃퀬/異쒓퀬/?ш퀬/諛섑뭹/?쇳궧/諛곗넚 (`iw*`, `ob*`, `iv*`, `rt*`, `pk*`, `dl*`)
+- 濡쒓렇?맞룻뿬?꽷?04 ???몄쬆/怨듯넻 ?섏씠吏
 
 ---
 
-## 단계별 워크플로우 상세 (공통)
+## ?④퀎蹂??뚰겕?뚮줈???곸꽭 (怨듯넻)
 
-### 1단계 — FE + BE 프로젝트 스캔으로 운영자 메뉴 후보 추출
+### 1?④퀎 ??FE + BE ?꾨줈?앺듃 ?ㅼ틪?쇰줈 ?댁쁺??硫붾돱 ?꾨낫 異붿텧
 
-**스크립트**: `scripts/01_scan_admin_menus.js`
-**출력**: `output/05 이행(TT)/tmp_543/admin_menu_candidates.json`
+**?ㅽ겕由쏀듃**: `scripts/01_scan_admin_menus.js`
+**異쒕젰**: `output/05 ?댄뻾(TT)/tmp_543/admin_menu_candidates.json`
 
-스크립트가 수행하는 일:
+?ㅽ겕由쏀듃媛 ?섑뻾?섎뒗 ??
 
-1. **FE 측 스캔** (TT_541 의 `01_scan_project.js` 와 동일 로직 + 운영자 필터):
-   - dev 포트, 라우트, 메뉴명 매핑
-   - 운영자 필터 (A/B/C) 적용, 제외 기준(E) 적용
-2. **BE 측 스캔**:
-   - `**/*.java`, `**/*.kt` 에서 `@RestController`, `@Controller`, `@RequestMapping("/...")` 추출
-   - 패키지명/클래스명에서 `sm`, `admin`, `mdm`, `sys` 패턴 매칭
-   - 추출된 URL prefix 를 FE 라우트와 교차 매칭하여 FE 측 누락 메뉴 보강
-3. **결과 머지**: 중복 제거, 식별 근거 기록
+1. **FE 痢??ㅼ틪** (TT_541 ??`01_scan_project.js` ? ?숈씪 濡쒖쭅 + ?댁쁺???꾪꽣):
+   - dev ?ы듃, ?쇱슦?? 硫붾돱紐?留ㅽ븨
+   - ?댁쁺???꾪꽣 (A/B/C) ?곸슜, ?쒖쇅 湲곗?(E) ?곸슜
+2. **BE 痢??ㅼ틪**:
+   - `**/*.java`, `**/*.kt` ?먯꽌 `@RestController`, `@Controller`, `@RequestMapping("/...")` 異붿텧
+   - ?⑦궎吏紐??대옒?ㅻ챸?먯꽌 `sm`, `admin`, `mdm`, `sys` ?⑦꽩 留ㅼ묶
+   - 異붿텧??URL prefix 瑜?FE ?쇱슦?몄? 援먯감 留ㅼ묶?섏뿬 FE 痢??꾨씫 硫붾돱 蹂닿컯
+3. **寃곌낵 癒몄?**: 以묐났 ?쒓굅, ?앸퀎 洹쇨굅 湲곕줉
 
 ```json
 {
@@ -270,40 +269,40 @@ rm -rf "$DOC_ROOT/output/05 이행(TT)/tmp_543"
   "devPort": 5173,
   "guessedBaseUrl": "http://localhost:5173",
   "adminMenus": [
-    { "code": "smus01", "name": "사용자관리", "path": "/sm/smus01", "category": "시스템관리", "source": ["fe-route", "be-controller"], "viewportHint": "desktop" },
-    { "code": "mdmbz01", "name": "사업장관리", "path": "/md/mdmbz01", "category": "마스터", "source": ["fe-route"], "viewportHint": "desktop" }
+    { "code": "smus01", "name": "?ъ슜?먭?由?, "path": "/sm/smus01", "category": "?쒖뒪?쒓?由?, "source": ["fe-route", "be-controller"], "viewportHint": "desktop" },
+    { "code": "mdmbz01", "name": "?ъ뾽?κ?由?, "path": "/md/mdmbz01", "category": "留덉뒪??, "source": ["fe-route"], "viewportHint": "desktop" }
   ],
   "rejected": [
-    { "code": "iwrq01", "name": "입고예정", "reason": "일반업무메뉴(입고)" },
-    { "code": "brsc01m", "name": "센터입고", "reason": "PDA 메뉴" }
+    { "code": "iwrq01", "name": "?낃퀬?덉젙", "reason": "?쇰컲?낅Т硫붾돱(?낃퀬)" },
+    { "code": "brsc01m", "name": "?쇳꽣?낃퀬", "reason": "PDA 硫붾돱" }
   ],
   "scannedAt": "2026-05-12T14:00:00.000Z"
 }
 ```
 
-### 2단계 — 사용자 입력으로 캡처 대상 확정
+### 2?④퀎 ???ъ슜???낅젰?쇰줈 罹≪쿂 ????뺤젙
 
-AskUserQuestion으로 BASE_URL / dev 서버 / 운영자 메뉴(multiSelect) / 관리자 로그인 / 고객사명 / 뷰포트 확정.
+AskUserQuestion?쇰줈 BASE_URL / dev ?쒕쾭 / ?댁쁺??硫붾돱(multiSelect) / 愿由ъ옄 濡쒓렇??/ 怨좉컼?щ챸 / 酉고룷???뺤젙.
 
-`output/05 이행(TT)/tmp_543/capture_config.json` 저장.
+`output/05 ?댄뻾(TT)/tmp_543/capture_config.json` ???
 
 ```json
 {
   "baseUrl": "http://168.126.28.62:8085",
-  "customer": "반다이남코",
+  "customer": "諛섎떎?대궓肄?,
   "login": { "needed": true, "url": "/", "originField": "http://168.126.28.62:8085/api", "id": "admin", "pw": "********" },
   "viewport": { "width": 1440, "height": 900, "hideSidebar": true },
   "menus": [
-    { "code": "smus01", "name": "사용자관리", "path": "/sm/smus01", "category": "시스템관리", "scenarios": ["main", "search", "register", "rowSelect", "edit"] }
+    { "code": "smus01", "name": "?ъ슜?먭?由?, "path": "/sm/smus01", "category": "?쒖뒪?쒓?由?, "scenarios": ["main", "search", "register", "rowSelect", "edit"] }
   ]
 }
 ```
 
-### 3단계 — Playwright 헤드리스 화면 캡처 (한국어 로케일)
+### 3?④퀎 ??Playwright ?ㅻ뱶由ъ뒪 ?붾㈃ 罹≪쿂 (?쒓뎅??濡쒖???
 
-**스크립트**: `scripts/02_capture_screens.js`
+**?ㅽ겕由쏀듃**: `scripts/02_capture_screens.js`
 
-#### 한국어 로케일 강제 (BLOCKING)
+#### ?쒓뎅??濡쒖???媛뺤젣 (BLOCKING)
 
 ```js
 const browser = await chromium.launch({
@@ -318,187 +317,181 @@ const ctx = await browser.newContext({
 });
 ```
 
-#### 표준 캡처 시나리오
+#### ?쒖? 罹≪쿂 ?쒕굹由ъ삤
 
-5단계로 캡처하지만 PPT 슬라이드에는 **01-main 을 제외** 한 4개 시나리오만 사용한다 (01-main 은 초기 진입 빈 화면이라 가치 낮음).
+5?④퀎濡?罹≪쿂?섏?留?PPT ?щ씪?대뱶?먮뒗 **01-main ???쒖쇅** ??4媛??쒕굹由ъ삤留??ъ슜?쒕떎 (01-main ? 珥덇린 吏꾩엯 鍮??붾㈃?대씪 媛移???쓬).
 
-| 파일명 | 트리거 | PPT 사용 여부 |
+| ?뚯씪紐?| ?몃━嫄?| PPT ?ъ슜 ?щ? |
 |---|---|---|
-| `01-main.png` | 메뉴 진입 직후 | 슬라이드 미생성 (캡처는 유지) |
-| `02-search-result.png` | "검색" 클릭 + 결과 로드 | "메인 화면" 슬라이드 |
-| `03-register-popup.png` | "추가/등록" 클릭 → 팝업 → 취소 | "등록 팝업" 슬라이드 |
-| `04-row-selected.png` | 결과 그리드 첫 행 클릭 | "행 선택" 슬라이드 |
-| `05-edit-popup.png` | 행 선택 후 "수정" → 팝업 → 취소 | "수정 팝업" 슬라이드 |
+| `01-main.png` | 硫붾돱 吏꾩엯 吏곹썑 | ?щ씪?대뱶 誘몄깮??(罹≪쿂???좎?) |
+| `02-search-result.png` | "寃?? ?대┃ + 寃곌낵 濡쒕뱶 | "硫붿씤 ?붾㈃" ?щ씪?대뱶 |
+| `03-register-popup.png` | "異붽?/?깅줉" ?대┃ ???앹뾽 ??痍⑥냼 | "?깅줉 ?앹뾽" ?щ씪?대뱶 |
+| `04-row-selected.png` | 寃곌낵 洹몃━??泥????대┃ | "???좏깮" ?щ씪?대뱶 |
+| `05-edit-popup.png` | ???좏깮 ??"?섏젙" ???앹뾽 ??痍⑥냼 | "?섏젙 ?앹뾽" ?щ씪?대뱶 |
 
-**⚠ 실제 데이터 변경 금지 원칙 (운영자 메뉴는 특히 중요)**
-- 운영자 메뉴(사용자관리·메뉴관리·공통코드 등)에서 실제 INSERT/UPDATE/DELETE 가 발생하면 시스템 전체에 영향.
-- 팝업은 열기만, 확인·저장·승인 절대 금지.
-- 취소 / ESC / ✕ 닫기로 팝업 닫기.
+**???ㅼ젣 ?곗씠??蹂寃?湲덉? ?먯튃 (?댁쁺??硫붾돱???뱁엳 以묒슂)**
+- ?댁쁺??硫붾돱(?ъ슜?먭?由?룸찓?닿?由?룰났?듭퐫?????먯꽌 ?ㅼ젣 INSERT/UPDATE/DELETE 媛 諛쒖깮?섎㈃ ?쒖뒪???꾩껜???곹뼢.
+- ?앹뾽? ?닿린留? ?뺤씤쨌??Β룹듅???덈? 湲덉?.
+- 痍⑥냼 / ESC / ???リ린濡??앹뾽 ?リ린.
 
-### 4단계 — PPTX 생성 (TT_541 양식 그대로)
+### 4?④퀎 ??PPTX ?앹꽦 (TT_541 ?묒떇 洹몃?濡?
 
-**스크립트**: `scripts/03_make_pptx.py` (python-pptx)
-**출력**: `output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx`
+**?ㅽ겕由쏀듃**: `scripts/03_make_pptx.py` (python-pptx)
+**異쒕젰**: `output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx`
 
-#### TT_541 와 동일한 처리 (BLOCKING)
+#### TT_541 ? ?숈씪??泥섎━ (BLOCKING)
 
-다음 항목은 TT_541 의 `03_make_pptx.py` 와 **완전히 동일하게** 처리. 양식 변경 금지.
+?ㅼ쓬 ??ぉ? TT_541 ??`03_make_pptx.py` ? **?꾩쟾???숈씪?섍쾶** 泥섎━. ?묒떇 蹂寃?湲덉?.
 
-- 슬라이드 크기: 13.33 × 7.5 인치 (16:9)
-- 색상 상수: `COLOR_RED/ORANGE/BLUE/GREEN/GRAY/NAVY/DARK/WARN/TITLE_BG/...`
-- 폰트: 맑은 고딕
-- 레이아웃: 제목 바(#2D4B73, 흰 16pt) + 이미지영역(0~10in) + 설명패널(10~13.33in) + 페이지 번호
-- 영역 라벨링·설명 패널·인라인 버튼 이미지·페이지 번호·템플릿 처리(`remove_all_slides()`)
+- ?щ씪?대뱶 ?ш린: 13.33 횞 7.5 ?몄튂 (16:9)
+- ?됱긽 ?곸닔: `COLOR_RED/ORANGE/BLUE/GREEN/GRAY/NAVY/DARK/WARN/TITLE_BG/...`
+- ?고듃: 留묒? 怨좊뵓
+- ?덉씠?꾩썐: ?쒕ぉ 諛?#2D4B73, ??16pt) + ?대?吏?곸뿭(0~10in) + ?ㅻ챸?⑤꼸(10~13.33in) + ?섏씠吏 踰덊샇
+- ?곸뿭 ?쇰꺼留겶룹꽕紐??⑤꼸쨌?몃씪??踰꾪듉 ?대?吏쨌?섏씠吏 踰덊샇쨌?쒗뵆由?泥섎━(`remove_all_slides()`)
 
-#### TT_541 와 다른 부분 (운영자 매뉴얼 특화)
+#### TT_541 ? ?ㅻⅨ 遺遺?(?댁쁺??留ㅻ돱???뱁솕)
 
-1. **표지 제목**: `사용자 매뉴얼` → `운영자 매뉴얼`
-2. **표지 부제**: `{고객사명} WMS` 유지
-3. **출력 파일명**: `TT_543_운영자매뉴얼_{고객사명}.pptx`
-4. **TMP 경로**: `tmp_541` → `tmp_543`
-5. **카테고리 헤더**: 메뉴 카테고리(`시스템관리`, `마스터`)가 다르면 카테고리 전환 시 섹션 표지 추가
-6. **설명 패널 톤**: TT_541 은 일반 사용자 톤, TT_543 은 운영자 톤 ("신규 사용자 등록 시 [추가] 버튼", "권한 변경 후 [저장] 클릭")
+1. **?쒖? ?쒕ぉ**: `?ъ슜??留ㅻ돱?? ??`?댁쁺??留ㅻ돱??
+2. **?쒖? 遺??*: `{怨좉컼?щ챸} WMS` ?좎?
+3. **異쒕젰 ?뚯씪紐?*: `TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx`
+4. **TMP 寃쎈줈**: `tmp_541` ??`tmp_543`
+5. **移댄뀒怨좊━ ?ㅻ뜑**: 硫붾돱 移댄뀒怨좊━(`?쒖뒪?쒓?由?, `留덉뒪??)媛 ?ㅻⅤ硫?移댄뀒怨좊━ ?꾪솚 ???뱀뀡 ?쒖? 異붽?
+6. **?ㅻ챸 ?⑤꼸 ??*: TT_541 ? ?쇰컲 ?ъ슜???? TT_543 ? ?댁쁺????("?좉퇋 ?ъ슜???깅줉 ??[異붽?] 踰꾪듉", "沅뚰븳 蹂寃???[??? ?대┃")
 
-#### 슬라이드 구성
+#### ?щ씪?대뱶 援ъ꽦
 
-1. **표지** — 제목 "운영자 매뉴얼", 부제 "{고객사명} WMS", 작성일자
-2. **목차** — 운영자 메뉴 목록 (카테고리별 묶음)
-3. **카테고리 섹션 표지** — 시스템관리 / 마스터 / 권한 등 (선택)
-4. **메뉴 섹션 표지** — 메뉴마다 1장
-5. **메뉴 화면 슬라이드** — 메뉴마다 캡처 시나리오 수만큼
+1. **?쒖?** ???쒕ぉ "?댁쁺??留ㅻ돱??, 遺??"{怨좉컼?щ챸} WMS", ?묒꽦?쇱옄
+2. **紐⑹감** ???댁쁺??硫붾돱 紐⑸줉 (移댄뀒怨좊━蹂?臾띠쓬)
+3. **移댄뀒怨좊━ ?뱀뀡 ?쒖?** ???쒖뒪?쒓?由?/ 留덉뒪??/ 沅뚰븳 ??(?좏깮)
+4. **硫붾돱 ?뱀뀡 ?쒖?** ??硫붾돱留덈떎 1??5. **硫붾돱 ?붾㈃ ?щ씪?대뱶** ??硫붾돱留덈떎 罹≪쿂 ?쒕굹由ъ삤 ?섎쭔??
+#### ?됱긽 留ㅽ븨 (TT_541 怨??숈씪)
 
-#### 색상 매핑 (TT_541 과 동일)
-
-| 목적 | HEX |
+| 紐⑹쟻 | HEX |
 |---|---|
-| 검색 조건 / 첫 번째 영역 | `DC1E1E` (빨강) |
-| 두 번째 영역 | `C86E00` (주황) |
-| 세 번째 영역 | `1E64C8` (파랑) |
-| 빈 영역·초기 상태 | `6E6E6E` (회색) |
-| 데이터 있는 결과 그리드 | `148C3C` (녹색) |
-| 중립 헤딩 | `1A3A5C` (남색) |
-| 일반 본문 | `333333` |
-| 경고 (⚠) | `CC2222` |
+| 寃??議곌굔 / 泥?踰덉㎏ ?곸뿭 | `DC1E1E` (鍮④컯) |
+| ??踰덉㎏ ?곸뿭 | `C86E00` (二쇳솴) |
+| ??踰덉㎏ ?곸뿭 | `1E64C8` (?뚮옉) |
+| 鍮??곸뿭쨌珥덇린 ?곹깭 | `6E6E6E` (?뚯깋) |
+| ?곗씠???덈뒗 寃곌낵 洹몃━??| `148C3C` (?뱀깋) |
+| 以묐┰ ?ㅻ뵫 | `1A3A5C` (?⑥깋) |
+| ?쇰컲 蹂몃Ц | `333333` |
+| 寃쎄퀬 (?? | `CC2222` |
 
-#### 설명 패널 작성 원칙 (BLOCKING — Vue 소스 기반)
+#### ?ㅻ챸 ?⑤꼸 ?묒꽦 ?먯튃 (BLOCKING ??Vue ?뚯뒪 湲곕컲)
 
-**우측 설명 패널은 일반 디폴트 문구가 아니라 실제 Vue 소스 코드에서 추출한 정보로 작성한다.**
+**?곗륫 ?ㅻ챸 ?⑤꼸? ?쇰컲 ?뷀뤃??臾멸뎄媛 ?꾨땲???ㅼ젣 Vue ?뚯뒪 肄붾뱶?먯꽌 異붿텧???뺣낫濡??묒꽦?쒕떎.**
 
-`scripts/parse_vue_source.py` 가 `{FE경로}/src/views/**/{메뉴코드}/*.vue` 를 정규식 분석:
+`scripts/parse_vue_source.py` 媛 `{FE寃쎈줈}/src/views/**/{硫붾돱肄붾뱶}/*.vue` 瑜??뺢퇋??遺꾩꽍:
 
-| 추출 항목 | 출처 |
+| 異붿텧 ??ぉ | 異쒖쿂 |
 |---|---|
-| `has_search`, `search_fields` | `<SearchSection>` + 내부 `<ZCell :title="$t('message.XXX')">` |
-| `grid_columns` | `headerText: 'XXX'` (visible:false 제외) |
-| `toolbar_buttons` | `<ZBtn*>` 컴포넌트 (`ZBtnRowAdd`/`ZBtnRowDel`/`ZBtnRowSave`/`ZBtnProc` 등) + 슬롯 텍스트 |
-| `has_popup_edit` | 같은 폴더에 `*Edt.vue` 또는 `*Popup.vue` 존재 여부 |
+| `has_search`, `search_fields` | `<SearchSection>` + ?대? `<ZCell :title="$t('message.XXX')">` |
+| `grid_columns` | `headerText: 'XXX'` (visible:false ?쒖쇅) |
+| `toolbar_buttons` | `<ZBtn*>` 而댄룷?뚰듃 (`ZBtnRowAdd`/`ZBtnRowDel`/`ZBtnRowSave`/`ZBtnProc` ?? + ?щ’ ?띿뒪??|
+| `has_popup_edit` | 媛숈? ?대뜑??`*Edt.vue` ?먮뒗 `*Popup.vue` 議댁옱 ?щ? |
 | `apis` | `axios.{get,post,put,delete}('/path', ...)` URL |
 
-`synth_regions_desc()` 가 이 정보로 설명 작성:
-1. **검색 영역 없는 메뉴**: 라벨에 "검색 조건" 표시 안 함. "그리드 영역" / "기능 버튼" 으로 라벨링.
-2. **검색 영역 있는 메뉴**: `search_fields` 를 그대로 본문에 나열.
-3. **그리드 컬럼**: `grid_columns` 를 3개씩 묶어 콤마 표시.
-4. **기능 버튼**: `toolbar_buttons` 에서 메타 버튼 자동 제외.
-5. **편집 방식**: `has_popup_edit` 으로 "팝업 편집" / "인라인 편집" 분기.
+`synth_regions_desc()` 媛 ???뺣낫濡??ㅻ챸 ?묒꽦:
+1. **寃???곸뿭 ?녿뒗 硫붾돱**: ?쇰꺼??"寃??議곌굔" ?쒖떆 ???? "洹몃━???곸뿭" / "湲곕뒫 踰꾪듉" ?쇰줈 ?쇰꺼留?
+2. **寃???곸뿭 ?덈뒗 硫붾돱**: `search_fields` 瑜?洹몃?濡?蹂몃Ц???섏뿴.
+3. **洹몃━??而щ읆**: `grid_columns` 瑜?3媛쒖뵫 臾띠뼱 肄ㅻ쭏 ?쒖떆.
+4. **湲곕뒫 踰꾪듉**: `toolbar_buttons` ?먯꽌 硫뷀? 踰꾪듉 ?먮룞 ?쒖쇅.
+5. **?몄쭛 諛⑹떇**: `has_popup_edit` ?쇰줈 "?앹뾽 ?몄쭛" / "?몃씪???몄쭛" 遺꾧린.
 
-**운영자 매뉴얼이므로 운영자 관점 시나리오로 기술:**
-- 사용자관리: "신규 사용자 등록", "권한 변경", "사용자 비활성화"
-- 메뉴관리: "메뉴 추가 / 순서 변경 / 사용 권한 부여"
-- 공통코드: "코드 그룹 추가 / 상세 코드 등록"
+**?댁쁺??留ㅻ돱?쇱씠誘濡??댁쁺??愿???쒕굹由ъ삤濡?湲곗닠:**
+- ?ъ슜?먭?由? "?좉퇋 ?ъ슜???깅줉", "沅뚰븳 蹂寃?, "?ъ슜??鍮꾪솢?깊솕"
+- 硫붾돱愿由? "硫붾돱 異붽? / ?쒖꽌 蹂寃?/ ?ъ슜 沅뚰븳 遺??
+- 怨듯넻肄붾뱶: "肄붾뱶 洹몃９ 異붽? / ?곸꽭 肄붾뱶 ?깅줉"
 
-코드 변수명·DB 컬럼명·API 경로는 본문에 직접 노출하지 않는다.
+肄붾뱶 蹂?섎챸쨌DB 而щ읆紐끒텮PI 寃쎈줈??蹂몃Ц??吏곸젒 ?몄텧?섏? ?딅뒗??
 
-> ⚠ `dist/{메뉴코드}/ui.md` 는 더 이상 사용하지 않는다. Vue 소스가 진실의 원본.
+> ??`30-domain/{硫붾돱肄붾뱶}/ui.md` ?????댁긽 ?ъ슜?섏? ?딅뒗?? Vue ?뚯뒪媛 吏꾩떎???먮낯.
 
 ---
 
-## 6단계 — 완료 보고
+## 6?④퀎 ???꾨즺 蹂닿퀬
 
 ```
-✓ 운영자매뉴얼 PPTX 생성 완료 [TT_543]
+???댁쁺?먮ℓ?댁뼹 PPTX ?앹꽦 ?꾨즺 [TT_543]
 
-실행 환경    : Windows PowerShell  또는  Bash on Linux/Mac/WSL
-고객사       : {고객사명}
-FE 경로      : {FE 프로젝트 경로}
-BE 경로      : {BE 프로젝트 경로}
+?ㅽ뻾 ?섍꼍    : Windows PowerShell  ?먮뒗  Bash on Linux/Mac/WSL
+怨좉컼??      : {怨좉컼?щ챸}
+FE 寃쎈줈      : {FE ?꾨줈?앺듃 寃쎈줈}
+BE 寃쎈줈      : {BE ?꾨줈?앺듃 寃쎈줈}
 BASE_URL     : {BASE_URL}
-뷰포트       : {width}x{height}, locale=ko-KR
+酉고룷??      : {width}x{height}, locale=ko-KR
 
-출력 파일    : output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx
-슬라이드     : 표지 1 + 목차 1 + 메뉴섹션 N + 화면 M = 총 K장
+異쒕젰 ?뚯씪    : output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx
+?щ씪?대뱶     : ?쒖? 1 + 紐⑹감 1 + 硫붾돱?뱀뀡 N + ?붾㈃ M = 珥?K??
+罹≪쿂 ?댁쁺??硫붾돱 ({N}媛?:
+  [?쒖뒪?쒓?由?
+    - smus01  ?ъ슜?먭?由?      (5?? 硫붿씤/寃???깅줉/?됱꽑???섏젙)
+    - smmn01  硫붾돱愿由?        (4??
+    - smcd01  怨듯넻肄붾뱶愿由?    (5??
+  [留덉뒪??
+    - mdmbz01 ?ъ뾽?κ?由?      (5??
+    - mdmce01 ?쇳꽣愿由?        (5??
+    - mdmwh01 李쎄퀬愿由?        (4??
 
-캡처 운영자 메뉴 ({N}개):
-  [시스템관리]
-    - smus01  사용자관리       (5장: 메인/검색/등록/행선택/수정)
-    - smmn01  메뉴관리         (4장)
-    - smcd01  공통코드관리     (5장)
-  [마스터]
-    - mdmbz01 사업장관리       (5장)
-    - mdmce01 센터관리         (5장)
-    - mdmwh01 창고관리         (4장)
-
-PPT 안에서 라벨·테두리·배지·설명 패널은 도형으로 직접 편집 가능합니다.
-PPT 양식은 TT_541 사용자매뉴얼과 동일하며, 표지 제목만 "운영자 매뉴얼"로 다릅니다.
+PPT ?덉뿉???쇰꺼쨌?뚮몢由?룸같吏쨌?ㅻ챸 ?⑤꼸? ?꾪삎?쇰줈 吏곸젒 ?몄쭛 媛?ν빀?덈떎.
+PPT ?묒떇? TT_541 ?ъ슜?먮ℓ?댁뼹怨??숈씪?섎ŉ, ?쒖? ?쒕ぉ留?"?댁쁺??留ㅻ돱??濡??ㅻ쫭?덈떎.
 ```
 
 ---
 
-## 메뉴별 단독 실행
+## 硫붾돱蹂??⑤룆 ?ㅽ뻾
 
-이미 만든 PPTX 에 메뉴를 한두 개만 추가/교체할 때는 같은 스킬을 다시 실행하고 2단계에서 해당 메뉴만 선택하면 된다. `tmp_543/screens/{메뉴코드}/` 는 메뉴별로 분리.
+?대? 留뚮뱺 PPTX ??硫붾돱瑜??쒕몢 媛쒕쭔 異붽?/援먯껜???뚮뒗 媛숈? ?ㅽ궗???ㅼ떆 ?ㅽ뻾?섍퀬 2?④퀎?먯꽌 ?대떦 硫붾돱留??좏깮?섎㈃ ?쒕떎. `tmp_543/screens/{硫붾돱肄붾뱶}/` ??硫붾돱蹂꾨줈 遺꾨━.
 
-PPTX 는 매번 `OUT_FILE` 경로에 **전체 다시** 작성된다.
+PPTX ??留ㅻ쾲 `OUT_FILE` 寃쎈줈??**?꾩껜 ?ㅼ떆** ?묒꽦?쒕떎.
 
 ---
 
-## 알려진 이슈 & 해결책
-
-| 이슈 | 원인 | 해결책 |
+## ?뚮젮吏??댁뒋 & ?닿껐梨?
+| ?댁뒋 | ?먯씤 | ?닿껐梨?|
 |------|------|--------|
-| 운영자 메뉴 자동 식별이 누락됨 | 라우트가 `/sm/...` 가 아닌 비표준 경로 | 1단계 결과를 사용자에게 보여주고 직접 입력 보강 |
-| 한글 메뉴명이 영어로 캡처됨 | `Accept-Language` 가 영어 | `--lang=ko-KR` + `locale='ko-KR'` + `Accept-Language: ko-KR` 모두 적용 |
-| 팝업 `getBoundingClientRect()` 가 0 반환 | Vue `v-show="false"` | `getPopupBBox()` 에서 visible layer-wrapper 중 가장 큰 것 채택 |
-| 로그인 실패 | 3-필드 폼 origin 필드 누락 | `capture_config.json` 의 `login.originField` 값 자동 입력 |
-| PPT 양식이 TT_541 과 미세하게 다름 | `03_make_pptx.py` 가 별도 유지 | TT_541 / TT_542 / TT_543 양쪽 함께 수정 |
-| 템플릿 슬라이드가 그대로 남음 | `Presentation(TEMPLATE)` 만 사용 | `remove_all_slides()` |
-| 운영자 계정 권한 부족 | 일반 사용자 계정으로 로그인 | 2단계에서 `login.id` 는 반드시 관리자 권한 계정 |
-| dev 서버 미기동 | `npm run dev` 안됨 | 사용자에게 별도 터미널에서 dev 서버 띄우라고 안내 |
+| ?댁쁺??硫붾돱 ?먮룞 ?앸퀎???꾨씫??| ?쇱슦?멸? `/sm/...` 媛 ?꾨땶 鍮꾪몴以 寃쎈줈 | 1?④퀎 寃곌낵瑜??ъ슜?먯뿉寃?蹂댁뿬二쇨퀬 吏곸젒 ?낅젰 蹂닿컯 |
+| ?쒓? 硫붾돱紐낆씠 ?곸뼱濡?罹≪쿂??| `Accept-Language` 媛 ?곸뼱 | `--lang=ko-KR` + `locale='ko-KR'` + `Accept-Language: ko-KR` 紐⑤몢 ?곸슜 |
+| ?앹뾽 `getBoundingClientRect()` 媛 0 諛섑솚 | Vue `v-show="false"` | `getPopupBBox()` ?먯꽌 visible layer-wrapper 以?媛????寃?梨꾪깮 |
+| 濡쒓렇???ㅽ뙣 | 3-?꾨뱶 ??origin ?꾨뱶 ?꾨씫 | `capture_config.json` ??`login.originField` 媛??먮룞 ?낅젰 |
+| PPT ?묒떇??TT_541 怨?誘몄꽭?섍쾶 ?ㅻ쫫 | `03_make_pptx.py` 媛 蹂꾨룄 ?좎? | TT_541 / TT_542 / TT_543 ?묒そ ?④퍡 ?섏젙 |
+| ?쒗뵆由??щ씪?대뱶媛 洹몃?濡??⑥쓬 | `Presentation(TEMPLATE)` 留??ъ슜 | `remove_all_slides()` |
+| ?댁쁺??怨꾩젙 沅뚰븳 遺議?| ?쇰컲 ?ъ슜??怨꾩젙?쇰줈 濡쒓렇??| 2?④퀎?먯꽌 `login.id` ??諛섎뱶??愿由ъ옄 沅뚰븳 怨꾩젙 |
+| dev ?쒕쾭 誘멸린??| `npm run dev` ?덈맖 | ?ъ슜?먯뿉寃?蹂꾨룄 ?곕??먯뿉??dev ?쒕쾭 ?꾩슦?쇨퀬 ?덈궡 |
 
 ---
 
-## 완료 체크리스트
-
-- [ ] 입력(FE 경로 / BE 경로 / 고객사명) 확정
-- [ ] Node/Python 런타임 설치 확인
-- [ ] Playwright `chromium` 브라우저 설치 확인
-- [ ] `python-pptx`, `Pillow` import 가능
-- [ ] `tmp_543/admin_menu_candidates.json` 생성 — 운영자 메뉴 후보 1건 이상
-- [ ] 사용자가 운영자 메뉴 다중 선택 + 관리자 로그인 정보 입력
-- [ ] `tmp_543/capture_config.json` 저장 (`locale: ko-KR`)
-- [ ] 메뉴별 `tmp_543/screens/{메뉴코드}/*.png` 생성
-- [ ] `output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx` 생성 성공
-- [ ] PowerPoint 에서 도형 편집 가능 여부 확인
-- [ ] `tmp_543/` 삭제
+## ?꾨즺 泥댄겕由ъ뒪??
+- [ ] ?낅젰(FE 寃쎈줈 / BE 寃쎈줈 / 怨좉컼?щ챸) ?뺤젙
+- [ ] Node/Python ?고????ㅼ튂 ?뺤씤
+- [ ] Playwright `chromium` 釉뚮씪?곗? ?ㅼ튂 ?뺤씤
+- [ ] `python-pptx`, `Pillow` import 媛??- [ ] `tmp_543/admin_menu_candidates.json` ?앹꽦 ???댁쁺??硫붾돱 ?꾨낫 1嫄??댁긽
+- [ ] ?ъ슜?먭? ?댁쁺??硫붾돱 ?ㅼ쨷 ?좏깮 + 愿由ъ옄 濡쒓렇???뺣낫 ?낅젰
+- [ ] `tmp_543/capture_config.json` ???(`locale: ko-KR`)
+- [ ] 硫붾돱蹂?`tmp_543/screens/{硫붾돱肄붾뱶}/*.png` ?앹꽦
+- [ ] `output/05 ?댄뻾(TT)/TT_543_?댁쁺?먮ℓ?댁뼹_{怨좉컼?щ챸}.pptx` ?앹꽦 ?깃났
+- [ ] PowerPoint ?먯꽌 ?꾪삎 ?몄쭛 媛???щ? ?뺤씤
+- [ ] `tmp_543/` ??젣
 
 ---
 
-## 함께 보면 좋은 스킬
+## ?④퍡 蹂대㈃ 醫뗭? ?ㅽ궗
 
-- PC 사용자 매뉴얼 PPTX → `/TT_541`
-- PDA 사용자 매뉴얼 PPTX → `/TT_542`
-- 프로그램 목록 엑셀 → `/PI_412`
-- DB 이관 데이터 dump SQL → `/TT_551`
-- 공통코드정의서 엑셀 → `/SD_332`
+- PC ?ъ슜??留ㅻ돱??PPTX ??`/TT_541`
+- PDA ?ъ슜??留ㅻ돱??PPTX ??`/TT_542`
+- ?꾨줈洹몃옩 紐⑸줉 ?묒? ??`/PI_412`
+- DB ?닿? ?곗씠??dump SQL ??`/TT_551`
+- 怨듯넻肄붾뱶?뺤쓽???묒? ??`/SD_332`
 
 ---
 
-## 주의사항 (OS 특화)
+## 二쇱쓽?ы빆 (OS ?뱁솕)
 
-### Windows 특화
-- **`python` vs `py`**: `python --version` 확인 후 실패 시 `py -3` 재시도.
-- **한글 콘솔 깨짐**: `chcp 65001` + `$env:PYTHONUTF8 = "1"`.
+### Windows ?뱁솕
+- **`python` vs `py`**: `python --version` ?뺤씤 ???ㅽ뙣 ??`py -3` ?ъ떆??
+- **?쒓? 肄섏넄 源⑥쭚**: `chcp 65001` + `$env:PYTHONUTF8 = "1"`.
 
-### Bash 특화
-- **Python 실행 명령**: `python3`.
-- **WSL 경로**: `/mnt/c/...` 형태로 입력 가능.
-- **Playwright chromium**: WSL/Linux/macOS 각각 해당 OS 바이너리.
+### Bash ?뱁솕
+- **Python ?ㅽ뻾 紐낅졊**: `python3`.
+- **WSL 寃쎈줈**: `/mnt/c/...` ?뺥깭濡??낅젰 媛??
+- **Playwright chromium**: WSL/Linux/macOS 媛곴컖 ?대떦 OS 諛붿씠?덈━.

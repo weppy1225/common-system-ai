@@ -1,0 +1,132 @@
+---
+name: PI-fe-all
+description: 【FE 전체 화면 개발 (목록+팝업)】 BE spec.md 기반으로 {메뉴코드}.vue (목록 화면) + {메뉴코드}Edt.vue (등록/수정 팝업) 파일을 한 번에 생성합니다. /PI-fe-all {메뉴코드} 형식으로 실행합니다. "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "PI-fe-all 실행해줘", "FE 화면 처음부터 만들어줘" 라고 말하면 이 스킬을 사용합니다.
+user-invocable: true
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+model: claude-sonnet-4-6
+---
+
+# FE 전체 화면 개발 (목록+팝업) [PI-fe-all]
+
+BE spec.md 기반으로 목록 화면(`{메뉴코드}.vue`)과 등록/수정 팝업(`{메뉴코드}Edt.vue`)을 한 번에 생성한다.
+
+## 사용법
+
+```
+/PI-fe-all {메뉴코드}
+예: /PI-fe-all mdct01
+```
+
+## 실행 절차
+
+### STEP 1. 프로젝트 코드 추출
+
+현재 워킹 디렉토리명(`wms-{code}-fe`)에서 `{code}` 추출.
+BE 경로: `../{code}-be` 또는 `../wms-{code}-be` (존재하는 쪽 사용)
+
+### STEP 2. BE spec 파일 확인
+
+경로: `../wms-{코드}-be/DEV_DOC/ai-docs/20-backend/80-spec/{메뉴코드}/`
+
+우선순위:
+1. `{YYYYMMDD}_output.md` (날짜 최신 파일)
+2. `output.md`
+3. `spec.md`
+
+파일이 없으면 사용자에게 BE spec 파일 경로를 직접 묻는다.
+
+### STEP 3. spec 파싱
+
+spec에서 추출:
+- 업무군 코드 (예: `rt2000`, `md8000`) — `ai-docs/20-frontend/00-frontend-ai-entry.md` 업무군 맵 또는 spec 내 라우트 경로 참조
+- 리소스명 (camelCase, 예: `cont`, `return`)
+- API URL 목록 (리스트/단건/등록/수정/삭제)
+- 응답 네이밍 (`postXxx`, `xxx`)
+- 복합키 순서 (`{resourceSeq}/{bizSeq}`)
+- 사용 공통코드 (`commHCd` 목록)
+- 검색 조건 필드
+- 그리드 컬럼 필드
+- 팝업 폼 필드
+
+### STEP 4. 목록 화면 생성 (`{메뉴코드}.vue`)
+
+`ai-docs/20-frontend/30-convention/10-vue-file-template.md` §1 스켈레톤 기준.
+
+**구성 요소:**
+- `SearchSection` + `ZCellBox` 검색 영역 (spec 검색 조건 기준)
+- `ContentSection` + `ZAuiGrid` 결과 그리드 (spec 컬럼 기준)
+- `{메뉴코드}Edt` 팝업 컴포넌트 import 및 ref 연결
+
+**코드 규칙 (`02-fe-code-rule.md` 준수):**
+- 리스트 조회: `axios.post(url, searchObj.value)` → `res.data.post{Resources}`
+- `errorSwal`, `successSwal`, `confirmSwal`, `noSelectSwal`, `oneSelectSwal` 사용
+- `regBizSeq` URL 하드코딩 금지 (zAxios 인터셉터 자동 처리)
+- `vfn_` 접두사: view 로컬 함수, `lfn_` 접두사: 모듈 내부 함수
+- import 순서: `3rd > 컴포넌트 > 팝업 > store > gfn > 변수선언`
+- `onActivated`에서 bizSeq 변경 감지
+- `searchRef({ ...initXxxObj.deepCopy() })` 패턴
+
+**생성 파일:** `src/views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue`
+
+### STEP 5. 등록/수정 팝업 생성 (`{메뉴코드}Edt.vue`)
+
+`ai-docs/20-frontend/30-convention/10-vue-file-template.md` §2 스켈레톤 기준.
+
+**구성 요소:**
+- `LayerPopup` 컴포넌트 (title + code props)
+- `ZCellBox` + `ZCell` 폼 영역 (spec 팝업 필드 기준)
+- 등록 / 수정 모드 전환 (`isUpdate` computed)
+- 유효성 검증 (`gfn_useValid`)
+
+**코드 규칙:**
+- 등록: `axios.put(url, payload)` → `successSwal` + emit + closePopup
+- 수정: `axios.patch(url, payload)` → `successSwal` + emit + closePopup
+- PK 필드는 수정 모드에서 `disabled`
+- `defineExpose({ openPopup })`
+- `closeCallback`에 `vfn_resetPopup` 연결
+
+**생성 파일:** `src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue`
+
+### STEP 6. 메뉴 문서 생성
+
+`ai-docs/20-frontend/60-menus/_template.md` 복사 후 채움:
+- §2 화면구성: 검색조건·그리드·팝업 항목
+- §3 API 매핑: spec의 API 목록 그대로
+- §9 BE 동기화: 오늘 날짜 + BE spec 원본 경로
+
+**생성 파일:** `ai-docs/20-frontend/60-menus/{업무군}/{메뉴코드}/menu.md`
+
+### STEP 7. 자기 검증
+
+`ai-docs/20-frontend/70-prompts/76-verify-menu-contract.md` 절차로 정합성 확인:
+- HTTP 메서드 규약 (POST=리스트, GET=단건, PUT=등록, PATCH=수정, DELETE=삭제)
+- URL 경로 — `regBizSeq` 포함 여부
+- 복합키 순서 (`{resourceSeq}/{bizSeq}`)
+- 응답 네이밍 (`res.data.post{Resource}s`, `res.data.{resource}`)
+
+### STEP 8. 완료 보고
+
+```
+생성 파일:
+  src/views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue
+  src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue
+  ai-docs/20-frontend/60-menus/{업무군}/{메뉴코드}/menu.md
+
+API 연결:
+  리스트: POST /{메뉴코드}/{리소스}s
+  단건:   GET  /{메뉴코드}/{리소스}s/{seq}/{bizSeq}
+  등록:   PUT  /{메뉴코드}/{리소스}s
+  수정:   PATCH /{메뉴코드}/{리소스}s/{seq}/{bizSeq}
+
+후속 수동 작업:
+  - router.js 에 라우트 등록
+  - 메뉴 DB 등록
+```
+
+## 주의사항
+
+- BE spec에 없는 정보는 추측 말고 `// TODO:` 주석으로 표시
+- `regBizSeq` URL 포함 금지
+- 라우터 등록·메뉴 DB는 이 스킬 범위 밖
+- BE 저장소(`../cloud-wms-be/`) 파일은 읽기만 함, 수정 금지
+- 영어 주석 금지 — 한글 유지

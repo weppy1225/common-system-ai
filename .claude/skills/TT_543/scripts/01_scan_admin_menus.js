@@ -1,68 +1,66 @@
 #!/usr/bin/env node
 /**
- * [TT_543] 1단계 — FE + BE 프로젝트 스캔으로 운영자(관리자) 메뉴 후보 추출
+ * [TT_543] 1?④퀎 ??FE + BE ?꾨줈?앺듃 ?ㅼ틪?쇰줈 ?댁쁺??愿由ъ옄) 硫붾돱 ?꾨낫 異붿텧
  *
- * 사용법:
- *   node 01_scan_admin_menus.js "<FE 프로젝트 경로>" "<BE 프로젝트 경로>"
+ * ?ъ슜踰?
+ *   node 01_scan_admin_menus.js "<FE ?꾨줈?앺듃 寃쎈줈>" "<BE ?꾨줈?앺듃 寃쎈줈>"
  *
- * 출력:
- *   output/05 이행(TT)/tmp_543/admin_menu_candidates.json
+ * 異쒕젰:
+ *   output/05 ?댄뻾(TT)/tmp_543/admin_menu_candidates.json
  *
- * 동작:
- *   1) FE 측: package.json/vite.config 에서 dev 포트 추출
- *   2) FE 측: router/views/pages 에서 라우트 추출
- *   3) FE 측: 운영자 메뉴 필터 적용 (path 또는 code 패턴 기반)
- *   4) BE 측: Controller / @RequestMapping 에서 URL prefix 추출하여 보강
- *   5) cloud-wms-doc dist/{메뉴코드}/ui.md 또는 menu-index.md 에서 메뉴명 매핑
- *   6) JSON 으로 저장
- *
- * 이 스크립트는 Windows 네이티브 경로(C:\...) 와 WSL 경로(/mnt/c/...) 를 모두 받는다.
+ * ?숈옉:
+ *   1) FE 痢? package.json/vite.config ?먯꽌 dev ?ы듃 異붿텧
+ *   2) FE 痢? router/views/pages ?먯꽌 ?쇱슦??異붿텧
+ *   3) FE 痢? ?댁쁺??硫붾돱 ?꾪꽣 ?곸슜 (path ?먮뒗 code ?⑦꽩 湲곕컲)
+ *   4) BE 痢? Controller / @RequestMapping ?먯꽌 URL prefix 異붿텧?섏뿬 蹂닿컯
+ *   5) cloud-wms-doc 30-domain/{硫붾돱肄붾뱶}/ui.md ?먮뒗 menu-index.md ?먯꽌 硫붾돱紐?留ㅽ븨
+ *   6) JSON ?쇰줈 ??? *
+ * ???ㅽ겕由쏀듃??Windows ?ㅼ씠?곕툕 寃쎈줈(C:\...) ? WSL 寃쎈줈(/mnt/c/...) 瑜?紐⑤몢 諛쏅뒗??
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-// ── 경로 정규화 (Windows / WSL 양방향) ──────────────────────────
-// 본 스크립트는 .claude/skills/TT_543/scripts/ 안에 있으므로
-// repo root = parents[3]. node 실행 위치와 무관하게 동작하도록 __dirname 기준으로 계산한다.
+// ?? 寃쎈줈 ?뺢퇋??(Windows / WSL ?묐갑?? ??????????????????????????
+// 蹂??ㅽ겕由쏀듃??.claude/skills/TT_543/scripts/ ?덉뿉 ?덉쑝誘濡?// repo root = parents[3]. node ?ㅽ뻾 ?꾩튂? 臾닿??섍쾶 ?숈옉?섎룄濡?__dirname 湲곗??쇰줈 怨꾩궛?쒕떎.
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_543');
+const TMP_DIR = path.join(REPO_ROOT, 'output', '05 ?댄뻾(TT)', 'tmp_543');
 const OUT_FILE = path.join(TMP_DIR, 'admin_menu_candidates.json');
 
 function normalizePath(p) {
     if (!p) return p;
-    // Windows -> POSIX 분리자 통일 (Node 자체가 양쪽 지원)
+    // Windows -> POSIX 遺꾨━???듭씪 (Node ?먯껜媛 ?묒そ 吏??
     let s = String(p).replace(/\\+/g, '/');
-    // WSL 경로(/mnt/c/...) 를 그대로 사용 (Node 가 WSL 환경이면 fs.existsSync 가 동작)
-    // Windows native 경로(C:/...) 도 그대로 사용 (Node Windows 빌드가 자동 처리)
+    // WSL 寃쎈줈(/mnt/c/...) 瑜?洹몃?濡??ъ슜 (Node 媛 WSL ?섍꼍?대㈃ fs.existsSync 媛 ?숈옉)
+    // Windows native 寃쎈줈(C:/...) ??洹몃?濡??ъ슜 (Node Windows 鍮뚮뱶媛 ?먮룞 泥섎━)
     return s.replace(/\/+$/, '');
 }
 
-// ── 인자 파싱 ───────────────────────────────────────────────────
+// ?? ?몄옄 ?뚯떛 ???????????????????????????????????????????????????
 let fePath = process.argv[2];
 let bePath = process.argv[3];
 
 if (!fePath) {
-    console.error('[ERR] FE 프로젝트 경로를 첫 번째 인자로 전달하세요.');
+    console.error('[ERR] FE ?꾨줈?앺듃 寃쎈줈瑜?泥?踰덉㎏ ?몄옄濡??꾨떖?섏꽭??');
     process.exit(1);
 }
 fePath = normalizePath(fePath);
 if (bePath) bePath = normalizePath(bePath);
 
 if (!fs.existsSync(fePath)) {
-    console.error(`[ERR] FE 경로가 존재하지 않습니다: ${fePath}`);
+    console.error(`[ERR] FE 寃쎈줈媛 議댁옱?섏? ?딆뒿?덈떎: ${fePath}`);
     process.exit(1);
 }
 if (bePath && !fs.existsSync(bePath)) {
-    console.error(`[WARN] BE 경로가 존재하지 않습니다 (FE 만으로 진행): ${bePath}`);
+    console.error(`[WARN] BE 寃쎈줈媛 議댁옱?섏? ?딆뒿?덈떎 (FE 留뚯쑝濡?吏꾪뻾): ${bePath}`);
     bePath = null;
 }
 
 fs.mkdirSync(TMP_DIR, { recursive: true });
 
-// ── 유틸 ────────────────────────────────────────────────────────
+// ?? ?좏떥 ????????????????????????????????????????????????????????
 function safeRead(p) {
     try { return fs.readFileSync(p, 'utf8'); }
     catch (_) { return ''; }
@@ -98,9 +96,9 @@ function findFiles(rootDir, predicate, opts = {}) {
     return out;
 }
 
-// ── 운영자 메뉴 식별 기준 ────────────────────────────────────────
+// ?? ?댁쁺??硫붾돱 ?앸퀎 湲곗? ????????????????????????????????????????
 
-// (A) FE 라우트 경로 패턴
+// (A) FE ?쇱슦??寃쎈줈 ?⑦꽩
 const ADMIN_PATH_PATTERNS = [
     /(^|\/)sm(\/|$)/i,                    // /sm/...
     /(^|\/)admin(\/|$)/i,                 // /admin/...
@@ -115,7 +113,7 @@ const ADMIN_PATH_PATTERNS = [
     /(^|\/)md(\/|$)/i,                    // /md/...  (master data)
 ];
 
-// (B) 메뉴 코드 접두사 패턴 (영문 prefix 기반)
+// (B) 硫붾돱 肄붾뱶 ?묐몢???⑦꽩 (?곷Ц prefix 湲곕컲)
 const ADMIN_CODE_PREFIXES = [
     /^sm[a-z]{0,4}\d/i,    // smus01, smmn01, smcd01, smgr01, smbz01
     /^mdm[a-z]{0,4}\d/i,   // mdmbz01, mdmce01, mdmwh01, mdmlc01
@@ -128,27 +126,26 @@ const ADMIN_CODE_PREFIXES = [
     /^perm[a-z]{0,4}\d/i,  // perm*
 ];
 
-// (C) 메뉴명 키워드
-const ADMIN_NAME_KEYWORDS = [
-    '관리자', '사용자관리', '사용자 관리', '권한', '메뉴관리', '메뉴 관리',
-    '공통코드', '공통 코드', '시스템 파라미터', '시스템파라미터',
-    '시스템 설정', '시스템설정', '사업장', '센터', '창고', '로케이션',
-    '그룹 관리', '그룹관리', '관리', '설정',
+// (C) 硫붾돱紐??ㅼ썙??const ADMIN_NAME_KEYWORDS = [
+    '愿由ъ옄', '?ъ슜?먭?由?, '?ъ슜??愿由?, '沅뚰븳', '硫붾돱愿由?, '硫붾돱 愿由?,
+    '怨듯넻肄붾뱶', '怨듯넻 肄붾뱶', '?쒖뒪???뚮씪誘명꽣', '?쒖뒪?쒗뙆?쇰???,
+    '?쒖뒪???ㅼ젙', '?쒖뒪?쒖꽕??, '?ъ뾽??, '?쇳꽣', '李쎄퀬', '濡쒖??댁뀡',
+    '洹몃９ 愿由?, '洹몃９愿由?, '愿由?, '?ㅼ젙',
 ];
 
-// (E) 제외 기준 — 일반 업무 메뉴
+// (E) ?쒖쇅 湲곗? ???쇰컲 ?낅Т 硫붾돱
 const NON_ADMIN_CODE_PREFIXES = [
-    /^iw\d/i,    // 입고
-    /^ob\d/i,    // 출고
-    /^iv\d/i,    // 재고
-    /^rt\d/i,    // 반품
-    /^pk\d/i,    // 피킹
-    /^dl\d/i,    // 배송
-    /^br[a-z]+\d.*m$/i,  // PDA (브랜치 + m 접미사)
+    /^iw\d/i,    // ?낃퀬
+    /^ob\d/i,    // 異쒓퀬
+    /^iv\d/i,    // ?ш퀬
+    /^rt\d/i,    // 諛섑뭹
+    /^pk\d/i,    // ?쇳궧
+    /^dl\d/i,    // 諛곗넚
+    /^br[a-z]+\d.*m$/i,  // PDA (釉뚮옖移?+ m ?묐???
     /^pda/i,     // pda*
 ];
 const NON_ADMIN_NAME_KEYWORDS = [
-    '입고', '출고', '재고', '반품', '피킹', '배송', '주문',
+    '?낃퀬', '異쒓퀬', '?ш퀬', '諛섑뭹', '?쇳궧', '諛곗넚', '二쇰Ц',
 ];
 const PDA_PATH = /(^|\/)pda(\/|$)/i;
 
@@ -165,39 +162,39 @@ function isAdminByCode(code) {
 function isAdminByName(name) {
     if (!name) return false;
     if (NON_ADMIN_NAME_KEYWORDS.some(k => name.includes(k))) {
-        // "재고관리" 처럼 두 키워드가 다 들어가면 일반 메뉴로 본다
-        // 단, "사용자관리"·"메뉴관리"·"권한관리" 등 운영자 키워드가 있으면 운영자로 본다
-        const ADMIN_STRONG = ['사용자관리', '메뉴관리', '권한', '공통코드',
-            '사용자 관리', '메뉴 관리', '시스템 파라미터', '시스템파라미터',
-            '시스템 설정', '시스템설정', '관리자'];
+        // "?ш퀬愿由? 泥섎읆 ???ㅼ썙?쒓? ???ㅼ뼱媛硫??쇰컲 硫붾돱濡?蹂몃떎
+        // ?? "?ъ슜?먭?由?쨌"硫붾돱愿由?쨌"沅뚰븳愿由? ???댁쁺???ㅼ썙?쒓? ?덉쑝硫??댁쁺?먮줈 蹂몃떎
+        const ADMIN_STRONG = ['?ъ슜?먭?由?, '硫붾돱愿由?, '沅뚰븳', '怨듯넻肄붾뱶',
+            '?ъ슜??愿由?, '硫붾돱 愿由?, '?쒖뒪???뚮씪誘명꽣', '?쒖뒪?쒗뙆?쇰???,
+            '?쒖뒪???ㅼ젙', '?쒖뒪?쒖꽕??, '愿由ъ옄'];
         if (!ADMIN_STRONG.some(k => name.includes(k))) return false;
     }
     return ADMIN_NAME_KEYWORDS.some(k => name.includes(k));
 }
 function rejectReason(menu) {
     if (!menu) return 'unknown';
-    if (menu.path && PDA_PATH.test(menu.path)) return 'PDA 메뉴';
+    if (menu.path && PDA_PATH.test(menu.path)) return 'PDA 硫붾돱';
     if (NON_ADMIN_CODE_PREFIXES.some(re => re.test(menu.code || ''))) {
-        return '일반업무메뉴(입출고/재고/반품/피킹/배송)';
+        return '?쇰컲?낅Т硫붾돱(?낆텧怨??ш퀬/諛섑뭹/?쇳궧/諛곗넚)';
     }
     if (NON_ADMIN_NAME_KEYWORDS.some(k => (menu.name || '').includes(k))) {
-        return `일반업무메뉴(${NON_ADMIN_NAME_KEYWORDS.find(k => menu.name.includes(k))})`;
+        return `?쇰컲?낅Т硫붾돱(${NON_ADMIN_NAME_KEYWORDS.find(k => menu.name.includes(k))})`;
     }
-    return '운영자 메뉴 패턴 미일치';
+    return '?댁쁺??硫붾돱 ?⑦꽩 誘몄씪移?;
 }
 
 function categorize(menu) {
     const p = menu.path || '';
     const c = menu.code || '';
-    if (/^mdm/i.test(c) || /(^|\/)md(\/|$)/i.test(p)) return '마스터';
-    if (/(^|\/)auth(\/|$)/i.test(p) || /^auth|^role|^perm/i.test(c)) return '권한관리';
-    if (/(^|\/)sm(\/|$)/i.test(p) || /^sm/i.test(c)) return '시스템관리';
-    if (/(^|\/)admin(\/|$)/i.test(p) || /^adm/i.test(c)) return '관리자';
-    if (/(^|\/)system(\/|$)/i.test(p) || /^sys/i.test(c)) return '시스템';
-    return '운영';
+    if (/^mdm/i.test(c) || /(^|\/)md(\/|$)/i.test(p)) return '留덉뒪??;
+    if (/(^|\/)auth(\/|$)/i.test(p) || /^auth|^role|^perm/i.test(c)) return '沅뚰븳愿由?;
+    if (/(^|\/)sm(\/|$)/i.test(p) || /^sm/i.test(c)) return '?쒖뒪?쒓?由?;
+    if (/(^|\/)admin(\/|$)/i.test(p) || /^adm/i.test(c)) return '愿由ъ옄';
+    if (/(^|\/)system(\/|$)/i.test(p) || /^sys/i.test(c)) return '?쒖뒪??;
+    return '?댁쁺';
 }
 
-// ── FE 프레임워크 / dev 포트 감지 ──────────────────────────────
+// ?? FE ?꾨젅?꾩썙??/ dev ?ы듃 媛먯? ??????????????????????????????
 function detectFramework(fePath) {
     const pkgPath = path.join(fePath, 'package.json');
     if (!fs.existsSync(pkgPath)) return { framework: 'unknown', devPort: null };
@@ -247,7 +244,7 @@ function detectFramework(fePath) {
     return { framework, devPort };
 }
 
-// ── FE 라우트 추출 ─────────────────────────────────────────────
+// ?? FE ?쇱슦??異붿텧 ?????????????????????????????????????????????
 const ROUTE_FILE_PATTERNS = [
     /router\/index\.(js|ts)$/i,
     /router\/routes\.(js|ts)$/i,
@@ -287,7 +284,7 @@ function extractRoutesFromFiles(fePath) {
         }
     }
 
-    // views/pages 자동 인식 (보조)
+    // views/pages ?먮룞 ?몄떇 (蹂댁“)
     if (found.size === 0) {
         const viewDirs = ['src/views', 'src/pages', 'pages', 'app'];
         for (const vd of viewDirs) {
@@ -299,8 +296,7 @@ function extractRoutesFromFiles(fePath) {
                 if (base === 'index' || base === '_app' || base === '_layout' || base === 'default') continue;
                 const code = base.toLowerCase().replace(/[^a-zA-Z0-9_-]/g, '');
                 if (!code) continue;
-                // 파일 경로에서 추론한 가짜 path — 운영자 디렉토리에 있는지 확인용
-                const rel = v.replace(/\\/g, '/').slice(fePath.replace(/\\/g, '/').length);
+                // ?뚯씪 寃쎈줈?먯꽌 異붾줎??媛吏?path ???댁쁺???붾젆?좊━???덈뒗吏 ?뺤씤??                const rel = v.replace(/\\/g, '/').slice(fePath.replace(/\\/g, '/').length);
                 if (!found.has(code)) {
                     found.set(code, { code, path: rel.replace(/\.(vue|tsx|jsx|svelte)$/, '') });
                 }
@@ -310,17 +306,17 @@ function extractRoutesFromFiles(fePath) {
     return Array.from(found.values());
 }
 
-// ── 메뉴명 매핑 ─────────────────────────────────────────────
+// ?? 硫붾돱紐?留ㅽ븨 ?????????????????????????????????????????????
 function buildMenuNameMap(fePath) {
     const map = {};
 
-    // a) cloud-wms-doc 의 dist/{메뉴코드}/ui.md
-    const distDir = path.join(REPO_ROOT, 'dist');
+    // a) cloud-wms-doc ??30-domain/{硫붾돱肄붾뱶}/ui.md
+    const distDir = path.join(REPO_ROOT, '30-domain');
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {
                 if (!ent.isDirectory()) continue;
-                const uiMd = path.join(distDir, ent.name, 'ui.md');
+                const uiMd = path.join(distDir, ent.name, ${ent.name}-02-ui.md);
                 if (!fs.existsSync(uiMd)) continue;
                 const txt = safeRead(uiMd);
                 const titleMatch = txt.match(/^#\s*([^\n\[]+?)(?:\s*\[([A-Za-z0-9_]+)\])?\s*$/m);
@@ -331,7 +327,7 @@ function buildMenuNameMap(fePath) {
         } catch (_) {}
     }
 
-    // b) FE 프로젝트 내 menu-index.md / menus.json
+    // b) FE ?꾨줈?앺듃 ??menu-index.md / menus.json
     const indexCandidates = findFiles(fePath, (_full, name) =>
         /^menu[-_]?index\.md$/i.test(name) ||
         /^menus?\.json$/i.test(name) ||
@@ -362,7 +358,7 @@ function buildMenuNameMap(fePath) {
     return map;
 }
 
-// ── BE Controller 스캔 ─────────────────────────────────────────
+// ?? BE Controller ?ㅼ틪 ?????????????????????????????????????????
 const ADMIN_URL_PATTERNS_BE = [
     /^\/?sm\//i,
     /^\/?admin\//i,
@@ -392,23 +388,23 @@ function extractBackendAdminUrls(bePath) {
             /class\s+\w+Controller\b/.test(txt);
         if (!isController) continue;
 
-        // 패키지 추출
+        // ?⑦궎吏 異붿텧
         let pkg = '';
         const mPkg = txt.match(/^\s*package\s+([\w\.]+);?/m);
         if (mPkg) pkg = mPkg[1];
         const pkgLower = pkg.toLowerCase();
         const pkgIsAdmin = ADMIN_PKG_KEYWORDS.some(k => pkgLower.includes('.' + k + '.') || pkgLower.endsWith('.' + k) || pkgLower.includes('.' + k));
 
-        // 클래스 레벨 @RequestMapping
+        // ?대옒???덈꺼 @RequestMapping
         let classUrl = '';
         const mClassRm = txt.match(/@RequestMapping\s*\(\s*(?:value\s*=\s*)?["']([^"']+)["']/);
         if (mClassRm) classUrl = mClassRm[1];
 
-        // 클래스명
+        // ?대옒?ㅻ챸
         const mClassName = txt.match(/class\s+(\w+Controller)\b/);
         const className = mClassName ? mClassName[1] : '';
 
-        // 메서드 레벨 @GetMapping/@PostMapping/@RequestMapping
+        // 硫붿꽌???덈꺼 @GetMapping/@PostMapping/@RequestMapping
         const methodRegex = /@(?:Request|Get|Post|Put|Delete|Patch)Mapping\s*\(\s*(?:value\s*=\s*)?["']([^"']+)["']/g;
         let m;
         const methodUrls = [];
@@ -431,13 +427,13 @@ function extractBackendAdminUrls(bePath) {
 }
 
 function backendUrlsToMenus(beUrls) {
-    // BE URL prefix 에서 운영자 메뉴 후보를 만들어낸다.
-    // 마지막 segment 가 영문+숫자 패턴이면 메뉴코드로 채택.
+    // BE URL prefix ?먯꽌 ?댁쁺??硫붾돱 ?꾨낫瑜?留뚮뱾?대궦??
+    // 留덉?留?segment 媛 ?곷Ц+?レ옄 ?⑦꽩?대㈃ 硫붾돱肄붾뱶濡?梨꾪깮.
     const map = new Map();
     for (const u of beUrls) {
         const segs = u.fullUrl.split('/').filter(Boolean);
         if (segs.length === 0) continue;
-        // 가장 가능성 높은 메뉴코드 후보: 끝에서부터 영문+숫자 패턴
+        // 媛??媛?μ꽦 ?믪? 硫붾돱肄붾뱶 ?꾨낫: ?앹뿉?쒕????곷Ц+?レ옄 ?⑦꽩
         let code = '';
         for (let i = segs.length - 1; i >= 0; i--) {
             const s = segs[i].toLowerCase().replace(/[^a-z0-9_]/g, '');
@@ -445,7 +441,7 @@ function backendUrlsToMenus(beUrls) {
             if (/^[a-z]{2,5}$/.test(s) && i === segs.length - 1) { code = s; break; }
         }
         if (!code) continue;
-        // 패키지나 classUrl 에서 path prefix 추출
+        // ?⑦궎吏??classUrl ?먯꽌 path prefix 異붿텧
         const pathPrefix = '/' + segs.slice(0, Math.max(1, segs.length - 1)).join('/');
         if (!map.has(code)) {
             map.set(code, {
@@ -462,21 +458,21 @@ function backendUrlsToMenus(beUrls) {
     return Array.from(map.values());
 }
 
-// ── 뷰포트 힌트 (운영자 메뉴는 거의 항상 desktop) ─────────────
+// ?? 酉고룷???뚰듃 (?댁쁺??硫붾돱??嫄곗쓽 ??긽 desktop) ?????????????
 function viewportHint(code, p) {
     if (PDA_PATH.test(p || '')) return 'pda';
     if (/m$/i.test(code) && /^br/i.test(code)) return 'pda';
     return 'desktop';
 }
 
-// ── 메인 실행 ──────────────────────────────────────────────────
+// ?? 硫붿씤 ?ㅽ뻾 ??????????????????????????????????????????????????
 const { framework, devPort } = detectFramework(fePath);
 const feRoutes = extractRoutesFromFiles(fePath);
 const nameMap = buildMenuNameMap(fePath);
 const beUrls = bePath ? extractBackendAdminUrls(bePath) : [];
 const beMenus = backendUrlsToMenus(beUrls);
 
-// 1) FE 라우트 중 운영자 메뉴 필터
+// 1) FE ?쇱슦??以??댁쁺??硫붾돱 ?꾪꽣
 const adminMap = new Map();
 const rejected = [];
 
@@ -503,7 +499,7 @@ for (const r of feRoutes) {
     });
 }
 
-// 2) BE 보강 — FE 에 없는 운영자 메뉴를 추가
+// 2) BE 蹂닿컯 ??FE ???녿뒗 ?댁쁺??硫붾돱瑜?異붽?
 for (const bm of beMenus) {
     const name = nameMap[bm.code] || bm.code.toUpperCase();
     if (adminMap.has(bm.code)) {
@@ -512,9 +508,9 @@ for (const bm of beMenus) {
         ex.beHints = bm.beHints;
         continue;
     }
-    // FE 라우트에 없지만 BE Controller 가 운영자 prefix 인 경우 → 후보로 추가
+    // FE ?쇱슦?몄뿉 ?놁?留?BE Controller 媛 ?댁쁺??prefix ??寃쎌슦 ???꾨낫濡?異붽?
     if (!isAdminByPath(bm.path) && !isAdminByCode(bm.code) && !isAdminByName(name)) {
-        // BE 만 있고 운영자 패턴이 아니면 skip
+        // BE 留??덇퀬 ?댁쁺???⑦꽩???꾨땲硫?skip
         continue;
     }
     adminMap.set(bm.code, {
@@ -528,7 +524,7 @@ for (const bm of beMenus) {
     });
 }
 
-// 3) 이름 보강: nameMap 적용
+// 3) ?대쫫 蹂닿컯: nameMap ?곸슜
 for (const v of adminMap.values()) {
     if (nameMap[v.code] && (!v.name || v.name === v.code.toUpperCase())) {
         v.name = nameMap[v.code];
@@ -536,7 +532,7 @@ for (const v of adminMap.values()) {
 }
 
 const adminMenus = Array.from(adminMap.values()).sort((a, b) => {
-    // 카테고리 → 코드 순으로 정렬
+    // 移댄뀒怨좊━ ??肄붾뱶 ?쒖쑝濡??뺣젹
     const ca = a.category || '';
     const cb = b.category || '';
     if (ca !== cb) return ca.localeCompare(cb);
@@ -560,10 +556,10 @@ fs.writeFileSync(OUT_FILE, JSON.stringify(result, null, 2), 'utf8');
 
 console.log(`[OK] ${OUT_FILE}`);
 console.log(`     framework=${framework}, devPort=${devPort || 'unknown'}`);
-console.log(`     FE 라우트 ${feRoutes.length}개 발견 → 운영자 메뉴 ${adminMenus.length}개 (제외 ${rejected.length}개)`);
+console.log(`     FE ?쇱슦??${feRoutes.length}媛?諛쒓껄 ???댁쁺??硫붾돱 ${adminMenus.length}媛?(?쒖쇅 ${rejected.length}媛?`);
 if (bePath) {
-    console.log(`     BE Controller 운영자 URL ${beUrls.length}개 매칭`);
+    console.log(`     BE Controller ?댁쁺??URL ${beUrls.length}媛?留ㅼ묶`);
 }
 if (adminMenus.length === 0) {
-    console.log('[WARN] 운영자 메뉴 후보를 추출하지 못했습니다. 다음 단계에서 사용자에게 메뉴 목록을 직접 입력받으세요.');
+    console.log('[WARN] ?댁쁺??硫붾돱 ?꾨낫瑜?異붿텧?섏? 紐삵뻽?듬땲?? ?ㅼ쓬 ?④퀎?먯꽌 ?ъ슜?먯뿉寃?硫붾돱 紐⑸줉??吏곸젒 ?낅젰諛쏆쑝?몄슂.');
 }

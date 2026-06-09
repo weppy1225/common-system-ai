@@ -1,35 +1,33 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
- * [TT_542] 1단계 — FE 프로젝트 스캔으로 PDA(모바일) 사용자 메뉴 후보 추출
+ * [TT_542] 1?④퀎 ??FE ?꾨줈?앺듃 ?ㅼ틪?쇰줈 PDA(紐⑤컮?? ?ъ슜??硫붾돱 ?꾨낫 異붿텧
  *
- * 사용법:
- *   node 01_scan_project.js "<FE 프로젝트 경로>"
+ * ?ъ슜踰?
+ *   node 01_scan_project.js "<FE ?꾨줈?앺듃 寃쎈줈>"
  *
- * 출력:
- *   output/05 이행(TT)/tmp_542/menu_candidates.json
+ * 異쒕젰:
+ *   output/05 ?댄뻾(TT)/tmp_542/menu_candidates.json
  *
- * 동작:
- *   1) package.json / vite.config / next.config 등에서 dev 포트 추출
- *   2) router 파일 또는 views/pages 디렉토리에서 라우트(메뉴) 추출
- *   3) menu-index.md / menus.json 파일이 있으면 메뉴명 매핑
- *   4) cloud-wms-doc 의 dist-mobile/{그룹}/{메뉴}.html 이 있으면 메뉴명 우선 매핑
- *   5) PDA 메뉴만 추출 — 코드 끝 m 또는 경로 /bm/·/pda/·/mobile/ 또는 부모 segment 가 *m 패턴
- *   6) PC 메뉴(/be/...)는 자동 제외
- *   7) JSON 으로 저장
- *
- * 이 스크립트는 Windows 네이티브 경로(C:\...) 와 WSL 경로(/mnt/c/...) 를 모두 받는다.
+ * ?숈옉:
+ *   1) package.json / vite.config / next.config ?깆뿉??dev ?ы듃 異붿텧
+ *   2) router ?뚯씪 ?먮뒗 views/pages ?붾젆?좊━?먯꽌 ?쇱슦??硫붾돱) 異붿텧
+ *   3) menu-index.md / menus.json ?뚯씪???덉쑝硫?硫붾돱紐?留ㅽ븨
+ *   4) cloud-wms-doc ??50-prototype/20-mobile/{洹몃９}/{硫붾돱}.html ???덉쑝硫?硫붾돱紐??곗꽑 留ㅽ븨
+ *   5) PDA 硫붾돱留?異붿텧 ??肄붾뱶 ??m ?먮뒗 寃쎈줈 /bm/쨌/pda/쨌/mobile/ ?먮뒗 遺紐?segment 媛 *m ?⑦꽩
+ *   6) PC 硫붾돱(/be/...)???먮룞 ?쒖쇅
+ *   7) JSON ?쇰줈 ??? *
+ * ???ㅽ겕由쏀듃??Windows ?ㅼ씠?곕툕 寃쎈줈(C:\...) ? WSL 寃쎈줈(/mnt/c/...) 瑜?紐⑤몢 諛쏅뒗??
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-// ── 경로 정규화 (Windows / WSL 양방향) ──────────────────────────
-// 본 스크립트는 .claude/skills/TT_542/scripts/ 안에 있으므로
-// repo root = parents[3]. node 실행 위치와 무관하게 __dirname 기준으로 계산한다.
+// ?? 寃쎈줈 ?뺢퇋??(Windows / WSL ?묐갑?? ??????????????????????????
+// 蹂??ㅽ겕由쏀듃??.claude/skills/TT_542/scripts/ ?덉뿉 ?덉쑝誘濡?// repo root = parents[3]. node ?ㅽ뻾 ?꾩튂? 臾닿??섍쾶 __dirname 湲곗??쇰줈 怨꾩궛?쒕떎.
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_542');
+const TMP_DIR = path.join(REPO_ROOT, 'output', '05 ?댄뻾(TT)', 'tmp_542');
 const OUT_FILE = path.join(TMP_DIR, 'menu_candidates.json');
 
 function normalizePath(p) {
@@ -38,46 +36,46 @@ function normalizePath(p) {
     return s.replace(/\/+$/, '');
 }
 
-// ── 인자 파싱 ───────────────────────────────────────────────────
+// ?? ?몄옄 ?뚯떛 ???????????????????????????????????????????????????
 let fePath = process.argv[2];
 if (!fePath) {
-    console.error('[ERR] FE 프로젝트 경로를 첫 번째 인자로 전달하세요.');
+    console.error('[ERR] FE ?꾨줈?앺듃 寃쎈줈瑜?泥?踰덉㎏ ?몄옄濡??꾨떖?섏꽭??');
     process.exit(1);
 }
 fePath = normalizePath(fePath);
 
 if (!fs.existsSync(fePath)) {
-    console.error(`[ERR] 경로가 존재하지 않습니다: ${fePath}`);
+    console.error(`[ERR] 寃쎈줈媛 議댁옱?섏? ?딆뒿?덈떎: ${fePath}`);
     process.exit(1);
 }
 
 fs.mkdirSync(TMP_DIR, { recursive: true });
 
-// ── PDA 메뉴 식별 ──────────────────────────────────────────────
-// cloud-wms-fe 기준 PDA 라우트 패턴:
-//   - 경로: /bm/{그룹코드m}/{메뉴코드m}  (예: /bm/iv3000m/ivad01m)
-//   - 그룹 segment: 영문 + 숫자 + 'm' (예: iv3000m, md8000m)
-//   - 메뉴 코드: 끝이 'm' (예: ivad01m, ivmvrq01m, sksp01m)
-// PC 라우트 패턴:
-//   - 경로: /be/{그룹코드}/{메뉴코드}  (예: /be/iv3000/ivad01)
+// ?? PDA 硫붾돱 ?앸퀎 ??????????????????????????????????????????????
+// cloud-wms-fe 湲곗? PDA ?쇱슦???⑦꽩:
+//   - 寃쎈줈: /bm/{洹몃９肄붾뱶m}/{硫붾돱肄붾뱶m}  (?? /bm/iv3000m/ivad01m)
+//   - 洹몃９ segment: ?곷Ц + ?レ옄 + 'm' (?? iv3000m, md8000m)
+//   - 硫붾돱 肄붾뱶: ?앹씠 'm' (?? ivad01m, ivmvrq01m, sksp01m)
+// PC ?쇱슦???⑦꽩:
+//   - 寃쎈줈: /be/{洹몃９肄붾뱶}/{硫붾돱肄붾뱶}  (?? /be/iv3000/ivad01)
 function isPdaMenu(code, p) {
     if (p) {
         const ps = String(p).toLowerCase();
-        // 1. 명시적 PDA 경로 prefix
+        // 1. 紐낆떆??PDA 寃쎈줈 prefix
         if (ps.includes('/bm/') || ps.includes('/pda/') || ps.includes('/mobile/')) return true;
-        // 2. 부모 segment 가 'm' 으로 끝남 (예: /iv3000m/ivad01m)
+        // 2. 遺紐?segment 媛 'm' ?쇰줈 ?앸궓 (?? /iv3000m/ivad01m)
         const segs = ps.split('/').filter(Boolean);
         for (const seg of segs.slice(0, -1)) {
             if (/^[a-z]+\d+m$/i.test(seg)) return true;
         }
     }
-    // 3. 메뉴 코드 끝이 'm' (예: ivad01m, ivmvrq01m)
+    // 3. 硫붾돱 肄붾뱶 ?앹씠 'm' (?? ivad01m, ivmvrq01m)
     if (code && /^[a-z][a-z0-9]+m$/i.test(code)) return true;
     if (code && /^pda/i.test(code)) return true;
     return false;
 }
 
-// ── 유틸 ────────────────────────────────────────────────────────
+// ?? ?좏떥 ????????????????????????????????????????????????????????
 function safeRead(p) {
     try { return fs.readFileSync(p, 'utf8'); }
     catch (_) { return ''; }
@@ -106,7 +104,7 @@ function findFiles(rootDir, predicate, opts = {}) {
     return out;
 }
 
-// ── 1) 프레임워크 감지 + dev 포트 추출 ────────────────────────
+// ?? 1) ?꾨젅?꾩썙??媛먯? + dev ?ы듃 異붿텧 ????????????????????????
 function detectFramework(fePath) {
     const pkgPath = path.join(fePath, 'package.json');
     if (!fs.existsSync(pkgPath)) return { framework: 'unknown', devPort: null };
@@ -126,7 +124,7 @@ function detectFramework(fePath) {
     else if (deps['react']) framework = 'react';
     else if (deps['svelte']) framework = 'svelte';
 
-    // dev script 의 --port 옵션에서 추출
+    // dev script ??--port ?듭뀡?먯꽌 異붿텧
     let devPort = null;
     const devScripts = [pkg?.scripts?.dev, pkg?.scripts?.start, pkg?.scripts?.serve].filter(Boolean);
     for (const s of devScripts) {
@@ -134,7 +132,7 @@ function detectFramework(fePath) {
         if (m) { devPort = parseInt(m[1], 10); break; }
     }
 
-    // vite.config / next.config / nuxt.config / vue.config / webpack.config 에서 fallback 추출
+    // vite.config / next.config / nuxt.config / vue.config / webpack.config ?먯꽌 fallback 異붿텧
     if (!devPort) {
         const cfgCandidates = [
             'vite.config.ts', 'vite.config.js', 'vite.config.mjs',
@@ -151,8 +149,7 @@ function detectFramework(fePath) {
         }
     }
 
-    // 기본값
-    if (!devPort) {
+    // 湲곕낯媛?    if (!devPort) {
         if (framework === 'next') devPort = 3000;
         else if (framework === 'nuxt') devPort = 3000;
         else if (framework.startsWith('vue3-vite') || framework === 'react-vite') devPort = 5173;
@@ -161,7 +158,7 @@ function detectFramework(fePath) {
     return { framework, devPort };
 }
 
-// ── 2) 라우트(메뉴) 추출 ───────────────────────────────────────
+// ?? 2) ?쇱슦??硫붾돱) 異붿텧 ???????????????????????????????????????
 const ROUTE_FILE_PATTERNS = [
     /router\/index\.(js|ts)$/i,
     /router\/routes\.(js|ts)$/i,
@@ -174,13 +171,13 @@ const ROUTE_FILE_PATTERNS = [
 
 function extractRoutesFromText(txt) {
     const out = [];
-    // path: '/be/.../mdpr01' 또는 path: "..." 패턴
+    // path: '/be/.../mdpr01' ?먮뒗 path: "..." ?⑦꽩
     const pathRegex = /path\s*:\s*['"`]([^'"`]+)['"`][\s\S]{0,200}?(?:component|element|name)\s*:\s*[^,\n]+/g;
     let m;
     while ((m = pathRegex.exec(txt)) !== null) {
         const p = m[1];
         if (!p || p === '/' || p === '*' || p === '/:catchAll(.*)') continue;
-        // 메뉴코드 후보 = 마지막 segment (`/be/md8000/mdpr01` → `mdpr01`)
+        // 硫붾돱肄붾뱶 ?꾨낫 = 留덉?留?segment (`/be/md8000/mdpr01` ??`mdpr01`)
         const segs = p.split('/').filter(Boolean);
         const last = segs[segs.length - 1];
         if (!last || last.startsWith(':')) continue;
@@ -204,7 +201,7 @@ function extractRoutesFromFiles(fePath) {
         }
     }
 
-    // views/pages 자동 인식 (라우트 파일이 없거나 추출 실패한 경우 보조)
+    // views/pages ?먮룞 ?몄떇 (?쇱슦???뚯씪???녾굅??異붿텧 ?ㅽ뙣??寃쎌슦 蹂댁“)
     if (found.size === 0) {
         const viewDirs = ['src/views', 'src/pages', 'pages', 'app'];
         for (const vd of viewDirs) {
@@ -225,17 +222,17 @@ function extractRoutesFromFiles(fePath) {
     return Array.from(found.values());
 }
 
-// ── 3) 메뉴명 매핑 ─────────────────────────────────────────────
+// ?? 3) 硫붾돱紐?留ㅽ븨 ?????????????????????????????????????????????
 function buildMenuNameMap(fePath) {
     const map = {};
 
-    // a) cloud-wms-doc 의 dist/{메뉴코드}/ui.md (PC 메뉴명을 PDA 메뉴 매핑에도 활용)
-    const distDir = path.join(REPO_ROOT, 'dist');
+    // a) cloud-wms-doc ??30-domain/{硫붾돱肄붾뱶}/ui.md (PC 硫붾돱紐낆쓣 PDA 硫붾돱 留ㅽ븨?먮룄 ?쒖슜)
+    const distDir = path.join(REPO_ROOT, '30-domain');
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {
                 if (!ent.isDirectory()) continue;
-                const uiMd = path.join(distDir, ent.name, 'ui.md');
+                const uiMd = path.join(distDir, ent.name, ${ent.name}-02-ui.md);
                 if (!fs.existsSync(uiMd)) continue;
                 const txt = safeRead(uiMd);
                 const titleMatch = txt.match(/^#\s*([^\n\[]+?)(?:\s*\[([A-Za-z0-9_]+)\])?\s*$/m);
@@ -243,33 +240,32 @@ function buildMenuNameMap(fePath) {
                     const code = ent.name.toLowerCase();
                     const name = titleMatch[1].trim();
                     map[code] = name;
-                    // PDA 변형 코드도 동일 메뉴명으로 매핑 (mdpr01 → mdpr01m)
+                    // PDA 蹂??肄붾뱶???숈씪 硫붾돱紐낆쑝濡?留ㅽ븨 (mdpr01 ??mdpr01m)
                     map[code + 'm'] = name;
                 }
             }
         } catch (_) {}
     }
 
-    // a2) cloud-wms-doc 의 dist-mobile/{그룹m}/{메뉴}.html — PDA 전용 메뉴명 매핑
-    const distMobileDir = path.join(REPO_ROOT, 'dist-mobile');
+    // a2) cloud-wms-doc ??50-prototype/20-mobile/{洹몃９m}/{硫붾돱}.html ??PDA ?꾩슜 硫붾돱紐?留ㅽ븨
+    const distMobileDir = path.join(REPO_ROOT, '50-prototype', '20-mobile');
     if (fs.existsSync(distMobileDir)) {
         try {
             for (const grp of fs.readdirSync(distMobileDir, { withFileTypes: true })) {
                 if (!grp.isDirectory()) continue;
-                if (!/^[a-z]+\d+m$/i.test(grp.name)) continue;   // *m 패턴 그룹만
-                const grpPath = path.join(distMobileDir, grp.name);
+                if (!/^[a-z]+\d+m$/i.test(grp.name)) continue;   // *m ?⑦꽩 洹몃９留?                const grpPath = path.join(distMobileDir, grp.name);
                 let files;
                 try { files = fs.readdirSync(grpPath); } catch (_) { continue; }
                 for (const f of files) {
                     if (!/\.html$/i.test(f)) continue;
                     if (/-data\./i.test(f)) continue;
                     const baseCode = f.replace(/\.html$/i, '').toLowerCase();
-                    // PDA 메뉴 코드는 보통 'm'으로 끝나므로 보정
+                    // PDA 硫붾돱 肄붾뱶??蹂댄넻 'm'?쇰줈 ?앸굹誘濡?蹂댁젙
                     const pdaCode = /m$/i.test(baseCode) ? baseCode : baseCode + 'm';
                     const html = safeRead(path.join(grpPath, f));
-                    // HTML 안의 <title>...</title> 또는 첫번째 헤더 텍스트에서 메뉴명 추출 시도
+                    // HTML ?덉쓽 <title>...</title> ?먮뒗 泥ル쾲吏??ㅻ뜑 ?띿뒪?몄뿉??硫붾돱紐?異붿텧 ?쒕룄
                     const titleTag = html.match(/<title>\s*([^<]+?)\s*<\/title>/i);
-                    if (titleTag && titleTag[1] && titleTag[1] !== '메뉴') {
+                    if (titleTag && titleTag[1] && titleTag[1] !== '硫붾돱') {
                         map[pdaCode] = titleTag[1].trim();
                     }
                 }
@@ -277,7 +273,7 @@ function buildMenuNameMap(fePath) {
         } catch (_) {}
     }
 
-    // b) FE 프로젝트 내 menu-index.md / menus.json
+    // b) FE ?꾨줈?앺듃 ??menu-index.md / menus.json
     const indexCandidates = findFiles(fePath, (_full, name) =>
         /^menu[-_]?index\.md$/i.test(name) ||
         /^menus?\.json$/i.test(name) ||
@@ -296,7 +292,7 @@ function buildMenuNameMap(fePath) {
                 }
             } catch (_) {}
         } else {
-            // markdown 표: | mdpr01 | 사은품관리 |
+            // markdown ?? | mdpr01 | ?ъ??덇?由?|
             const re = /\|\s*([a-z][a-z0-9_]*)\s*\|\s*([^|\n]+?)\s*\|/g;
             let m;
             while ((m = re.exec(txt)) !== null) {
@@ -309,12 +305,12 @@ function buildMenuNameMap(fePath) {
     return map;
 }
 
-// ── 4) 뷰포트 힌트 (path + code 기반) ────────────────────────
+// ?? 4) 酉고룷???뚰듃 (path + code 湲곕컲) ????????????????????????
 function viewportHint(code, p) {
     return isPdaMenu(code, p) ? 'pda' : 'desktop';
 }
 
-// ── 메인 실행 ──────────────────────────────────────────────────
+// ?? 硫붿씤 ?ㅽ뻾 ??????????????????????????????????????????????????
 const { framework, devPort } = detectFramework(fePath);
 const routes = extractRoutesFromFiles(fePath);
 const nameMap = buildMenuNameMap(fePath);
@@ -328,15 +324,15 @@ const rawMenus = routes
         viewportHint: viewportHint(r.code, r.path),
     }));
 
-// PDA 메뉴만 keep (PC 메뉴는 /TT_541 범위로 분리)
+// PDA 硫붾돱留?keep (PC 硫붾돱??/TT_541 踰붿쐞濡?遺꾨━)
 const menus = [];
 const rejected = [];
 for (const m of rawMenus) {
     if (isPdaMenu(m.code, m.path)) {
-        // PDA 메뉴: viewportHint 강제 'pda'
+        // PDA 硫붾돱: viewportHint 媛뺤젣 'pda'
         menus.push({ ...m, viewportHint: 'pda' });
     } else {
-        rejected.push({ code: m.code, name: m.name, reason: 'PC 메뉴(/be/... 또는 코드 끝이 m이 아님) — /TT_541 에서 처리' });
+        rejected.push({ code: m.code, name: m.name, reason: 'PC 硫붾돱(/be/... ?먮뒗 肄붾뱶 ?앹씠 m???꾨떂) ??/TT_541 ?먯꽌 泥섎━' });
     }
 }
 menus.sort((a, b) => a.code.localeCompare(b.code));
@@ -356,5 +352,5 @@ fs.writeFileSync(OUT_FILE, JSON.stringify(result, null, 2), 'utf8');
 console.log(`[OK] ${OUT_FILE}`);
 console.log(`     framework=${framework}, devPort=${devPort || 'unknown'}, menus=${menus.length}`);
 if (menus.length === 0) {
-    console.log('[WARN] 메뉴 후보를 추출하지 못했습니다. 다음 단계에서 사용자에게 메뉴 목록을 직접 입력받으세요.');
+    console.log('[WARN] 硫붾돱 ?꾨낫瑜?異붿텧?섏? 紐삵뻽?듬땲?? ?ㅼ쓬 ?④퀎?먯꽌 ?ъ슜?먯뿉寃?硫붾돱 紐⑸줉??吏곸젒 ?낅젰諛쏆쑝?몄슂.');
 }
