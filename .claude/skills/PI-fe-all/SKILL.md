@@ -1,6 +1,6 @@
 ---
 name: PI-fe-all
-description: 【FE 전체 화면 개발 (목록+팝업)】 BE spec.md 기반으로 {메뉴코드}.vue (목록 화면) + {메뉴코드}Edt.vue (등록/수정 팝업) 파일을 한 번에 생성합니다. /PI-fe-all {메뉴코드} 형식으로 실행합니다. "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "PI-fe-all 실행해줘", "FE 화면 처음부터 만들어줘" 라고 말하면 이 스킬을 사용합니다.
+description: FE 목록 화면 + 등록/수정 팝업 전체 생성 ({메뉴코드}.vue + {메뉴코드}Edt.vue). "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "FE 화면 처음부터 만들어줘" 요청 시 사용. /PI-fe-all {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

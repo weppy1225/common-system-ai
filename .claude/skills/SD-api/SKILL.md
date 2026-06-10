@@ -1,6 +1,6 @@
 ---
 name: SD-api
-description: 【API 명세서 설계】 화면설계·DB 설계 기반으로 api.md(API 설계+기능명세 통합문서)를 작성한다. API 목록·VO·DTO·비즈니스 로직·검증 규칙 정의. /SD-db 완료 후 실행. /SD-api {메뉴코드} 형식으로 실행한다. 사용자가 "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "SD-api 실행해줘", "design-spec 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 화면설계·DB 기반 api.md(API 설계+기능명세) 작성. /SD-db 완료 후 실행. "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "design-spec 실행해줘" 요청 시 사용. /SD-api {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep
 model: claude-opus-4-7

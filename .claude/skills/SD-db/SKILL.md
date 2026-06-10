@@ -1,6 +1,6 @@
-﻿---
+---
 name: SD-db
-description: 【DB 설계 문서 작성】 화면설계 기반으로 DB 변경사항(테이블 추가/컬럼 추가/공통코드 추가)을 도출하고 db.md를 작성한다. DDL SQL 포함. /design-spec 이전 단계. /SD-db {메뉴코드} 형식으로 실행한다. 사용자가 "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DDL 작성해줘", "DB 변경사항 정리해줘", "SD-db 실행해줘", "design-db 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용. /SD-db {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep, Bash
 model: claude-opus-4-7

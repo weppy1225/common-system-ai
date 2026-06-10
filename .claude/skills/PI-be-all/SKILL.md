@@ -1,6 +1,6 @@
 ---
 name: PI-be-all
-description: 【BE 전체 개발】 Mapper → Dao → CompUtil → TxComp → Comp → Controller 전 레이어 일괄 개발. 각 레이어 JUnit 통과 후 다음 레이어 진행. 일반 메뉴 기능 전용. /PI-be-all {메뉴코드} 형식으로 실행한다. 사용자가 "BE 전체 개발해줘", "백엔드 전부 만들어줘", "전 레이어 개발해줘", "PI-be-all 실행해줘", "dev-all 실행해줘", "백엔드 코드 다 만들어줘" 라고 말해도 이 스킬을 사용한다. SIF 인터페이스 개발은 별도 스킬을 사용한다.
+description: BE 전체 레이어 일괄 개발 (Mapper→Dao→TxComp→Comp→Controller, 각 레이어 JUnit 통과 후 진행). "BE 전체 개발", "백엔드 전부 만들어줘", "전 레이어 개발", "백엔드 코드 다 만들어줘" 요청 시 사용. /PI-be-all {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

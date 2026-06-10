@@ -1,91 +1,91 @@
 ---
 name: SD_311
-description: ?먰솕硫댁꽕怨꾩꽌 ?꾨줈?좏???HTML ?앹꽦??30-domain/{메뉴코드}/{메뉴코드}-02-ui.md瑜??쎄퀬 {硫붾돱肄붾뱶}-02-wireframe.html + {硫붾돱肄붾뱶}-02-mock-data.js瑜??앹꽦?섍퀬 硫붾돱瑜??먮룞 ?깅줉?쒕떎. /SD_311 {硫붾돱肄붾뱶} ?뺤떇?쇰줈 ?ㅽ뻾?쒕떎. WMS ?붾㈃?ㅺ퀎???꾨줈?좏????앹꽦, ?붾㈃?ㅺ퀎 HTML ?앹꽦, 硫붾돱 ?먮룞 ?깅줉 ?붿껌 ??諛섎뱶?????ㅽ궗???ъ슜?쒕떎. ?ъ슜?먭? "?붾㈃ 留뚮뱾?댁쨾", "?꾨줈?좏????앹꽦?댁쨾", "wireframe 留뚮뱾?댁쨾", "UI ?앹꽦?댁쨾", "?붾㈃ 戮묒븘以?, "SD_311 ?ㅽ뻾?댁쨾" ?쇨퀬 留먰빐?????ㅽ궗???ъ슜?쒕떎.
+description: ui.md → 프로토타입 HTML(wireframe.html + mock-data.js) 생성 + 메뉴 자동 등록. "화면 만들어줘", "프로토타입 생성해줘", "wireframe 만들어줘", "화면 뽑아줘" 요청 시 사용. /SD_311 {메뉴코드}
 allowed-tools: Bash, Read, Write, Edit
 ---
 
-# ?붾㈃?ㅺ퀎???꾨줈?좏????앹꽦 紐낅졊??[SD_311]
+# 화면설계 프로토타입 HTML 생성 규칙 [SD_311]
 
-硫붾돱肄붾뱶: **$ARGUMENTS**
+메뉴코드: **$ARGUMENTS**
 
-`30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` 瑜??쎄퀬, **怨듯넻 CSS쨌JS + ?ㅼ펷?덊넠 ?쒗뵆由?*??議고빀???꾨줈?좏???HTML怨??뚯뒪???곗씠??JS ?뚯씪???앹꽦?쒕떎.
+`30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **공통 CSS·JS + 정해진 템플릿 파일**을 의거해 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
 
 ---
 
-## ?앹꽦 ?꾨왂 (以묒슂)
+## 생성 원칙 (중요)
 
-怨듯넻?쇰줈 諛섎났?섎뜕 CSS쨌JS???꾨옒 ?뚯씪濡?遺꾨━?섏뼱 ?덈떎. **留ㅻ쾲 ?ъ젙?섑븯吏 ?딅뒗??**
+공통으로 제공되는 CSS·JS는 아래 파일로 분리되어 있다. **절대 수정하지 않는다.**
 
-| ?뚯씪 | ?⑸룄 |
+| 파일 | 역할 |
 |---|---|
-| `50-prototype/10-common/wms-ui.css`      | 紐⑤뱺 ?붾㈃??怨듭쑀?섎뒗 ?덉씠?꾩썐쨌而댄룷?뚰듃 CSS |
-| `50-prototype/10-common/wms-common.js`   | 怨듯넻 ?앹뾽(openCpPopup/openPdPopup), 紐⑤떖 ?쒕옒洹?以묒븰?뺣젹, ?섏씠吏?ㅼ씠?? initHScroll/syncHScroll, esc, fmt |
-| `50-prototype/10-common/_template/base.html`        | ?꾩껜 踰좎씠???ㅼ펷?덊넠 |
-| `50-prototype/10-common/_template/grid1.html`       | UI?좏삎: 洹몃━??1媛?|
-| `50-prototype/10-common/_template/grid2-tb.html`    | UI?좏삎: 洹몃━??2媛?(?겶룻븯) |
-| `50-prototype/10-common/_template/grid2-lr.html`    | UI?좏삎: 洹몃━??2媛?(醫뙿룹슦) |
-| `50-prototype/10-common/_template/grid3-lrt.html`   | UI?좏삎: 洹몃━??3媛?(醫뚯륫 + ?곗륫 ?겶룻븯) |
-| `50-prototype/10-common/_template/grid3-tlb.html`   | UI?좏삎: 洹몃━??3媛?(?곷떒 + ?섎떒 醫뙿룹슦) |
+| `50-prototype/10-common/wms-ui.css`      | 모든 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
+| `50-prototype/10-common/wms-common.js`   | 공통 팝업(openCpPopup/openPdPopup), 페이징 유틸, 수평 스크롤 initHScroll/syncHScroll, esc, fmt |
+| `50-prototype/10-common/_template/base.html`        | 전체 레이아웃 기본 뼈대 |
+| `50-prototype/10-common/_template/grid1.html`       | UI유형: 그리드 1개 |
+| `50-prototype/10-common/_template/grid2-tb.html`    | UI유형: 그리드 2개 (상하) |
+| `50-prototype/10-common/_template/grid2-lr.html`    | UI유형: 그리드 2개 (좌우) |
+| `50-prototype/10-common/_template/grid3-lrt.html`   | UI유형: 그리드 3개 (좌측 + 우측 상하) |
+| `50-prototype/10-common/_template/grid3-tlb.html`   | UI유형: 그리드 3개 (상단 + 하단 좌우) |
 
-???앹꽦 HTML?먮뒗 諛섎뱶???ㅼ쓬 2以꾩씠 ?ы븿?쒕떎.
+생성하는 HTML에는 반드시 아래 2줄이 포함되어야 한다.
 
 ```html
 <link rel="stylesheet" href="../../50-prototype/10-common/wms-ui.css">
 <script src="../../50-prototype/10-common/wms-common.js"></script>
 ```
 
-**wms-ui.css ???대? ?뺤쓽???대옒?ㅼ쓽 ?띿꽦??HTML `<style>` 釉붾줉?먯꽌 ?ъ젙?섑븯吏 ?딅뒗??** ?붾㈃ 怨좎쑀 ?ㅽ????? ?뱀젙 諛곗? ?? ?뱀닔 ???덉씠?꾩썐)留?理쒖냼濡?異붽??쒕떎.
+**wms-ui.css 에 이미 정의된 공통 스타일은 HTML `<style>` 블록에서 재정의하지 않는다.** 화면 고유 스타일(특정 색상, 특수 레이아웃, 추가 컴포넌트)만 최소로 추가한다.
 
 ---
 
-## ?ㅽ뻾 ?덉감
+## 실행 순서
 
-### 1?④퀎 ???ъ쟾 ?뚯씪 ?쎄린
+### 1단계 — 전체 파일 읽기
 
-1. `30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` ???붾㈃?붽굔?뺣━ (硫붿씤 ?낅젰)
-2. `50-prototype/10-common/icon-preview.html` ???ъ슜 媛?ν븳 ?꾩씠肄?紐⑸줉 (**???뚯씪???녿뒗 ?꾩씠肄섏? ?덈? ?ъ슜 湲덉?**)
-3. `50-prototype/10-common/_template/base.html` ??踰좎씠???ㅼ펷?덊넠
-4. ?붽굔 臾몄꽌??**UI?좏삎**???대떦?섎뒗 `_template/gridX-*.html` 1媛???硫붿씤 ?곸뿭 ?ㅼ펷?덊넠
+1. `30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
+2. `50-prototype/10-common/icon-preview.html` 에서 사용 가능한 아이콘 목록 확인 (**이 파일에 없는 아이콘은 절대 사용 금지**)
+3. `50-prototype/10-common/_template/base.html` 에서 레이아웃 기본 뼈대 파악
+4. 요건 문서의 **UI유형**에 해당하는 `_template/gridX-*.html` 1개를 메인 영역 템플릿으로 읽기
 
-### 2?④퀎 ???붽굔 遺꾩꽍
+### 2단계 — 요건 파악
 
-- **硫붾돱洹몃９紐?/ 硫붾돱洹몃９肄붾뱶 / 硫붾돱紐?/ 硫붾돱肄붾뱶 / UI?좏삎 / 紐⑹쟻** (?낅Т洹쒖튃 紐⑤떖??湲곗엯)
-- UI?좏삎 ???ъ슜???쒗뵆由?1媛?寃곗젙
-- 寃???곸뿭 ??ぉ (?됀룹닚踰댟룹뺨?щ꼳??
-- 洹몃━?쒕퀎 ?대컮 踰꾪듉, 而щ읆 紐⑸줉 (而щ읆紐끒룹젙??룸꼫鍮?
-- ?앹뾽 紐⑸줉 (?깅줉/?섏젙쨌?꾩슜)
-- 怨듯넻 ?낅Т洹쒖튃 (紐⑤떖 `<ol>` ??洹몃?濡????)
-- 嫄곕옒泥샕룻뭹紐??앹뾽 ?곕룞 ?꾨뱶 ?щ?
+- **메뉴그룹명 / 메뉴그룹코드 / 메뉴명 / 메뉴코드 / UI유형 / 목적** (업무규칙 팝업 섹션에 기입)
+- UI유형 → 사용할 템플릿 1개 결정
+- 검색 영역 항목 수 (그룹별 묶음)
+- 그리드별 툴바 버튼, 컬럼 목록 (컬럼명·정렬·편집여부)
+- 팝업 목록 (등록/수정·조회)
+- 공통 업무규칙 (각 `<li>` 항목으로 작성)
+- 거래처·품목 팝업 연동 필드 목록
 
-### 3?④퀎 ???뚯뒪???곗씠??JS ?앹꽦
+### 3단계 — 목업 데이터 JS 생성
 
-?뚯씪: `30-domain/$ARGUMENTS/$ARGUMENTS-02-mock-data.js`
+파일: `30-domain/$ARGUMENTS/$ARGUMENTS-02-mock-data.js`
 
-- 泥?以?二쇱꽍: `/* $ARGUMENTS ?뚯뒪???곗씠??*/`
-- 蹂?섎챸: 硫붾돱肄붾뱶 ?臾몄옄 + `_DATA` (?? `MDFG01_DATA`)
-- 硫붿씤 洹몃━??**10嫄??댁긽**, ?뷀뀒??**5嫄??댁긽**
-- `fetch()` / `.json` ?ъ슜 湲덉?
+- 첫 줄 주석: `/* $ARGUMENTS 목업 데이터 */`
+- 변수명: 메뉴코드 대문자 + `_DATA` (예: `MDFG01_DATA`)
+- 메인 그리드 **10건 이상**, 서브 그리드 **5건 이상**
+- `fetch()` / `.json` 방식 사용 금지
 
 ```js
-/* mdfg01 ?뚯뒪???곗씠??*/
+/* mdfg01 목업 데이터 */
 const MDFG01_DATA = {
-  main: [ { ... }, ... ],   // 10嫄??댁긽
-  d1:   [ { ... }, ... ],   // 5嫄??댁긽 (?뷀뀒???덉쑝硫?
+  main: [ { ... }, ... ],   // 10건 이상
+  d1:   [ { ... }, ... ],   // 5건 이상 (서브 그리드 있으면)
   d2:   [ { ... }, ... ]
 };
 ```
 
-### 4?④퀎 ??HTML ?앹꽦
+### 4단계 — HTML 생성
 
-1. `base.html` ??蹂듭궗?쒕떎.
-2. UI?좏삎??留욌뒗 `gridX-*.html` ?댁슜??`{{MAIN_AREA}}` ?먮━???쎌엯?쒕떎.
-3. ?뚯씪 **理쒖긽??* (`<!DOCTYPE html>` 諛붾줈 ?????꾨옒 硫뷀? 二쇱꽍???쎌엯?쒕떎.
+1. `base.html` 을 복사한다.
+2. UI유형에 맞는 `gridX-*.html` 내용을 `{{MAIN_AREA}}` 위치에 삽입한다.
+3. 파일 **최상단** (`<!DOCTYPE html>` 바로 위에 빈 줄 없이) 주석을 삽입한다.
 
 ```html
 <!--
   purpose: wireframe-only
-  menuCode: {硫붾돱肄붾뱶 ?뚮Ц??
-  menuName: {硫붾돱紐?
+  menuCode: {메뉴코드 소문자}
+  menuName: {메뉴명}
   sourceOfTruth:
     ui: $ARGUMENTS-02-ui.md
   rules:
@@ -95,65 +95,68 @@ const MDFG01_DATA = {
 -->
 ```
 
-4. ?꾨옒 ?뚮젅?댁뒪??붾? 移섑솚?쒕떎.
+4. 아래 플레이스홀더를 전부 교체한다.
 
-| ?좏겙 | 移섑솚 |
+| 플레이스홀더 | 교체 |
 |---|---|
-| `{{MENU_CODE}}`    | 硫붾돱肄붾뱶 ?뚮Ц??|
-| `{{MENU_CODE_UP}}` | 硫붾돱肄붾뱶 ?臾몄옄 |
-| `{{MENU_NAME}}`    | 硫붾돱紐?|
-| `{{CUSTOM_CSS}}`   | ?붾㈃ 怨좎쑀 CSS (?놁쑝硫?怨듬갚) ??**wms-ui.css 以묐났 湲덉?** |
-| `{{SEARCH_ROWS}}`  | 寃???곸뿭 `<tr>...</tr>` |
-| `{{GRID_MAIN_TOOLBAR}}` 쨌 `{{GRID_MAIN_COLGROUP}}` 쨌 `{{GRID_MAIN_THEAD}}` | 硫붿씤 洹몃━??援ъ꽦 |
-| `{{GRID_D1_*}}` 쨌 `{{GRID_D2_*}}` | ?뷀뀒??洹몃━??援ъ꽦 (?대떦 UI?좏삎留? |
-| `{{REG_POPUPS}}`   | ?깅줉/?섏젙쨌?꾩슜 ?앹뾽 HTML (媛?紐⑤떖? `id="xxxModal"` + ?ㅻ뜑 `id="xxxHeader"` 援ъ“ ?좎?) |
-| `{{RULE_TABLE}}`   | ?낅Т洹쒖튃 紐⑤떖 ?붾㈃援ъ꽦 `<table class="rule-table">` 4??|
-| `{{RULE_LIST}}`    | ?낅Т洹쒖튃 `<li>` ??ぉ (紐낆꽭 ?먮Ц 洹몃?濡? |
-| `{{SCRIPT_BODY}}`  | ?붾㈃ 怨좎쑀 JS (doSearch, doReset, renderMainGrid, ?섏씠吏 ?대룞, CRUD ?? |
+| `{{MENU_CODE}}`    | 메뉴코드 소문자 |
+| `{{MENU_CODE_UP}}` | 메뉴코드 대문자 |
+| `{{MENU_NAME}}`    | 메뉴명 |
+| `{{CUSTOM_CSS}}`   | 화면 고유 CSS (없으면 공란) — **wms-ui.css 중복 금지** |
+| `{{SEARCH_ROWS}}`  | 검색 영역 `<tr>...</tr>` |
+| `{{GRID_MAIN_TOOLBAR}}` · `{{GRID_MAIN_COLGROUP}}` · `{{GRID_MAIN_THEAD}}` | 메인 그리드 구성 |
+| `{{GRID_D1_*}}` · `{{GRID_D2_*}}` | 서브 그리드 구성 (해당 UI유형만) |
+| `{{REG_POPUPS}}`   | 등록/수정·조회 팝업 HTML (각 팝업에 `id="xxxModal"` + 헤더 `id="xxxHeader"` 반드시 지정) |
+| `{{RULE_TABLE}}`   | 업무규칙 팝업 화면구성 `<table class="rule-table">` 4행 |
+| `{{RULE_LIST}}`    | 업무규칙 `<li>` 항목 (ui.md 원문 그대로) |
+| `{{SCRIPT_BODY}}`  | 화면 고유 JS (doSearch, doReset, renderMainGrid, 페이지 이동, CRUD 등) |
 
-#### ?덈? 湲덉?
+#### 절대 금지
 
-- `window.open()` ?ъ슜 ??怨듯넻 ?앹뾽? `openCpPopup(targetId)` / `openPdPopup(targetId)` ?몄텧 (?대? `wms-common.js` ???뺤쓽??
-- ?몃씪??`style`濡?`overflow` / `width` / `height` 吏??(紐⑤떖 ?덈퉬 ?쒖쇅)
-- 洹몃━???꽷룻댋諛붿뿉 ?쒕ぉ ?띿뒪??- ?ъ슜?щ? 而щ읆 badge ?됱긽 (?띿뒪?몃쭔)
-- 紐낆꽭???녿뒗 踰꾪듉(?묒? ?? ?꾩쓽 異붽?
-- ?꾩쓽 placeholder ?띿뒪??- 鍮?stub ?⑥닔 (`function doXxx() {}`)
-- **wms-ui.css ??怨듯넻 ?대옒??CSS ?ъ젙??* ??`.panel`, `.grid-wrap`, `.toolbar`, `.modal`, `.btn` ??
-#### 諛섎뱶??援ы쁽
+- `window.open()` 사용 → 공통 팝업은 `openCpPopup(targetId)` / `openPdPopup(targetId)` 사용 (wms-common.js에 정의됨)
+- 인라인 `style`로 `overflow` / `width` / `height` 직접 지정 (공통 클래스 사용)
+- 그리드 셀 내에 텍스트 넘침 처리 없이 방치
+- 사용여부 컬럼에 badge 색상 (텍스트만)
+- ui.md에 없는 버튼(엑셀등록, 엑셀다운로드 등) 임의 추가
+- 입력 필드에 placeholder 임의 추가
+- 빈 stub 함수 (`function doXxx() {}`)
+- **wms-ui.css 에 있는 공통 CSS 재정의** — `.panel`, `.grid-wrap`, `.toolbar`, `.modal`, `.btn` 등
 
-- 踰꾪듉 ?숈옉: 異붽?/?섏젙 ???앹뾽 ?ㅽ뵂, ??젣 ??`confirm()` + ?щ젋?? ?????`alert()`, 洹몃━?????대┃ ???섏쐞 洹몃━???곕룞
-- 紐⑤떖 ?쒕옒洹? 媛?紐⑤떖留덈떎 `initModalDrag('xxxModal', 'xxxHeader')` ?몄텧 (?낅Т洹쒖튃? base.html ???먮룞 ?몄텧)
-- ?섏씠吏?ㅼ씠?? `renderPagination('mainPaging', total, size, current, 'goMainPage')` 濡??뚮뜑
-- 議고쉶 嫄댁닔: `renderRowCount('mainRowCount', total, size, current)`
-- 媛濡??ㅽ겕濡? `initHScroll('xxxWrap', 'xxxHScroll', 'xxxHInner', 'xxxTable')` + ?뚮뜑 ??`syncHScroll('xxxHInner', 'xxxTable')`
-- ?곗씠??濡쒕뱶: `window.addEventListener('DOMContentLoaded', function() { mainAll = JSON.parse(JSON.stringify(MDFG01_DATA.main)); renderMainGrid(); })`
+#### 반드시 구현
 
-### 5?④퀎 ??硫붾돱 ?깅줉
+- 버튼 동작: 추가/수정 → 팝업 열기, 삭제 → `confirm()` + 그리드 행 제거, 검색 → `alert()`, 그리드 행 선택 → 서브 그리드 갱신
+- 각 팝업에 `initModalDrag('xxxModal', 'xxxHeader')` 호출 (업무규칙 팝업은 base.html에서 자동 호출)
+- 페이징 렌더링: `renderPagination('mainPaging', total, size, current, 'goMainPage')` 형식
+- 조회 건수: `renderRowCount('mainRowCount', total, size, current)`
+- 수평 스크롤: `initHScroll('xxxWrap', 'xxxHScroll', 'xxxHInner', 'xxxTable')` + 이벤트 연동 `syncHScroll('xxxHInner', 'xxxTable')`
+- 데이터 렌더링: `window.addEventListener('DOMContentLoaded', function() { mainAll = JSON.parse(JSON.stringify(MDFG01_DATA.main)); renderMainGrid(); })`
 
-1. `50-prototype/index.html` ?먯꽌 ?대떦 硫붾돱洹몃９ `<ul class="submenu-list collapsed">` 釉붾줉??李얠븘 ??ぉ 異붽?:
+### 5단계 — 메뉴 등록
+
+1. `50-prototype/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
    ```html
-   <li class="submenu-item" onclick="loadContent('../30-domain/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{硫붾돱紐?')">{硫붾돱紐?</li>
+   <li class="submenu-item" onclick="loadContent('../30-domain/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
-2. `50-prototype/10-common/left-menu.html` ?먮룄 ?숈씪?섍쾶 異붽? (寃쎈줈 prefix `../`):
+2. `50-prototype/10-common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
    ```html
-   <li class="submenu-item" onclick="loadContent('../../30-domain/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{硫붾돱紐?')">{硫붾돱紐?</li>
+   <li class="submenu-item" onclick="loadContent('../../30-domain/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
-3. ?대? ?깅줉??硫붾돱肄붾뱶硫?嫄대꼫?대떎.
+3. 이미 등록된 메뉴코드면 중복 추가하지 않는다.
 
 ---
 
-### 6?④퀎 ???꾨즺 泥댄겕由ъ뒪??
-- [ ] `$ARGUMENTS-02-mock-data.js` ?앹꽦 (硫붿씤 10嫄는룸뵒?뚯씪 5嫄??댁긽)
-- [ ] `$ARGUMENTS-02-wireframe.html` ??`<link rel="stylesheet" href="../../50-prototype/10-common/wms-ui.css">` ?ы븿
-- [ ] `$ARGUMENTS-02-wireframe.html` ??`<script src="../../50-prototype/10-common/wms-common.js"></script>` ?ы븿
-- [ ] 怨듯넻 ?대옒??CSS瑜??붾㈃ `<style>` ?먯꽌 ?ъ젙?섑븯吏 ?딆쓬
-- [ ] `<title>` 諛??ㅻ뜑??`{硫붾돱紐? [{硫붾돱肄붾뱶}]` ?뺥솗???쒖떆
-- [ ] 寃???곸뿭 而щ읆/而댄룷?뚰듃媛 ?붽굔怨??쇱튂
-- [ ] 洹몃━??No. ??泥댄겕諛뺤뒪 ?쒖꽌, 泥?而щ읆 No.
-- [ ] `<colgroup>` 媛?`<col width>` 媛 `area_result_grid.md` 理쒖넖媛??댁긽 (?ㅻ뜑 ?섎┝ ?놁쓬)
-- [ ] CRUD 踰꾪듉 紐⑤몢 ?ㅼ젣 ?숈옉 (stub ?놁쓬)
-- [ ] ?낅Т洹쒖튃 紐⑤떖 ?붾㈃援ъ꽦 4??+ `<ol>` ?먮Ц ?쇱튂
-- [ ] ?깅줉/?섏젙 ?앹뾽 肄붾뱶 梨꾨쾲 (`{硫붾돱肄붾뱶}P01`, `P02` ??
-- [ ] 嫄곕옒泥샕룻뭹紐??꾨뱶 ??`openCpPopup('id')` / `openPdPopup('id')` ?ъ슜, `window.open()` ?놁쓬
-- [ ] 媛?紐⑤떖??`initModalDrag('xxxModal', 'xxxHeader')` ?몄텧
-- [ ] `index.html` / `left-menu.html` 硫붾돱 以묐났 ?놁씠 ?깅줉
+### 6단계 — 완료 체크리스트
+- [ ] `$ARGUMENTS-02-mock-data.js` 생성 (메인 10건 이상·서브 5건 이상)
+- [ ] `$ARGUMENTS-02-wireframe.html` 에 `<link rel="stylesheet" href="../../50-prototype/10-common/wms-ui.css">` 포함
+- [ ] `$ARGUMENTS-02-wireframe.html` 에 `<script src="../../50-prototype/10-common/wms-common.js"></script>` 포함
+- [ ] 공통 스타일 CSS를 화면 `<style>` 에서 재정의하지 않음
+- [ ] `<title>` 및 헤더에 `{메뉴명} [{메뉴코드}]` 정확히 표시
+- [ ] 검색 영역 컬럼/컴포넌트가 요건과 일치
+- [ ] 그리드 No. 및 체크박스 순서 준수, 첫 번째 컬럼 No.
+- [ ] `<colgroup>` 각 `<col width>` 가 `area_result_grid.md` 최소 너비 이상 (헤더 잘림 없음)
+- [ ] CRUD 버튼 모두 실제 동작 (stub 없음)
+- [ ] 업무규칙 팝업 화면구성 4행 + `<ol>` 업무규칙 일치
+- [ ] 등록/수정 팝업 코드 채번 (`{메뉴코드}P01`, `P02` 등)
+- [ ] 거래처·품목 팝업 연동 → `openCpPopup('id')` / `openPdPopup('id')` 사용, `window.open()` 없음
+- [ ] 각 팝업에 `initModalDrag('xxxModal', 'xxxHeader')` 호출
+- [ ] `index.html` / `left-menu.html` 메뉴 중복 없이 등록

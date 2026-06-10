@@ -1,6 +1,6 @@
 ---
 name: PI-be-dao
-description: 【BE DAO 개발】 Dao 레이어 개발. Mapper 완료 후 Mapper 위임 및 복수 Mapper 조합 Dao 메서드 구현 + JUnit 검증. 일반 메뉴 기능 전용. /PI-be-dao {메뉴코드} 형식으로 실행한다. 사용자가 "Dao 만들어줘", "Dao 레이어 개발해줘", "PI-be-dao 실행해줘", "dev-dao 실행해줘", "DAO 클래스 만들어줘" 라고 말해도 이 스킬을 사용한다. Mapper가 완료된 후 실행한다. SIF 인터페이스 개발은 별도 스킬을 사용한다.
+description: BE Dao 레이어 개발 (Mapper 위임·조합 + JUnit 검증). Mapper 완료 후 실행. "Dao 만들어줘", "Dao 레이어 개발해줘", "DAO 클래스 만들어줘" 요청 시 사용. /PI-be-dao {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

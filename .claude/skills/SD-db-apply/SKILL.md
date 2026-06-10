@@ -1,6 +1,6 @@
 ---
 name: SD-db-apply
-description: 【DB 설계사항 반영 (Windows/WSL/Linux/Mac 통합)】 db.md의 DDL SQL을 psql로 test/dev 서버에 실행하고 DB 문서를 자동 최신화한다. 실행 환경(Windows/WSL/Linux/macOS)을 자동 감지하여 psql 경로를 선택한다. /design-db 완료 후, /design-spec 이전에 실행. /SD-db-apply {메뉴코드} 형식으로 실행한다. "DB 반영해줘", "DDL 실행해줘", "db.md DDL 적용해줘", "WSL에서 DB 반영해줘", "Linux에서 DDL 실행해줘", "SD-db-apply 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: db.md의 DDL을 psql로 test/dev DB에 반영 (Windows/WSL/Linux 자동 감지). "DB 반영해줘", "DDL 실행해줘", "db.md DDL 적용해줘" 요청 시 사용. /SD-db-apply {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

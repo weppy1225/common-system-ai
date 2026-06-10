@@ -1,6 +1,6 @@
 ---
 name: PI-be-mapper
-description: 【BE Mapper 개발】 Mapper 레이어(Mapper.java + Mapper.xml) 개발. DB 설계 기반 MyBatis 쿼리 작성 + JUnit 검증. 일반 메뉴 기능 전용. /PI-be-mapper {메뉴코드} 형식으로 실행한다. 사용자가 "Mapper 만들어줘", "MyBatis 쿼리 작성해줘", "Mapper.xml 만들어줘", "PI-be-mapper 실행해줘", "dev-mapper 실행해줘", "Mapper 레이어 개발해줘" 라고 말해도 이 스킬을 사용한다. SIF 인터페이스 개발은 별도 스킬을 사용한다.
+description: BE Mapper 레이어 개발 (Mapper.java + Mapper.xml, MyBatis 쿼리 + JUnit). "Mapper 만들어줘", "MyBatis 쿼리 작성해줘", "Mapper.xml 만들어줘", "Mapper 레이어 개발해줘" 요청 시 사용. /PI-be-mapper {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

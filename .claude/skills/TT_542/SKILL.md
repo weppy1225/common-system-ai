@@ -1,95 +1,96 @@
-﻿---
+---
 name: TT_542
-description: ?륯DA ?ъ슜?먮ℓ?댁뼹 PPTX ?앹꽦 (Windows/WSL/Linux/Mac ?듯빀)???ъ슜?먭? 吏?뺥븳 ?꾨줎?몄뿏???꾨줈?앺듃???ㅼ젣 dev/諛고룷 ?쒕쾭??Playwright(?ㅻ뱶由ъ뒪, 紐⑤컮??390횞844)濡??묒냽?섏뿬 PDA(紐⑤컮?? ?ъ슜??硫붾돱蹂??붾㈃??罹≪쿂?섍퀬, template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx 瑜?base濡?python-pptx 湲곕컲??PDA ?ъ슜?먮ℓ?댁뼹 PPTX瑜??먮룞 ?앹꽦?⑸땲?? ?ㅽ뻾 ?섍꼍(Windows PowerShell vs WSL/Linux/macOS Bash)???먮룞 媛먯??섏뿬 ?대떦 OS 遺꾧린 釉붾줉留??ㅽ뻾?⑸땲?? PC(?곗뒪?ы깙) 硫붾돱???먮룞 ?쒖쇅?섎ŉ 蹂꾨룄 ?ㅽ궗 /TT_541 ?먯꽌 泥섎━?⑸땲?? PDA ?먮룞 ?앸퀎 湲곗?: ?쇱슦??寃쎈줈??`/bm/`쨌`/pda/`쨌`/mobile/` ?ы븿, 遺紐?segment 媛 `*m` ?⑦꽩(`iv3000m`쨌`md8000m` ??, 硫붾돱肄붾뱶 ?앹씠 `m`(`ivad01m`쨌`ivmvrq01m` ??. cloud-wms-doc ??`50-prototype/20-mobile/{洹몃９}/{硫붾돱}.html` ??蹂댁“ 硫붾돱紐?留ㅽ븨???쒖슜?⑸땲?? ?쇰꺼쨌?뚮몢由?룸같吏쨌而ㅻ꽖?걔룹꽕紐낇뙣?먯? 紐⑤몢 PPT ?덉쓽 ?꾪삎(add_shape)?쇰줈 洹몃젮 PowerPoint ?대??먯꽌 吏곸젒 ?몄쭛?????덈룄濡??⑸땲?? /TT_542 ?뺤떇?쇰줈 ?ㅽ뻾?섎ŉ FE ?꾨줈?앺듃 寃쎈줈쨌怨좉컼?щ챸쨌BASE_URL쨌硫붾돱 紐⑸줉쨌濡쒓렇???뺣낫???ㅽ뻾 ??臾살뒿?덈떎. ?곗텧臾쇱? output/05 ?댄뻾(TT)/TT_542_?ъ슜?먮ℓ?댁뼹_PDA_{怨좉컼?щ챸}.pptx ?⑥씪 ?뚯씪濡??⑥뼱吏묐땲?? PDA ?ъ슜??留ㅻ돱???묒꽦, 紐⑤컮???ъ슜?먯슜 留ㅻ돱?? PDA ?붾㈃ 罹≪쿂 PPT, WMS 紐⑤컮???ъ슜??留ㅻ돱??PPTX 留뚮뱾湲??붿껌 ??諛섎뱶?????ㅽ궗???ъ슜?⑸땲?? ?ъ슜?먭? "PDA ?ъ슜?먮ℓ?댁뼹 留뚮뱾?댁쨾", "紐⑤컮??留ㅻ돱??PPT 戮묒븘以?, "TT_542 ?ㅽ뻾?댁쨾", "PDA ?붾㈃ 罹≪퀜?댁꽌 PPT 留뚮뱾?댁쨾", "紐⑤컮???ъ슜??留ㅻ돱???곗텧臾?留뚮뱾?댁쨾", "WSL?먯꽌 PDA 留ㅻ돱??留뚮뱾?댁쨾", "Linux?먯꽌 紐⑤컮??留ㅻ돱??罹≪퀜?댁쨾" ?쇨퀬 留먰빐?????ㅽ궗???ъ슜?⑸땲?? ?? PC ?ъ슜??留ㅻ돱?쇱씠 ?꾩슂??寃쎌슦??/TT_541, ?댁쁺??留ㅻ돱?쇱? /TT_543 ???ъ슜?⑸땲??
+description: PDA 사용자매뉴얼 PPTX 생성 (Playwright 모바일 390×844 화면 캡처, python-pptx). "PDA 사용자매뉴얼 만들어줘", "모바일 매뉴얼 PPT 뽑아줘", "PDA 화면 캡처해서 PPT 만들어줘" 요청 시 사용. /TT_542
 type: skill
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
-# PDA ?ъ슜??留ㅻ돱??PPTX ?먮룞 ?앹꽦 ?ㅽ궗 (Windows/WSL/Linux/Mac ?듯빀) [TT_542]
+# PDA 사용자매뉴얼 PPTX 자동 생성 스킬 (Windows/WSL/Linux/Mac 통합) [TT_542]
 
-???FE ?꾨줈?앺듃: **$ARGUMENTS**
+입력 FE 프로젝트: **$ARGUMENTS**
 
-`$ARGUMENTS` ?붾젆?좊━(?먮뒗 ?ъ슜?먭? 異붽?濡??낅젰?섎뒗 BASE_URL)?먯꽌 dev ?쒕쾭瑜??앸퀎?섍퀬, **Playwright ?ㅻ뱶由ъ뒪 紐⑤뱶(紐⑤컮??390횞844, ?쒓뎅??濡쒖???ko-KR)** 濡?**PDA 硫붾돱留?* 罹≪쿂???? **?ъ슜??留ㅻ돱???쒗뵆由?pptx 瑜?base濡?python-pptx** 濡?PDA ?ъ슜?먮ℓ?댁뼹 PPTX瑜?`output/05 ?댄뻾(TT)/TT_542_?ъ슜?먮ℓ?댁뼹_PDA_{怨좉컼?щ챸}.pptx` ?뚯씪濡??앹꽦?쒕떎.
+`$ARGUMENTS` 경로(또는 사용자가 직접 입력하는 BASE_URL)에서 dev 서버를 확인하고, **Playwright 헤드리스 브라우저(모바일 390×844, 한국어 로캘 ko-KR)** 로 **PDA 메뉴별** 화면을 캡처한 뒤, **사용자매뉴얼 샘플 pptx 를 base로 python-pptx** 로 PDA 사용자매뉴얼 PPTX를 `output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx` 파일로 생성한다.
 
 ---
 
-## OS 遺꾧린 ??媛??癒쇱? ?ㅽ뻾
+## OS 분기 및 공통 실행
 
 ```
-- Windows ?ㅼ씠?곕툕 (PowerShell): $env:OS == 'Windows_NT' && uname ?놁쓬
-  ??[Windows ?뱀뀡] ??`python`/`node` ?ㅽ뻾, Windows 寃쎈줈(`\`).
-- WSL / Linux / macOS (Bash):    uname 議댁옱 (Linux/Darwin)
-  ??[Bash ?뱀뀡] ??`python3`/`node` ?ㅽ뻾, POSIX 寃쎈줈(`/`).
+- Windows 네이티브 (PowerShell): $env:OS == 'Windows_NT' && uname 없음
+  → [Windows 블록] → `python`/`node` 실행, Windows 경로(`\`).
+- WSL / Linux / macOS (Bash):    uname 결과 (Linux/Darwin)
+  → [Bash 블록] → `python3`/`node` 실행, POSIX 경로(`/`).
 ```
 
-> Node.js/Python ?ㅽ겕由쏀듃(`scripts/*.{js,py}`)???묒そ?먯꽌 ?숈씪?섍쾶 ?숈옉.
+> Node.js/Python 스크립트(`scripts/*.{js,py}`)는 같은 위치에서 동일하게 실행.
 
 ---
 
-## ?먮룞 ?ㅼ틪
-- FE ?꾨줈?앺듃 寃쎈줈 ??`C:\zinide\workspace\wms-{?낆껜肄붾뱶}-fe` (Win) ?먮뒗 `/mnt/c/zinide/workspace/wms-{?낆껜肄붾뱶}-fe` (WSL)
-- BE ?꾨줈?앺듃 寃쎈줈 ??(?ъ슜 ???? FE留??꾩슂)
-- ex) BASE_URL ??`localhost:5173`
-- 濡쒓렇???뺣낫 ??`test / 1111`
-- ?꾩껜硫붾돱 / ?듭뀡-?⑥씪硫붾돱 : `ivad01m`
-- 酉고룷?? 紐⑤컮??390횞844 (`isMobile: true`)
+## 실행 변수
+- FE 프로젝트 경로 → `C:\zinide\workspace\wms-{프로젝트코드}-fe` (Win) 또는 `/mnt/c/zinide/workspace/wms-{프로젝트코드}-fe` (WSL)
+- BE 프로젝트 경로 → (사용 안 함. FE만 필요)
+- ex) BASE_URL → `localhost:5173`
+- 로그인 정보 → `test / 1111`
+- 예시메뉴 / 시작-종료메뉴 : `ivad01m`
+- 뷰포트: 모바일 390×844 (`isMobile: true`)
 
-## ?ㅽ뻾 ?ㅽ겕由쏀듃
-1. `.claude/skills/TT_542/scripts/01_scan_project.js` (Node.js) ??FE ?ㅼ틪 + PC ?먮룞 ?쒖쇅 (PDA留?keep)
-2. `.claude/skills/TT_542/scripts/02_capture_screens.js` (Node.js + Playwright chromium ?ㅻ뱶由ъ뒪, 紐⑤컮??而⑦뀓?ㅽ듃) ??硫붾돱蹂?罹≪쿂
-3. `.claude/skills/TT_542/scripts/03_make_pptx.py` (Python + python-pptx + Pillow) ??PPTX ?앹꽦
+## 실행 스크립트
+1. `.claude/skills/TT_542/scripts/01_scan_project.js` (Node.js) → FE 스캔 + PC 제외 (PDA만 keep)
+2. `.claude/skills/TT_542/scripts/02_capture_screens.js` (Node.js + Playwright chromium 헤드리스, 모바일 에뮬레이션) → 메뉴별 캡처
+3. `.claude/skills/TT_542/scripts/03_make_pptx.py` (Python + python-pptx + Pillow) → PPTX 생성
 
-## ?쒗뵆由?- `template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx`
-
----
-
-> **PC(?곗뒪?ы깙) 硫붾돱??蹂??ㅽ궗??踰붿쐞媛 ?꾨땲??** PC 硫붾돱??`/TT_541` ?ㅽ궗?먯꽌 蹂꾨룄濡?泥섎━?쒕떎.
-> **?댁쁺??留ㅻ돱?쇱? 蹂??ㅽ궗??踰붿쐞媛 ?꾨땲??** ?댁쁺??愿由ъ옄 留ㅻ돱?쇱? `/TT_543` ?ㅽ궗?먯꽌 泥섎━?쒕떎.
-
-> **?쒗뵆由?(BLOCKING)**
-> PPTX ??諛섎뱶??`template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx` 瑜??댁뼱 base 濡??ъ슜?쒕떎.
-> ?쒗뵆由우쓽 ?щ씪?대뱶 留덉뒪??/ ?뚮쭏 / ?덉씠?꾩썐? 洹몃?濡?蹂댁〈?섍퀬, ?덉젣 ?щ씪?대뱶??紐⑤몢 ?쒓굅???????щ씪?대뱶瑜?異붽??쒕떎.
-
-> **PPT ???몄쭛 媛???먯튃 (BLOCKING)**
-> ?쇰꺼 諛뺤뒪쨌?뚮몢由?룸같吏쨌而ㅻ꽖?걔룹꽕紐??⑤꼸? 紐⑤몢 python-pptx `add_shape` / `add_textbox` / `add_connector` ?꾪삎?쇰줈 PPT ?덉뿉 吏곸젒 洹몃┛??
-
-> **?대씪?댁뼵???꾧뎄**: 罹≪쿂??Node.js + Playwright, PPTX ?앹꽦? Python + python-pptx + Pillow.
+## 템플릿
+- `template/05 이행(TT)/사용자매뉴얼_샘플.pptx`
 
 ---
 
-## ?ъ쟾 以鍮?(怨듯넻)
+> **PC(데스크탑) 메뉴는 이 스킬에서 처리하지 않는다.** PC 메뉴는 `/TT_541` 스킬에서 별도로 처리한다.
+> **관리자매뉴얼이 필요하면 이 스킬에서 처리하지 않는다.** 관리자 메뉴에 대한 매뉴얼은 `/TT_543` 스킬에서 처리한다.
 
-### ?몄옄 ?뺤젙 (AskUserQuestion ?쒖슜)
+> **템플릿(BLOCKING)**
+> PPTX 생성에는 반드시 `template/05 이행(TT)/사용자매뉴얼_샘플.pptx` 를 열어 base 로 사용한다.
+> 템플릿의 슬라이드 레이아웃 / 폰트 / 색상은 그대로 유지하고, 실제 슬라이드는 모두 제거한 뒤 새 슬라이드를 추가한다.
 
-| ?낅젰 | ?ㅻ챸 | ?덉떆 |
+> **PPT 직접 삽입 제약 (BLOCKING)**
+> 텍스트박스·화살표·레이블·콜아웃 등의 요소는 모두 python-pptx `add_shape` / `add_textbox` / `add_connector` 계열로 PPT 파일에 직접 삽입한다.
+
+> **의존성 안내**: 캡처는 Node.js + Playwright, PPTX 생성은 Python + python-pptx + Pillow.
+
+---
+
+## 사전 준비(공통)
+
+### 매개변수 확인 (AskUserQuestion 사용)
+
+| 입력 | 설명 | 예시 |
 |---|---|---|
-| **FE ?꾨줈?앺듃 寃쎈줈** | dev ?쒕쾭瑜??꾩슱 ?꾨줎?몄뿏???뚯뒪 猷⑦듃 | `C:\zinide\workspace\wms-cloud-fe` ?먮뒗 `/mnt/c/...` |
-| **BASE_URL** | ?대? ???덈뒗 dev/?ㅽ뀒?댁쭠 ?쒕쾭 | `http://localhost:5173` |
-| **怨좉컼?щ챸** | 異쒕젰 ?뚯씪紐? OS 湲덉?臾몄옄 ?먮룞 `_` 移섑솚 | `諛섎떎?대궓肄? |
-| **濡쒓렇???꾩슂 ?щ?** | Y硫?濡쒓렇???뺣낫 異붽?濡?臾산린 | Y/N |
-| **硫붾돱 紐⑸줉 ?좏깮** | 1?④퀎 ?먮룞 ?ㅼ틪?쇰줈 異붿텧??PDA 硫붾돱 ?ㅼ쨷 ?좏깮 | `ivad01m, ivmv01m, iwpc01m` |
-| **酉고룷??* | 紐⑤컮??怨좎젙 (390횞844, `isMobile: true`) | `390x844` |
+| **FE 프로젝트 경로** | dev 서버를 켤 프로젝트 루트 디렉토리 | `C:\zinide\workspace\wms-cloud-fe` 또는 `/mnt/c/...` |
+| **BASE_URL** | 이미 켜져 있는 dev/스테이징 서버 | `http://localhost:5173` |
+| **고객사명** | 산출물 파일명. OS 금지문자 자동 `_` 교체 | `진아이드물류` |
+| **로그인 필요 여부** | Y면 로그인 정보 직접 입력으로 진행 | Y/N |
+| **메뉴 목록 선택** | 1단계 자동 스캔으로 발견한 PDA 메뉴 선택 | `ivad01m, ivmv01m, iwpc01m` |
+| **뷰포트** | 모바일 고정 (390×844, `isMobile: true`) | `390x844` |
 
-### 寃쎈줈 ?뺤쓽
+### 경로 정의
 
-?곷?寃쎈줈??git ??μ냼 猷⑦듃(`$DocRoot` / `$DOC_ROOT`) 湲곗?.
+모든 경로는 git 최상위 디렉토리(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-BASE      = $DocRoot / $DOC_ROOT (?숈쟻 媛먯?)
-TEMPLATE  = template/05 ?댄뻾(TT)/?ъ슜??留ㅻ돱???쒗뵆由?pptx
-OUT_DIR   = output/05 ?댄뻾(TT)
-TMP_DIR   = output/05 ?댄뻾(TT)/tmp_542
+BASE      = $DocRoot / $DOC_ROOT (자동 감지)
+TEMPLATE  = template/05 이행(TT)/사용자매뉴얼_샘플.pptx
+OUT_DIR   = output/05 이행(TT)
+TMP_DIR   = output/05 이행(TT)/tmp_542
 SCRIPTS   = .claude/skills/TT_542/scripts
-OUT_FILE  = output/05 ?댄뻾(TT)/TT_542_?ъ슜?먮ℓ?댁뼹_PDA_{怨좉컼?щ챸}.pptx
+OUT_FILE  = output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx
 ```
 
-> **TMP ?붾젆?좊━ 遺꾨━:** TT_541 ? `tmp_541`, TT_542 ??`tmp_542`, TT_543 ??`tmp_543` ?ъ슜.
+> **TMP 디렉토리 구분:** TT_541 은 `tmp_541`, TT_542 는 `tmp_542`, TT_543 은 `tmp_543` 사용.
 
 ---
 
-# === Windows ?뱀뀡 (PowerShell) ===
+# === Windows 블록 (PowerShell) ===
 
-### W-0) 寃쎈줈 ?숈쟻 媛먯?
+### W-0) 경로 자동 감지
 
 ```powershell
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
@@ -99,7 +100,7 @@ if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjC
 $FeRoot    = Join-Path $Workspace "wms-$ProjCode-fe"
 ```
 
-### W-1) ?섏〈???먮룞 ?ㅼ튂
+### W-1) 의존성 자동 설치
 
 ```powershell
 $env:PYTHONUTF8 = "1"
@@ -115,21 +116,21 @@ python -c "from pptx import Presentation; from PIL import Image" 2>$null
 if ($LASTEXITCODE -ne 0) { python -m pip install --user python-pptx Pillow }
 ```
 
-### W-2) FE ?ㅼ틪
+### W-2) FE 스캔
 
 ```powershell
 Set-Location $DocRoot
-node ".claude\skills\TT_542\scripts\01_scan_project.js" "{FE寃쎈줈}"
+node ".claude\skills\TT_542\scripts\01_scan_project.js" "{FE경로}"
 ```
 
-### W-3) ?붾㈃ 罹≪쿂 (紐⑤컮??而⑦뀓?ㅽ듃)
+### W-3) 화면 캡처 (모바일 에뮬레이션)
 
 ```powershell
 Set-Location $DocRoot
 node ".claude\skills\TT_542\scripts\02_capture_screens.js"
 ```
 
-### W-4) PPTX ?앹꽦
+### W-4) PPTX 생성
 
 ```powershell
 Set-Location $DocRoot
@@ -138,9 +139,9 @@ python ".claude\skills\TT_542\scripts\03_make_pptx.py"
 
 ---
 
-# === Bash ?뱀뀡 (WSL/Linux/Mac) ===
+# === Bash 블록 (WSL/Linux/Mac) ===
 
-### B-0) 寃쎈줈 ?숈쟻 媛먯?
+### B-0) 경로 자동 감지
 
 ```bash
 DOC_ROOT=$(git rev-parse --show-toplevel)
@@ -150,7 +151,7 @@ if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; el
 FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
 ```
 
-### B-1) ?섏〈???먮룞 ?ㅼ튂
+### B-1) 의존성 자동 설치
 
 ```bash
 cd "$DOC_ROOT/.claude/skills/TT_542/scripts"
@@ -161,21 +162,21 @@ npx playwright install chromium 2>/dev/null
 python3 -c "from pptx import Presentation; from PIL import Image" 2>/dev/null || pip3 install --user python-pptx Pillow
 ```
 
-### B-2) FE ?ㅼ틪
+### B-2) FE 스캔
 
 ```bash
 cd "$DOC_ROOT"
-node .claude/skills/TT_542/scripts/01_scan_project.js "{FE寃쎈줈}"
+node .claude/skills/TT_542/scripts/01_scan_project.js "{FE경로}"
 ```
 
-### B-3) ?붾㈃ 罹≪쿂 (紐⑤컮??而⑦뀓?ㅽ듃)
+### B-3) 화면 캡처 (모바일 에뮬레이션)
 
 ```bash
 cd "$DOC_ROOT"
 node .claude/skills/TT_542/scripts/02_capture_screens.js
 ```
 
-### B-4) PPTX ?앹꽦
+### B-4) PPTX 생성
 
 ```bash
 cd "$DOC_ROOT"
@@ -184,48 +185,48 @@ python3 .claude/skills/TT_542/scripts/03_make_pptx.py
 
 ---
 
-## PDA 硫붾돱 ?먮룞 ?앸퀎 湲곗? (怨듯넻, PC ?먮룞 ?쒖쇅)
+## PDA 메뉴 포함 판단 기준 (공통, PC 제외)
 
-### PDA ?앸퀎 ?⑦꽩 (?ы븿 ???
+### PDA 포함 기준 (포함 대상)
 
-| ?⑦꽩 | ?덉떆 |
+| 기준 | 예시 |
 |---|---|
-| ?쇱슦??寃쎈줈??`/bm/` ?ы븿 | `/bm/iv3000m/ivad01m`, `/bm/md8000m/mdpr01m` |
-| ?쇱슦??寃쎈줈??`/pda/` ?ы븿 | `/pda/iv3000m/ivad01m` |
-| ?쇱슦??寃쎈줈??`/mobile/` ?ы븿 | `/mobile/iw1000m/iwpc01m` |
-| 遺紐?segment 媛 `*m` ?⑦꽩 | `iv3000m`, `md8000m`, `ow5000m` |
-| 硫붾돱 肄붾뱶 ?앹씠 `m` | `ivad01m`, `ivmvrq01m`, `sksp01m`, `skmg01m` |
-| 硫붾돱 肄붾뱶 prefix 媛 `pda` | `pdamain` |
+| 라우터 경로에 `/bm/` 포함 | `/bm/iv3000m/ivad01m`, `/bm/md8000m/mdpr01m` |
+| 라우터 경로에 `/pda/` 포함 | `/pda/iv3000m/ivad01m` |
+| 라우터 경로에 `/mobile/` 포함 | `/mobile/iw1000m/iwpc01m` |
+| 경로 segment 중 `*m` 패턴 | `iv3000m`, `md8000m`, `ow5000m` |
+| 메뉴 코드 끝이 `m` | `ivad01m`, `ivmvrq01m`, `sksp01m`, `skmg01m` |
+| 메뉴 코드 prefix 가 `pda` | `pdamain` |
 
-### PC ?앸퀎 ?⑦꽩 (?쒖쇅 ???
+### PC 제외 기준 (제외 대상)
 
-| ?⑦꽩 | ?덉떆 |
+| 기준 | 예시 |
 |---|---|
-| ?쇱슦??寃쎈줈??`/be/` ?ы븿 | `/be/iv3000/ivad01` |
-| 遺紐?segment 媛 ?곷Ц+?レ옄 (??'m' ?놁쓬) | `iv3000`, `md8000` |
-| 硫붾돱 肄붾뱶 ?앹씠 'm' ???꾨떂 | `ivad01`, `mdpr01` |
+| 라우터 경로에 `/be/` 포함 | `/be/iv3000/ivad01` |
+| 경로 segment 가 소문자+숫자 (끝에 'm' 없음) | `iv3000`, `md8000` |
+| 메뉴 코드 끝이 'm' 이 아닌 것 | `ivad01`, `mdpr01` |
 
-> **李멸퀬: wms-{?낆껜肄붾뱶}-fe ?쇱슦??援ъ“**
-> - PC: `src/router/modules/be/{洹몃９}.js` ??`path: '{洹몃９}'`
-> - PDA: `src/router/modules/bm/{洹몃９m}.js` ??`path: '{洹몃９m}'`
-> - PDA views: `src/views/bm/{洹몃９m}/{硫붾돱m}/{硫붾돱m}.vue`
-> - 硫붾돱紐?蹂댁“ 留ㅽ븨: `50-prototype/20-mobile/{洹몃９m}/{硫붾돱?臾몄옄}.html` ??`<title>`
+> **참고: wms-{프로젝트코드}-fe 라우터 구조**
+> - PC: `src/router/modules/be/{그룹}.js` 에서 `path: '{그룹}'`
+> - PDA: `src/router/modules/bm/{그룹m}.js` 에서 `path: '{그룹m}'`
+> - PDA views: `src/views/bm/{그룹m}/{메뉴m}/{메뉴m}.vue`
+> - 메뉴명 보완 출처: `50-prototype/20-mobile/{그룹m}/{메뉴코드대문자}.html` 에서 `<title>`
 
 ---
 
-## ?④퀎蹂??뚰겕?뚮줈???곸꽭 (怨듯넻)
+## 단계별 상세 동작 (공통)
 
-### 1?④퀎 ??FE ?꾨줈?앺듃 ?ㅼ틪?쇰줈 PDA 硫붾돱 ?꾨낫 異붿텧
+### 1단계 → FE 프로젝트 스캔으로 PDA 메뉴 후보 추출
 
-**?ㅽ겕由쏀듃**: `scripts/01_scan_project.js`
-**異쒕젰**: `output/05 ?댄뻾(TT)/tmp_542/menu_candidates.json`
+**스크립트**: `scripts/01_scan_project.js`
+**출력**: `output/05 이행(TT)/tmp_542/menu_candidates.json`
 
-?ㅽ겕由쏀듃媛 ?섑뻾?섎뒗 ??
-1. `package.json`, `vite.config.*`, `next.config.*` ?먯꽌 dev ?ы듃 異붿텧
-2. router/views ?뚯씪?먯꽌 ?쇱슦??異붿텧
-3. `30-domain/{硫붾돱}/ui.md` 諛?`50-prototype/20-mobile/{洹몃９m}/{硫붾돱}.html` ?먯꽌 硫붾돱紐?留ㅽ븨
-4. **PDA ?꾪꽣 ?곸슜**: PDA ?앸퀎 ?⑦꽩 ?듦낵??硫붾돱留?`menus[]` ??keep
-5. PC 硫붾돱??`rejected[]` ??遺꾨━
+스크립트가 수행하는 것:
+1. `package.json`, `vite.config.*`, `next.config.*` 에서 dev 포트 추출
+2. router/views 파일에서 라우터 추출
+3. `30-domain/{메뉴}/ui.md` 및 `50-prototype/20-mobile/{그룹m}/{메뉴}.html` 에서 메뉴명 보완
+4. **PDA 포함 기준** 적용 → PDA 메뉴만 `menus[]` 에 keep
+5. PC 메뉴는 `rejected[]` 에 기록
 
 ```json
 {
@@ -234,38 +235,38 @@ python3 .claude/skills/TT_542/scripts/03_make_pptx.py
   "devPort": 5173,
   "guessedBaseUrl": "http://localhost:5173",
   "menus": [
-    { "code": "ivad01m", "name": "?ш퀬議곗젙", "path": "/bm/iv3000m/ivad01m", "viewportHint": "pda" }
+    { "code": "ivad01m", "name": "재고조정", "path": "/bm/iv3000m/ivad01m", "viewportHint": "pda" }
   ],
   "rejected": [
-    { "code": "mdpr01", "name": "?ъ??덇?由?, "reason": "PC 硫붾돱 ??/TT_541 ?먯꽌 泥섎━" }
+    { "code": "mdpr01", "name": "프로모션", "reason": "PC 메뉴 → /TT_541 에서 처리" }
   ],
   "scannedAt": "2026-05-15T14:00:00.000Z"
 }
 ```
 
-### 2?④퀎 ???ъ슜???낅젰?쇰줈 罹≪쿂 ????뺤젙
+### 2단계 → 사용자 입력으로 캡처 설정 확정
 
-AskUserQuestion?쇰줈 BASE_URL / dev ?쒕쾭 / 硫붾돱 / 濡쒓렇?몄젙蹂?/ 怨좉컼?щ챸 ?뺤젙.
+AskUserQuestion으로 BASE_URL / dev 서버 / 메뉴 / 로그인 정보 / 고객사명 확정.
 
-`output/05 ?댄뻾(TT)/tmp_542/capture_config.json` ???
+`output/05 이행(TT)/tmp_542/capture_config.json` 저장
 
 ```json
 {
   "baseUrl": "http://168.126.28.62:8085",
-  "customer": "諛섎떎?대궓肄?,
+  "customer": "진아이드물류",
   "login": { "needed": true, "url": "/login", "id": "jhlee", "pw": "1111" },
   "viewport": { "width": 390, "height": 844, "isMobile": true, "hideSidebar": false },
   "menus": [
-    { "code": "ivad01m", "name": "?ш퀬議곗젙", "path": "/bm/iv3000m/ivad01m", "scenarios": ["main", "search", "register", "rowSelect"] }
+    { "code": "ivad01m", "name": "재고조정", "path": "/bm/iv3000m/ivad01m", "scenarios": ["main", "search", "register", "rowSelect"] }
   ]
 }
 ```
 
-### 3?④퀎 ??Playwright ?ㅻ뱶由ъ뒪 ?붾㈃ 罹≪쿂 (紐⑤컮??酉고룷??
+### 3단계 → Playwright 헤드리스 화면 캡처 (모바일 뷰포트)
 
-**?ㅽ겕由쏀듃**: `scripts/02_capture_screens.js`
+**스크립트**: `scripts/02_capture_screens.js`
 
-#### 紐⑤컮??而⑦뀓?ㅽ듃 媛뺤젣 (BLOCKING)
+#### 모바일 에뮬레이션 필수 (BLOCKING)
 
 ```js
 const ctx = await browser.newContext({
@@ -279,126 +280,129 @@ const ctx = await browser.newContext({
 });
 ```
 
-#### ?쒖? 罹≪쿂 ?쒕굹由ъ삤 (PDA 硫붾돱 ?뱀꽦??留욎땄)
+#### 기본 캡처 시나리오 (PDA 메뉴 특성에 맞게)
 
-| ?뚯씪紐?| ?몃━嫄?| 罹≪쿂 ?곸뿭 痢≪젙 |
+| 파일명 | 시나리오 | 캡처 영역 지정 |
 |---|---|---|
-| `01-main.png` | 硫붾돱 吏꾩엯 吏곹썑 | ?ㅻ뜑 + 寃?됰컮 + 泥??붾㈃ |
-| `02-search-result.png` | 寃????寃곌낵 濡쒕뱶 | 寃곌낵 紐⑸줉 ?곸뿭 |
-| `03-register-popup.png` | "異붽?/?깅줉/泥섎━" ?대┃ ??紐⑤떖/?섏씠吏 | 紐⑤떖 ?꾩껜 ?먮뒗 ?섏씠吏 |
-| `04-row-selected.png` | 寃곌낵 移대뱶 泥?????| ?뷀뀒???곸뿭 |
+| `01-main.png` | 메뉴 진입 직후 | 헤더 + 검색바 + 첫 화면 |
+| `02-search-result.png` | 검색 후 결과 렌더링 | 결과 목록 영역 |
+| `03-register-popup.png` | "추가/등록/처리" 클릭 후 모달/시트 | 모달 전체 또는 시트 |
+| `04-row-selected.png` | 결과 목록 항목 클릭 | 서브 영역 |
 
-**???ㅼ젣 ?곗씠??蹂寃?湲덉? ?먯튃**: 泥섎━/????≪뀡 ?덈? ?대┃ 湲덉?. 痍⑥냼 / ???ㅻ줈 媛湲?/ ESC 濡??リ린.
+**절대 실제 데이터 변경 금지**: 처리/확인 탭 클릭 금지. 닫기 / 뒤로 가기 / ESC 로 닫기.
 
-#### PDA ?뱁솕 ??됲꽣 ?곗꽑?쒖쐞
+#### PDA 전용 셀렉터 힌트
 
-| ?섎룄 | ??됲꽣 ?꾨낫 |
+| 역할 | 셀렉터 예시 |
 |---|---|
-| PDA ?ㅻ뜑 | `.pda-hdr`, `.mobile-header`, `header.app-header` |
-| 寃???낅젰 | `input.search-input`, `input[placeholder*="寃??]`, `.search-bar input` |
-| 移대뱶 紐⑸줉 | `.card-list`, `.menu-cell`, `[class*="row-card"]`, `ul.item-list > li` |
-| ?≪뀡 踰꾪듉 | `.bottom-action button`, `button.btn-primary`, `.cta-btn` |
-| 紐⑤떖 / ?쒗듃 | `.modal-bg`, `.bottom-sheet`, `.popup-layer`, `.pda-modal` |
-| ?ㅻ줈 媛湲?| `.back-btn`, `button[aria-label="?ㅻ줈"]`, `.menu-hdr-close` |
+| PDA 헤더 | `.pda-hdr`, `.mobile-header`, `header.app-header` |
+| 검색어 입력 | `input.search-input`, `input[placeholder*="검색"]`, `.search-bar input` |
+| 목록 항목 | `.card-list`, `.menu-cell`, `[class*="row-card"]`, `ul.item-list > li` |
+| 확인 버튼 | `.bottom-action button`, `button.btn-primary`, `.cta-btn` |
+| 모달 / 시트 | `.modal-bg`, `.bottom-sheet`, `.popup-layer`, `.pda-modal` |
+| 뒤로 가기 | `.back-btn`, `button[aria-label="뒤로"]`, `.menu-hdr-close` |
 
-### 4?④퀎 ??PPTX ?앹꽦 (紐⑤컮??醫낇슒鍮? TT_541 ?묒떇 洹몃?濡?
+### 4단계 → PPTX 생성 (모바일 비율, TT_541 형식 동일)
 
-**?ㅽ겕由쏀듃**: `scripts/03_make_pptx.py` (python-pptx)
-**異쒕젰**: `output/05 ?댄뻾(TT)/TT_542_?ъ슜?먮ℓ?댁뼹_PDA_{怨좉컼?щ챸}.pptx`
+**스크립트**: `scripts/03_make_pptx.py` (python-pptx)
+**출력**: `output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx`
 
-#### ?щ씪?대뱶 援ъ꽦
+#### 슬라이드 구성
 
-1. **?쒖? ?щ씪?대뱶** ???쒕ぉ "?ъ슜??留ㅻ돱??(PDA)", 遺??"{怨좉컼?щ챸} WMS", ?묒꽦?쇱옄
-2. **紐⑹감 ?щ씪?대뱶** ??PDA 硫붾돱 紐⑸줉 (洹몃９蹂꾨줈 臾띠뼱??
-3. **硫붾돱 ?뱀뀡 ?쒖?** ??硫붾돱留덈떎 1??4. **硫붾돱 ?붾㈃ ?щ씪?대뱶** ??硫붾돱留덈떎 罹≪쿂???쒕굹由ъ삤 ?섎쭔??
-#### ?붾㈃ ?щ씪?대뱶 ?덉씠?꾩썐 (PDA 紐⑤컮??醫낇슒鍮?9:19.5)
+1. **표지 슬라이드** → 제목 "사용자매뉴얼(PDA)", 부제 "{고객사명} WMS", 작성일자
+2. **목차 슬라이드** → PDA 메뉴 목록 (그룹별로 묶어 표시)
+3. **메뉴 그룹 구분 표지** → 메뉴마다 1장
+4. **메뉴 화면 슬라이드** → 메뉴마다 캡처 시나리오 수만큼
 
-- **?대?吏 ?곸뿭**: 醫뚯륫 narrow 而щ읆 (390횞844 ????2.5횞5.4in, 醫낇슒鍮?蹂댁〈)
-- **?ㅻ챸 ?⑤꼸**: ?곗륫 wide 而щ읆
-- **?쇰꺼 諛뺤뒪**: ?대?吏 ?꾩뿉 ?щ챸 fill + ?됱긽 ?뚮몢由?- **諛곗?**: ?대?吏 ?곗륫 ??~ ?ㅻ챸 ?⑤꼸 ?ъ씠 "諛곗? 議?
-- **?섏씠吏 踰덊샇**: ?고븯??9pt #888888
+#### 화면 슬라이드 레이아웃 (PDA 모바일 비율 9:19.5)
 
-#### ?됱긽 留ㅽ븨 (TT_541 怨??숈씪)
+- **이미지 영역**: 좌측 narrow 컬럼 (390×844 픽셀을 약 2.5×5.4in으로 비율 유지)
+- **설명 영역**: 우측 wide 컬럼
+- **텍스트박스**: 이미지 위에 색상 fill + 색상 텍스트
+- **화살표**: 이미지 오른쪽 ~ 설명 영역 사이 "화살표 선"
+- **페이지 번호**: 오른쪽 아래 9pt #888888
 
-| 紐⑹쟻 | HEX |
+#### 색상 기준 (TT_541 과 동일)
+
+| 용도 | HEX |
 |---|---|
-| 寃??議곌굔 / 泥?踰덉㎏ ?곸뿭 | `DC1E1E` (鍮④컯) |
-| ??踰덉㎏ ?곸뿭 | `C86E00` (二쇳솴) |
-| ??踰덉㎏ ?곸뿭 | `1E64C8` (?뚮옉) |
-| 鍮??곸뿭쨌珥덇린 ?곹깭 | `6E6E6E` (?뚯깋) |
-| ?곗씠???덈뒗 寃곌낵 洹몃━??| `148C3C` (?뱀깋) |
-| 以묐┰ ?ㅻ뵫 | `1A3A5C` (?⑥깋) |
-| ?쇰컲 蹂몃Ц | `333333` |
-| 寃쎄퀬 (?? | `CC2222` |
+| 검색 조건 / 빨간 텍스트박스 영역 | `DC1E1E` (빨강) |
+| 저장 텍스트박스 영역 | `C86E00` (주황) |
+| 조회 텍스트박스 영역 | `1E64C8` (파랑) |
+| 기타 영역·기본 상태 | `6E6E6E` (회색) |
+| 데이터가 있는 결과 그리드 | `148C3C` (녹색) |
+| 강조 헤더(팝업·확인) | `1A3A5C` (진파랑) |
+| 본문 텍스트 | `333333` |
+| 경고 (에러) | `CC2222` |
 
-#### ?ㅻ챸 ?⑤꼸 ?묒꽦 ?먯튃
+#### 설명 영역 작성 규칙
 
-- `30-domain/{硫붾돱肄붾뱶(?쓒?녿뒗)}/ui.md` 媛 議댁옱?섎㈃ 蹂댁“ ?쒖슜
-- `50-prototype/20-mobile/{洹몃９m}/{硫붾돱}.html` ???덉쑝硫?HTML ?덉쓽 ?쇰꺼 ?띿뒪???곗꽑 ?쒖슜
-- PDA ?ъ슜??愿?먯쑝濡?湲곗닠: ???ㅼ??댄봽/?ㅼ틪 ??紐⑤컮???명꽣?숈뀡 ?꾩＜
-- 肄붾뱶 蹂?섎챸쨌API 寃쎈줈쨌DB 而щ읆紐낆쓣 吏곸젒 ?쒕윭?댁? ?딅뒗??
+- `30-domain/{메뉴코드(끝m없는)}/ui.md` 가 있으면 우선 참조
+- `50-prototype/20-mobile/{그룹m}/{메뉴}.html` 이 있으면 HTML의 텍스트 기준 참조
+- PDA 사용자 관점으로 작성: 앱 조작방법/목록/처리 → 모바일 특성 설명 포함
+- 변수명·API 경로·DB 컬럼명을 직접 노출하지 않는다.
 ---
 
-## 5?④퀎 ???꾨즺 蹂닿퀬
+## 5단계 → 완료 보고
 
 ```
-??PDA ?ъ슜?먮ℓ?댁뼹 PPTX ?앹꽦 ?꾨즺 [TT_542]
+✅ PDA 사용자매뉴얼 PPTX 생성 완료 [TT_542]
 
-?ㅽ뻾 ?섍꼍 : Windows PowerShell  ?먮뒗  Bash on Linux/Mac/WSL
-怨좉컼??   : {怨좉컼?щ챸}
-FE 寃쎈줈   : {FE ?꾨줈?앺듃 寃쎈줈}
+실행 환경 : Windows PowerShell  또는  Bash on Linux/Mac/WSL
+고객사명   : {고객사명}
+FE 경로   : {FE 프로젝트 경로}
 BASE_URL  : {BASE_URL}
-酉고룷??   : 390x844 (紐⑤컮?? isMobile=true)
+뷰포트    : 390x844 (모바일, isMobile=true)
 locale    : ko-KR
 
-異쒕젰 ?뚯씪 : output/05 ?댄뻾(TT)/TT_542_?ъ슜?먮ℓ?댁뼹_PDA_{怨좉컼?щ챸}.pptx
-?щ씪?대뱶  : ?쒖? 1 + 紐⑹감 1 + 硫붾돱?뱀뀡 N + ?붾㈃ M = 珥?K??
-罹≪쿂 PDA 硫붾돱 ({N}媛?:
-  [?ш퀬愿由?
-    - ivad01m   ?ш퀬議곗젙     (3??
-    - ivmv01m   ?ш퀬?대룞     (3??
-    - ivmvrq01m ?ш퀬?대룞?붿껌 (4??
-  [?낃퀬]
-    - iwpc01m   ?낃퀬泥섎━     (3??
+산출물 파일 : output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx
+슬라이드  : 표지 1 + 목차 1 + 메뉴그룹 N + 화면 M = 총 K장
+캡처 PDA 메뉴 ({N}개):
+  [재고관련]
+    - ivad01m   재고조정     (3장)
+    - ivmv01m   재고이동     (3장)
+    - ivmvrq01m 재고이동요청 (4장)
+  [입고]
+    - iwpc01m   입고처리     (3장)
 
-?먮룞 ?쒖쇅??PC 硫붾돱 ({P}媛? ??/TT_541 ?먯꽌 泥섎━:
+제외된 PC 메뉴 ({P}개) → /TT_541 에서 처리:
   - mdpr01, mdct01, iwrq01, ...
 
-PPT ?덉뿉???쇰꺼쨌?뚮몢由?룸같吏쨌?ㅻ챸 ?⑤꼸? ?꾪삎?쇰줈 吏곸젒 ?몄쭛 媛?ν빀?덈떎.
+PPT 파일에서 텍스트박스·화살표·설명 영역은 도형으로 직접 삽입되어 있습니다.
 ```
 
 ---
 
-## ?뚮젮吏??댁뒋 & ?닿껐梨?
-| ?댁뒋 | ?먯씤 | ?닿껐梨?|
+## 문제해결 & 대처법
+| 문제 | 원인 | 대처법 |
 |------|------|--------|
-| PDA 硫붾돱媛 ?꾨씫??| 硫붾돱 肄붾뱶 ?앹뿉 'm' ???녾퀬 ?쇱슦??寃쎈줈??鍮꾪몴以 | 1?④퀎 寃곌낵 `rejected[]` 瑜??ъ슜?먯뿉寃?蹂댁뿬二쇨퀬 吏곸젒 PDA濡?蹂듭썝 |
-| PC 硫붾돱媛 PDA濡??섎せ 遺꾨쪟??| 硫붾돱 肄붾뱶 ?앹씠 ?곗뿰??'m' ?몃뜲 PC | ?ъ슜?먯뿉寃?蹂댁뿬二쇨퀬 `AskUserQuestion(multiSelect)` ?쇰줈 吏곸젒 ?쒓굅 |
-| 紐⑤컮???뚮뜑留곸씠 ?곗뒪?ы깙泥섎읆 ?섏샂 | Vue 而댄룷?뚰듃媛 `isMobile` 誘명솗??| `isMobile: true` + `hasTouch: true` + 紐⑤컮??user-agent 紐⑤몢 ?곸슜 |
-| 紐⑤떖??紐⑤컮???쒗듃濡?????| `viewport` 留?紐⑤컮?쇱씠怨?user-agent ???곗뒪?ы깙 | ??議곌굔 紐⑤몢 異⑹” |
-| 濡쒓렇???ㅽ뙣 | 3-?꾨뱶 ?쇱뿉??origin ?꾨뱶 泥섎━ ?꾨씫 | `capture_config.json` ??`login.originField` 媛??쒖슜 |
-| ?대?吏 ?쒓끝 | width/height 鍮꾩쑉 ?닿툔??| `Geom` ?대옒??醫낇슒鍮?蹂댁〈 |
-| ?쒗뵆由??щ씪?대뱶媛 洹몃?濡??⑥쓬 | `Presentation(TEMPLATE)` 留??ъ슜 | `remove_all_slides()` ?몄텧 |
-| dev ?쒕쾭 誘멸린??| `npm run dev` 媛 ?ㅽ뻾 ?덈맖 | ?ъ슜?먯뿉寃?蹂꾨룄 ?곕??먯뿉??dev ?쒕쾭瑜??꾩슦?쇨퀬 ?덈궡 |
+| PDA 메뉴가 인식 안 됨 | 메뉴 코드 끝이 'm' 이거나 경로 확인 필요 | 1단계 결과 `rejected[]` 를 사용자에게 보여주고 직접 PDA로 복구 |
+| PC 메뉴가 PDA로 잘못 분류 | 메뉴 코드 끝이 의도치 않게 'm' | 사용자에게 보여주고 `AskUserQuestion(multiSelect)` 로 직접 제거 |
+| 모바일 렌더링이 데스크탑처럼 나옴 | Vue 컴포넌트가 `isMobile` 무시 | `isMobile: true` + `hasTouch: true` + 모바일 user-agent 모두 적용 |
+| 팝업이 모바일 시트로 표시 안 됨 | `viewport` 넓이가 모바일인데 user-agent 가 데스크탑 | 위 조건 모두 적용 |
+| 로그인 실패 | 3-factor 에서 origin 필드 처리 누락 | `capture_config.json` 에 `login.originField` 가 있으면 사용 |
+| 이미지 늘어남 | width/height 비율 계산 오류 | `Geom` 클래스의 비율 유지 |
+| 템플릿 슬라이드가 그대로 남음 | `Presentation(TEMPLATE)` 후 미사용 | `remove_all_slides()` 호출 |
+| dev 서버 연결 실패 | `npm run dev` 가 실행 안 됨 | 사용자에게 별도 터미널에서 dev 서버를 켜도록 요청 |
 
 ---
 
-## ?④퍡 蹂대㈃ 醫뗭? ?ㅽ궗
+## 관련 스킬
 
-- PC ?ъ슜??留ㅻ돱??PPTX ??`/TT_541`
-- ?댁쁺??留ㅻ돱??PPTX ??`/TT_543`
-- PDA ?붾㈃ ?꾨줈?좏???HTML ?앹꽦 ??`/SD_312`
-- ?꾨줈洹몃옩 紐⑸줉 ?묒? ??`/PI_412`
+- PC 사용자매뉴얼 PPTX → `/TT_541`
+- 관리자매뉴얼 PPTX → `/TT_543`
+- PDA 화면 프로토타입 HTML → `/SD_312`
+- 프로그램 목록 산출물 → `/PI_412`
 
 ---
 
-## 二쇱쓽?ы빆 (OS ?뱁솕)
+## 주의사항 (OS 별)
 
-### Windows ?뱁솕
-- **Python ?ㅽ뻾 紐낅졊**: `python` (PATH ?깅줉 ?꾩슂).
-- **?쒓? 肄섏넄 源⑥쭚**: `chcp 65001` + `$env:PYTHONUTF8 = "1"`.
+### Windows 주의사항
+- **Python 실행 명령**: `python` (PATH 등록 필요).
+- **한글 인코딩 출력**: `chcp 65001` + `$env:PYTHONUTF8 = "1"`.
 
-### Bash ?뱁솕
-- **Python ?ㅽ뻾 紐낅졊**: `python3`.
-- **WSL 寃쎈줈**: `/mnt/c/...` ?뺥깭濡??낅젰 媛??
-- **Playwright chromium**: WSL/Linux/macOS 媛곴컖 ?대떦 OS 諛붿씠?덈━ ?ㅼ슫濡쒕뱶.
+### Bash 주의사항
+- **Python 실행 명령**: `python3`.
+- **WSL 경로**: `/mnt/c/...` 형태로 입력 받기.
+- **Playwright chromium**: WSL/Linux/macOS 각각 해당 OS 바이너리로 설치.

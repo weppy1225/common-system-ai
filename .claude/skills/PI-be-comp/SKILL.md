@@ -1,6 +1,6 @@
 ---
 name: PI-be-comp
-description: 【BE Comp 개발】 CompUtil → TxComp → Comp → Controller 레이어 개발. Mapper·Dao 완료 후 비즈니스 레이어 구현. 일반 메뉴 기능 전용. /PI-be-comp {메뉴코드} 형식으로 실행한다. 사용자가 "Comp 만들어줘", "Controller 만들어줘", "비즈니스 레이어 만들어줘", "PI-be-comp 실행해줘", "dev-comp 실행해줘", "Comp TxComp Controller 개발해줘" 라고 말해도 이 스킬을 사용한다. Mapper와 Dao가 완료된 후 실행한다. SIF 인터페이스 개발은 별도 스킬을 사용한다.
+description: BE 비즈니스 레이어 개발 (CompUtil→TxComp→Comp→Controller). Mapper·Dao 완료 후 실행. "Comp 만들어줘", "Controller 만들어줘", "비즈니스 레이어 만들어줘", "Comp TxComp Controller 개발" 요청 시 사용. /PI-be-comp {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

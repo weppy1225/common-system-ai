@@ -1,6 +1,6 @@
 ---
 name: PI-test-fe
-description: 【FE 단위 테스트 실행 (Windows/WSL/Linux/Mac 통합)】 npm run test:unit 을 실행하고 결과를 보고합니다. 실패 시 오류 원인을 분석하고 수정 방향을 제시합니다. 실행 환경(Windows/WSL/Linux/macOS)을 자동 감지하여 적절한 방식으로 실행합니다. /PI-test-fe 형식으로 실행합니다. "FE 테스트 실행해줘", "unit test 돌려줘", "vitest 실행해줘", "PI-test-fe 실행해줘", "WSL에서 FE 테스트 실행해줘", "리눅스에서 unit test 돌려줘", "bash로 프론트 테스트 해줘" 라고 말하면 이 스킬을 사용합니다.
+description: FE npm run test:unit 실행, 실패 시 원인 분석 (Windows/WSL/Linux 자동 감지). "FE 테스트 실행해줘", "unit test 돌려줘", "vitest 실행해줘" 요청 시 사용. /PI-test-fe
 user-invocable: true
 allowed-tools: Read, Bash, Grep
 model: claude-sonnet-4-6

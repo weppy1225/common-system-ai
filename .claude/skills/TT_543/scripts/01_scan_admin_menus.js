@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
  * [TT_543] 1?④퀎 ??FE + BE ?꾨줈?앺듃 ?ㅼ틪?쇰줈 ?댁쁺??愿由ъ옄) 硫붾돱 ?꾨낫 異붿텧
  *
@@ -126,27 +126,27 @@ const ADMIN_CODE_PREFIXES = [
     /^perm[a-z]{0,4}\d/i,  // perm*
 ];
 
-// (C) 硫붾돱紐??ㅼ썙??const ADMIN_NAME_KEYWORDS = [
-    '愿由ъ옄', '?ъ슜?먭?由?, '?ъ슜??愿由?, '沅뚰븳', '硫붾돱愿由?, '硫붾돱 愿由?,
-    '怨듯넻肄붾뱶', '怨듯넻 肄붾뱶', '?쒖뒪???뚮씪誘명꽣', '?쒖뒪?쒗뙆?쇰???,
-    '?쒖뒪???ㅼ젙', '?쒖뒪?쒖꽕??, '?ъ뾽??, '?쇳꽣', '李쎄퀬', '濡쒖??댁뀡',
-    '洹몃９ 愿由?, '洹몃９愿由?, '愿由?, '?ㅼ젙',
+// (C) 메뉴명 키워드
+const ADMIN_NAME_KEYWORDS = [
+    '관리자', '사용자관리', '사용자 관리', '권한', '메뉴관리', '메뉴 관리',
+    '공통코드', '공통 코드', '시스템알림설정', '시스템사용자',
+    '시스템설정', '시스템환경', '사업장', '센터', '창고', '로그인이력',
+    '그룹 관리', '그룹관리', '관리', '설정',
 ];
-
 // (E) ?쒖쇅 湲곗? ???쇰컲 ?낅Т 硫붾돱
-const NON_ADMIN_CODE_PREFIXES = [
+// (E) 제외 기준 → 현장운영 메뉴
     /^iw\d/i,    // ?낃퀬
-    /^ob\d/i,    // 異쒓퀬
-    /^iv\d/i,    // ?ш퀬
-    /^rt\d/i,    // 諛섑뭹
-    /^pk\d/i,    // ?쇳궧
-    /^dl\d/i,    // 諛곗넚
-    /^br[a-z]+\d.*m$/i,  // PDA (釉뚮옖移?+ m ?묐???
+    /^iw\d/i,    // 입고
+    /^ob\d/i,    // 출고
+    /^iv\d/i,    // 재고
+    /^rt\d/i,    // 반품
+    /^pk\d/i,    // 피킹
+    /^dl\d/i,    // 배송
     /^pda/i,     // pda*
 ];
 const NON_ADMIN_NAME_KEYWORDS = [
     '?낃퀬', '異쒓퀬', '?ш퀬', '諛섑뭹', '?쇳궧', '諛곗넚', '二쇰Ц',
-];
+    '입고', '출고', '재고', '반품', '피킹', '배송', '현장',
 const PDA_PATH = /(^|\/)pda(\/|$)/i;
 
 function isAdminByPath(p) {
@@ -163,36 +163,36 @@ function isAdminByName(name) {
     if (!name) return false;
     if (NON_ADMIN_NAME_KEYWORDS.some(k => name.includes(k))) {
         // "?ш퀬愿由? 泥섎읆 ???ㅼ썙?쒓? ???ㅼ뼱媛硫??쇰컲 硫붾돱濡?蹂몃떎
-        // ?? "?ъ슜?먭?由?쨌"硫붾돱愿由?쨌"沅뚰븳愿由? ???댁쁺???ㅼ썙?쒓? ?덉쑝硫??댁쁺?먮줈 蹂몃떎
-        const ADMIN_STRONG = ['?ъ슜?먭?由?, '硫붾돱愿由?, '沅뚰븳', '怨듯넻肄붾뱶',
-            '?ъ슜??愿由?, '硫붾돱 愿由?, '?쒖뒪???뚮씪誘명꽣', '?쒖뒪?쒗뙆?쇰???,
-            '?쒖뒪???ㅼ젙', '?쒖뒪?쒖꽕??, '愿由ъ옄'];
-        if (!ADMIN_STRONG.some(k => name.includes(k))) return false;
+        // "재고관리" 류의 키워드가 있어도 현장 메뉴로 분류
+        // 단 "사용자관리", "메뉴관리", "권한관리" 등 강한 관리자 키워드가 있으면 관리자로 분류
+        const ADMIN_STRONG = ['사용자관리', '메뉴관리', '권한', '공통코드',
+            '사용자 관리', '메뉴 관리', '시스템알림설정', '시스템사용자',
+            '시스템설정', '시스템환경', '관리자'];
     }
     return ADMIN_NAME_KEYWORDS.some(k => name.includes(k));
 }
 function rejectReason(menu) {
     if (!menu) return 'unknown';
     if (menu.path && PDA_PATH.test(menu.path)) return 'PDA 硫붾돱';
-    if (NON_ADMIN_CODE_PREFIXES.some(re => re.test(menu.code || ''))) {
+    if (menu.path && PDA_PATH.test(menu.path)) return 'PDA 메뉴';
         return '?쇰컲?낅Т硫붾돱(?낆텧怨??ш퀬/諛섑뭹/?쇳궧/諛곗넚)';
-    }
+        return '현장운영메뉴(입고/출고/재고/반품/피킹/배송)';
     if (NON_ADMIN_NAME_KEYWORDS.some(k => (menu.name || '').includes(k))) {
         return `?쇰컲?낅Т硫붾돱(${NON_ADMIN_NAME_KEYWORDS.find(k => menu.name.includes(k))})`;
-    }
+        return `현장운영메뉴(${NON_ADMIN_NAME_KEYWORDS.find(k => menu.name.includes(k))})`; 
     return '?댁쁺??硫붾돱 ?⑦꽩 誘몄씪移?;
-}
+    return '관리자 메뉴 기준 미해당';
 
 function categorize(menu) {
     const p = menu.path || '';
     const c = menu.code || '';
     if (/^mdm/i.test(c) || /(^|\/)md(\/|$)/i.test(p)) return '留덉뒪??;
-    if (/(^|\/)auth(\/|$)/i.test(p) || /^auth|^role|^perm/i.test(c)) return '沅뚰븳愿由?;
-    if (/(^|\/)sm(\/|$)/i.test(p) || /^sm/i.test(c)) return '?쒖뒪?쒓?由?;
-    if (/(^|\/)admin(\/|$)/i.test(p) || /^adm/i.test(c)) return '愿由ъ옄';
-    if (/(^|\/)system(\/|$)/i.test(p) || /^sys/i.test(c)) return '?쒖뒪??;
-    return '?댁쁺';
-}
+    if (/^mdm/i.test(c) || /(^|\/)md(\/|$)/i.test(p)) return '마스터';
+    if (/(^|\/)auth(\/|$)/i.test(p) || /^auth|^role|^perm/i.test(c)) return '권한관리';
+    if (/(^|\/)sm(\/|$)/i.test(p) || /^sm/i.test(c)) return '시스템관리';
+    if (/(^|\/)admin(\/|$)/i.test(p) || /^adm/i.test(c)) return '관리자';
+    if (/(^|\/)system(\/|$)/i.test(p) || /^sys/i.test(c)) return '시스템';
+    return '관리';
 
 // ?? FE ?꾨젅?꾩썙??/ dev ?ы듃 媛먯? ??????????????????????????????
 function detectFramework(fePath) {

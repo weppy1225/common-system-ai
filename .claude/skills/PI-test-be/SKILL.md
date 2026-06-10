@@ -1,6 +1,6 @@
 ---
 name: PI-test-be
-description: 【BE 테스트 실행 (Windows/WSL/Linux/Mac 통합)】 JUnit 레이어 테스트(Gradle/Ant)와 Bruno CLI API 테스트를 실행한다. 실행 환경(Windows/WSL/Linux/macOS)을 자동 감지하여 gradlew.bat 또는 ./gradlew를 선택한다. /PI-test-be {메뉴코드} 형식으로 실행. "BE 테스트 실행해줘", "JUnit 테스트 돌려줘", "단위테스트 실행해줘", "PI-test-be 실행해줘", "Bruno 테스트 실행해줘", "WSL에서 BE 테스트 실행해줘", "Linux에서 JUnit 테스트 돌려줘" 라고 말해도 이 스킬을 사용한다.
+description: BE JUnit 단위테스트 + Bruno CLI API 테스트 실행 (Windows/WSL/Linux 자동 감지). "BE 테스트 실행해줘", "JUnit 테스트 돌려줘", "단위테스트 실행해줘", "Bruno 테스트 실행해줘" 요청 시 사용. /PI-test-be {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Bash, Glob
 model: claude-sonnet-4-6

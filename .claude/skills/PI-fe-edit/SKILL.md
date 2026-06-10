@@ -1,6 +1,6 @@
 ---
 name: PI-fe-edit
-description: 【FE 등록·수정 팝업 개발】 BE spec.md 기반으로 {메뉴코드}Edt.vue 등록/수정 팝업만 생성합니다. /PI-fe-edit {메뉴코드} 형식으로 실행합니다. "FE 팝업 만들어줘", "등록 팝업 개발해줘", "수정 팝업 만들어줘", "Edt.vue 만들어줘", "PI-fe-edit 실행해줘" 라고 말하면 이 스킬을 사용합니다. 목록 화면도 함께 필요하면 /PI-fe-all 을 사용합니다.
+description: FE 등록·수정 팝업({메뉴코드}Edt.vue)만 생성. "FE 팝업 만들어줘", "등록 팝업 개발해줘", "수정 팝업 만들어줘", "Edt.vue 만들어줘" 요청 시 사용. /PI-fe-edit {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

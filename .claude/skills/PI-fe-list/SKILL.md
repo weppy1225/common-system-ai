@@ -1,6 +1,6 @@
 ---
 name: PI-fe-list
-description: 【FE 검색조건·결과목록 화면 개발】 BE spec.md 기반으로 {메뉴코드}.vue 목록 화면만 생성합니다. /PI-fe-list {메뉴코드} 형식으로 실행합니다. "FE 목록 화면 만들어줘", "검색 그리드 개발해줘", "목록 vue 만들어줘", "PI-fe-list 실행해줘" 라고 말하면 이 스킬을 사용합니다. 등록/수정 팝업도 함께 필요하면 /PI-fe-all 을 사용합니다.
+description: FE 검색·목록 화면({메뉴코드}.vue)만 생성. "FE 목록 화면 만들어줘", "검색 그리드 개발해줘", "목록 vue 만들어줘" 요청 시 사용. /PI-fe-list {메뉴코드}
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
