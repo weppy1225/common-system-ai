@@ -33,7 +33,7 @@ last_verified: 2026-04-07
 ## 2. 인터페이스 선언 예시
 
 ```java
-@Repository
+@Mapper
 public interface {메뉴코드}Mapper {
     // 메서드 선언
 }

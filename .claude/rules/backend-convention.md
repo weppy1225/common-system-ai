@@ -57,8 +57,10 @@ paths:
 | 예외 클래스 | 사용 조건 |
 |---|---|
 | `CompWarnException` | 업무 검증 실패 (사용자에게 경고 표시) |
-| `CompException` | 시스템 오류, 복구 불가 상황 |
-| `DataNotFoundException` | 조회 결과 없음 |
+| `ResponseErrorException` | 시스템 오류, 복구 불가 상황 |
+| `ZinNotFoundException` | 조회 결과 없음 / 처리 대상 없음 |
+| `ZinBadRequestException` | 잘못된 요청 데이터 |
+| `ZinExistDataException` | 중복 데이터 존재 |
 
 **SIF 연동 코드에서 `CompWarnException` 사용 금지** → `sif-convention.md` 참조.
 
@@ -66,7 +68,7 @@ paths:
 
 - `@RequiredArgsConstructor(onConstructor = @__(@Autowired))`
 - `@Slf4j`
-- `ResponseData` — 반드시 프레임워크 클래스 사용 (`com.zin.wms.common.data.ResponseData`)
+- `ResponseData` — 반드시 프레임워크 클래스 사용 (`fw.bean.ResponseData`)
 - `EmptyTool` — null·빈 문자열·컬렉션 통합 검사 (`fw.tool.EmptyTool`)
 
 ## §7 금지 패턴

@@ -333,7 +333,8 @@ WHERE WMS_OUTWH_ASSIGN.outwh_assign_seq = ASSIGN.outwhAssignSeq
 > | 테이블 유형 | 삭제 방식 | 비고 |
 > |---|---|---|
 > | `MDM_*` 기준정보 테이블 | 논리삭제 `UPDATE SET use_yn = 'N'` | 조회 조건 `AND use_yn = 'Y'` 필수 |
-> | `WMS_*` 업무 테이블 | 물리삭제 `DELETE FROM` | 예외 시 기존 소스 패턴 따름 |
+> | `WMS_*` 업무 테이블 | `del_yn` 컬럼이 있으면 논리삭제 `UPDATE SET del_yn = 'Y'` | 조회 조건 `AND del_yn = 'N'` 필수 |
+> | 삭제 플래그 없는 매핑·처리 테이블 | 물리삭제 `DELETE FROM` | 기존 소스/스키마 확인 |
 
 ```sql
 -- MDM_* 기준정보 테이블: 논리삭제
@@ -343,7 +344,7 @@ UPDATE MDM_PROD
      , mod_dt = NOW()
  WHERE prod_seq = #{prodSeq}
 
--- WMS_* 업무 테이블: 물리삭제
+-- 삭제 플래그 없는 매핑·처리 테이블: 물리삭제
 DELETE FROM WMS_OUTWH_ASSIGN
  WHERE outwh_assign_seq IN ( :seq1, :seq2, ... )
 ```

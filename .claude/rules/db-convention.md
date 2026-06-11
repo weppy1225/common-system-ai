@@ -30,7 +30,7 @@ paths:
 | `select*` | 단건 조회 |
 | `insert*` | 등록 |
 | `update*` | 수정 |
-| `delete*` | 소프트 삭제 (`use_yn='N'`) |
+| `delete*` | 삭제 처리 (`use_yn='N'` / `del_yn='Y'` / 물리삭제 중 실제 테이블 정책 적용) |
 | `exist*` | 존재 여부 확인 (boolean) |
 | `count*` | 건수 조회 |
 
@@ -42,7 +42,9 @@ paths:
 ## §3 SELECT/INSERT/UPDATE/DELETE 공통 체크리스트
 
 **SELECT**
-- 모든 테이블에 `AND t.use_yn = 'Y'` 조건 추가 (조인 테이블 포함)
+- `use_yn` 컬럼이 있는 테이블은 `AND t.use_yn = 'Y'` 조건 추가 (조인 테이블 포함)
+- `del_yn` 컬럼이 있는 테이블은 `AND t.del_yn = 'N'` 조건 추가
+- `use_yn`/`del_yn` 컬럼이 없는 매핑·이력 테이블은 실제 스키마와 기존 Mapper 패턴을 따른다
 - 동적 조건은 `<where>` + `<if>` 조합 사용
 - 페이징: `LIMIT #{pageSize} OFFSET #{offset}` (offset은 Controller/Comp에서 계산해서 전달)
 
@@ -55,7 +57,9 @@ paths:
 - 동적 SET: `<set>` + `<if>` 조합
 
 **DELETE**
-- 물리 삭제 금지. 항상 `UPDATE ... SET use_yn = 'N', mod_id = #{modId}, mod_dt = NOW()`
+- `use_yn` 테이블: `UPDATE ... SET use_yn = 'N', mod_id = #{modId}, mod_dt = NOW()`
+- `del_yn` 테이블: `UPDATE ... SET del_yn = 'Y', mod_id = #{modId}, mod_dt = NOW()`
+- 삭제 플래그가 없는 순수 매핑·처리 테이블: 기존 Mapper 패턴 확인 후 `DELETE FROM` 허용
 
 ## §4 공통코드(`_cd`) 확인 절차
 
@@ -74,7 +78,7 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 
 | 금지 패턴 | 대체 |
 |---|---|
-| `DELETE FROM` (물리 삭제) | `UPDATE SET use_yn='N'` |
+| 삭제 플래그가 있는 테이블의 `DELETE FROM` | `UPDATE SET use_yn='N'` 또는 `UPDATE SET del_yn='Y'` |
 | `WHERE 1=1` | `<where>` 태그 사용 |
 | `!= null` | `@fw.tool.EmptyTool@notEmpty(param)` |
 | `col LIKE '%' || #{v} || '%'` | `FN_CONCAT('%', #{v}, '%')` |

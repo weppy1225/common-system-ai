@@ -117,7 +117,7 @@ int deleteItems(@Param("bizSeq") Integer bizSeq, @Param("seqs") List<Integer> se
           FROM SOME_TABLE T
         <where>
                T.use_yn = 'Y'    /* MDM_* 테이블: use_yn = 'Y' */
-               /* WMS_* 업무 테이블: del_yn = 'N' 사용 */
+               /* WMS_* 업무 테이블: del_yn 컬럼이 있으면 del_yn = 'N' 사용 */
             <if test="@fw.tool.EmptyTool@notEmpty(bizSeq)">
                AND T.biz_seq = #{bizSeq}
             </if>
@@ -162,7 +162,8 @@ int deleteItems(@Param("bizSeq") Integer bizSeq, @Param("seqs") List<Integer> se
 > | 테이블 유형 | 방식 |
 > |---|---|
 > | `MDM_*` 기준정보 | 논리삭제 — `UPDATE SET use_yn = 'N'` |
-> | `WMS_*` 업무 | 물리삭제 — `DELETE FROM` (예외 시 기존 소스 따름) |
+> | `WMS_*` 업무 | `del_yn` 컬럼이 있으면 논리삭제 — `UPDATE SET del_yn = 'Y'` |
+> | 삭제 플래그 없는 매핑·처리 테이블 | 기존 소스/스키마 확인 후 물리삭제 — `DELETE FROM` |
 
 ```xml
 <!-- MDM_* 기준정보: 논리삭제 -->
@@ -176,7 +177,7 @@ int deleteItems(@Param("bizSeq") Integer bizSeq, @Param("seqs") List<Integer> se
        AND use_yn   = 'Y'
 </update>
 
-<!-- WMS_* 업무: 물리삭제 -->
+<!-- 삭제 플래그 없는 매핑·처리 테이블: 물리삭제 -->
 /* XXXX01Mapper.deleteItem  물리삭제 */
 <delete id="deleteItem" parameterType="be.{패키지}.bean.XXXX01Item">
     DELETE FROM SOME_TABLE
@@ -245,7 +246,8 @@ public class XXXX01Dao {
 
 ❌ MDM_* 테이블에 DELETE FROM 사용            → 논리삭제 위반
 ✅ MDM_* 테이블: UPDATE SET use_yn = 'N'     → 논리삭제
-✅ WMS_* 테이블: DELETE FROM 테이블명 WHERE  → 물리삭제 (예외 시 기존 소스 따름)
+✅ WMS_* del_yn 테이블: UPDATE SET del_yn = 'Y' → 논리삭제
+✅ 삭제 플래그 없는 매핑·처리 테이블: DELETE FROM 테이블명 WHERE → 물리삭제
 
 ❌ JOIN 테이블 use_yn 체크 누락
 ✅ LEFT JOIN MDM_PROD MP ON T.prod_seq = MP.prod_seq AND MP.use_yn = 'Y'

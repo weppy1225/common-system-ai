@@ -101,7 +101,7 @@ Controller → Comp (비즈니스) → TxComp (트랜잭션) → Dao → Mapper
 | Comp | `@Service`, `@Slf4j`, `@RequiredArgsConstructor(onConstructor = @__(@Autowired))` |
 | TxComp | `@Service`, `@Slf4j`, `@RequiredArgsConstructor(onConstructor = @__(@Autowired))` |
 | Dao | `@Repository`, `@Slf4j`, `@RequiredArgsConstructor(onConstructor = @__(@Autowired))` |
-| Mapper | `@Repository` (인터페이스) |
+| Mapper | `@Mapper` (인터페이스) |
 | CompUtil | `@Service` |
 | DTO (Bean) | `@Getter`, `@Setter` (Response: extends `ResponseData`, Search: extends `BaseParam`, Domain: implements `Serializable`) |
 

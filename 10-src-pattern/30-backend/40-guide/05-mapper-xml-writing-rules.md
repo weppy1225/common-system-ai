@@ -306,7 +306,8 @@ SELECT (
 > | 테이블 유형 | 삭제 방식 | 메서드 태그 |
 > |---|---|---|
 > | `MDM_*` 기준정보 | 논리삭제(소프트삭제) — `UPDATE SET use_yn = 'N'` | `<update>` |
-> | `WMS_*` 업무 | 물리삭제 — `DELETE FROM` (예외 시 기존 소스 따름) | `<delete>` |
+> | `WMS_*` 업무 | `del_yn` 컬럼이 있으면 논리삭제 — `UPDATE SET del_yn = 'Y'` | `<update>` |
+> | 삭제 플래그 없는 매핑·처리 테이블 | 기존 소스/스키마 확인 후 물리삭제 — `DELETE FROM` | `<delete>` |
 
 ```xml
 <!-- MDM_* 기준정보 테이블: 논리삭제(소프트삭제) -->
@@ -319,7 +320,7 @@ SELECT (
      WHERE biz_seq = #{bizSeq}
 </update>
 
-<!-- WMS_* 업무 테이블: 물리삭제 -->
+<!-- 삭제 플래그 없는 매핑·처리 테이블: 물리삭제 -->
 <delete id="deleteOutwh" parameterType="be.ow5000.owxx01.bean.OWXX01Outwh">
     /* OWXX01Mapper.deleteOutwh 출고 삭제 */
     DELETE FROM WMS_OUTWH
@@ -442,13 +443,15 @@ LEFT JOIN SM_COMM_D SCD ON SCD.comm_d_cd = MW.wh_group_cd
 | 테이블 유형 | 필수 조건 |
 |---|---|
 | MDM_* (기준정보) | `AND XX.use_yn = 'Y'` |
-| WMS_* (업무) | 필터 없음 — 물리삭제이므로 del_yn 컬럼 미존재 |
+| WMS_* (업무) | `del_yn` 컬럼이 있으면 `AND XX.del_yn = 'N'` |
+| 삭제 플래그 없는 매핑·처리 테이블 | 실제 스키마와 기존 Mapper 패턴 확인 |
 
 ```xml
 -- 기준정보 테이블 (MDM_*): 논리삭제 필터 필수
 WHERE MB.use_yn = 'Y'
 
--- 업무 테이블 (WMS_*): 물리삭제(DELETE FROM) 방식 → SELECT 필터 불필요
+-- 업무 테이블 (WMS_*): del_yn 컬럼이 있으면 삭제 필터 필수
+WHERE WI.del_yn = 'N'
 ```
 
 ---
