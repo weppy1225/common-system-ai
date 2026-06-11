@@ -44,7 +44,7 @@ paths:
 
 ## 재고 테이블 직접 조작 금지 (BLOCKING)
 
-`wms_inven`, `wms_inven_hold`, `wms_inven_inout` 에 직접 INSERT/UPDATE/DELETE 금지.
+`wms_inven`, `wms_inven_holding`, `wms_inven_inout` 에 직접 INSERT/UPDATE/DELETE 금지.
 모든 재고 증감·홀딩은 **InvenManager 경유** 필수.
 
 ---

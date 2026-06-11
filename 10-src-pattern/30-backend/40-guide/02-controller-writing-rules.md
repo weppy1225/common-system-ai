@@ -13,9 +13,9 @@ tags:
   - mockmvc
   - pathvariable
   - requestbody
-relates_to:
+related:
   - 10-src-pattern/30-backend/30-convention/01-coding-convention.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # Controller 작성규칙 ({MenuCode}Controller Writing Rules)
@@ -130,7 +130,7 @@ public ResponseEntity<{메뉴코드}Response> delete{리소스}s(
 | 파일 | `@RequestPart(required = false) MultipartFile` | 파일 업로드 |
 | 쿼리 파라미터 | `@RequestParam List<Integer> {리소스}Seqs` | 다중 삭제 등 |
 
-> **유효성 검증**: 클래스 레벨 `@Validated` 필수. 등록·수정 데이터는 `@Valid` 명시.
+> **유효성 검증**: 클래스 레벨 `@Validated` 필수. 등록·수정 데이터는 `@Valid` 명시. 기존 Controller에 누락된 경우도 미준수 레거시로 보고, 해당 파일 수정 시 함께 보완한다.
 
 ## 5. 응답 처리 예시
 
@@ -179,7 +179,7 @@ public ResponseEntity<ResponseData> search{리소스}s(
         @RequestBody {메뉴코드}Search search) { ... }
 ```
 
-> `@author` / `@version` 작성 금지. 첫 줄 설명 + `@param` + `@return` 만 작성.
+> `@author` / `@version` 작성 금지. 첫 줄 설명 + `@param` + `@return` 만 작성. 기존 JavaDoc에 남아 있는 `@author` / `@version`도 미준수 레거시이므로, 해당 파일 수정 시 제거한다.
 
 ## 8. 작성 시 주의사항
 

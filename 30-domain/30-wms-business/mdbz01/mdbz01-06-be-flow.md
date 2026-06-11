@@ -9,11 +9,15 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "30-domain/_common/be-layer-pattern.md"
-  - "30-domain/mdbz01-v2/mdbz01-05-api.md"
-  - "30-domain/mdbz01-v2/mdbz01-03-data-model.md"
-  - "30-domain/mdbz01-v2/mdbz01-04-be-mapper-sql.md"
-tags: [detail-design, backend, sequence, master]
+  - "10-src-pattern/30-backend/be-layer-pattern.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-03-data-model.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-04-be-mapper-sql.md"
+tags:
+  - detail-design
+  - backend
+  - sequence
+  - master
 ---
 
 # MDBZ01 BE 구현 흐름 (서버 처리)
@@ -363,18 +367,9 @@ sequenceDiagram
 
 ## 5. 기술 이슈
 
-### 이슈 1. 물류대행(위탁) 기능 일부 주석 처리
+상세 이슈는 [mdbz01-99-issues.md](./mdbz01-99-issues.md)를 단일 출처(SSoT)로 관리한다.
 
-`updateBiz` 로직에서 물류대행 여부 변경 시 전체 센터의 위탁 여부를 미사용으로 일괄 업데이트하는 코드가 주석 처리됨. Comp의 위탁 업체 존재 검증 블록도 비활성화 상태. 코드가 완전히 삭제되지 않고 주석으로 남아 향후 요건 변경 시 의도 파악이 어려울 수 있음.
-
-### 이슈 2. cancelRequest에서 checkExistBizCenter 이중 호출
-
-`cancelRequest` 내부에서 동일 쿼리를 연속으로 두 번 호출함. 첫 번째는 존재 확인, 두 번째는 상태(REQUEST 여부) 확인 목적. 불필요한 DB 조회이며 두 호출 사이 상태 변경 시 결과 불일치 가능성 있음.
-
-### 이슈 3. 센터 등록 시 창고 자동 생성 — 템플릿 미존재 엣지케이스
-
-`saveBizCenterTX` 트랜잭션 내에서 창고 템플릿을 조회하고 루프를 돌며 기본 창고를 생성함. 창고 템플릿 데이터가 없는 환경에서는 루프가 실행되지 않아 창고 없이 센터만 등록되는 상황이 발생할 수 있음.
-
-### 이슈 4. TxComp가 조회성 Dao를 직접 호출하는 구조
-
-`MDBZ01TxComp`가 `MDBZ01Dao`를 직접 주입받아 조회와 쓰기를 모두 처리함. `saveBizCenterTX` 하나의 메서드에 삽입·수정·삭제·검증 로직이 집중되어 유지보수 시 영향 범위 파악이 어려움.
+- 주석 처리된 위탁 관련 코드: `MDBZ01Comp.updateBiz`, `MDBZ01TxComp.updateBizTX` 요약은 `99-issues.md`의 ISSUE-09 참조
+- `cancelRequest`의 `checkExistBizCenter` 이중 호출: `99-issues.md`의 ISSUE-03 참조
+- 센터 등록 시 창고 템플릿 미존재 엣지케이스: `99-issues.md`의 관련 이슈 참조
+- TxComp에 검증·조회·쓰기 로직이 집중된 구조: `99-issues.md`의 구조 개선 항목 참조

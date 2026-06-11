@@ -13,9 +13,9 @@ tags:
   - validation
   - dto-builder
   - make
-relates_to:
+related:
   - 10-src-pattern/30-backend/40-guide/06-comp-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # CompUtil 작성규칙 (CompUtil Writing Rules)
@@ -180,10 +180,12 @@ public String chkUpdWesSndYn({메뉴코드}Prod oldProd, {메뉴코드}Prod newP
 | `chk` | 상태 체크 (Y/N/null) | `chkUpdWesSndYn()` |
 | `get` | 값 조회/계산 | `getBarcodeValueByLabelType()` |
 
+> `chk` 접두사는 CompUtil 내부의 상태 비교 헬퍼에 한해 허용한다. 일반 공개 검증 메서드 네이밍은 컨벤션 §8의 `check` / `validate` 기준을 따른다.
+
 ## 5. null 안전 처리 패턴
 
 ```java
-// null을 더미 객체로 대체하여 비교
+// null을 더미 객체로 대체하여 비교: null/null 과 값/null 비교를 동일 루프로 처리하기 위함
 Object o1 = fnc.apply(oldProd) != null ? fnc.apply(oldProd) : EMPTY_OBJECT;
 Object o2 = fnc.apply(newProd) != null ? fnc.apply(newProd) : EMPTY_OBJECT;
 
@@ -196,7 +198,7 @@ if (EmptyTool.empty(barcodeValue)) {
 ## 6. switch 분기 예시
 
 ```java
-private String getBarcodeValueByLabelType(Prod prod, String labelPaperTypeCd) {
+private String getBarcodeValueByLabelType({메뉴코드}Prod prod, String labelPaperTypeCd) {
     switch (labelPaperTypeCd) {
     case WMSPool.LABEL_TYPE_PROD_BOX:
         return prod.getParentBarcode();

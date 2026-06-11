@@ -13,10 +13,10 @@ tags:
   - exception-handling
   - txcomp
   - validation
-relates_to:
+related:
   - 10-src-pattern/30-backend/30-convention/01-coding-convention.md
   - 10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # Comp 작성규칙 ({MenuCode}Comp Writing Rules)
@@ -49,9 +49,9 @@ public class {메뉴코드}Comp {
 ```java
 import fw.bean.ResponseData;            // {메뉴코드}Response 상위
 import fw.bean.BaseParam;                // {메뉴코드}Search 상위
-import fw.exception.warn.CompWarnException;
-import fw.exception.response.ResponseWarnException;
-import fw.exception.response.ResponseErrorException;
+import fw.exception.CompWarnException;
+import fw.exception.ResponseWarnException;
+import fw.exception.ResponseErrorException;
 ```
 
 ## 3. 메서드 공통 구조 템플릿
@@ -96,7 +96,7 @@ public {메뉴코드}Response methodName(파라미터...) {
 }
 ```
 
-> **규칙**: try 블록은 5줄 이내로 유지. 복잡한 로직은 CompUtil 또는 private 메서드로 분리.
+> **규칙**: try 블록은 가급적 5줄 이내로 유지한다. 복잡한 로직은 CompUtil 또는 private 메서드로 분리한다.
 
 ## 4. CRUD 패턴 예시
 
@@ -180,7 +180,8 @@ public {메뉴코드}Response delete{리소스}s(Integer bizSeq, List<Integer> {
         {메뉴코드}{리소스} checkResult =
             {메뉴코드_인스턴스}Dao.check{리소스}SeqInOtherTbl(bizSeq, {리소스}Seq);
         if (checkResult != null) {
-            throw new NotMeetConditionsException(MsgTool.getMessage("error.existRef"));
+            String errMsg = /* 미확인: 실제 MsgTool 키는 메뉴 소스에서 확인 후 적용 */ "참조 데이터가 존재합니다.";
+            throw new NotMeetConditionsException(errMsg);
         }
     }
     retCnt = {메뉴코드_인스턴스}TxComp.delete{리소스}sTX(bizSeq, {리소스}Seqs);
@@ -198,7 +199,8 @@ private void checkDuplicate{리소스}No(Integer bizSeq, Integer seq, String no)
         bizSeq, seq, Collections.singletonList(no)
     );
     if (!dupList.isEmpty()) {
-        throw new ZinExistDataException(MsgTool.getMessage("error.duplicate"));
+        String errMsg = /* 미확인: 실제 MsgTool 키는 메뉴 소스에서 확인 후 적용 */ "중복 데이터가 존재합니다.";
+        throw new ZinExistDataException(errMsg);
     }
 }
 ```
@@ -212,7 +214,7 @@ private String checkProdLabelAndProc({메뉴코드}{리소스} existProd, {메�
     }
     boolean isAlreadyProc = {메뉴코드_인스턴스}Dao.checkProdLabelAndProc(prodSeq);
     return isAlreadyProc
-        ? MsgTool.getMsg("message.{메뉴그룹코드_인스턴스}.{메뉴코드_인스턴스}.ExistInoutOrLabel")
+        ? MsgTool.getMsg("message.{메뉴그룹_인스턴스}.{메뉴코드_인스턴스}.ExistInoutOrLabel")
         : null;
 }
 ```
@@ -278,7 +280,7 @@ TokenTool.getLoginUserId() / TokenTool.getRegBizSeq()
 ## 10. 검증 실패 시 throw 예시
 
 ```java
-throw new ZinNotFoundException(MsgTool.getMsg("error.notFound"));
+throw new ZinNotFoundException(MsgTool.getMsg("message.warn.NotFound"));
 throw new ZinExistDataException(errMsg);
 throw new NotMeetConditionsException(errMsg);
 ```

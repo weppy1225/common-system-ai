@@ -14,7 +14,7 @@ tags:
   - ztest
   - test-convention
   - edge-case
-last_modified: 2026-04-09
+last_verified: 2026-04-09
 ---
 
 # 백엔드 테스트 코딩 컨벤션 (Backend Test Coding Convention)
@@ -337,6 +337,7 @@ rtnBean.setModDt(DateTool.now());
 | Hamcrest | `org.hamcrest.Matchers.containsString` (static import) |
 
 > **javax vs jakarta**: 이 프로젝트는 `javax.validation` 을 사용합니다. `jakarta.validation` 사용 금지.
+> 버전 근거: `../cloud-wms-be/build.gradle` 기준 `org.springframework.boot` `2.7.18`, 테스트는 `useJUnitPlatform()`으로 JUnit 5를 사용한다.
 
 ---
 
@@ -390,7 +391,7 @@ rtnBean.setModDt(DateTool.now());
 |---|---|---|
 | 1 | **정상 수정** | `procCnt=1`, 변경 후 값 재조회 검증 |
 | 2 | **존재하지 않는 PK** | `ZinNotFoundException` |
-| 3 | **`use_yn='N'` (소프트 삭제된 행)** | `ZinNotFoundException` |
+| 3 | **`use_yn='N'` (논리삭제된 행)** | `ZinNotFoundException` |
 | 4 | **다른 사업장(`bizSeq`)의 데이터 접근 시도** | `ZinNotFoundException` 또는 권한 예외 |
 
 #### DELETE 메서드 — 최소 4건
@@ -399,7 +400,7 @@ rtnBean.setModDt(DateTool.now());
 |---|---|---|
 | 1 | **정상 삭제** | `use_yn='N'` 변경 확인 |
 | 2 | **존재하지 않는 seqs** | `procCnt=0` 또는 예외 |
-| 3 | **이미 사용 중인 데이터** | `NotMeetConditionsException` 또는 비즈니스 예외 |
+| 3 | **이미 사용 중인 데이터** | `NotMeetConditionsException` 또는 `AlreadyProcessException` |
 | 4 | **빈 리스트 / null 입력** | `ZinRequestParamValidException` |
 
 #### SELECT (목록) 메서드 — 최소 5건

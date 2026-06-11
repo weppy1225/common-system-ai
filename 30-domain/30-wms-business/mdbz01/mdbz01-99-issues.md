@@ -9,10 +9,13 @@ agent_usage: task
 menu_code: mdbz01
 domain: master
 related:
-  - "70-knowledgebase/mdbz01/mdbz01-05-api.md"
-  - "70-knowledgebase/mdbz01/mdbz01-04-be-mapper-sql.md"
-  - "70-knowledgebase/mdbz01/mdbz01-06-be-flow.md"
-tags: [open-issues, verification, master]
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-04-be-mapper-sql.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-06-be-flow.md"
+tags:
+  - open-issues
+  - verification
+  - master
 ---
 
 # MDBZ01 Open Issues / 확인 필요 사항
@@ -21,21 +24,21 @@ tags: [open-issues, verification, master]
 
 | # | 우선 | 이슈 | 근거 |
 |---|---|---|---|
-| 1 | 🔴 | Controller 엔드포인트 3건 Vue 미연결 | tplReq GET, tplReq PATCH, cancel PATCH — 3개 Vue 파일 어디에도 호출 미확인 |
-| 2 | 🔴 | `vfn_searchCenterDtl` 미정의 함수 호출 | mdbz01.vue `lfn_reqGridKeydown`에서 호출하나 함수 정의 없음 |
-| 3 | 🟠 | cancelRequest 동일 쿼리 2회 호출 | MDBZ01Comp.cancelRequest에서 checkExistBizCenter 연속 2회 호출 |
-| 4 | 🟠 | for 루프 내 단건 DML 반복 (N+1) | insertCenter, updateCenter, deleteCenter, reqTplCenterTX, update3plCenterTX |
-| 5 | 🟠 | searchBizs SQL — Dao/Mapper 호출자 없음 | Mapper.xml에 정의되어 있으나 MDBZ01Mapper.java에 인터페이스 메서드 없음 |
-| 6 | 🟠 | 사업장 수정 @PostMapping (REST 관례 불일치) | 수정 기능이지만 POST 메서드 사용 (multipart 전송을 위한 의도적 선택으로 보이나 확인 필요) |
-| 7 | 🟠 | Controller 메서드명 오류 (`postBizCenters`) | @GetMapping인데 메서드명 'post'로 시작 |
-| 8 | 🟡 | MDBZ01Request 클래스 미사용 | bean 폴더에 존재하지만 어디서도 사용 확인 안 됨 |
-| 9 | 🟡 | 주석 처리된 위탁 관련 코드 | updateBizTX, updateBiz Comp에 위탁 관련 코드 주석 처리됨 |
-| 10 | 🟡 | insertBiz/insertUserBiz/insertDocNo — 이 화면 미사용 SQL | 회원가입 흐름용으로 보이나 다른 모듈과 공유 여부 확인 필요 |
-| 11 | 🟡 | reqTplBiz SQL — 호출자 확인 필요 | Mapper.xml 정의 존재, Dao/Mapper 인터페이스 미확인 |
+| 1 | 🔴 (높음) | Controller 엔드포인트 3건 Vue 미연결 | tplReq GET, tplReq PATCH, cancel PATCH — 3개 Vue 파일 어디에도 호출 미확인 |
+| 2 | 🔴 (높음) | `vfn_searchCenterDtl` 미정의 함수 호출 | mdbz01.vue `lfn_reqGridKeydown`에서 호출하나 함수 정의 없음 |
+| 3 | 🟠 (중간) | cancelRequest 동일 쿼리 2회 호출 | MDBZ01Comp.cancelRequest에서 checkExistBizCenter 연속 2회 호출 |
+| 4 | 🟠 (중간) | for 루프 내 단건 DML 반복 (N+1) | insertCenter, updateCenter, deleteCenter, reqTplCenterTX, update3plCenterTX |
+| 5 | 🟠 (중간) | searchBizs SQL — Dao/Mapper 호출자 없음 | Mapper.xml에 정의되어 있으나 MDBZ01Mapper.java에 인터페이스 메서드 없음 |
+| 6 | 🟠 (중간) | 사업장 수정 @PostMapping (REST 관례 불일치) | 실제 구현은 POST 사용, multipart 전송 목적 여부는 미확인 |
+| 7 | 🟠 (중간) | Controller 메서드명 오류 (`postBizCenters`) | @GetMapping인데 메서드명 'post'로 시작 |
+| 8 | 🟡 (낮음) | MDBZ01Request 클래스 미사용 | bean 폴더에 존재하지만 어디서도 사용 확인 안 됨 |
+| 9 | 🟡 (낮음) | 주석 처리된 위탁 관련 코드 | updateBizTX, updateBiz Comp에 위탁 관련 코드 주석 처리됨 |
+| 10 | 🟡 (낮음) | insertBiz/insertUserBiz/insertDocNo — 이 화면 미사용 SQL | 회원가입 흐름용으로 보이나 다른 모듈과 공유 여부 확인 필요 |
+| 11 | 🟡 (낮음) | reqTplBiz SQL — 호출자 확인 필요 | Mapper.xml 정의 존재, Dao/Mapper 인터페이스 미확인 |
 
 ---
 
-## 🔴 기능 공백
+## 🔴 (높음) 기능 공백
 
 ### ISSUE-01: Controller 엔드포인트 3건 Vue 미연결
 
@@ -71,7 +74,7 @@ tags: [open-issues, verification, master]
 
 ---
 
-## 🟠 정책 / 정합
+## 🟠 (중간) 정책 / 정합
 
 ### ISSUE-03: cancelRequest — 동일 쿼리 2회 호출
 
@@ -119,7 +122,7 @@ tags: [open-issues, verification, master]
 ### ISSUE-06: 사업장 수정 @PostMapping (HTTP 메서드 불일치)
 
 **현상:**
-`MDBZ01Controller.patchBiz` 메서드가 `@PostMapping`으로 선언되어 있다. 기능은 사업장 수정(Update)이나 POST를 사용하고 있다. multipart/form-data 전송을 위해 의도적으로 POST를 선택한 것으로 추정되나, 메서드명이 `patchBiz`임에도 불구하고 실제 어노테이션은 `@PostMapping`이다.
+`MDBZ01Controller.patchBiz` 메서드가 `@PostMapping`으로 선언되어 있다. 기능은 사업장 수정(Update)이나 POST를 사용하고 있다. 메서드명이 `patchBiz`임에도 불구하고 실제 어노테이션은 `@PostMapping`이다. multipart/form-data 전송 목적 여부는 소스상 미확인이다.
 
 **파급:**
 기능 동작에는 영향 없으나 API 명세 이해 혼란 야기.
@@ -142,7 +145,7 @@ tags: [open-issues, verification, master]
 
 ---
 
-## 🟡 정리 / 개선
+## 🟡 (낮음) 정리 / 개선
 
 ### ISSUE-08: MDBZ01Request 클래스 미사용
 

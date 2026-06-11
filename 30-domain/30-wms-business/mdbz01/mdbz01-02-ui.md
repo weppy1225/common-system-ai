@@ -11,11 +11,15 @@ domain: master
 ui_type: 좌우 2분할 (사업장 정보 폼 + 물류센터 그리드)
 purpose: 사업장의 기본 프로필과 물류센터를 관리하고, 외부 물류 대행 업체와의 위탁 관계를 수립·관리한다
 depends_on:
-  - "30-domain/mdbz01-v2/mdbz01-01-basic-design.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-01-basic-design.md"
 related:
-  - "30-domain/mdbz01-v2/mdbz01-05-api.md"
-  - "30-domain/mdbz01-v2/mdbz01-07-fe-flow.md"
-tags: [detail-design, screen, ui, master]
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-07-fe-flow.md"
+tags:
+  - detail-design
+  - screen
+  - ui
+  - master
 ---
 
 # MDBZ01 화면 명세
@@ -112,7 +116,7 @@ API: `GET /editable/bizs/{regBizSeq}` → [04-SQL `searchEditableBizs` §37](./m
 |---|---|---|---|---|
 | 1 | No. | 중앙 | - | |
 | 2 | checkbox | 중앙 | - | |
-| 3 | 물류센터명 | 좌측 | O | 위탁 센터는 편집 불가 |
+| 3 | 센터명 | 좌측 | O | 위탁 센터는 편집 불가 |
 | 4 | 우편번호 | 중앙 | - | 🔍 클릭 → 카카오 주소 팝업, 위탁 센터는 🔍 미표시 |
 | 5 | 주소 | 좌측 | - | 주소 검색으로만 변경 |
 | 6 | 주소상세 | 좌측 | O | |
@@ -160,7 +164,7 @@ API: `GET /editable/bizs/{regBizSeq}` → [04-SQL `searchEditableBizs` §37](./m
 | 팝업코드 | MDBZ01P02 |
 | 레이아웃 | 검색 조건 → 결과 그리드 → 의뢰자 정보 + 요청 내용 |
 
-검색 파라미터 3개 (사업장명·물류센터명·주소, 모두 부분 검색) → [04-SQL `searchTplBizCenter` §26](./mdbz01-04-be-mapper-sql.md)
+검색 파라미터 3개 (사업장명·센터명·주소, 모두 부분 검색) → [04-SQL `searchTplBizCenter` §26](./mdbz01-04-be-mapper-sql.md)
 
 #### 검색 결과 그리드
 

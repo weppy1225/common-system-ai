@@ -9,12 +9,15 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "70-knowledgebase/mdbz01/mdbz01-02-screen.md"
-  - "70-knowledgebase/mdbz01/mdbz01-03-data-model.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-02-ui.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-03-data-model.md"
 related:
-  - "70-knowledgebase/mdbz01/mdbz01-06-be-flow.md"
-  - "70-knowledgebase/mdbz01/mdbz01-07-fe-flow.md"
-tags: [detail-design, api, master]
+  - "30-domain/30-wms-business/mdbz01/mdbz01-06-be-flow.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-07-fe-flow.md"
+tags:
+  - detail-design
+  - api
+  - master
 ---
 
 # MDBZ01 API 명세 (FE·BE 공용)
@@ -40,13 +43,13 @@ Controller @RequestMapping: /{bizSeq}/mdbz01/bizs
 | 사업장 수정 | POST | `/{bizSeq}/mdbz01/bizs` | mdbz01.vue (사업장 저장 버튼) | 요청: multipart/form-data (사업장 정보 + 이미지 파일), 응답: `procCnt` |
 | 물류센터 목록 조회 | GET | `/{bizSeq}/mdbz01/bizs/{selectedBizSeq}/centers` | mdbz01.vue (사업장 선택 후) | 응답: `bizCenter` 배열 |
 | 물류센터 저장 (추가/수정/삭제) | PUT | `/{bizSeq}/mdbz01/bizs/centers` | mdbz01.vue (센터 저장 버튼) | 요청: `{insertList, updateList, deleteList}`, 응답: `succeed` |
-| 대행의뢰신청업체 목록 조회 | GET | `/{bizSeq}/mdbz01/bizs/{selCenterSeq}/tplReq` | ⚠️ Vue 호출 미확인 | 응답: `bizCenter` 배열 |
-| 위탁 의뢰 수락/거절 | PATCH | `/{bizSeq}/mdbz01/bizs/{selBizSeq}/tplReq` | ⚠️ Vue 호출 미확인 | 요청: `MDBZ01Center` 객체, 응답: `procCnt` |
+| 대행의뢰신청업체 목록 조회 | GET | `/{bizSeq}/mdbz01/bizs/{selCenterSeq}/tplReq` | 미확인: Vue 호출 미확인 | 응답: `bizCenter` 배열 |
+| 위탁 의뢰 수락/거절 | PATCH | `/{bizSeq}/mdbz01/bizs/{selBizSeq}/tplReq` | 미확인: Vue 호출 미확인 | 요청: `MDBZ01Center` 객체, 응답: `procCnt` |
 | 위탁 센터 목록 조회 (팝업) | GET | `/{bizSeq}/mdbz01/bizs/tpl` | mdbz01Set.vue (MDBZ01P01 팝업 열기) | 응답: `bizCenter` 배열 |
 | 위탁 센터 정보 수정 | PATCH | `/{bizSeq}/mdbz01/bizs/tpl` | mdbz01Set.vue (MDBZ01P01 저장 버튼) | 요청: `{updateList}`, 응답: `procCnt` |
 | 물류 대행 업체 검색 | POST | `/{bizSeq}/mdbz01/bizs/tpl` | mdbz01Sch.vue (MDBZ01P02 검색 버튼) | 요청: `MDBZ01Search` 객체, 응답: `bizCenter` 배열 |
-| 위탁 의뢰 신청 | PUT | `/{bizSeq}/mdbz01/bizs/tpl` | mdbz01Sch.vue (MDBZ01P02 위탁 요청 버튼) | 요청: `{bizSeq, note, checkedList}`, 응답: `procCnt` |
-| 위탁 의뢰 취소 (의뢰자) | PATCH | `/{bizSeq}/mdbz01/bizs/cancel` | ⚠️ Vue 호출 미확인 | 요청: `MDBZ01Center` 객체, 응답: `procCnt` |
+| 위탁 의뢰 신청 | PUT | `/{bizSeq}/mdbz01/bizs/tpl` | mdbz01Sch.vue (MDBZ01P02 위탁 의뢰 버튼) | 요청: `{bizSeq, note, checkedList}`, 응답: `procCnt` |
+| 위탁 의뢰 취소 (의뢰자) | PATCH | `/{bizSeq}/mdbz01/bizs/cancel` | 미확인: Vue 호출 미확인 | 요청: `MDBZ01Center` 객체, 응답: `procCnt` |
 
 ---
 
@@ -58,7 +61,7 @@ Controller @RequestMapping: /{bizSeq}/mdbz01/bizs
 | PATCH | `/{bizSeq}/mdbz01/bizs/{selBizSeq}/tplReq` | Vue 파일에서 호출 코드 미발견 | 동일 |
 | PATCH | `/{bizSeq}/mdbz01/bizs/cancel` | Vue 파일에서 호출 코드 미발견 | 동일 |
 
-> ⚠️ 미확인 엔드포인트는 다른 Vue 화면(사업장 관련 화면 전체)에서 사용 중일 가능성이 있으므로 즉시 삭제하지 말 것.
+> 미확인: 다른 Vue 화면(사업장 관련 화면 전체)에서 사용 중일 가능성이 있으므로 즉시 삭제하지 말 것.
 
 ---
 
@@ -102,7 +105,7 @@ Controller @RequestMapping: /{bizSeq}/mdbz01/bizs
 | postNo | 우편번호 | |
 | addr | 주소 | |
 | addrDtl | 주소 상세 | |
-| note | 비고 / 위탁 요청 메모 | |
+| note | 비고 / 위탁 의뢰 메모 | |
 | useYn | 사용여부 | Y/N |
 | tplYn | 물류대행 가능 여부 | Y/N |
 | tplCenterYn | 위탁 센터(외부 소유) 여부 | 응답 전용 |
@@ -148,11 +151,15 @@ Controller @RequestMapping: /{bizSeq}/mdbz01/bizs
 | POST | 물류 대행 업체 검색 (MDBZ01P02 팝업 검색) |
 | PUT | 위탁 의뢰 신청 |
 
-FE에서 호출 시 HTTP 메서드를 정확히 지정해야 한다. GET과 POST가 완전히 다른 업무이므로 혼동 주의.
+FE에서 호출 시 HTTP 메서드를 MUST 정확히 지정해야 한다. GET과 POST가 완전히 다른 업무이므로 혼동 주의.
 
 ### 5-2. 사업장 수정 메서드 불일치
 
-사업장 수정(`updateBiz`) 는 Controller에서 `@PostMapping`으로 선언되어 있으나, 업무적으로는 수정 기능이다. multipart/form-data 전송을 위해 POST를 사용한 것으로 보이나, REST 관례(수정 = PUT/PATCH)와 다르다. FE도 `axios.post`로 호출한다.
+사실: 사업장 수정(`updateBiz`)은 실제 구현에서 `MDBZ01Controller.patchBiz`가 `@PostMapping`으로 선언되어 있고, FE도 `axios.post`로 호출한다.
+
+추정: multipart/form-data 전송 처리 때문에 POST를 유지한 것으로 해석할 수 있으나, 그 이유 자체는 소스에 명시돼 있지 않다.
+
+현재 문서 기준에서는 현 구현(POST)을 유지 대상으로 본다.
 
 ### 5-3. 미연결 엔드포인트 3건
 

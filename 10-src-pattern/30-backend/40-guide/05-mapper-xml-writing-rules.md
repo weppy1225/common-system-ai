@@ -15,19 +15,19 @@ tags:
   - fn-concat
   - where-tag
   - foreach
-relates_to:
+related:
   - 10-src-pattern/30-backend/40-guide/04-mapper-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # Mapper XML 작성규칙 (Mapper XML Writing Rule)
 
-> 80개 이상의 실제 Mapper.xml 파일 분석 기반. 2026-03-05 작성.
+> 미확인: "80개 이상의 실제 Mapper.xml 파일 분석 기반"이라는 수치 근거는 현재 저장소에서 직접 확인하지 못했다. 2026-03-05 작성 문구만 유지한다.
 >
 > **규칙 참조**: 백엔드 일반 규칙(레이어/네이밍/예외)은
 > [30-convention/01-coding-convention.md](../30-convention/01-coding-convention.md),
 > SQL 작성 규칙(MyBatis 패턴)은
-> [10-src-pattern/20-database/30-convention/02-database-layer-coding-convention.md](../../20-database/30-convention/02-database-layer-coding-convention.md) 참조.
+> [10-src-pattern/20-database/30-convention/02-mybatis-convention.md](../../20-database/30-convention/02-mybatis-convention.md) 참조.
 > 이 문서는 Mapper XML 작성 시 참고할 **실제 XML 코드 패턴·예시**를 기술합니다.
 
 ---
@@ -301,13 +301,15 @@ SELECT (
 
 ### 6.2 삭제 패턴
 
+> 삭제 기준 SSoT는 [01-coding-convention.md](../30-convention/01-coding-convention.md) §12를 우선 참조한다.
+>
 > | 테이블 유형 | 삭제 방식 | 메서드 태그 |
 > |---|---|---|
-> | `MDM_*` 기준정보 | 논리삭제 — `UPDATE SET use_yn = 'N'` | `<update>` |
+> | `MDM_*` 기준정보 | 논리삭제(소프트삭제) — `UPDATE SET use_yn = 'N'` | `<update>` |
 > | `WMS_*` 업무 | 물리삭제 — `DELETE FROM` (예외 시 기존 소스 따름) | `<delete>` |
 
 ```xml
-<!-- MDM_* 기준정보 테이블: 논리삭제 -->
+<!-- MDM_* 기준정보 테이블: 논리삭제(소프트삭제) -->
 <update id="deleteBiz" parameterType="be.md8000.mdbz01.bean.MDBZ01Biz">
     /* MDBZ01Mapper.deleteBiz 사업장 삭제 */
     UPDATE MDM_BIZ
@@ -354,7 +356,7 @@ SELECT (
 
 ## 7. DELETE 패턴
 
-물리 DELETE는 극소수. 대부분 소프트삭제(UPDATE) 사용.
+물리 DELETE는 극소수다. 대부분 논리삭제(소프트삭제, UPDATE) 패턴을 사용한다.
 
 ```xml
 <!-- 물리 DELETE (use_yn/del_yn 컬럼 없는 순수 매핑 테이블에만 허용) -->

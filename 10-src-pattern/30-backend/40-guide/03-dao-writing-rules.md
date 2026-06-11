@@ -13,10 +13,10 @@ tags:
   - crud
   - logging
   - emptytool
-relates_to:
+related:
   - 10-src-pattern/30-backend/30-convention/01-coding-convention.md
   - 10-src-pattern/30-backend/40-guide/04-mapper-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # Dao 작성규칙 ({MenuCode}Dao Writing Rules)
@@ -98,7 +98,7 @@ public int insertProd({메뉴코드}Prod insertProd) {
     log.info(FwPool.DAO_START_LOG);
 
     int retCnt = mapper.insertProd(insertProd);
-    retCnt = mapper.insertBizProd(insertProd); // 사업장 매핑 동시 등록
+    retCnt += mapper.insertBizProd(insertProd); // 사업장 매핑 동시 등록
 
     log.info(FwPool.DAO_END_LOG);
     return retCnt;
@@ -122,8 +122,8 @@ public int updateProd({메뉴코드}Prod updateProd) {
 ### 4.4 삭제 (DELETE) — 복수 Mapper 조합
 
 ```java
-// ⚠️ 주의: 참조 무결성 등 비즈니스 검증은 Comp 계층에서 수행.
-//         Dao는 복수 Mapper 단순 조합만 허용.
+// ❌ 잘못된 예: Dao에서 참조 무결성·상태 검증 같은 비즈니스 규칙을 판단하지 않는다.
+// Dao는 복수 Mapper 단순 조합만 허용한다.
 public int deleteProds(Integer bizSeq, List<Integer> prodSeqs) {
     log.info(FwPool.DAO_START_LOG);
     int retCnt = 0;
@@ -194,8 +194,8 @@ Controller → Comp → TxComp → Dao → Mapper(MyBatis) → DB
 
 ## 9. 작성 시 주의사항
 
-1. **null 반환 금지**: List 반환 메서드는 항상 빈 리스트
-2. **예외 전파**: Dao는 예외를 잡지 않고 상위로 전파
-3. **트랜잭션 경계**: TxComp에서 관리, Dao는 단순 실행
-4. **비즈니스 로직 금지**: 복잡한 규칙은 Comp 계층에서 처리
+1. **null 반환 금지**: List 반환 메서드는 항상 빈 리스트. 상위 계층이 null 분기 없이 순회·후처리할 수 있어야 한다.
+2. **예외 전파**: Dao는 예외를 잡지 않고 상위로 전파. 예외 변환 책임은 Comp에 있다.
+3. **트랜잭션 경계**: TxComp에서 관리, Dao는 단순 실행. 동일 SQL 조합도 트랜잭션 판단은 Dao가 하지 않는다.
+4. **비즈니스 로직 금지**: 복잡한 규칙은 Comp 계층에서 처리. Dao는 DB 접근과 결과 반환에 집중한다.
 5. **로깅 필수**: 메서드 시작/종료에 `FwPool.DAO_START_LOG` / `DAO_END_LOG`

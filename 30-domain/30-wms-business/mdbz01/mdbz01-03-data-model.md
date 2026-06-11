@@ -9,17 +9,20 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "30-domain/mdbz01-v2/mdbz01-01-basic-design.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-01-basic-design.md"
 related:
-  - "30-domain/mdbz01-v2/mdbz01-04-be-mapper-sql.md"
-  - "30-domain/mdbz01-v2/mdbz01-05-api.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-04-be-mapper-sql.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
 source_of_truth: true
-tags: [detail-design, data-model, master]
+tags:
+  - detail-design
+  - data-model
+  - master
 ---
 
 # MDBZ01 데이터 모델 (테이블·상태·코드)
 
-> ⚠️ 컬럼 타입·길이·NN·default는 운영/dev DB information_schema 직접 조회로 확인.
+> 미확인: 컬럼 타입·길이·NN·default는 운영/dev DB information_schema 직접 조회로 확인.
 > ```sql
 > SELECT column_name, column_type, is_nullable, column_default
 > FROM information_schema.columns
@@ -52,7 +55,7 @@ tags: [detail-design, data-model, master]
 
 ## 2. 테이블 관계
 
-> ⚠️ 아래 JOIN 조건은 소스 SQL(`04-be-mapper-sql.md`) 기준으로 작성됨.
+> 주의: 아래 JOIN 조건은 소스 SQL(`04-be-mapper-sql.md`) 기준으로 작성됨.
 > 테이블 관계가 불명확할 경우 **소스 SQL의 실제 JOIN ON 조건을 우선** 참조한다.
 
 | 관계 | 좌측 / 컬럼 | 우측 / 컬럼 | 의미 |
@@ -120,7 +123,7 @@ MDM_BIZ_CENTER는 두 가지 용도로 공용된다.
 | WMSPool.BIZ_DIV_TPL | 물류대행 | 외부 물류 대행 서비스 제공 업체 |
 | WMSPool.BIZ_DIV_SHIPPER | 화주 | 납품업체 유형, MDBZ01 수정 대상 제외 |
 
-> ⚠️ 실제 코드 문자열 값은 `fw.constant.WMSPool` 클래스에서 확인.
+> 미확인: 실제 코드 문자열 값은 `fw.constant.WMSPool` 클래스에서 확인.
 
 ### 3-4. 사용여부 (use_yn)
 
@@ -145,7 +148,7 @@ MDM_BIZ, MDM_CENTER, MDM_BIZ_CENTER, MDM_BIZ_BIZ 모두 동일 패턴 적용.
 | 'Y' | 외부 의뢰를 받을 수 있는 물류대행 가능 센터 |
 | 'N' | 물류대행 미운영 센터 |
 
-> ⚠️ 소스에서 `tpl_yn`을 `updateCenter` SQL에서 주석 처리하고 `updateTplCenter` SQL에서만 사용. 운영 컬럼 정책을 DB에서 확인 필요.
+> 미확인: 소스에서 `tpl_yn`을 `updateCenter` SQL에서 주석 처리하고 `updateTplCenter` SQL에서만 사용한다. 운영 컬럼 정책은 DB 확인이 필요하다.
 
 ### 3-7. 사용자 권한 유형 (MDM_USER.auth_type_cd)
 
@@ -155,7 +158,7 @@ MDM_BIZ, MDM_CENTER, MDM_BIZ_CENTER, MDM_BIZ_BIZ 모두 동일 패턴 적용.
 | WMSPool.AUTH_TYPE_BIZ | 사업장 권한 — 사업자번호 기준 사업장 접근 |
 | WMSPool.AUTH_TYPE_CENTER | 센터 권한 — 센터 소속 사업장만 접근 |
 
-> ⚠️ 실제 코드 문자열 값은 `fw.constant.WMSPool` 클래스에서 확인.
+> 미확인: 실제 코드 문자열 값은 `fw.constant.WMSPool` 클래스에서 확인.
 
 ---
 

@@ -9,9 +9,13 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "30-domain/mdbz01-v2/mdbz01-02-ui.md"
-  - "30-domain/mdbz01-v2/mdbz01-05-api.md"
-tags: [detail-design, frontend, vue, master]
+  - "30-domain/30-wms-business/mdbz01/mdbz01-02-ui.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
+tags:
+  - detail-design
+  - frontend
+  - vue
+  - master
 ---
 
 # MDBZ01 FE 구현 흐름 (화면 처리)
@@ -151,7 +155,7 @@ sequenceDiagram
     alt 변경 없으면
         S->>S: swal 경고, return
     end
-    S->>S: lfn_validUpdateTpl() [tplYn=Y && addr/addrDtl/tel 비어있으면 false]
+    S->>S: lfn_validUpdateTpl() [`tplYn='Y'` && `addr`/`addrDtl`/`tel` 비어있으면 false]
     S->>A: PATCH /mdbz01/bizs/tpl
     A-->>S: result
     S->>S: successSwal()
@@ -222,6 +226,6 @@ sequenceDiagram
 
 8. **mdbz01Sch `closeCallback`**: `LayerPopup`의 `:closeCallback`에 `lfn_insertpopupCloseCallback` 연결 → 팝업 닫힐 때 `insertTplReqObj` 초기화.
 
-9. **위탁센터 `disableStyle`**: `tplCenterYn=Y && cfmYn=Y && useYn=N`(거절·미사용) 행에 `gridTxt-disabledStyle` 적용.
+9. **위탁센터 `disableStyle`**: 실제 Vue 구현 기준으로 `tplCenterYn='Y' && cfmYn='Y' && useYn='N'` 행의 `disableStyle` 값에 `gridTxt-disabledStyle`을 지정한다.
 
 10. **`getEditedGridData` 공통 유틸**: `insertList / updateList / deleteList` 분리 추출. 변경 건수 합산 0이면 API 미호출.

@@ -12,10 +12,10 @@ tags:
   - mybatis
   - param
   - interface
-relates_to:
+related:
   - 10-src-pattern/30-backend/40-guide/05-mapper-xml-writing-rules.md
   - 10-src-pattern/30-backend/40-guide/03-dao-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # Mapper 작성규칙 ({MenuCode}Mapper Writing Rules)
@@ -152,6 +152,7 @@ int searchExistInven(Integer prodSeq);
 <!-- 메서드명과 SQL ID 일치 -->
 <select id="searchProds" parameterType="be.{...}.bean.{메뉴코드}Search"
                          resultType="be.{...}.bean.{메뉴코드}Search">
+    <!-- 예시 테이블: mdm_prod -->
     SELECT * FROM mdm_prod WHERE ...
 </select>
 
@@ -175,10 +176,10 @@ int searchExistInven(Integer prodSeq);
 
 ## 7. 메서드 설계 원칙
 
-- **단일 책임**: 하나의 메서드는 하나의 SQL 작업만 수행
-- **VO/DTO 그룹화**: 관련 파라미터는 객체로 묶어 전달
-- **Collection 일괄 처리**: 다건 처리에는 List 활용
-- **반환값**: 빈 컬렉션 선호, 처리 건수는 항상 int
+- **단일 책임**: 하나의 메서드는 하나의 SQL 작업만 수행. XML의 SQL ID와 1:1 대응이 유지되어야 추적이 쉽다.
+- **VO/DTO 그룹화**: 관련 파라미터는 객체로 묶어 전달. 파라미터명이 늘어날수록 `@Param` 누락 위험이 커진다.
+- **Collection 일괄 처리**: 다건 처리에는 List 활용. XML `<foreach>`와 짝을 맞추기 쉽다.
+- **반환값**: 빈 컬렉션 선호, 처리 건수는 항상 int. 상위 계층이 결과 건수를 그대로 판단한다.
 
 ## 8. 작성 시 주의사항
 

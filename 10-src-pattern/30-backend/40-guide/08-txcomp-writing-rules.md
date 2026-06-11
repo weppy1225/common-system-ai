@@ -13,9 +13,9 @@ tags:
   - file-handling
   - inven-manager
   - docno
-relates_to:
+related:
   - 10-src-pattern/30-backend/40-guide/06-comp-writing-rules.md
-last_modified: 2026-04-07
+last_verified: 2026-04-07
 ---
 
 # TxComp 작성규칙 (TxComp Writing Rules)
@@ -29,7 +29,7 @@ last_modified: 2026-04-07
 - **클래스명**: `{메뉴코드}TxComp`
 - **역할**: 트랜잭션 경계, DB Write 메서드, 파일 처리 통합
 - **계층**: Comp → **TxComp** → Dao
-- **트랜잭션**: 메서드 레벨 `@Transactional`만 허용 (클래스 레벨 금지)
+- **트랜잭션**: TxComp 메서드 레벨 `@Transactional`만 허용 (클래스 레벨 및 Comp/Dao/Controller 선언 금지). 기존 코드에 다른 레이어 선언이 남아 있으면 미준수 레거시로 보고, 해당 업무 수정 시 TxComp로 이동한다.
 
 ## 2. 클래스 선언 예시
 
@@ -79,7 +79,7 @@ public int insert{리소스}TX({메뉴코드}{리소스} put{리소스}, Multipa
 
 ### 3.2 수정 (update{리소스}TX) — 파일 처리 매트릭스
 
-| newFile | patchProd.getFileSeq() | exFileSeq | 처리 |
+| newFile | patch{리소스}.getFileSeq() | ex{리소스}FileSeq | 처리 |
 |---------|------------------------|-----------|------|
 | NULL | NULL | NULL | 단순 DB 수정 |
 | NULL | 값 있음 | 값 있음 | 단순 DB 수정 |
@@ -92,16 +92,16 @@ public int insert{리소스}TX({메뉴코드}{리소스} put{리소스}, Multipa
 @Transactional
 public int update{리소스}TX({메뉴코드}{리소스} patch{리소스},
                           MultipartFile newFile,
-                          Integer exFileSeq) {
+                           Integer ex{리소스}FileSeq) {
 
     if (EmptyTool.notEmpty(newFile)) {
-        if (EmptyTool.notEmpty(exFileSeq)) {
-            fileComp.deleteFileProdImg(patch{리소스}.getBizSeq(), exFileSeq);
+        if (EmptyTool.notEmpty(ex{리소스}FileSeq)) {
+            fileComp.deleteFileProdImg(patch{리소스}.getBizSeq(), ex{리소스}FileSeq);
         }
         this.addFile(patch{리소스}, newFile);
     } else {
-        if (EmptyTool.empty(patch{리소스}.getFileSeq()) && EmptyTool.notEmpty(exFileSeq)) {
-            fileComp.deleteFileProdImg(patch{리소스}.getBizSeq(), exFileSeq);
+        if (EmptyTool.empty(patch{리소스}.getFileSeq()) && EmptyTool.notEmpty(ex{리소스}FileSeq)) {
+            fileComp.deleteFileProdImg(patch{리소스}.getBizSeq(), ex{리소스}FileSeq);
             patch{리소스}.setFileSeq(null);
         }
     }
@@ -234,7 +234,7 @@ int update{리소스}TX({메뉴코드}{리소스} patch{리소스},
 int delete{리소스}sTX(Integer bizSeq, List<Integer> {리소스}Seqs)
 ```
 
-> **트랜잭션 메서드 접미사**: `Tx` 또는 `TX` 일관 사용. 컨벤션 §8 참조.
+> **트랜잭션 메서드 접미사**: 기본 예시는 `TX`로 통일한다. 기존 메뉴가 `Tx`를 이미 사용 중이면 메뉴 단위 일관성을 우선한다. 컨벤션 §8 참조.
 
 ## 9. 컴포넌트 협력 관계
 
@@ -250,6 +250,6 @@ int delete{리소스}sTX(Integer bizSeq, List<Integer> {리소스}Seqs)
 
 1. **파일과 DB는 동일 트랜잭션**: 파일 업로드 성공 → DB 저장, 실패 시 전체 롤백
 2. **부분 성공 방지**: 다건 삭제는 모두 성공 또는 모두 실패
-3. **메서드 단위 `@Transactional`**: 클래스 레벨 선언 금지
+3. **메서드 단위 `@Transactional`**: 클래스 레벨 및 Comp/Dao/Controller 선언 금지. 기존 미준수 코드는 수정 대상 파일 작업 시 TxComp 메서드로 이동한다.
 4. **InvenManager / DocNoGenerator 호출은 TxComp에서만**: 상세는
    `.claude/rules/biz-framework.md` 참조

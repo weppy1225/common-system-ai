@@ -84,7 +84,7 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 
 ## 재고·홀딩 테이블은 직접 쿼리 금지
 
-`wms_inven`, `wms_inven_hold`, `wms_inven_inout` 직접 INSERT/UPDATE/DELETE 금지.
+`wms_inven`, `wms_inven_holding`, `wms_inven_inout` 직접 INSERT/UPDATE/DELETE 금지.
 → **InvenManager 경유**. 판단 기준·메서드는 `biz-framework.md` 참조.
 
 ---

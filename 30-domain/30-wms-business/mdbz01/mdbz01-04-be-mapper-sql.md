@@ -9,11 +9,15 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "70-knowledgebase/mdbz01/mdbz01-03-data-model.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-03-data-model.md"
 related:
-  - "70-knowledgebase/mdbz01/mdbz01-06-be-flow.md"
-  - "70-knowledgebase/mdbz01/mdbz01-05-api.md"
-tags: [detail-design, backend, sql, master]
+  - "30-domain/30-wms-business/mdbz01/mdbz01-06-be-flow.md"
+  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
+tags:
+  - detail-design
+  - backend
+  - sql
+  - master
 ---
 
 # MDBZ01 SQL 명세 (데이터 접근 설계)
@@ -36,7 +40,7 @@ tags: [detail-design, backend, sql, master]
 | 12 | updateBizCenter | UPDATE | 사업장-센터 관계 정보 수정 (승인상태, 사용여부, 비고) |
 | 13 | deleteCenter | UPDATE | 물류센터 비활성화 (use_yn='N', 물리 삭제 아님) |
 | 14 | deleteBizCenter | UPDATE | 사업장-센터 관계 비활성화 |
-| 15 | deleteUserCenter | DELETE | 물리 DELETE — 센터 삭제 시 사용자-센터 권한 레코드 제거 |
+| 15 | deleteUserCenter | DELETE | 미확인: 물리 DELETE — `db-convention.md` §6의 소프트삭제 원칙과 상충하나, 실제 Mapper XML은 `DELETE FROM MDM_USER_CENTER` 구현 |
 | 16 | searchWhTemplate | SELECT | 기본 창고 템플릿 조회 — 센터 등록 시 자동 창고 생성용 |
 | 17 | insertDefaultWh | INSERT | 기본 창고 생성 |
 | 18 | insertbizWh | INSERT | 사업장-창고 관계 등록 |
@@ -52,14 +56,14 @@ tags: [detail-design, backend, sql, master]
 | 28 | checkExistBizCenter | SELECT | 위탁 의뢰 중복 및 상태 확인 |
 | 29 | selectReqBizCenter | SELECT | 대행의뢰신청업체 목록 조회 |
 | 30 | respTplCenter | UPDATE | 위탁 의뢰 수락/거절 처리 |
-| 31 | cancelRequest | DELETE | 위탁 의뢰 취소 (물리 DELETE) |
+| 31 | cancelRequest | DELETE | 미확인: 위탁 의뢰 취소 (물리 DELETE). `db-convention.md` §6과 상충하나 실제 Mapper XML은 `DELETE FROM MDM_BIZ_CENTER` 구현 |
 | 32 | updateBizBiz | UPDATE | 위탁 수락/거절 후 사업장-사업장 관계 활성상태 재계산 |
 | 33 | insertCenterAutorityToSuper | INSERT | 슈퍼 관리자 전원에게 신규 센터 접근 권한 부여 |
 | 34 | deleteCenterAutority | DELETE | 센터 삭제 시 해당 센터의 사용자 권한 제거 |
 | 35 | insertBizWh | INSERT | 위탁 수락 시 의뢰 사업장에 센터의 창고 접근 권한 부여 |
 | 36 | updateAllCenterTplYnToN | UPDATE | 사업장 구분 변경 시 모든 센터의 물류대행여부를 일괄 미사용으로 전환 (현재 주석 처리됨) |
 | 37 | searchEditableBizs | SELECT | 수정 가능한 사업장 목록 조회 — 화면 진입 시 드롭다운 데이터 |
-| 38 | reqTplBiz | SELECT | 의뢰 사업장 목록 조회 (Dao 호출자 확인 필요) |
+| 38 | reqTplBiz | SELECT | 미확인: 의뢰 사업장 목록 조회 (Mapper XML 정의만 확인, `MDBZ01Mapper.java`/`MDBZ01Dao.java` 호출 미확인) |
 
 ---
 
@@ -388,7 +392,9 @@ UPDATE MDM_CENTER
 
 ### deleteUserCenter
 
-**용도:** 센터 삭제 시 해당 센터에 부여된 사용자 권한 레코드를 물리 삭제한다. MDM_USER_CENTER에서 직접 DELETE를 수행하는 유일한 물리 삭제 SQL이다.
+**용도:** 센터 삭제 시 해당 센터에 부여된 사용자 권한 레코드를 물리 삭제한다. `MDBZ01Mapper.xml`의 실제 구현은 `DELETE FROM MDM_USER_CENTER`이다.
+
+**미확인:** 이 SQL은 `db-convention.md` §6의 물리 삭제 금지 원칙과 상충한다. 현재 문서 범위에서는 예외 허용 근거를 소스에서 확인하지 못했다.
 
 **파라미터:**
 
@@ -419,11 +425,11 @@ DELETE FROM MDM_USER_CENTER
 **반환 컬럼:** 중복 건이 있으면 센터명(field)과 코드 'DUPLICATE' 반환, 없으면 빈 목록 반환
 
 ```sql
--- 예시: bizSeq=100, centerSeq=null, centerNm='서울 물류센터'
+-- 실제 Mapper.xml 기준 예시: bizSeq=100, centerSeq=null, centerNm='서울 물류센터'
 SELECT MC.center_nm AS field, 'DUPLICATE' AS code
   FROM MDM_CENTER MC
   JOIN MDM_BIZ_CENTER MBC ON MC.center_seq = MBC.center_seq
- WHERE MC.center_seq != null  -- 수정 시 자기 자신 제외
+ WHERE MC.center_seq != #{centerSeq}  -- 수정 시 자기 자신 제외
    AND MBC.biz_seq = 100
    AND MC.center_nm = '서울 물류센터'
    AND MC.USE_YN = 'Y'
@@ -534,7 +540,9 @@ UPDATE MDM_BIZ_CENTER
 
 ### cancelRequest
 
-**용도:** 의뢰자가 아직 처리되지 않은 위탁 의뢰를 취소한다. MDM_BIZ_CENTER에서 해당 의뢰 레코드를 물리 삭제하는 유일한 DELETE SQL이다.
+**용도:** 의뢰자가 아직 처리되지 않은 위탁 의뢰를 취소한다. `MDBZ01Mapper.xml`의 실제 구현은 `DELETE FROM MDM_BIZ_CENTER`이다.
+
+**미확인:** 이 SQL은 `db-convention.md` §6의 물리 삭제 금지 원칙과 상충한다. 현재 문서 범위에서는 예외 허용 근거를 소스에서 확인하지 못했다.
 
 **파라미터:**
 

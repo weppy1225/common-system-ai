@@ -7,8 +7,12 @@ wms_meta: true
 project: cloud-wms-doc
 agent_usage: reference
 domain: common
-last_updated: "2026-06-09"
-tags: [backend, pattern, common, architecture]
+last_verified: "2026-06-09"
+tags:
+  - backend
+  - pattern
+  - common
+  - architecture
 ---
 
 # BE 레이어 공통 패턴
@@ -26,24 +30,31 @@ tags: [backend, pattern, common, architecture]
 
 ## 2. 호출 원칙
 
-- Controller → Comp → (TxComp) → Dao 방향으로만 호출한다.
-- Comp는 조회성 Dao를 직접 호출할 수 있으나, 쓰기 트랜잭션은 반드시 TxComp를 경유한다.
-- TxComp는 Dao를 직접 주입받아 사용한다. (Spring DI 기준)
+- Controller → Comp → (TxComp) → Dao 방향으로만 호출한다. 요청/응답 변환과 비즈니스 규칙의 책임이 섞이지 않도록 분리한다.
+- Comp는 조회성 Dao를 직접 호출할 수 있으나, 쓰기 트랜잭션은 반드시 TxComp를 경유한다. 기존 코드에 Comp 직접 `@Transactional` 선언이 남아 있더라도 미준수 레거시로 보고, 신규/수정 코드에서는 TxComp로 이동한다.
+- TxComp는 Dao를 직접 주입받아 사용한다. (Spring DI 기준) 트랜잭션 경계 안에서 DB 변경을 한곳에 모으기 위함이다.
 
 ## 3. 공통 예외 클래스
 
 | 예외 | 의미 |
 |---|---|
-| `ZinBadRequestException` | 요청 파라미터 오류 (필수값 누락, 형식 오류) |
+| `ZinBadRequestException` | 잘못된 요청 데이터 |
+| `ZinRequestParamValidException` | 요청 파라미터 검증 실패 |
 | `ZinExistDataException` | 중복 데이터 존재 |
-| `AlreadyProcessException` | 이미 처리된 건 / 대상 없음 |
-| `NotMeetConditionsException` | 업무 조건 미충족 (예: 사용 센터 0개) |
+| `ZinNotFoundException` | 조회 결과 없음 / 처리 대상 없음 |
+| `AlreadyProcessException` | 상태 불일치, 이미 처리됨 |
+| `NotMeetConditionsException` | 업무 조건 미충족 |
 | `ResponseErrorException` | 시스템 오류 |
+
+> 출처: `../cloud-wms-be/src/main/java/fw/exception/warn/*.java`, `../cloud-wms-be/src/main/java/fw/exception/ResponseErrorException.java`
 
 ## 4. 공통 응답 패턴
 
 | 응답 필드 | 사용 시점 |
 |---|---|
-| `procCnt` | 단건 저장·수정·삭제 응답 |
-| `succeed` | 복수 건 일괄 저장 응답 |
+| `procCnt` | 저장·수정·삭제 처리 건수 |
+| `succeed` | 성공/실패 여부 |
+| `swalTitle`, `swalText`, `swalType` | 화면 메시지 표시용 공통 필드 |
 | 데이터 키 (예: `biz`, `bizCenter`, `bizList`) | 조회 응답 |
+
+> 출처: `../cloud-wms-be/src/main/java/fw/bean/ResponseData.java`
