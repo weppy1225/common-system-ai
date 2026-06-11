@@ -1,14 +1,10 @@
 ---
 description: SIF 외부연동(ERP/OMS/WES/DLV) 코드 작성·수정 시 적용. sif/ 하위 E2W(수신)·W2E(송신) 개발, Retrofit2 API 인터페이스, SIF 전용 예외, sif_* 이력 테이블 처리 패턴을 정의한다.
-globs: ["**/sif/**"]
-alwaysApply: false
+paths:
+  - "**/sif/**"
 ---
 
 # WMS SIF 외부연동 컨벤션 (ERP/OMS/WES/DLV)
-
-`sif/` 하위 코드 작성·수정, E2W(수신)/W2E(송신) 개발, Retrofit2 API 인터페이스 구성 시 반드시 참조한다.
-
----
 
 ## 참조 문서
 

@@ -1,6 +1,9 @@
 ---
 name: PI_time_reg
-description: 레드마인 이슈 작업시간(hours) 등록. "작업시간 등록해줘", "레드마인 공수 4시간 등록", "#16129 1.5시간 등록해줘" 요청 시 사용. /PI_time_reg {이슈번호} {시간} {작업내역}
+description: 레드마인 이슈 작업시간(hours) 등록. /PI_time_reg {이슈번호} {시간} {작업내역}
+when_to_use: "작업시간 등록해줘", "레드마인 공수 4시간 등록", "#16129 1.5시간 등록해줘" 요청 시 사용.
+argument-hint: "[이슈번호] [시간] [작업내역]"
+disable-model-invocation: true
 allowed-tools: AskUserQuestion, mcp__redmine__createTimeEntry
 ---
 

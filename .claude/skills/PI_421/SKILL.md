@@ -1,6 +1,9 @@
 ---
 name: PI_421
-description: 단위테스트보고서 엑셀 생성 (JUnit @Test 스캔, Java/Kotlin, Windows/WSL/Linux 자동 감지). "단위테스트보고서 만들어줘", "JUnit 테스트 정리해줘", "단위테스트 산출물 뽑아줘" 요청 시 사용. /PI_421
+description: 단위테스트보고서 엑셀 생성 (JUnit @Test 스캔, Java/Kotlin, Windows/WSL/Linux 자동 감지). /PI_421
+when_to_use: "단위테스트보고서 만들어줘", "JUnit 테스트 정리해줘", "단위테스트 산출물 뽑아줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

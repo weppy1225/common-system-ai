@@ -1,6 +1,9 @@
 ---
 name: deploy
-description: 50-prototype/ + 30-domain/ 산출물을 zinDev FTP 서버에 배포. "배포해줘", "FTP 올려줘", "화면 올려줘", "메뉴 배포해줘" 요청 시 사용. /deploy [{메뉴코드}]
+description: 50-prototype/ + 30-domain/ 산출물을 zinDev FTP 서버에 배포. /deploy [{메뉴코드}]
+when_to_use: "배포해줘", "FTP 올려줘", "화면 올려줘", "메뉴 배포해줘" 요청 시 사용.
+argument-hint: "[메뉴코드(선택)]"
+disable-model-invocation: true
 allowed-tools: Bash, Read, AskUserQuestion
 ---
 

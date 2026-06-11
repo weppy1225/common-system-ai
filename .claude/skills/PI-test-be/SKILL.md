@@ -1,7 +1,10 @@
 ---
 name: PI-test-be
-description: BE JUnit 단위테스트 + Bruno CLI API 테스트 실행 (Windows/WSL/Linux 자동 감지). "BE 테스트 실행해줘", "JUnit 테스트 돌려줘", "단위테스트 실행해줘", "Bruno 테스트 실행해줘" 요청 시 사용. /PI-test-be {메뉴코드}
+description: BE JUnit 단위테스트 + Bruno CLI API 테스트 실행 (Windows/WSL/Linux 자동 감지). /PI-test-be {메뉴코드}
+when_to_use: "BE 테스트 실행해줘", "JUnit 테스트 돌려줘", "단위테스트 실행해줘", "Bruno 테스트 실행해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
+disable-model-invocation: true
 allowed-tools: Read, Bash, Glob
 model: claude-sonnet-4-6
 ---

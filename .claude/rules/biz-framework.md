@@ -1,21 +1,10 @@
 ---
 description: 재고 증감(InvenManager iw/ow/im/ad/rt)·문서번호 채번(DocNoGenerator) 코드 작성 시 적용. 입고/출고/반품/이동/조정 확정, wms_inven* 처리, 출고예약·대기재고 로직을 TxComp 에서 구현할 때 참조한다.
-globs: ["**/*TxComp.java"]
-alwaysApply: false
+paths:
+  - "**/*TxComp.java"
 ---
 
 # WMS 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
-
-InvenManager / DocNoGenerator 호출 코드 작성 시, 재고 증감·문서번호 채번이 필요한 TxComp 작성 시 반드시 참조한다.
-
----
-
-## 적용 시점
-
-- `/PI-be-inven`, `/PI-be-all`, `/PI-be-comp` 실행 시 (입출고·재고 확정/취소 포함)
-- TxComp에서 `wms_inven*` 테이블 관련 비즈니스 작성 시
-- 입고/출고/반품/이동/조정 문서번호 채번이 필요한 경우
-- 출고 예약(Hold/HoldCancel), 대기재고(PROC_WAIT) 처리 시
 
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: SD_312
-description: ui.md → PDA 모바일 프로토타입 HTML 생성 + 메뉴 자동 등록. "PDA 화면 만들어줘", "PDA 프로토타입 생성해줘", "모바일 화면 생성해줘" 요청 시 사용. /SD_312 {메뉴코드}
+description: ui.md → PDA 모바일 프로토타입 HTML 생성 + 메뉴 자동 등록. /SD_312 {메뉴코드}
+when_to_use: "PDA 화면 만들어줘", "PDA 프로토타입 생성해줘", "모바일 화면 생성해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 allowed-tools: Bash, Read, Write, Edit
 ---
 

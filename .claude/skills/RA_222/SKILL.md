@@ -1,6 +1,9 @@
 ---
 name: RA_222
-description: 회의록 엑셀 분석 → 요구사항정의서 엑셀 자동 생성 (Windows/WSL/Linux 자동 감지). "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘", "요구사항정의서 만들어줘" 요청 시 사용. /RA_222 {고객사명}
+description: 회의록 엑셀 분석 → 요구사항정의서 엑셀 자동 생성 (Windows/WSL/Linux 자동 감지). /RA_222 {고객사명}
+when_to_use: "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘", "요구사항정의서 만들어줘" 요청 시 사용.
+argument-hint: "[고객사명]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 ---
 

@@ -1,7 +1,9 @@
 ---
 name: PI-test-fe
-description: FE npm run test:unit 실행, 실패 시 원인 분석 (Windows/WSL/Linux 자동 감지). "FE 테스트 실행해줘", "unit test 돌려줘", "vitest 실행해줘" 요청 시 사용. /PI-test-fe
+description: FE npm run test:unit 실행, 실패 시 원인 분석 (Windows/WSL/Linux 자동 감지). /PI-test-fe
+when_to_use: "FE 테스트 실행해줘", "unit test 돌려줘", "vitest 실행해줘" 요청 시 사용.
 user-invocable: true
+disable-model-invocation: true
 allowed-tools: Read, Bash, Grep
 model: claude-sonnet-4-6
 ---

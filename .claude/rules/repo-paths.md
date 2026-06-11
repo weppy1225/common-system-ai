@@ -5,8 +5,6 @@ status: active
 version: 1.0.0
 wms_meta: true
 project: wms-{code}-ai
-applies_to:
-  - .claude/skills/**/SKILL.md
 agent_usage: rule
 tags:
   - workspace

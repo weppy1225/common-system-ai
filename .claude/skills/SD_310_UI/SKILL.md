@@ -1,6 +1,8 @@
 ---
 name: SD_310_UI
-description: 대화형 인터뷰로 화면요건 문서(ui.md) 작성. "ui.md 만들어줘", "화면요건 작성", "화면설계 요건 정리", "ui 스펙 만들어줘" 요청 시 사용. /SD_310_UI {메뉴코드}
+description: 대화형 인터뷰로 화면요건 문서(ui.md) 작성. /SD_310_UI {메뉴코드}
+when_to_use: "ui.md 만들어줘", "화면요건 작성", "화면설계 요건 정리", "ui 스펙 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 allowed-tools: Bash, Read, Write
 ---
 # 화면요건 문서 대화형 작성 [SD_310_UI]

@@ -1,6 +1,8 @@
 ---
 name: PI-fe-edit
-description: FE 등록·수정 팝업({메뉴코드}Edt.vue)만 생성. "FE 팝업 만들어줘", "등록 팝업 개발해줘", "수정 팝업 만들어줘", "Edt.vue 만들어줘" 요청 시 사용. /PI-fe-edit {메뉴코드}
+description: FE 등록·수정 팝업({메뉴코드}Edt.vue)만 생성. /PI-fe-edit {메뉴코드}
+when_to_use: "FE 팝업 만들어줘", "등록 팝업 개발해줘", "수정 팝업 만들어줘", "Edt.vue 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

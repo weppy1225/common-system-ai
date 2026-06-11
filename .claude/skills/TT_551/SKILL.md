@@ -1,6 +1,9 @@
 ---
 name: TT_551
-description: input/TT.551/ 폴더의 PowerShell 마이그레이션 스크립트 실행 (V0~V10 또는 all). "DB 이관 스크립트 실행해줘", "이관 실행 V3", "전체 이관 실행", "migrate all 실행" 요청 시 사용. /TT_551 [V번호|all]
+description: input/TT.551/ 폴더의 PowerShell 마이그레이션 스크립트 실행 (V0~V10 또는 all). /TT_551 [V번호|all]
+when_to_use: "DB 이관 스크립트 실행해줘", "이관 실행 V3", "전체 이관 실행", "migrate all 실행" 요청 시 사용.
+argument-hint: "[V번호|all]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell
 ---
 

@@ -1,12 +1,10 @@
 ---
 description: 검색 결과 데이터 그리드(Data Grid) 영역 HTML 작성 시 적용. 헤더·셀·컬럼 너비·정렬·페이징·스크롤·다중 패널 높이 제어 규칙을 정의한다.
-globs: ["**/*.html"]
-alwaysApply: false
+paths:
+  - "**/*.html"
 ---
 
 # 결과 그리드 영역 규칙
-
-검색 결과가 출력되는 데이터 그리드(Data Grid) 영역에 적용되는 규칙이다.
 
 ---
 

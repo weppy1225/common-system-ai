@@ -1,7 +1,9 @@
 ---
 name: TT_542
-description: PDA 사용자매뉴얼 PPTX 생성 (Playwright 모바일 390×844 화면 캡처, python-pptx). "PDA 사용자매뉴얼 만들어줘", "모바일 매뉴얼 PPT 뽑아줘", "PDA 화면 캡처해서 PPT 만들어줘" 요청 시 사용. /TT_542
-type: skill
+description: PDA 사용자매뉴얼 PPTX 생성 (Playwright 모바일 390×844 화면 캡처, python-pptx). /TT_542
+when_to_use: "PDA 사용자매뉴얼 만들어줘", "모바일 매뉴얼 PPT 뽑아줘", "PDA 화면 캡처해서 PPT 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

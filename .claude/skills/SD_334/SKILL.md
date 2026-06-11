@@ -1,6 +1,8 @@
 ---
 name: SD_334
-description: 실DB 접속 → ERD 뷰어 HTML 생성·갱신 (PostgreSQL, Windows/WSL/Linux 자동 감지). "DB 관계도 만들어줘", "ERD 뽑아줘", "ERD 갱신해줘", "ERD 뷰어 만들어줘" 요청 시 사용. /SD_334
+description: 실DB 접속 → ERD 뷰어 HTML 생성·갱신 (PostgreSQL, Windows/WSL/Linux 자동 감지). /SD_334
+when_to_use: "DB 관계도 만들어줘", "ERD 뽑아줘", "ERD 갱신해줘", "ERD 뷰어 만들어줘" 요청 시 사용.
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

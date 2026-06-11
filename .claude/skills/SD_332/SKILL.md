@@ -1,6 +1,9 @@
 ---
 name: SD_332
-description: 실DB 접속 → 공통코드정의서 엑셀 생성 (sm_comm_h/sm_comm_d, Windows/WSL/Linux 자동 감지). "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "공통코드 테일러링 해줘" 요청 시 사용. /SD_332 {디렉토리경로}
+description: 실DB 접속 → 공통코드정의서 엑셀 생성 (sm_comm_h/sm_comm_d, Windows/WSL/Linux 자동 감지). /SD_332 {디렉토리경로}
+when_to_use: "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "공통코드 테일러링 해줘" 요청 시 사용.
+argument-hint: "[디렉토리경로]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

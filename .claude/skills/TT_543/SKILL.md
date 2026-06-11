@@ -1,7 +1,9 @@
 ---
 name: TT_543
-description: 관리자매뉴얼 PPTX 생성 (관리자 메뉴 자동 탐지 + Playwright 화면 캡처, python-pptx). "관리자매뉴얼 만들어줘", "운영자 매뉴얼 PPT 뽑아줘", "운영자 화면 캡처해서 PPT 만들어줘" 요청 시 사용. /TT_543
-type: skill
+description: 관리자매뉴얼 PPTX 생성 (관리자 메뉴 자동 탐지 + Playwright 화면 캡처, python-pptx). /TT_543
+when_to_use: "관리자매뉴얼 만들어줘", "운영자 매뉴얼 PPT 뽑아줘", "운영자 화면 캡처해서 PPT 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

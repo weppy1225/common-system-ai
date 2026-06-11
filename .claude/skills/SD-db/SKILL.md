@@ -1,6 +1,8 @@
 ---
 name: SD-db
-description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용. /SD-db {메뉴코드}
+description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. /SD-db {메뉴코드}
+when_to_use: "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep, Bash
 model: claude-opus-4-7

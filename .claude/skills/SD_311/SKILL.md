@@ -1,6 +1,8 @@
 ---
 name: SD_311
-description: ui.md → 프로토타입 HTML(wireframe.html + mock-data.js) 생성 + 메뉴 자동 등록. "화면 만들어줘", "프로토타입 생성해줘", "wireframe 만들어줘", "화면 뽑아줘" 요청 시 사용. /SD_311 {메뉴코드}
+description: ui.md → 프로토타입 HTML(wireframe.html + mock-data.js) 생성 + 메뉴 자동 등록. /SD_311 {메뉴코드}
+when_to_use: "화면 만들어줘", "프로토타입 생성해줘", "wireframe 만들어줘", "화면 뽑아줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 allowed-tools: Bash, Read, Write, Edit
 ---
 

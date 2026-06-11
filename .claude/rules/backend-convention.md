@@ -1,22 +1,14 @@
 ---
 description: WMS 백엔드 레이어(Controller·Comp·TxComp·Dao·CompUtil) 및 VO·DTO·Bean 코드 작성·수정 시 적용. 패키지구조·어노테이션·네이밍·예외처리·ResponseData·@Transactional 배치·금지패턴을 정의한다.
-globs: ["**/*Controller.java", "**/*Comp.java", "**/*TxComp.java", "**/*Dao.java", "**/*CompUtil.java"]
-alwaysApply: false
+paths:
+  - "**/*Controller.java"
+  - "**/*Comp.java"
+  - "**/*TxComp.java"
+  - "**/*Dao.java"
+  - "**/*CompUtil.java"
 ---
 
 # WMS 백엔드 코딩 컨벤션
-
-Controller·Comp·TxComp·Dao·CompUtil / VO·DTO·Bean 코드 작성·수정 시 반드시 참조한다.
-
----
-
-## 적용 시점
-
-- `/PI-be-all`, `/PI-be-mapper`, `/PI-be-dao`, `/PI-be-comp`, `/PI-be-excel`, `/PI-be-inven` 실행 시
-- 기존 Controller/Comp/TxComp/Dao/CompUtil 파일 수정 요청 시
-- 신규 DTO·VO·Bean 작성 시 (Lombok / Audit 필드 패턴 필요)
-- 예외 throw 패턴, `ResponseData` 구성이 필요한 순간
-- `@Transactional` 레이어 배치(특히 TxComp vs Comp) 판단 필요 시
 
 ---
 

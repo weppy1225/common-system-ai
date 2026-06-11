@@ -1,22 +1,11 @@
 ---
 description: MyBatis Mapper.xml·Mapper.java 작성·수정 시 적용. SELECT/INSERT/UPDATE/DELETE 쿼리, 동적 SQL(where·if·foreach), 페이징, LIKE 검색(FN_CONCAT), 소프트삭제, Audit 컬럼, NEXTVAL 채번 패턴을 정의한다.
-globs: ["**/*Mapper.xml", "**/*Mapper.java"]
-alwaysApply: false
+paths:
+  - "**/*Mapper.xml"
+  - "**/*Mapper.java"
 ---
 
 # WMS MyBatis XML 쿼리 작성 컨벤션
-
-Mapper.xml / Mapper.java 작성·수정 시 반드시 참조한다.
-
----
-
-## 적용 시점
-
-- `/PI-be-mapper`, `/PI-be-all` 실행 시
-- 신규 Mapper.xml 작성, 기존 쿼리 수정·리팩터링 시
-- 동적 SQL (`<where>`, `<if>`, `<foreach>`) 작성 시
-- 페이징/LIKE 검색/소프트 삭제 쿼리 작성 시
-- PK 채번(`NEXTVAL`), `<selectKey>` 사용 판단 시
 
 ---
 

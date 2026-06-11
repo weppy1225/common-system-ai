@@ -1,6 +1,8 @@
 ---
 name: SD-db-apply
-description: db.md의 DDL을 psql로 test/dev DB에 반영 (Windows/WSL/Linux 자동 감지). "DB 반영해줘", "DDL 실행해줘", "db.md DDL 적용해줘" 요청 시 사용. /SD-db-apply {메뉴코드}
+description: db.md의 DDL을 psql로 test/dev DB에 반영 (Windows/WSL/Linux 자동 감지). /SD-db-apply {메뉴코드}
+when_to_use: "DB 반영해줘", "DDL 실행해줘", "db.md DDL 적용해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

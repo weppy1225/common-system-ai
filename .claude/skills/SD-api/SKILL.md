@@ -1,6 +1,8 @@
 ---
 name: SD-api
-description: 화면설계·DB 기반 api.md(API 설계+기능명세) 작성. /SD-db 완료 후 실행. "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "design-spec 실행해줘" 요청 시 사용. /SD-api {메뉴코드}
+description: 화면설계·DB 기반 api.md(API 설계+기능명세) 작성. /SD-db 완료 후 실행. /SD-api {메뉴코드}
+when_to_use: "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "design-spec 실행해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep
 model: claude-opus-4-7

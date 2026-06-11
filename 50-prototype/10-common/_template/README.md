@@ -1,3 +1,13 @@
+---
+title: HTML 스켈레톤 템플릿
+description: /ui 명령으로 HTML 화면 스켈레톤을 만들 때 사용할 템플릿 종류와 플레이스홀더 치환 규칙을 안내하는 문서.
+status: active
+version: 1.0.0
+wms_meta: true
+project: cloud-wms-doc
+agent_usage: reference
+---
+
 # HTML 스켈레톤 템플릿
 
 `/ui` 명령은 UI유형에 따라 아래 템플릿을 복사한 뒤 플레이스홀더를 치환한다.

@@ -1,4 +1,4 @@
-﻿---
+---
 title: 컬럼 용어 사전
 description: WMS DB 컬럼명에 대한 한글 설명을 찾아볼 때 읽는다
 status: active

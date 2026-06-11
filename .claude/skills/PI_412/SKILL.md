@@ -1,6 +1,9 @@
 ---
 name: PI_412
-description: 프로그램 목록 엑셀 생성 (BE Controller + FE Component 자동 스캔). "프로그램 목록 만들어줘", "프로그램목록 엑셀 뽑아줘", "API 목록 정리해줘", "컴포넌트 목록 추출해줘" 요청 시 사용. /PI_412
+description: 프로그램 목록 엑셀 생성 (BE Controller + FE Component 자동 스캔). /PI_412
+when_to_use: "프로그램 목록 만들어줘", "프로그램목록 엑셀 뽑아줘", "API 목록 정리해줘", "컴포넌트 목록 추출해줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: PI_422
-description: 통합테스트보고서 엑셀 생성 (ui.md 스캔→시나리오 자동 생성, Windows/WSL/Linux 자동 감지). "통합테스트보고서 만들어줘", "통합테스트 산출물 만들어줘", "통합테스트 시나리오 정리" 요청 시 사용. /PI_422
+description: 통합테스트보고서 엑셀 생성 (ui.md 스캔→시나리오 자동 생성, Windows/WSL/Linux 자동 감지). /PI_422
+when_to_use: "통합테스트보고서 만들어줘", "통합테스트 산출물 만들어줘", "통합테스트 시나리오 정리" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

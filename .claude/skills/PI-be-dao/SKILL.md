@@ -1,6 +1,8 @@
 ---
 name: PI-be-dao
-description: BE Dao 레이어 개발 (Mapper 위임·조합 + JUnit 검증). Mapper 완료 후 실행. "Dao 만들어줘", "Dao 레이어 개발해줘", "DAO 클래스 만들어줘" 요청 시 사용. /PI-be-dao {메뉴코드}
+description: BE Dao 레이어 개발 (Mapper 위임·조합 + JUnit 검증). Mapper 완료 후 실행. /PI-be-dao {메뉴코드}
+when_to_use: "Dao 만들어줘", "Dao 레이어 개발해줘", "DAO 클래스 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

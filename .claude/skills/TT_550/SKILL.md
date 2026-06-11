@@ -1,6 +1,8 @@
 ---
 name: TT_550
-description: @migrate: 마커 테이블 → DB 이관용 INSERT SQL 파일 생성 (PostgreSQL, Windows/WSL/Linux 자동 감지). "DB 이관 SQL 만들어줘", "공통코드 데이터 dump 떠줘", "마스터 데이터 INSERT 스크립트" 요청 시 사용. /TT_550
+description: @migrate: 마커 테이블 → DB 이관용 INSERT SQL 파일 생성 (PostgreSQL, Windows/WSL/Linux 자동 감지). /TT_550
+when_to_use: "DB 이관 SQL 만들어줘", "공통코드 데이터 dump 떠줘", "마스터 데이터 INSERT 스크립트" 요청 시 사용.
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

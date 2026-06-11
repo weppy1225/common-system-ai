@@ -1,6 +1,8 @@
 ---
 name: PI-fe-list
-description: FE 검색·목록 화면({메뉴코드}.vue)만 생성. "FE 목록 화면 만들어줘", "검색 그리드 개발해줘", "목록 vue 만들어줘" 요청 시 사용. /PI-fe-list {메뉴코드}
+description: FE 검색·목록 화면({메뉴코드}.vue)만 생성. /PI-fe-list {메뉴코드}
+when_to_use: "FE 목록 화면 만들어줘", "검색 그리드 개발해줘", "목록 vue 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

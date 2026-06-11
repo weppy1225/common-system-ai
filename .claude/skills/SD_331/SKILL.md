@@ -1,6 +1,9 @@
 ---
 name: SD_331
-description: 실DB 접속 → 테이블정의서 엑셀 생성 (PostgreSQL/MySQL/MSSQL/Oracle, Windows/WSL/Linux 자동 감지). "DB에서 직접 테이블정의서 뽑아줘", "라이브 DB 스키마 엑셀로", "운영 DB 접속해서 테이블 명세서" 요청 시 사용. /SD_331 {디렉토리경로}
+description: 실DB 접속 → 테이블정의서 엑셀 생성 (PostgreSQL/MySQL/MSSQL/Oracle, Windows/WSL/Linux 자동 감지). /SD_331 {디렉토리경로}
+when_to_use: "DB에서 직접 테이블정의서 뽑아줘", "라이브 DB 스키마 엑셀로", "운영 DB 접속해서 테이블 명세서" 요청 시 사용.
+argument-hint: "[디렉토리경로]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

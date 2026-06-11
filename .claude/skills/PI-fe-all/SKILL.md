@@ -1,6 +1,8 @@
 ---
 name: PI-fe-all
-description: FE 목록 화면 + 등록/수정 팝업 전체 생성 ({메뉴코드}.vue + {메뉴코드}Edt.vue). "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "FE 화면 처음부터 만들어줘" 요청 시 사용. /PI-fe-all {메뉴코드}
+description: FE 목록 화면 + 등록/수정 팝업 전체 생성 ({메뉴코드}.vue + {메뉴코드}Edt.vue). /PI-fe-all {메뉴코드}
+when_to_use: "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "FE 화면 처음부터 만들어줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6

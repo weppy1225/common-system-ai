@@ -1,6 +1,9 @@
 ---
 name: PI_issue_mod
-description: 레드마인 이슈 진행율(done_ratio) + 작업이력(notes) 업데이트. "이슈 진행율 업데이트해줘", "레드마인 작업 코멘트 추가", "이슈 #123 진행율 80으로 바꿔줘" 요청 시 사용. /PI_issue_mod {이슈번호} {진행율} {작업내역}
+description: 레드마인 이슈 진행율(done_ratio) + 작업이력(notes) 업데이트. /PI_issue_mod {이슈번호} {진행율} {작업내역}
+when_to_use: "이슈 진행율 업데이트해줘", "레드마인 작업 코멘트 추가", "이슈 #123 진행율 80으로 바꿔줘" 요청 시 사용.
+argument-hint: "[이슈번호] [진행율] [작업내역]"
+disable-model-invocation: true
 allowed-tools: AskUserQuestion, mcp__redmine__updateIssue
 ---
 

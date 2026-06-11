@@ -1,6 +1,8 @@
 ---
 name: SD_333
-description: 실DB 접속 → DDL SQL 파일 생성 (PostgreSQL, pg_catalog 기반, Windows/WSL/Linux 자동 감지). "DDL 뽑아줘", "DB 스키마 SQL로 추출", "CREATE TABLE 스크립트 만들어줘" 요청 시 사용. /SD_333
+description: 실DB 접속 → DDL SQL 파일 생성 (PostgreSQL, pg_catalog 기반, Windows/WSL/Linux 자동 감지). /SD_333
+when_to_use: "DDL 뽑아줘", "DB 스키마 SQL로 추출", "CREATE TABLE 스크립트 만들어줘" 요청 시 사용.
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

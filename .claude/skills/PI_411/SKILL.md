@@ -1,6 +1,9 @@
 ---
 name: PI_411
-description: 프로그램 소스 ZIP 생성 (git archive, Windows/WSL/Linux 자동 감지). "소스 ZIP 만들어줘", "프로그램 소스 압축해줘", "고객 인계용 소스 압축", "산출물용 소스 zip 뽑아줘" 요청 시 사용. /PI_411
+description: 프로그램 소스 ZIP 생성 (git archive, Windows/WSL/Linux 자동 감지). /PI_411
+when_to_use: "소스 ZIP 만들어줘", "프로그램 소스 압축해줘", "고객 인계용 소스 압축", "산출물용 소스 zip 뽑아줘" 요청 시 사용.
+argument-hint: "[메뉴코드]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, AskUserQuestion
 ---
 

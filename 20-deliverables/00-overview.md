@@ -1,4 +1,4 @@
-﻿---
+---
 title: 20-deliverables 산출물 관리
 description: 프로젝트 산출물 템플릿(10-templates)·원천자료(20-sources)·생성 결과물(30-output)을 단계별로 관리
 status: active
