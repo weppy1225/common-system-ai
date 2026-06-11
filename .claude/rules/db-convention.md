@@ -18,11 +18,11 @@ Mapper.xml / Mapper.java 작성·수정 시 반드시 참조한다.
 
 | 주제 | 문서 |
 |---|---|
-| Mapper.java 시그니처·`@Param` | `DEV_DOC/ai-docs/20-backend/40-guide/04-mapper-writing-rules.md` |
-| Mapper.xml 쿼리 패턴 (SELECT/INSERT/UPDATE/DELETE·페이징·동적 SQL) | `DEV_DOC/ai-docs/20-backend/40-guide/05-mapper-xml-writing-rules.md` |
-| Dao의 Mapper 위임 | `DEV_DOC/ai-docs/20-backend/40-guide/03-dao-writing-rules.md` |
-| 테이블·컬럼 정의 | `DEV_DOC/ai-docs/10-database/00-database-overview.md` |
-| 공통코드(`_cd`) 값 | `DEV_DOC/ai-docs/10-database/90-schema/30-data/01-common-code.md` |
+| Mapper.java 시그니처·`@Param` | `10-src-pattern/30-backend/40-guide/04-mapper-writing-rules.md` |
+| Mapper.xml 쿼리 패턴 (SELECT/INSERT/UPDATE/DELETE·페이징·동적 SQL) | `10-src-pattern/30-backend/40-guide/05-mapper-xml-writing-rules.md` |
+| Dao의 Mapper 위임 | `10-src-pattern/30-backend/40-guide/03-dao-writing-rules.md` |
+| 테이블·컬럼 정의 | `10-src-pattern/20-database/00-overview.md` |
+| 공통코드(`_cd`) 값 | `10-src-pattern/20-database/40-schema/90-common-code.md` |
 
 ---
 
@@ -52,7 +52,7 @@ Mapper.xml / Mapper.java 작성·수정 시 반드시 참조한다.
 
 **INSERT**
 - Audit 컬럼: `reg_id = #{regId}, reg_dt = NOW()`
-- PK 채번: `NEXTVAL('{테이블명}_seq')` — 실제 시퀀스명은 `90-schema/20-tables/` 문서에서 확인
+- PK 채번: `NEXTVAL('{테이블명}_seq')` — 실제 시퀀스명은 psql `\d {테이블명}` 직접 조회
 
 **UPDATE**
 - Audit 컬럼: `mod_id = #{modId}, mod_dt = NOW()`

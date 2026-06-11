@@ -8,11 +8,11 @@
 
 | 주제 | 문서 |
 |---|---|
-| IF 연동 규칙 개요 | `DEV_DOC/ai-docs/30-interface/20-rule/00-interface-rule-overview.md` |
-| E2W(ERP→WMS) 컨벤션 | `DEV_DOC/ai-docs/30-interface/30-convention/02-erp-to-wms-convention.md` |
-| 현재 IF 명세 | `DEV_DOC/ai-docs/30-interface/80-spec/{IF폴더}/design-spec.md` |
-| `sif_*` 테이블 스키마 | `DEV_DOC/ai-docs/10-database/00-database-overview.md` |
-| TxComp 기본 패턴 | `DEV_DOC/ai-docs/20-backend/40-guide/08-txcomp-writing-rules.md` |
+| IF 연동 규칙 개요 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| E2W(ERP→WMS) 컨벤션 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| 현재 IF 명세 | `30-domain/{메뉴코드}/{메뉴코드}-05-api.md` |
+| `sif_*` 테이블 스키마 | `10-src-pattern/20-database/00-overview.md` |
+| TxComp 기본 패턴 | `10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md` |
 
 ---
 

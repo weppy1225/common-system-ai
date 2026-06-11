@@ -17,10 +17,10 @@ InvenManager / DocNoGenerator 호출 코드 작성 시, 재고 증감·문서번
 
 | 주제 | 문서 | 적용 레이어 |
 |---|---|---|
-| TxComp 작성 (InvenManager 호출 위치) | `DEV_DOC/ai-docs/20-backend/40-guide/08-txcomp-writing-rules.md` | TxComp |
-| Comp 작성 (DocNoGenerator 단건 호출) | `DEV_DOC/ai-docs/20-backend/40-guide/06-comp-writing-rules.md` | Comp |
-| CompUtil — 재고 DTO 초기화 | `DEV_DOC/ai-docs/20-backend/40-guide/07-computil-writing-rules.md` | CompUtil |
-| 재고 테이블 스키마 | `DEV_DOC/ai-docs/10-database/90-schema/20-tables/wms_inven*.md` | DB 문서 |
+| TxComp 작성 (InvenManager 호출 위치) | `10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md` | TxComp |
+| Comp 작성 (DocNoGenerator 단건 호출) | `10-src-pattern/30-backend/40-guide/06-comp-writing-rules.md` | Comp |
+| CompUtil — 재고 DTO 초기화 | `10-src-pattern/30-backend/40-guide/07-computil-writing-rules.md` | CompUtil |
+| 재고 테이블 스키마 | psql `\d {테이블명}` 직접 조회 | DB 문서 |
 
 ---
 

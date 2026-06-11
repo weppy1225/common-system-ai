@@ -10,4 +10,7 @@ agent_usage: reference
 
 # 10-src-pattern
 
-현재 정의 중
+| 문서 | 설명 |
+|---|---|
+| [ai-dev-procedure.md](./ai-dev-procedure.md) | AI 개발 절차 (BE/FE 코드 개발 → 단위테스트 → 기동/목업 → 통합테스트) |
+| [30-backend/be-layer-pattern.md](./30-backend/be-layer-pattern.md) | BE 레이어 구조·호출 원칙·예외 클래스 |
