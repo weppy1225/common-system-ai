@@ -1,3 +1,9 @@
+---
+description: MyBatis Mapper.xml·Mapper.java 작성·수정 시 적용. SELECT/INSERT/UPDATE/DELETE 쿼리, 동적 SQL(where·if·foreach), 페이징, LIKE 검색(FN_CONCAT), 소프트삭제, Audit 컬럼, NEXTVAL 채번 패턴을 정의한다.
+globs: ["**/*Mapper.xml", "**/*Mapper.java"]
+alwaysApply: false
+---
+
 # WMS MyBatis XML 쿼리 작성 컨벤션
 
 Mapper.xml / Mapper.java 작성·수정 시 반드시 참조한다.

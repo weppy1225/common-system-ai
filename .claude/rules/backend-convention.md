@@ -1,3 +1,9 @@
+---
+description: WMS 백엔드 레이어(Controller·Comp·TxComp·Dao·CompUtil) 및 VO·DTO·Bean 코드 작성·수정 시 적용. 패키지구조·어노테이션·네이밍·예외처리·ResponseData·@Transactional 배치·금지패턴을 정의한다.
+globs: ["**/*Controller.java", "**/*Comp.java", "**/*TxComp.java", "**/*Dao.java", "**/*CompUtil.java"]
+alwaysApply: false
+---
+
 # WMS 백엔드 코딩 컨벤션
 
 Controller·Comp·TxComp·Dao·CompUtil / VO·DTO·Bean 코드 작성·수정 시 반드시 참조한다.

@@ -1,3 +1,9 @@
+---
+description: 재고 증감(InvenManager iw/ow/im/ad/rt)·문서번호 채번(DocNoGenerator) 코드 작성 시 적용. 입고/출고/반품/이동/조정 확정, wms_inven* 처리, 출고예약·대기재고 로직을 TxComp 에서 구현할 때 참조한다.
+globs: ["**/*TxComp.java"]
+alwaysApply: false
+---
+
 # WMS 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
 
 InvenManager / DocNoGenerator 호출 코드 작성 시, 재고 증감·문서번호 채번이 필요한 TxComp 작성 시 반드시 참조한다.
