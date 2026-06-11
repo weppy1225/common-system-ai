@@ -54,3 +54,9 @@ alwaysApply: false
 - 기본 버튼 호버: `border-color: #9ca3af; background: #f9fafb; color: #111827`.
 - 보조 버튼(`.btn-aux`) 스타일: `color: #6b7280; font-weight: 400`, 호버 시 `color: #374151; background: #f9fafb`.
 - 강조 버튼(`.btn-primary`) 스타일: `background: #304a6e; border-color: #304a6e; color: #fff`, 호버 시 `background: #263858; border-color: #263858`.
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (기능 버튼 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

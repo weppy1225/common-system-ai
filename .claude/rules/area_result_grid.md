@@ -236,3 +236,9 @@ page-wrap (height: 100vh, overflow: hidden)
 .h-scroll-wrap { flex-shrink: 0; height: 12px; }
 .grid-footer   { flex-shrink: 0; height: 40px; }
 ```
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (결과 그리드 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

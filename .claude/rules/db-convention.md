@@ -23,6 +23,7 @@ Mapper.xml / Mapper.java 작성·수정 시 반드시 참조한다.
 | Dao의 Mapper 위임 | `10-src-pattern/30-backend/40-guide/03-dao-writing-rules.md` |
 | 테이블·컬럼 정의 | `10-src-pattern/20-database/00-overview.md` |
 | 공통코드(`_cd`) 값 | `10-src-pattern/20-database/40-schema/90-common-code.md` |
+| Mapper.java 시그니처·패턴·Dao 레이어 전체 구현 예제 | `10-src-pattern/20-database/30-convention/02-mybatis-convention.md` |
 
 ---
 
@@ -90,3 +91,13 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 
 `wms_inven`, `wms_inven_hold`, `wms_inven_inout` 직접 INSERT/UPDATE/DELETE 금지.
 → **InvenManager 경유**. 판단 기준·메서드는 `biz-framework.md` 참조.
+
+---
+
+## 상세 패턴 문서
+
+Mapper.java 인터페이스, Mapper.xml 전체 구현 패턴, Dao 레이어, 동적 SQL 예제:
+→ `10-src-pattern/20-database/30-convention/02-mybatis-convention.md`
+
+SQL 텍스트 서식 (들여쓰기·anchor 규칙):
+→ `10-src-pattern/20-database/30-convention/01-sql-query-style.md`

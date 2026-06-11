@@ -15,35 +15,15 @@ WMS AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스
 ```
 cloud-wms-doc\
 ├── .claude\
-│   ├── skills\                 # Claude Code 슬래시 커맨드 스킬 위치
-│   └── rules\                  # 항상 적용되는 UI·문서 규칙
-│
-├── 00-overview.md              # 전체 진입점 인덱스
-│
-├── 10-src-pattern\             # 소스코드 패턴 표준화 (화면설계·DB·BE·FE 패턴)
-│
-├── 20-deliverables\            # 산출물 표준화
-│   ├── 10-templates\           # 산출물 양식·예시
-│   ├── 20-sources\             # 원천자료 (회의록·화면캡처·고객 제공자료)
-│   └── 30-output\              # 스킬 생성 결과물 (고객 제출)
-│
-├── 30-domain\                  # 메뉴별 지식베이스 (화면요건·프로토타입·설계·API·흐름)
-│   └── {메뉴코드}\
-│       ├── {메뉴코드}-01-basic-design.md
-│       ├── {메뉴코드}-02-ui.md            # 화면요건 (SD_310_UI 산출물)
-│       ├── {메뉴코드}-02-wireframe.html   # 프로토타입 HTML (SD_311 산출물)
-│       ├── {메뉴코드}-02-mock-data.js     # 테스트 데이터 (SD_311 산출물)
-│       ├── {메뉴코드}-03-data-model.md
-│       ├── {메뉴코드}-04-be-mapper-sql.md
-│       ├── {메뉴코드}-05-api.md
-│       ├── {메뉴코드}-06-be-flow.md
-│       ├── {메뉴코드}-07-fe-flow.md
-│       └── {메뉴코드}-99-issues.md
-│
-└── 50-prototype\               # 화면 프로토타입 배포 프레임 (공용 셸만 보유)
-    ├── index.html              # 메인 프레임. 메뉴 클릭 시 ../30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html 로드
-    └── 10-common\              # 공통 팝업(CPCT01/CPPD01)·left-menu·icon-preview
+│   ├── skills\       # 슬래시 커맨드 스킬
+│   └── rules\        # 항상 적용되는 UI·문서·코딩 규칙
+├── 10-src-pattern\   # 소스코드 패턴 (DB·BE·FE·IF)
+├── 20-deliverables\  # 산출물 (템플릿·원천·결과)
+├── 30-domain\        # 메뉴별 지식베이스
+└── 50-prototype\     # 화면 프로토타입 배포 프레임
 ```
+
+> 전체 디렉토리 구조·영역별 역할·KB 문서 역할 분리(SoT) 규칙: → [STRUCTURE.md](./STRUCTURE.md)
 
 ## 프로토타입 파일 구조
 

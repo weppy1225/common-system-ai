@@ -8,10 +8,10 @@
 ## 출력 파일명 및 저장경로
 
 ```
-C:\zinide\workspace\cloud-wms-doc\dist\{메뉴코드 소문자}\ui.md
+C:\zinide\workspace\cloud-wms-doc\30-domain\30-wms-business\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
 ```
 
-예) 메뉴코드 MDPR01 → `dist\mdpr01\ui.md`
+예) 메뉴코드 MDPR01 → `30-domain/30-wms-business/mdpr01/mdpr01-02-ui.md`
 
 ---
 
