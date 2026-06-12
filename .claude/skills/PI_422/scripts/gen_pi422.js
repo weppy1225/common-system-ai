@@ -1,4 +1,4 @@
-﻿/**
+/**
  * gen_pi422.js — 통합테스트보고서 자동 생성 [PI_422]
  *
  * Usage:
@@ -21,10 +21,10 @@ const fs   = require('fs');
 
 // ── 경로 ─────────────────────────────────────────────────────────────────────
 const BASE_DIR        = path.resolve(__dirname, '..', '..', '..', '..');
-const DIST_DIR        = path.join(BASE_DIR, '30-domain');
+const DIST_DIR        = path.join(BASE_DIR, '30-domain', '30-wms-business');
 const DIST_MOBILE_DIR = path.join(BASE_DIR, '50-prototype', '20-mobile');
-const TEMPLATE        = path.join(BASE_DIR, 'template', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
-const OUTPUT_DIR      = path.join(BASE_DIR, 'output', '04 구현(PI)');
+const TEMPLATE        = path.join(BASE_DIR, '20-deliverables', '10-templates', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
+const OUTPUT_DIR      = path.join(BASE_DIR, '20-deliverables', '30-output', '04 구현(PI)');
 const LIB_DIR         = path.join(OUTPUT_DIR, 'node_modules', 'xlsx-populate');
 
 // ── 인자 파싱 ────────────────────────────────────────────────────────────────
@@ -83,10 +83,10 @@ function parseUiMd(content) {
   return meta;
 }
 
-// ── 30-domain/ 스캔 (WEB) ──────────────────────────────────────────────────────────
+// ── 30-domain/30-wms-business/ 스캔 (WEB) ─────────────────────────────────────────
 function collectUiMds() {
   if (!fs.existsSync(DIST_DIR)) {
-    console.error('[ERROR] 30-domain/ 폴더가 없습니다:', DIST_DIR);
+    console.error('[ERROR] 30-domain/30-wms-business/ 폴더가 없습니다:', DIST_DIR);
     process.exit(1);
   }
   const results = [];
@@ -118,7 +118,7 @@ function collectPdaMenus() {
     const menuCode    = m[2];   // IVMV01
     const menuName    = m[3];   // 입고예정
 
-    // 30-domain/{menuCode.toLowerCase()}/{menuCode.toLowerCase()}-02-ui.md 매칭 시도
+    // 30-domain/30-wms-business/{menuCode.toLowerCase()}/{menuCode.toLowerCase()}-02-ui.md 매칭 시도
     const lowerCode = menuCode.toLowerCase();
     const mdPath = path.join(DIST_DIR, lowerCode, `${lowerCode}-02-ui.md`);
     let meta;
@@ -251,7 +251,7 @@ function writeCases(sheet, cases) {
   const pdaMenus = collectPdaMenus();
   const menus = [...webMenus, ...pdaMenus];
   if (menus.length === 0) {
-    console.error('[ERROR] 메뉴를 찾지 못했습니다. 30-domain/*-02-ui.md 또는 50-prototype/20-mobile/menu.html 확인.');
+    console.error('[ERROR] 메뉴를 찾지 못했습니다. 30-domain/30-wms-business/*/*-02-ui.md 또는 50-prototype/20-mobile/menu.html 확인.');
     process.exit(1);
   }
   console.log(`[1/3] 메뉴 스캔 완료: WEB ${webMenus.length}개 / PDA ${pdaMenus.length}개`);

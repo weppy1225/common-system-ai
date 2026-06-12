@@ -34,10 +34,10 @@ BE와 FE 각각 **코드 개발 → 단위테스트 → 기동/목업 → 통합
 
 | 산출물 | 위치 | 생성 스킬 |
 |---|---|---|
-| 화면요건 (`*-02-ui.md`) | `30-domain/{메뉴코드}/` | `/SD_310_UI` |
-| DB 설계 (`db.md`) | `30-domain/{메뉴코드}/` | `/SD-db` |
+| 화면요건 (`*-02-ui.md`) | `30-domain/30-wms-business/{메뉴코드}/` | `/SD_310_UI` |
+| DB 설계 (`db.md`) | `30-domain/30-wms-business/{메뉴코드}/` | `/SD-db` |
 | DB 반영 완료 (test/dev) | PostgreSQL | `/SD-db-apply` |
-| API 명세 (`api.md`) | `30-domain/{메뉴코드}/` | `/SD-api` |
+| API 명세 (`api.md`) | `30-domain/30-wms-business/{메뉴코드}/` | `/SD-api` |
 
 > 위 4가지 산출물이 갖춰진 뒤 BE 개발을 시작한다. FE 개발은 BE spec.md가 추가로 필요하다.
 
@@ -253,9 +253,9 @@ bru run "src/test/bruno/{메뉴그룹}/{메뉴코드}" --env local --reporter-js
 
 | 산출물 | 위치 |
 |---|---|
-| BE spec.md (API 명세 + VO/DTO) | `30-domain/{메뉴코드}/{메뉴코드}-05-api.md` |
-| 화면요건 ui.md | `30-domain/{메뉴코드}/{메뉴코드}-02-ui.md` |
-| 프로토타입 wireframe.html | `30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html` |
+| BE spec.md (API 명세 + VO/DTO) | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-05-api.md` |
+| 화면요건 ui.md | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` |
+| 프로토타입 wireframe.html | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` |
 
 #### 생성 파일 및 위치
 

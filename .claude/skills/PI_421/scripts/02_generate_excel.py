@@ -4,8 +4,8 @@
 사용법:
     python 02_generate_excel.py <고객사명> <담당자명>
 
-입력: output/04 구현(PI)/tmp/tests.json
-출력: output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+입력: 20-deliverables/30-output/04 구현(PI)/tmp/tests.json
+출력: 20-deliverables/30-output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
 
 BASE_DIR을 `Path(__file__).resolve().parents[4]` 로 자동 추론하여
 Windows/WSL 어느 환경에서도 정상 동작한다.
@@ -26,9 +26,9 @@ from openpyxl.utils import get_column_letter
 # .claude/skills/PI_421/scripts/02_generate_excel.py
 # parents[4] = 프로젝트 루트
 BASE_DIR = Path(__file__).resolve().parents[4]
-TEMPLATE = BASE_DIR / "template" / "04 구현(PI)" / "PI_212-단위테스트보고서.xlsx"
-TMP_JSON = BASE_DIR / "output" / "04 구현(PI)" / "tmp" / "tests.json"
-OUT_DIR = BASE_DIR / "output" / "04 구현(PI)"
+TEMPLATE = BASE_DIR / "20-deliverables" / "10-templates" / "04 구현(PI)" / "PI_212-단위테스트보고서.xlsx"
+TMP_JSON = BASE_DIR / "20-deliverables" / "30-output" / "04 구현(PI)" / "tmp" / "tests.json"
+OUT_DIR = BASE_DIR / "20-deliverables" / "30-output" / "04 구현(PI)"
 
 DATA_SHEET = "단위테스트 보고서"
 STAT_SHEET = "Sheet1"

@@ -233,7 +233,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 1. `package.json`, `vite.config.*`, `next.config.*` 에서 dev 포트 추출
 2. `src/router/index.*`, `src/router/modules/**/*.{js,ts}`, `src/views/**/*.vue`, `src/pages/**/*.tsx` 에서 라우터 추출
-3. `30-domain/{메뉴코드}/ui.md` 또는 `menu-index.md` 에서 메뉴명 보완
+3. `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 또는 `menu-index.md` 에서 메뉴명 보완
 4. **PDA 제외 기준** 적용 → 제외 메뉴는 `rejected[]` 에 기록
 5. PC 메뉴만 `menus[]` 에 포함
 
@@ -360,7 +360,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 #### 설명 영역 작성 규칙
 
-- `30-domain/{메뉴코드}/ui.md` 가 있으면 거기서 우선 참조 (메뉴명, 검색 조건, 그리드 컬럼, 업무규칙).
+- `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 가 있으면 거기서 우선 참조 (메뉴명, 검색 조건, 그리드 컬럼, 업무규칙).
 - ui.md 가 없는 경우 캡처한 DOM에서 추출한 텍스트/플레이스홀더로 보완.
 - **PC 사용자매뉴얼이므로 변수명·API 경로·DB 컬럼명을 직접 노출하지 않는다.** 사용자가 화면에서 보이는 레이블·버튼·텍스트 기준으로 작성.
 

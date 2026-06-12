@@ -31,6 +31,9 @@ tags:
 | wms_inven_sku | WMS_재고_SKU이력 |
 | wms_inven_inout | WMS_재고_수불 |
 | wms_inven | WMS_재고 |
+| wms_inven_ad | WMS_재고조정 |
+| wms_inven_ad_prod | WMS_재고조정_품목 |
+| wms_inven_ad_tran | WMS_재고조정_트랜잭션 |
 | wms_inven_holding | WMS_재고_예약 |
 | wms_inven_month | WMS_재고_월마감 |
 

@@ -64,7 +64,7 @@ Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`
 |---|---|---|
 | `src/main/java/`, `src/main/resource/`, `DEV_DOC/`, `build/`, `./gradlew`, `db.md`, `api.md` 등 BE 산출물 | `$BE_DIR` | `$BE_DIR/src/main/java/be/...` |
 | `src/views/`, `package.json`, `vitest/` 등 FE 산출물 | `$FE_DIR` | `$FE_DIR/src/views/be/...` |
-| `30-domain/`, `50-prototype/`, `10-src-pattern/`, `20-deliverables/` 화면설계·문서 | `$AI_DIR` (허브, CWD) | `$AI_DIR/30-domain/{메뉴코드}/...` |
+| `30-domain/`, `50-prototype/`, `10-src-pattern/`, `20-deliverables/` 화면설계·문서 | `$AI_DIR` (허브, CWD) | `$AI_DIR/30-domain/30-wms-business/{메뉴코드}/...` |
 
 - **BE 전용 스킬**: 작업 시작 시 `cd "$BE_DIR"` 후 진행하면 스킬 본문의 상대경로(`src/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)가 그대로 동작한다.
 - **FE 전용 스킬**: `cd "$FE_DIR"` 후 진행하면 `src/views/...`, `package.json` 이 그대로 동작한다.

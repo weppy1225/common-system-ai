@@ -12,7 +12,7 @@ paths:
 |---|---|
 | IF 연동 규칙 개요 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
 | E2W(ERP→WMS) 컨벤션 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
-| 현재 IF 명세 | `30-domain/{메뉴코드}/{메뉴코드}-05-api.md` |
+| 현재 IF 명세 | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-05-api.md` |
 | `sif_*` 테이블 스키마 | `10-src-pattern/20-database/00-overview.md` |
 | TxComp 기본 패턴 | `10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md` |
 
@@ -125,8 +125,8 @@ SifWmsPool.PROC_TYPE_CANCEL  = "CANCEL"
 | 클래스 | 경로 |
 |---|---|
 | `SifPool` | `sif/abc/SifPool.java` (수정 금지) |
-| `SifWmsPool` | `sif/wms/SifWmsPool.java` |
-| `SifWmsProcComp` | `sif/wms/proc/SifWmsProcComp.java` |
+| `SifWmsPool` | `sif/wms/abc/SifWmsPool.java` |
+| `SifWmsProcComp` | `sif/wms/proc/abc/SifWmsProcComp.java` |
 | `SifWmsProcApiServiceUtil` | `sif/wms/proc/SifWmsProcApiServiceUtil.java` |
-| `SifWmsLog` | `sif/wms/SifWmsLog.java` |
+| `SifWmsLog` | `sif/wms/abc/SifWmsLog.java` |
 | `@SifValid` | `sif/abc/annotation/` |

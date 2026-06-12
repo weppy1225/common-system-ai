@@ -158,7 +158,7 @@ public class {메뉴코드}Dao {
 ### 5-2. {메뉴코드}CompUtil.java 작성
 
 ```java
-@Component
+@Service
 public class {메뉴코드}CompUtil {
     public void setRegisterAudit({메뉴코드}{리소스} target) { ... }
     public void setModifyAudit({메뉴코드}{리소스} target) { ... }

@@ -1,6 +1,6 @@
 """
-에이전트 1: input/RA.212/ 폴더의 모든 xlsx 파일을 읽어
-output/02 분석(RA)/tmp/meeting_raw.json 에 저장한다.
+에이전트 1: 20-deliverables/20-sources/RA.212/ 폴더의 모든 xlsx 파일을 읽어
+20-deliverables/30-output/02 분석(RA)/tmp/meeting_raw.json 에 저장한다.
 
 사용법: python scripts/01_read_meetings.py
 작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
@@ -9,8 +9,8 @@ import openpyxl, json, os, glob, subprocess
 from datetime import datetime
 
 base = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
-input_dir = os.path.join(base, "input/RA.212")
-out_dir = os.path.join(base, "output/02 분석(RA)/tmp")
+input_dir = os.path.join(base, "20-deliverables", "20-sources", "RA.212")
+out_dir = os.path.join(base, "20-deliverables", "30-output", "02 분석(RA)", "tmp")
 os.makedirs(out_dir, exist_ok=True)
 
 result = {"files": []}

@@ -45,8 +45,8 @@ tags:
 - spring-messaging-5.3.18.jar
 
 ### 4.2 MyBatis
-- mybatis-3.5.7.jar
-- mybatis-spring-2.0.6.jar
+- mybatis-3.5.13.jar
+- mybatis-spring-2.1.1.jar
 
 ### 4.3 PostgreSQL
 - postgresql-42.5.4.jar

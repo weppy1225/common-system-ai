@@ -58,17 +58,20 @@ be/
 │
 ├── cm9400/ # 소통관리
 │ └── alst01/ # 알람설정
-│ ├── controller/
-│ ├── service/
-│ ├── bean/
-│ └── mapper/ # 매퍼 인터페이스만 존재 (XML은 resources/mapper/)
+│     ├── ALST01Controller.java
+│     ├── ALST01Comp.java
+│     ├── ALST01TxComp.java
+│     ├── ALST01Dao.java
+│     ├── ALST01Mapper.java
+│     ├── ALST01Mapper.xml
+│     └── bean/
 │
 ├── iw1000/ # 입고관리
 │ ├── iwlb01/ # 라벨품목
 │ ├── iwpc01/ # 입고처리
 │ ├── iwrq01/ # 입고예정
 │ └── iwsc01/ # 입고현황
-│ 각 모듈 동일 구조
+│ 각 모듈은 메뉴 패키지 바로 아래에 Controller/Comp/TxComp/Dao/Mapper/XML/bean 이 평면 배치
 │
 ├── rt2000/ # 반품관리
 │ ├── rtpc01/ # 반품처리

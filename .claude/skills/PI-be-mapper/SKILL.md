@@ -77,7 +77,8 @@ public interface {메뉴코드}Mapper {
 ✅ WHERE절에 use_yn = 'Y' 또는 del_yn = 'N' 항상 포함
 ✅ 동적 조건: <if test="@fw.tool.EmptyTool@notEmpty(field)">
 ✅ LIKE 검색: ${@fw.config.DBConfig@DB_PREFIX}FN_CONCAT('%', #{val}, '%')
-✅ 소프트 삭제: UPDATE SET use_yn = 'N' (DELETE FROM 금지)
+✅ 기본 삭제정책: 마스터/이력성 데이터는 소프트 삭제 우선 (`use_yn = 'N'` 또는 `del_yn = 'Y'`)
+✅ 예외 삭제정책: 교차/매핑/신청 테이블은 업무 의미가 연결 해제인 경우 `DELETE FROM` 허용
 ✅ namespace: 풀 패키지 경로 (예: be.md8000.mdpd01.MDPD01Mapper)
 ✅ parameterType: 풀 패키지 경로
 ✅ resultType: 풀 패키지 경로

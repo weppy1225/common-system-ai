@@ -226,7 +226,7 @@ python3 .claude/skills/TT_542/scripts/03_make_pptx.py
 스크립트가 수행하는 것:
 1. `package.json`, `vite.config.*`, `next.config.*` 에서 dev 포트 추출
 2. router/views 파일에서 라우터 추출
-3. `30-domain/{메뉴}/ui.md` 및 `50-prototype/20-mobile/{그룹m}/{메뉴}.html` 에서 메뉴명 보완
+3. `30-domain/30-wms-business/{메뉴}/{메뉴}-02-ui.md` 및 `50-prototype/20-mobile/{그룹m}/{메뉴}.html` 에서 메뉴명 보완
 4. **PDA 포함 기준** 적용 → PDA 메뉴만 `menus[]` 에 keep
 5. PC 메뉴는 `rejected[]` 에 기록
 
@@ -339,7 +339,7 @@ const ctx = await browser.newContext({
 
 #### 설명 영역 작성 규칙
 
-- `30-domain/{메뉴코드(끝m없는)}/ui.md` 가 있으면 우선 참조
+- `30-domain/30-wms-business/{메뉴코드(끝m없는)}/{메뉴코드(끝m없는)}-02-ui.md` 가 있으면 우선 참조
 - `50-prototype/20-mobile/{그룹m}/{메뉴}.html` 이 있으면 HTML의 텍스트 기준 참조
 - PDA 사용자 관점으로 작성: 앱 조작방법/목록/처리 → 모바일 특성 설명 포함
 - 변수명·API 경로·DB 컬럼명을 직접 노출하지 않는다.

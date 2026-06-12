@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 메뉴코드: **$ARGUMENTS**
 
-`30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **mobile.css + PDA 전용 레이아웃 템플릿 파일**을 의거해 모바일 PDA 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
+`30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **mobile.css + PDA 전용 레이아웃 템플릿 파일**을 의거해 모바일 PDA 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
 
 ---
 
@@ -39,7 +39,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 1단계 — 전체 파일 읽기
 
-1. `30-domain/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
+1. `30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
 2. `50-prototype/20-mobile/ui-standard.html` 에서 PDA 레이아웃 기준 파악
 3. 요건 문서의 목적/UI유형에 맞는 `50-prototype/20-mobile/common/_template/type{X}.html` 1개
 

@@ -39,10 +39,10 @@ allowed-tools: Bash, Read, AskUserQuestion
 
 | 로컬 원본 | dist 대상 | 내부 경로 변환 |
 | --- | --- | --- |
-| `50-prototype/index.html` | `dist/index.html` | `loadContent('../30-domain/{c}/{c}-02-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
-| `50-prototype/10-common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../../30-domain/{c}/{c}-02-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
+| `50-prototype/index.html` | `dist/index.html` | `loadContent('../30-domain/30-wms-business/{c}/{c}-02-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
+| `50-prototype/10-common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../../30-domain/30-wms-business/{c}/{c}-02-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
 | `50-prototype/10-common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
-| `30-domain/30-wms-business/{c}/{c}-02-wireframe.html` | `dist/{c}/wireframe.html` | `../../50-prototype/10-common/` → `../common/`, `./{c}-02-mock-data.js` → `./mock-data.js` |
+| `30-domain/30-wms-business/{c}/{c}-02-wireframe.html` | `dist/{c}/wireframe.html` | `../../../50-prototype/10-common/` → `../common/`, `./{c}-02-mock-data.js` → `./mock-data.js` |
 | `30-domain/30-wms-business/{c}/{c}-02-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
 | `30-domain/30-wms-business/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 |
 
@@ -95,11 +95,11 @@ STAGE=$(mktemp -d)
 mkdir -p "$STAGE/common"
 
 # index.html — 메뉴 경로 평탄화
-sed -E "s#\.\./30-domain/([a-z0-9]+)/\1-02-wireframe\.html#\1/wireframe.html#g" \
+sed -E "s#\.\./30-domain/30-wms-business/([a-z0-9]+)/\1-02-wireframe\.html#\1/wireframe.html#g" \
     50-prototype/index.html > "$STAGE/index.html"
 
 # common/left-menu.html — 메뉴 경로 평탄화 (common 기준 상대경로)
-sed -E "s#\.\./\.\./30-domain/([a-z0-9]+)/\1-02-wireframe\.html#../\1/wireframe.html#g" \
+sed -E "s#\.\./\.\./30-domain/30-wms-business/([a-z0-9]+)/\1-02-wireframe\.html#../\1/wireframe.html#g" \
     50-prototype/10-common/left-menu.html > "$STAGE/common/left-menu.html"
 
 # common/ 그 외 공통 자산 — 변환 없이 복사
@@ -112,7 +112,7 @@ for CODE in $CODES; do
   SRC="30-domain/30-wms-business/$CODE"
   [ -d "$SRC" ] || { echo "skip: $SRC 없음"; continue; }
   mkdir -p "$STAGE/$CODE"
-  sed -E -e "s#\.\./\.\./50-prototype/10-common/#../common/#g" \
+  sed -E -e "s#\.\./\.\./\.\./50-prototype/10-common/#../common/#g" \
          -e "s#\./$CODE-02-mock-data\.js#./mock-data.js#g" \
       "$SRC/$CODE-02-wireframe.html" > "$STAGE/$CODE/wireframe.html"
   [ -f "$SRC/$CODE-02-mock-data.js" ] && cp "$SRC/$CODE-02-mock-data.js" "$STAGE/$CODE/mock-data.js"

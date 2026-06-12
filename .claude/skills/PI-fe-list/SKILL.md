@@ -10,7 +10,7 @@ model: claude-sonnet-4-6
 
 # FE 검색조건·결과목록 화면 개발 [PI-fe-list]
 
-BE spec.md 기반으로 `{메뉴코드}.vue` (검색 영역 + 결과 그리드) 목록 화면만 생성한다.
+BE spec.md 기반으로 `{메뉴코드}.vue` 목록 화면을 생성한다. 기본형은 목록 + `{메뉴코드}Edt` 연결이지만, 실제 FE 표본처럼 `mdbz01Sch.vue`/`mdbz01Set.vue` 분리나 `Ivst01Edt`/`Ivst01Proc`/`Ivst01Cancel`/`Ivst01ProcCancel`/`Ivst01ReqInvenMove` 같은 다중 팝업 연결도 고려한다.
 
 ## 사용법
 
@@ -74,8 +74,11 @@ BE spec.md 기반으로 `{메뉴코드}.vue` (검색 영역 + 결과 그리드) 
     </div>
   </ContentSection>
 
-  <!-- 팝업 컴포넌트 (있는 경우) -->
+  <!-- 팝업 컴포넌트 (실제 FE 파일 확인 후 연결) -->
   <{메뉴코드}Edt ref="editPopup" .../>
+  <{메뉴코드}Sch ref="searchPopup" .../>
+  <{메뉴코드}Set ref="setPopup" .../>
+  <Ivst01Proc ref="procPopup" .../>
 </template>
 
 <script setup>
@@ -119,6 +122,10 @@ BE spec.md 기반으로 `{메뉴코드}.vue` (검색 영역 + 결과 그리드) 
 - `vfn_` 접두사: view 로컬 함수, `lfn_` 접두사: 모듈 내부 함수
 - 영어 주석 금지 — 한글 유지
 - `regBizSeq` URL 하드코딩 금지
+- 팝업 연결 전제는 고정하지 말고 실제 FE 디렉터리의 파일명을 먼저 확인한다
+- 기본형: `{메뉴코드}Edt`
+- 변형형: `{메뉴코드}Sch`(검색), `{메뉴코드}Set`(설정)
+- 다중 업무 팝업형: `Ivst01Proc`, `Ivst01Cancel`, `Ivst01ProcCancel`, `Ivst01ReqInvenMove`처럼 화면별 보조 팝업을 여러 개 import 가능
 
 ### STEP 5. 완료 보고
 
@@ -130,7 +137,7 @@ API 연결:
   리스트: POST /{메뉴코드}/{리소스}s
 
 후속 수동 작업:
-  - {메뉴코드}Edt.vue 팝업 생성: /PI-fe-edit {메뉴코드}
+  - 실제 확인한 팝업 파일 생성: /PI-fe-edit {메뉴코드}
   - router.js 라우트 등록
   - 메뉴 DB 등록
 ```

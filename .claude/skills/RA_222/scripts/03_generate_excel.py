@@ -1,11 +1,11 @@
 """
-에이전트 3: output/02 분析(RA)/tmp/requirements.json 을 읽어
+에이전트 3: 20-deliverables/30-output/02 분석(RA)/tmp/requirements.json 을 읽어
 요구사항정의서 xlsx 파일을 생성한다.
 
 사용법: python scripts/03_generate_excel.py
 작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-doc
 """
-import openpyxl, json, shutil, os, glob, math, subprocess
+import openpyxl, json, shutil, os, math, subprocess
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from datetime import datetime
@@ -14,16 +14,8 @@ from collections import Counter
 BASE  = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
 TODAY = datetime.now().strftime("%y%m%d")
 
-# ── 경로 탐색 (한/중 혼용 인코딩 대응) ──────────────────────────────
-def find_dir(pattern):
-    results = glob.glob(pattern)
-    return results[0] if results else None
-
-outdir = find_dir(os.path.join(BASE, "output", "*RA*"))
-if not outdir:
-    outdir = os.path.join(BASE, "output", "02 분析(RA)")
-    os.makedirs(outdir, exist_ok=True)
-
+outdir = os.path.join(BASE, "20-deliverables", "30-output", "02 분석(RA)")
+os.makedirs(outdir, exist_ok=True)
 tmp = os.path.join(outdir, "tmp")
 
 # ── requirements.json 로드 ───────────────────────────────────────────
@@ -35,8 +27,10 @@ reqs    = data["requirements"]
 out_path = os.path.join(outdir, f"RA.222-요구사항정의서_{company}_{TODAY}.xlsx")
 
 # ── 템플릿 복사 ──────────────────────────────────────────────────────
-tpl_path = find_dir(os.path.join(BASE, "template", "*RA*", "RA.314*.xlsx"))
-if tpl_path and os.path.exists(tpl_path):
+tpl_path = os.path.join(
+    BASE, "20-deliverables", "10-templates", "02 분석(RA)", "RA.314-요구사항정의서.xlsx"
+)
+if os.path.exists(tpl_path):
     shutil.copy2(tpl_path, out_path)
     wb = openpyxl.load_workbook(out_path)
 else:

@@ -1,6 +1,6 @@
 ---
 name: PI-fe-edit
-description: FE 등록·수정 팝업({메뉴코드}Edt.vue)만 생성. /PI-fe-edit {메뉴코드}
+description: FE 팝업 컴포넌트({메뉴코드}Edt.vue 기본, `Sch`/`Set`/업무별 팝업 변형 포함)만 생성. /PI-fe-edit {메뉴코드}
 when_to_use: "FE 팝업 만들어줘", "등록 팝업 개발해줘", "수정 팝업 만들어줘", "Edt.vue 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -10,7 +10,7 @@ model: claude-sonnet-4-6
 
 # FE 등록·수정 팝업 개발 [PI-fe-edit]
 
-BE spec.md 기반으로 `{메뉴코드}Edt.vue` (등록/수정 모달 팝업)만 생성한다.
+BE spec.md 기반으로 팝업 컴포넌트만 생성한다. 기본형은 `{메뉴코드}Edt.vue` 등록/수정 팝업이고, 실제 FE 표본처럼 `mdbz01Sch.vue`(검색), `mdbz01Set.vue`(설정), `Ivst01Proc`/`Ivst01Cancel`/`Ivst01ProcCancel`/`Ivst01ReqInvenMove` 같은 업무별 팝업 분리도 허용한다.
 
 ## 사용법
 
@@ -48,11 +48,18 @@ BE spec.md 기반으로 `{메뉴코드}Edt.vue` (등록/수정 모달 팝업)만
 - 팝업 폼 필드 목록 (타입, 필수 여부, 최대 길이)
 - 사용 공통코드 (`commHCd` 목록)
 
-### STEP 4. Edt.vue 생성
+### STEP 4. 팝업 컴포넌트 생성
 
 기준 템플릿: `ai-docs/20-frontend/30-convention/10-vue-file-template.md` §2
 
-**파일 위치:** `src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue`
+**파일 위치:** `src/views/be/{업무군}/{메뉴코드}/{실제확인한팝업파일명}.vue`
+
+**파일명 결정 규칙:**
+- 기본형: `{메뉴코드}Edt.vue`
+- 검색 팝업 분리형: `{메뉴코드}Sch.vue`
+- 설정 팝업 분리형: `{메뉴코드}Set.vue`
+- 다중 업무 팝업형: `Ivst01Proc.vue`, `Ivst01Cancel.vue`, `Ivst01ProcCancel.vue`, `Ivst01ReqInvenMove.vue`처럼 업무 단위 suffix 사용
+- suffix는 추정하지 말고 `src/views/.../{메뉴코드}/`의 실제 FE 파일명과 기존 표본을 확인한 뒤 정한다
 
 **구조:**
 
@@ -62,7 +69,7 @@ BE spec.md 기반으로 `{메뉴코드}Edt.vue` (등록/수정 모달 팝업)만
 </style>
 
 <template>
-  <LayerPopup ref="editPopup" :title="confirmTitle" :code="confirmCode" width="{X}" :closeCallback="vfn_resetPopup">
+  <LayerPopup ref="editPopup" :title="confirmTitle" code="{MENUCODE}P01" width="{X}" :closeCallback="vfn_resetPopup">
     <ZCellBox>
       <!-- 폼 필드 (spec 기준) -->
     </ZCellBox>
@@ -99,8 +106,8 @@ BE spec.md 기반으로 `{메뉴코드}Edt.vue` (등록/수정 모달 팝업)만
 // 등록/수정 모드 전환
 const isUpdate = ref(false);
 const confirmTitle = computed(() => isUpdate.value ? `${menunm} 수정` : `${menunm} 등록`);
-const confirmCode = computed(() => isUpdate.value ? '{MENUCODE}P02' : '{MENUCODE}P01');
 const confirmBtnText = computed(() => isUpdate.value ? t('message.수정') : t('message.등록'));
+// LayerPopup code는 모드와 무관하게 고정한다. 실제 표본: IVST01P01, MDBZ01P01
 
 // 팝업 열기 (등록: seq 없음, 수정: seq 있음)
 async function openPopup(bizSeq, resourceSeq) {
@@ -147,6 +154,12 @@ function vfn_resetPopup() { editObj.value = { ...initEditObj }; }
 defineExpose({ openPopup });
 ```
 
+- `LayerPopup code`는 등록/수정 모드에 따라 바꾸지 않는다
+- 모드 분기는 `title`, 저장 버튼 텍스트, 내부 저장 로직(`PUT`/`PATCH`)으로 처리한다
+- 실제 FE 표본 근거:
+  - `ivst01Edt.vue` → `code="IVST01P01"` 고정, 제목/버튼만 `isUpdate`로 분기
+  - `mdbz01Set.vue` → `code="MDBZ01P01"` 고정
+
 **유효성 검증 패턴:**
 
 ```js
@@ -176,7 +189,7 @@ const { valid, validate } = gfn_useValid(editObj, validRules);
 
 ```
 생성 파일:
-  src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue
+  src/views/be/{업무군}/{메뉴코드}/{실제확인한팝업파일명}.vue
 
 API 연결:
   단건 조회: GET  /{메뉴코드}/{리소스}s/{resourceSeq}/{bizSeq}

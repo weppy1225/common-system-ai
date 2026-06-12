@@ -43,7 +43,8 @@ cloud-wms-doc/
 │   ├── 20-database/              # DB 패턴
 │   ├── 30-backend/               # BE 패턴
 │   │   └── be-layer-pattern.md   # ★ Controller·Comp·TxComp·Dao 레이어 역할 (KB 06이 의존)
-│   └── 40-frontend/              # FE 패턴
+│   ├── 40-frontend/              # FE 패턴
+│   └── 50-interface/             # 인터페이스 패턴
 │
 ├── 20-deliverables/              # ▣ 산출물 표준
 │   ├── 10-templates/             # 양식·예시
@@ -73,9 +74,11 @@ cloud-wms-doc/
 │   ├── 10-common/                # 공통 팝업(CPCT01/CPPD01)·left-menu·wms-ui.css 등
 │   └── 20-mobile/                # PDA 모바일 프로토타입
 │
-└── 60-system/                    # ▣ 시스템 운영·인프라 가이드
-    └── deploy/                   # 빌드·배포 가이드
-        └── local-deploy-guide.md # 로컬 Tomcat 빌드·배포·검증 절차
+├── 60-system/                    # ▣ 시스템 운영·인프라 가이드
+│   └── deploy/                   # 빌드·배포 가이드
+│       └── local-deploy-guide.md # 로컬 Tomcat 빌드·배포·검증 절차
+│
+└── 90-archive/                   # ▣ 아카이브 문서
 ```
 
 ### 최상위 영역 역할
@@ -89,6 +92,7 @@ cloud-wms-doc/
 | `30-domain` | **메뉴별 지식베이스** = 코딩 컨텍스트 원천 | 작업별 선택 로드 |
 | `50-prototype` | 화면설계 프로토타입 배포 | 브라우저 |
 | `60-system` | 시스템 운영·인프라 가이드 (빌드·배포·설치) | 운영자·개발자 참조 |
+| `90-archive` | 아카이브 문서 보관 | 참조 |
 
 > **공통 지식의 home은 `10-src-pattern/`이다.** 레이어 역할(`be-layer-pattern.md`)·쿼리 패턴·화면 패턴은 이미 여기 존재하므로, 메뉴 KB는 이를 **복제하지 않고 이름으로만 참조**한다. (별도 `_common/` 디렉토리를 만들지 않는다.)
 

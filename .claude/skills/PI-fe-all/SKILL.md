@@ -1,6 +1,6 @@
 ---
 name: PI-fe-all
-description: FE 목록 화면 + 등록/수정 팝업 전체 생성 ({메뉴코드}.vue + {메뉴코드}Edt.vue). /PI-fe-all {메뉴코드}
+description: FE 목록 화면 + 팝업 전체 생성 (기본 `{메뉴코드}.vue` + `{메뉴코드}Edt.vue`, 변형 `Sch`/`Set`/업무별 팝업 포함). /PI-fe-all {메뉴코드}
 when_to_use: "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "FE 화면 처음부터 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -10,7 +10,7 @@ model: claude-sonnet-4-6
 
 # FE 전체 화면 개발 (목록+팝업) [PI-fe-all]
 
-BE spec.md 기반으로 목록 화면(`{메뉴코드}.vue`)과 등록/수정 팝업(`{메뉴코드}Edt.vue`)을 한 번에 생성한다.
+BE spec.md 기반으로 목록 화면과 팝업 컴포넌트를 한 번에 생성한다. 기본형은 `{메뉴코드}.vue` + `{메뉴코드}Edt.vue`이며, 실제 FE 표본처럼 `mdbz01Sch.vue`(검색), `mdbz01Set.vue`(설정), `Ivst01Proc`/`Ivst01Cancel`/`Ivst01ProcCancel`/`Ivst01ReqInvenMove` 같은 업무별 다중 팝업 조합도 허용한다.
 
 ## 사용법
 
@@ -58,7 +58,10 @@ spec에서 추출:
 **구성 요소:**
 - `SearchSection` + `ZCellBox` 검색 영역 (spec 검색 조건 기준)
 - `ContentSection` + `ZAuiGrid` 결과 그리드 (spec 컬럼 기준)
-- `{메뉴코드}Edt` 팝업 컴포넌트 import 및 ref 연결
+- 실제 FE 파일 확인 후 팝업 컴포넌트 import 및 ref 연결
+- 기본형: `{메뉴코드}Edt`
+- 변형형: `{메뉴코드}Sch`(검색 팝업), `{메뉴코드}Set`(설정 팝업)
+- 다중 업무 팝업형: `Ivst01Edt`, `Ivst01Proc`, `Ivst01Cancel`, `Ivst01ProcCancel`, `Ivst01ReqInvenMove`처럼 한 화면에 여러 팝업을 병렬 연결 가능
 
 **코드 규칙 (`02-fe-code-rule.md` 준수):**
 - 리스트 조회: `axios.post(url, searchObj.value)` → `res.data.post{Resources}`
@@ -71,7 +74,7 @@ spec에서 추출:
 
 **생성 파일:** `src/views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue`
 
-### STEP 5. 등록/수정 팝업 생성 (`{메뉴코드}Edt.vue`)
+### STEP 5. 팝업 컴포넌트 생성 (`{메뉴코드}Edt.vue` 등)
 
 `ai-docs/20-frontend/30-convention/10-vue-file-template.md` §2 스켈레톤 기준.
 
@@ -80,6 +83,7 @@ spec에서 추출:
 - `ZCellBox` + `ZCell` 폼 영역 (spec 팝업 필드 기준)
 - 등록 / 수정 모드 전환 (`isUpdate` computed)
 - 유효성 검증 (`gfn_useValid`)
+- 실제 FE 확인 결과에 따라 `{메뉴코드}Edt` 단일 팝업이 아니라 `{메뉴코드}Sch`, `{메뉴코드}Set`, `Proc`, `Cancel`, `ProcCancel` 같은 업무별 보조 팝업으로 분리 가능
 
 **코드 규칙:**
 - 등록: `axios.put(url, payload)` → `successSwal` + emit + closePopup
@@ -88,7 +92,7 @@ spec에서 추출:
 - `defineExpose({ openPopup })`
 - `closeCallback`에 `vfn_resetPopup` 연결
 
-**생성 파일:** `src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue`
+**생성 파일:** `src/views/be/{업무군}/{메뉴코드}/{실제확인한팝업파일명}.vue`
 
 ### STEP 6. 메뉴 문서 생성
 
@@ -112,7 +116,7 @@ spec에서 추출:
 ```
 생성 파일:
   src/views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue
-  src/views/be/{업무군}/{메뉴코드}/{메뉴코드}Edt.vue
+  src/views/be/{업무군}/{메뉴코드}/{실제확인한팝업파일명}.vue
   ai-docs/20-frontend/60-menus/{업무군}/{메뉴코드}/menu.md
 
 API 연결:

@@ -24,12 +24,12 @@ AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 # BE_DIR 은 repo-paths.md 규칙으로 결정
 
 # ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 30-domain/ 에 위치
-UI_MD="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-ui.md"
+UI_MD="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md"
 
 # wireframe: PC / PDA 모바일 자동 분기
-if [ -f "$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
+if [ -f "$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
   # PC 화면
-  WIREFRAME="$AI_DIR/30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html"
+  WIREFRAME="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html"
 else
   # PDA 모바일 화면 — 50-prototype/20-mobile/ 하위 그룹 폴더 검색
   WIREFRAME=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
@@ -37,7 +37,7 @@ fi
 ```
 
 > 이 스킬에서 `api.md`, `db.md`, `DEV_DOC/...`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`).
-> `$BE_DIR` 또는 허브의 `30-domain/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> `$BE_DIR` 또는 허브의 `30-domain/30-wms-business/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ### Step 1 — 기능 정보 파악
 
@@ -67,8 +67,8 @@ fi
 
 1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` — 메뉴코드·네이밍 규칙
 2. 기능 폴더의 `db.md` — DB 설계 결과 (존재하는 경우 **우선 참조**)
-3. `$UI_MD` (`30-domain/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
-4. `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `50-prototype/20-mobile/…/{메뉴코드대문자}.html`)
+3. `$UI_MD` (`30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
+4. `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `50-prototype/20-mobile/…/{메뉴코드대문자}.html`)
 5. `$BE_DIR/DEV_DOC/ai-docs/10-database/00-database-overview.md` — 관련 테이블 분석
 6. 해당 도메인 테이블 컬럼 명세 (`$BE_DIR/DEV_DOC/ai-docs/10-database/90-schema/20-tables/`)
 7. `$BE_DIR/DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` — 코딩 컨벤션
@@ -91,8 +91,10 @@ fi
 | 메뉴명 | {메뉴명} |
 | 메뉴그룹 | {메뉴그룹} |
 | 패키지 | `be.{그룹}.{메뉴코드}/` |
-| URL prefix | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}` |
+| URL prefix | 권장: `/{bizSeq}/{메뉴코드_인스턴스}/{리소스_복수형}` |
 | 해당 도메인 | MDM / IW / OW / IV / RT / SIF |
+
+> URL/메서드는 **권장 예시**이며 고정 규칙이 아니다. 실제 구현은 컬렉션 경로에 `PUT`/`PATCH`를 사용하거나, `/{stSeq}/trans` 같은 업무별 하위 경로를 둘 수 있다.
 
 ---
 
@@ -107,10 +109,11 @@ fi
 | Interface ID | HTTP Method | URL | 설명 |
 |---|---|---|---|
 | {메뉴코드}_POST_{리소스}S | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 목록 조회 |
-| {메뉴코드}_POST_INSERT | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/insert` | 단건 등록 |
+| {메뉴코드}_PUT_INSERT | PUT | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 단건 등록(권장 예시) |
 | {메뉴코드}_GET_{리소스} | GET | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/{seq}` | 단건 조회 |
-| {메뉴코드}_POST_UPDATE | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/update` | 단건 수정 |
+| {메뉴코드}_PATCH_UPDATE | PATCH | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 단건 수정(권장 예시) |
 | {메뉴코드}_DELETE_{리소스}S | DELETE | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s` | 삭제 |
+| {메뉴코드}_POST_ACTION | POST | `/{bizSeq}/{메뉴코드_인스턴스}/{리소스}s/{seq}/trans` | 업무 처리형 하위 경로 예시 |
 
 ---
 
