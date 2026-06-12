@@ -44,13 +44,13 @@ tags:
 | 사업장 수정 | `POST /{bizSeq}/mdbz01/bizs` |
 | 물류센터 목록 조회 | `GET /{bizSeq}/mdbz01/bizs/{selectedBizSeq}/centers` |
 | 물류센터 저장 (등록·수정·삭제) | `PUT /{bizSeq}/mdbz01/bizs/centers` |
-| 대행의뢰신청업체 조회 | `GET /{bizSeq}/mdbz01/bizs/{selCenterSeq}/tplReq` |
-| 의뢰 수락/거절 | `PATCH /{bizSeq}/mdbz01/bizs/{selBizSeq}/tplReq` |
+| 대행의뢰신청업체 조회 **(FE 미연결)** | `GET /{bizSeq}/mdbz01/bizs/{selCenterSeq}/tplReq` |
+| 의뢰 수락/거절 **(FE 미연결)** | `PATCH /{bizSeq}/mdbz01/bizs/{selBizSeq}/tplReq` |
 | 대행센터지정 팝업 조회 | `GET /{bizSeq}/mdbz01/bizs/tpl` |
 | 대행센터지정 수정 | `PATCH /{bizSeq}/mdbz01/bizs/tpl` |
 | 물류대행업체 검색 (팝업) | `POST /{bizSeq}/mdbz01/bizs/tpl` |
 | 대행 의뢰 신청 | `PUT /{bizSeq}/mdbz01/bizs/tpl` |
-| 의뢰 취소 (의뢰자) | `PATCH /{bizSeq}/mdbz01/bizs/cancel` |
+| 의뢰 취소 (의뢰자) **(FE 미연결)** | `PATCH /{bizSeq}/mdbz01/bizs/cancel` |
 
 ---
 
@@ -208,6 +208,8 @@ sequenceDiagram
 
 ### 3-6. 대행의뢰신청업체 조회
 
+**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
+
 ```mermaid
 sequenceDiagram
     participant C as Controller
@@ -220,6 +222,8 @@ sequenceDiagram
 ```
 
 ### 3-7. 의뢰 수락/거절
+
+**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
 
 ```mermaid
 sequenceDiagram
@@ -319,6 +323,8 @@ sequenceDiagram
 ```
 
 ### 3-12. 의뢰 취소 (의뢰자)
+
+**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
 
 ```mermaid
 sequenceDiagram

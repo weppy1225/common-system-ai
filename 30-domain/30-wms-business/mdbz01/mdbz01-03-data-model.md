@@ -41,8 +41,9 @@ tags:
 |---|---|---|
 | 사업장 | MDM_BIZ | 사업장 기본 정보 마스터 |
 | 사업장-사업장 관계 | MDM_BIZ_BIZ | 사업장 간 연결(상위↔하위, 위탁관계) 교차 테이블 |
-| 물류센터 | MDM_CENTER | 물류센터 기본 정보 마스터 |
+| 물류센터 | MDM_CENTER | 물류센터 기본 정보 마스터. 실제 컬럼 `center_file_seq`(integer, nullable), `email`(varchar, nullable) 존재. BE bean `MDBZ01Center.centerImg`는 실제 DB 컬럼명이 아니며 센터 이미지 매핑은 `MDM_CENTER.center_file_seq`이다. |
 | 사업장-센터 관계 | MDM_BIZ_CENTER | 사업장과 센터의 소속 및 위탁 신청 상태 관리 |
+| 사용자 | MDM_USER | 사용자 마스터이며 권한과 의뢰자 조회에 참조됨 |
 | 사용자-사업장 권한 | MDM_USER_BIZ | 사용자가 접근 가능한 사업장 매핑 |
 | 사용자-센터 권한 | MDM_USER_CENTER | 사용자가 접근 가능한 센터 매핑 |
 | 창고 | MDM_WH | 물류센터 내 창고 마스터 |
