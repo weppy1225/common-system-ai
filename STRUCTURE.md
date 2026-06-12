@@ -68,10 +68,14 @@ cloud-wms-doc/
 │   ├── 50-install-guide/         # 설치 가이드
 │   └── 60-development-workflow/  # 개발 워크플로
 │
-└── 50-prototype/                 # ▣ 화면 프로토타입 배포 프레임
-    ├── index.html                # 메인 프레임 (메뉴 클릭 시 wireframe 로드)
-    ├── 10-common/                # 공통 팝업(CPCT01/CPPD01)·left-menu·wms-ui.css 등
-    └── 20-mobile/                # PDA 모바일 프로토타입
+├── 50-prototype/                 # ▣ 화면 프로토타입 배포 프레임
+│   ├── index.html                # 메인 프레임 (메뉴 클릭 시 wireframe 로드)
+│   ├── 10-common/                # 공통 팝업(CPCT01/CPPD01)·left-menu·wms-ui.css 등
+│   └── 20-mobile/                # PDA 모바일 프로토타입
+│
+└── 60-system/                    # ▣ 시스템 운영·인프라 가이드
+    └── deploy/                   # 빌드·배포 가이드
+        └── local-deploy-guide.md # 로컬 Tomcat 빌드·배포·검증 절차
 ```
 
 ### 최상위 영역 역할
@@ -84,6 +88,7 @@ cloud-wms-doc/
 | `20-deliverables` | 고객 제출 산출물(양식·원천·결과) | 스킬 입출력 |
 | `30-domain` | **메뉴별 지식베이스** = 코딩 컨텍스트 원천 | 작업별 선택 로드 |
 | `50-prototype` | 화면설계 프로토타입 배포 | 브라우저 |
+| `60-system` | 시스템 운영·인프라 가이드 (빌드·배포·설치) | 운영자·개발자 참조 |
 
 > **공통 지식의 home은 `10-src-pattern/`이다.** 레이어 역할(`be-layer-pattern.md`)·쿼리 패턴·화면 패턴은 이미 여기 존재하므로, 메뉴 KB는 이를 **복제하지 않고 이름으로만 참조**한다. (별도 `_common/` 디렉토리를 만들지 않는다.)
 
