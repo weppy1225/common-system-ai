@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * [TT_541] 1단계 — FE 프로젝트 스캔으로 PC(데스크탑) 사용자 메뉴 후보 추출
+ * [TT_541] 1단계 - FE 프로젝트 스캔으로 PC 사용자 메뉴 후보 추출
  *
  * 사용법:
  *   node 01_scan_project.js "<FE 프로젝트 경로>"
@@ -10,20 +10,19 @@
  *
  * 동작:
  *   1) package.json / vite.config / next.config 등에서 dev 포트 추출
- *   2) router 파일 또는 views/pages 디렉토리에서 라우트(메뉴) 추출
+ *   2) router 파일 또는 views/pages 디렉터리에서 라우터(사용자 메뉴) 추출
  *   3) menu-index.md / menus.json 파일이 있으면 메뉴명 매핑
- *   4) cloud-wms-doc 의 dist/{메뉴코드}/ui.md 가 있으면 메뉴명 우선 매핑
- *   5) PDA 메뉴(코드 끝 m 또는 경로 /pda/, /mobile/) 자동 제외
+ *   4) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md 가 있으면 메뉴명 우선 매핑
+ *   5) PDA 메뉴(코드 끝 m 또는 경로 /bm/, /pda/, /mobile/)는 자동 제외
  *   6) JSON 으로 저장
- *
- * 이 스크립트는 Windows 네이티브 경로(C:\...) 와 WSL 경로(/mnt/c/...) 를 모두 받는다.
+ * 이 스크립트는 Windows 드라이브 경로(C:\...) 와 WSL 경로(/mnt/c/...)를 모두 받는다.
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-// ── 경로 정규화 (Windows / WSL 양방향) ──────────────────────────
+// 공통 경로 정의 (Windows / WSL 겸용)
 // 본 스크립트는 .claude/skills/TT_541/scripts/ 안에 있으므로
 // repo root = parents[3]. node 실행 위치와 무관하게 __dirname 기준으로 계산한다.
 const SCRIPT_DIR = __dirname;
@@ -33,14 +32,14 @@ const OUT_FILE = path.join(TMP_DIR, 'menu_candidates.json');
 
 function normalizePath(p) {
     if (!p) return p;
-    let s = String(p).replace(/\\+/g, '/');
+    const s = String(p).replace(/\\+/g, '/');
     return s.replace(/\/+$/, '');
 }
 
-// ── 인자 파싱 ───────────────────────────────────────────────────
+// 입력 인자 파싱
 let fePath = process.argv[2];
 if (!fePath) {
-    console.error('[ERR] FE 프로젝트 경로를 첫 번째 인자로 전달하세요.');
+    console.error('[ERR] FE 프로젝트 경로를 첫 번째 인자로 전달해주세요.');
     process.exit(1);
 }
 fePath = normalizePath(fePath);
@@ -52,12 +51,12 @@ if (!fs.existsSync(fePath)) {
 
 fs.mkdirSync(TMP_DIR, { recursive: true });
 
-// ── PDA 메뉴 식별 ──────────────────────────────────────────────
-// cloud-wms-fe 기준 PDA 라우트 패턴:
+// PDA 메뉴 판별
+// cloud-wms-fe 기준 PDA 라우터 패턴:
 //   - 경로: /bm/{그룹코드m}/{메뉴코드m}  (예: /bm/iv3000m/ivad01m)
 //   - 그룹 segment: 영문 + 숫자 + 'm' (예: iv3000m, md8000m)
 //   - 메뉴 코드: 끝이 'm' (예: ivad01m, ivmvrq01m, sksp01m)
-// PC 라우트 패턴:
+// PC 라우터 패턴:
 //   - 경로: /be/{그룹코드}/{메뉴코드}  (예: /be/iv3000/ivad01)
 function isPdaMenu(code, p) {
     if (p) {
@@ -76,10 +75,13 @@ function isPdaMenu(code, p) {
     return false;
 }
 
-// ── 유틸 ────────────────────────────────────────────────────────
+// 공통 유틸
 function safeRead(p) {
-    try { return fs.readFileSync(p, 'utf8'); }
-    catch (_) { return ''; }
+    try {
+        return fs.readFileSync(p, 'utf8');
+    } catch (_) {
+        return '';
+    }
 }
 
 function findFiles(rootDir, predicate, opts = {}) {
@@ -88,8 +90,11 @@ function findFiles(rootDir, predicate, opts = {}) {
     function walk(dir, depth) {
         if (depth > maxDepth) return;
         let entries;
-        try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
-        catch (_) { return; }
+        try {
+            entries = fs.readdirSync(dir, { withFileTypes: true });
+        } catch (_) {
+            return;
+        }
         for (const ent of entries) {
             if (ent.name.startsWith('.') && ent.name !== '.env') continue;
             const full = path.join(dir, ent.name);
@@ -105,35 +110,39 @@ function findFiles(rootDir, predicate, opts = {}) {
     return out;
 }
 
-// ── 1) 프레임워크 감지 + dev 포트 추출 ────────────────────────
-function detectFramework(fePath) {
-    const pkgPath = path.join(fePath, 'package.json');
+// 1) 프레임워크 감지 + dev 포트 추출
+function detectFramework(rootPath) {
+    const pkgPath = path.join(rootPath, 'package.json');
     if (!fs.existsSync(pkgPath)) return { framework: 'unknown', devPort: null };
 
     let pkg;
-    try { pkg = JSON.parse(safeRead(pkgPath)); }
-    catch (_) { return { framework: 'unknown', devPort: null }; }
+    try {
+        pkg = JSON.parse(safeRead(pkgPath));
+    } catch (_) {
+        return { framework: 'unknown', devPort: null };
+    }
 
     const deps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
     let framework = 'unknown';
-    if (deps['next']) framework = 'next';
-    else if (deps['nuxt'] || deps['nuxt3']) framework = 'nuxt';
-    else if (deps['@vitejs/plugin-vue'] || deps['vue'] && deps['vite']) framework = 'vue3-vite';
-    else if (deps['vue'] && (deps['@vue/cli-service'] || deps['vue-cli-plugin-webpack'])) framework = 'vue-cli';
-    else if (deps['vue']) framework = 'vue';
-    else if (deps['react'] && deps['vite']) framework = 'react-vite';
-    else if (deps['react']) framework = 'react';
-    else if (deps['svelte']) framework = 'svelte';
+    if (deps.next) framework = 'next';
+    else if (deps.nuxt || deps.nuxt3) framework = 'nuxt';
+    else if (deps['@vitejs/plugin-vue'] || (deps.vue && deps.vite)) framework = 'vue3-vite';
+    else if (deps.vue && (deps['@vue/cli-service'] || deps['vue-cli-plugin-webpack'])) framework = 'vue-cli';
+    else if (deps.vue) framework = 'vue';
+    else if (deps.react && deps.vite) framework = 'react-vite';
+    else if (deps.react) framework = 'react';
+    else if (deps.svelte) framework = 'svelte';
 
-    // dev script 의 --port 옵션에서 추출
     let devPort = null;
     const devScripts = [pkg?.scripts?.dev, pkg?.scripts?.start, pkg?.scripts?.serve].filter(Boolean);
-    for (const s of devScripts) {
-        const m = s.match(/--port[= ](\d{2,5})/) || s.match(/-p\s+(\d{2,5})/);
-        if (m) { devPort = parseInt(m[1], 10); break; }
+    for (const script of devScripts) {
+        const match = script.match(/--port[= ](\d{2,5})/) || script.match(/-p\s+(\d{2,5})/);
+        if (match) {
+            devPort = parseInt(match[1], 10);
+            break;
+        }
     }
 
-    // vite.config / next.config / nuxt.config / vue.config / webpack.config 에서 fallback 추출
     if (!devPort) {
         const cfgCandidates = [
             'vite.config.ts', 'vite.config.js', 'vite.config.mjs',
@@ -141,100 +150,97 @@ function detectFramework(fePath) {
             'nuxt.config.ts', 'nuxt.config.js',
             'vue.config.js', 'webpack.config.js',
         ];
-        for (const f of cfgCandidates) {
-            const fp = path.join(fePath, f);
+        for (const file of cfgCandidates) {
+            const fp = path.join(rootPath, file);
             if (!fs.existsSync(fp)) continue;
             const txt = safeRead(fp);
-            const m = txt.match(/port\s*:\s*(\d{2,5})/);
-            if (m) { devPort = parseInt(m[1], 10); break; }
+            const match = txt.match(/port\s*:\s*(\d{2,5})/);
+            if (match) {
+                devPort = parseInt(match[1], 10);
+                break;
+            }
         }
     }
 
-    // 기본값
     if (!devPort) {
-        if (framework === 'next') devPort = 3000;
-        else if (framework === 'nuxt') devPort = 3000;
-        else if (framework.startsWith('vue3-vite') || framework === 'react-vite') devPort = 5173;
+        if (framework === 'next' || framework === 'nuxt') devPort = 3000;
+        else if (framework === 'vue3-vite' || framework === 'react-vite') devPort = 5173;
         else if (framework === 'vue-cli' || framework === 'react') devPort = 8080;
     }
     return { framework, devPort };
 }
 
-// ── 2) 라우트(메뉴) 추출 ───────────────────────────────────────
+// 2) 라우터(메뉴) 추출
 const ROUTE_FILE_PATTERNS = [
     /router\/index\.(js|ts)$/i,
     /router\/routes\.(js|ts)$/i,
     /routes\/index\.(js|ts|tsx)$/i,
     /src\/router\.[jt]s$/i,
     /src\/routes\.[jt]s$/i,
-    /router\/modules\/.+\.(js|ts)$/i,   // cloud-wms-fe: src/router/modules/{be,bm}/{group}.js
-    /App\.(jsx|tsx)$/,
+    /router\/modules\/.+\.(js|ts)$/i,
+    /App\.(jsx|tsx)$/i,
 ];
 
 function extractRoutesFromText(txt) {
     const out = [];
-    // path: '/be/.../mdpr01' 또는 path: "..." 패턴
     const pathRegex = /path\s*:\s*['"`]([^'"`]+)['"`][\s\S]{0,200}?(?:component|element|name)\s*:\s*[^,\n]+/g;
-    let m;
-    while ((m = pathRegex.exec(txt)) !== null) {
-        const p = m[1];
-        if (!p || p === '/' || p === '*' || p === '/:catchAll(.*)') continue;
-        // 메뉴코드 후보 = 마지막 segment (`/be/md8000/mdpr01` → `mdpr01`)
-        const segs = p.split('/').filter(Boolean);
+    let match;
+    while ((match = pathRegex.exec(txt)) !== null) {
+        const routePath = match[1];
+        if (!routePath || routePath === '/' || routePath === '*' || routePath === '/:catchAll(.*)') continue;
+        const segs = routePath.split('/').filter(Boolean);
         const last = segs[segs.length - 1];
         if (!last || last.startsWith(':')) continue;
         const code = last.replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
         if (!code) continue;
-        out.push({ code, path: p });
+        out.push({ code, path: routePath });
     }
     return out;
 }
 
-function extractRoutesFromFiles(fePath) {
+function extractRoutesFromFiles(rootPath) {
     const found = new Map();
-    const candidates = findFiles(fePath, (full) => {
-        return ROUTE_FILE_PATTERNS.some(re => re.test(full.replace(/\\/g, '/')));
-    }, { maxDepth: 6 });
+    const candidates = findFiles(rootPath, (full) =>
+        ROUTE_FILE_PATTERNS.some((re) => re.test(full.replace(/\\/g, '/'))),
+        { maxDepth: 6 }
+    );
 
-    for (const f of candidates) {
-        const txt = safeRead(f);
-        for (const r of extractRoutesFromText(txt)) {
-            if (!found.has(r.code)) found.set(r.code, r);
+    for (const file of candidates) {
+        const txt = safeRead(file);
+        for (const route of extractRoutesFromText(txt)) {
+            if (!found.has(route.code)) found.set(route.code, route);
         }
     }
 
-    // views/pages 자동 인식 (라우트 파일이 없거나 추출 실패한 경우 보조)
     if (found.size === 0) {
         const viewDirs = ['src/views', 'src/pages', 'pages', 'app'];
         for (const vd of viewDirs) {
-            const dir = path.join(fePath, vd);
+            const dir = path.join(rootPath, vd);
             if (!fs.existsSync(dir)) continue;
-            const vues = findFiles(dir, (_full, name) => /\.(vue|tsx|jsx|svelte)$/.test(name), { maxDepth: 6 });
-            for (const v of vues) {
-                const base = path.basename(v).replace(/\.(vue|tsx|jsx|svelte)$/, '');
-                if (base === 'index' || base === '_app' || base === '_layout' || base === 'default') continue;
+            const views = findFiles(dir, (_full, name) => /\.(vue|tsx|jsx|svelte)$/.test(name), { maxDepth: 6 });
+            for (const view of views) {
+                const base = path.basename(view).replace(/\.(vue|tsx|jsx|svelte)$/, '');
+                if (['index', '_app', '_layout', 'default'].includes(base)) continue;
                 const code = base.toLowerCase().replace(/[^a-zA-Z0-9_-]/g, '');
-                if (!code) continue;
-                if (!found.has(code)) {
-                    found.set(code, { code, path: '/' + code });
-                }
+                if (!code || found.has(code)) continue;
+                found.set(code, { code, path: `/${code}` });
             }
         }
     }
     return Array.from(found.values());
 }
 
-// ── 3) 메뉴명 매핑 ─────────────────────────────────────────────
-function buildMenuNameMap(fePath) {
+// 3) 메뉴명 매핑
+function buildMenuNameMap(rootPath) {
     const map = {};
 
-    // a) cloud-wms-doc 의 dist/{메뉴코드}/ui.md
-    const distDir = path.join(REPO_ROOT, 'dist');
+    // a) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md
+    const distDir = path.join(REPO_ROOT, '30-domain', '30-wms-business');
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {
                 if (!ent.isDirectory()) continue;
-                const uiMd = path.join(distDir, ent.name, 'ui.md');
+                const uiMd = path.join(distDir, ent.name, `${ent.name}-02-ui.md`);
                 if (!fs.existsSync(uiMd)) continue;
                 const txt = safeRead(uiMd);
                 const titleMatch = txt.match(/^#\s*([^\n\[]+?)(?:\s*\[([A-Za-z0-9_]+)\])?\s*$/m);
@@ -246,66 +252,70 @@ function buildMenuNameMap(fePath) {
     }
 
     // b) FE 프로젝트 내 menu-index.md / menus.json
-    const indexCandidates = findFiles(fePath, (_full, name) =>
-        /^menu[-_]?index\.md$/i.test(name) ||
-        /^menus?\.json$/i.test(name) ||
-        /^menu[-_]list\.json$/i.test(name),
-        { maxDepth: 6 });
-    for (const f of indexCandidates) {
-        const txt = safeRead(f);
-        if (f.endsWith('.json')) {
+    const indexCandidates = findFiles(
+        rootPath,
+        (_full, name) => /^menu[-_]?index\.md$/i.test(name) || /^menus?\.json$/i.test(name) || /^menu[-_]list\.json$/i.test(name),
+        { maxDepth: 6 }
+    );
+    for (const file of indexCandidates) {
+        const txt = safeRead(file);
+        if (file.endsWith('.json')) {
             try {
-                const j = JSON.parse(txt);
-                const list = Array.isArray(j) ? j : (j.menus || j.items || []);
-                for (const m of list) {
-                    const c = (m.code || m.id || m.menuCode || '').toLowerCase();
-                    const n = m.name || m.menuName || m.title;
-                    if (c && n) map[c] = n;
+                const json = JSON.parse(txt);
+                const list = Array.isArray(json) ? json : (json.menus || json.items || []);
+                for (const item of list) {
+                    const code = (item.code || item.id || item.menuCode || '').toLowerCase();
+                    const name = item.name || item.menuName || item.title;
+                    if (code && name) map[code] = name;
                 }
             } catch (_) {}
         } else {
-            // markdown 표: | mdpr01 | 사은품관리 |
             const re = /\|\s*([a-z][a-z0-9_]*)\s*\|\s*([^|\n]+?)\s*\|/g;
-            let m;
-            while ((m = re.exec(txt)) !== null) {
-                const c = m[1].toLowerCase();
-                const n = m[2].trim();
-                if (c && n && !/^[-=]+$/.test(n)) map[c] = n;
+            let match;
+            while ((match = re.exec(txt)) !== null) {
+                const code = match[1].toLowerCase();
+                const name = match[2].trim();
+                if (code && name && !/^[-=]+$/.test(name)) map[code] = name;
             }
         }
     }
+
     return map;
 }
 
-// ── 4) 뷰포트 힌트 (path + code 기반) ────────────────────────
-function viewportHint(code, p) {
-    return isPdaMenu(code, p) ? 'pda' : 'desktop';
+// 4) 뷰포트 힌트
+function viewportHint(code, routePath) {
+    return isPdaMenu(code, routePath) ? 'pda' : 'desktop';
 }
 
-// ── 메인 실행 ──────────────────────────────────────────────────
+// 메인 실행
 const { framework, devPort } = detectFramework(fePath);
 const routes = extractRoutesFromFiles(fePath);
 const nameMap = buildMenuNameMap(fePath);
 
 const rawMenus = routes
-    .filter(r => /^[a-z][a-z0-9_]{2,}$/.test(r.code))
-    .map(r => ({
-        code: r.code,
-        name: nameMap[r.code] || r.code.toUpperCase(),
-        path: r.path,
-        viewportHint: viewportHint(r.code, r.path),
+    .filter((route) => /^[a-z][a-z0-9_]{2,}$/.test(route.code))
+    .map((route) => ({
+        code: route.code,
+        name: nameMap[route.code] || route.code.toUpperCase(),
+        path: route.path,
+        viewportHint: viewportHint(route.code, route.path),
     }));
 
-// PDA 메뉴 자동 제외 (PC 사용자매뉴얼 범위)
 const menus = [];
 const rejected = [];
-for (const m of rawMenus) {
-    if (isPdaMenu(m.code, m.path)) {
-        rejected.push({ code: m.code, name: m.name, reason: 'PDA 메뉴(코드 끝 m 또는 경로 /pda/·/mobile/)' });
+for (const menu of rawMenus) {
+    if (isPdaMenu(menu.code, menu.path)) {
+        rejected.push({
+            code: menu.code,
+            name: menu.name,
+            reason: 'PDA 메뉴(코드 끝 m 또는 경로 /bm/·/pda/·/mobile/)',
+        });
     } else {
-        menus.push(m);
+        menus.push(menu);
     }
 }
+
 menus.sort((a, b) => a.code.localeCompare(b.code));
 rejected.sort((a, b) => a.code.localeCompare(b.code));
 

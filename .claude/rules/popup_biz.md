@@ -1,12 +1,10 @@
 ---
 description: 업무규칙 버튼 클릭 시 표시되는 모달 팝업 HTML 작성 시 적용. 화면구성 테이블, 업무규칙 목록, 드래그 이동, CSS 패턴을 정의한다.
-globs: ["**/*.html"]
-alwaysApply: false
+paths:
+  - "**/*.html"
 ---
 
 # 업무규칙 팝업 규칙
-
-업무규칙 버튼 클릭 시 표시되는 모달 팝업에 적용되는 규칙이다.
 
 ---
 
@@ -159,3 +157,9 @@ alwaysApply: false
   color: #111827;
 }
 ```
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (팝업 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

@@ -3,18 +3,8 @@ title: Markdown Frontmatter Rule
 description: WMS 계열 모든 프로젝트에서 AI 에이전트가 사용할 Markdown 문서에 YAML frontmatter를 작성하는 규칙
 version: 1.0.0
 status: active
-applies_to:
+paths:
   - "**/*.md"
-  - "AGENTS.md"
-  - "CLAUDE.md"
-  - "GEMINI.md"
-  - "claude-memory-type.md"
-  - ".claude/**/*.md"
-  - ".codex/**/*.md"
-  - ".agents/**/*.md"
-  - "DEV_DOC/**/*.md"
-  - "docs/**/*.md"
-  - "output-doc/**/*.md"
 agent_usage: rule
 tags:
   - markdown
@@ -39,14 +29,6 @@ WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}
 - 경로는 저장소 루트 기준 상대 경로를 사용한다.
 - 민감정보, DB 접속정보, 토큰, 고객 데이터는 넣지 않는다.
 - Claude Code와 Codex가 공식적으로 해석하는 frontmatter와 WMS 내부 메타데이터를 섞어 설명하지 않는다.
-
-## 적용 대상
-
-- `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` 같은 공식 AI 에이전트 지침 문서
-- `claude-memory-type.md`, 세션 메모리, 작업 기억, 회고/lesson 문서
-- `.claude/**/*.md`, `.codex/**/*.md`, `.agents/**/*.md`
-- `DEV_DOC/**/*.md`, `docs/**/*.md`, `output-doc/**/*.md`
-- 기능 명세, 계획, 작업 목록, 완료 산출물, API/DB/IF/FE 전달 문서
 
 ## 제외 대상
 

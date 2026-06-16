@@ -5,7 +5,7 @@ PI_412 — 1단계: 프로젝트 스캔 및 스택 감지.
 지정된 프로젝트 디렉토리에서:
   - 마커 파일(pom.xml/build.gradle/build.xml/.classpath/package.json/...)로 스택 감지
   - 스택별 후보 소스 파일 목록 수집 (파일 단위)
-결과: output/04 구현(PI)/tmp/scan.json
+결과: 20-deliverables/30-output/04 구현(PI)/tmp/scan.json
 
 템플릿(PI_412-프로그램목록.xlsx)이 파일 단위로 행을 구성하므로,
 컨트롤러 외 Comp/Dao/Mapper(.java/.xml) 등 모든 소스 파일을 수집한다.
@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, List, Set
 
 REPO_BASE = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip())
-OUT_DIR = REPO_BASE / "output" / "04 구현(PI)"
+OUT_DIR = REPO_BASE / "20-deliverables" / "30-output" / "04 구현(PI)"
 TMP_DIR = OUT_DIR / "tmp"
 OUT_JSON = TMP_DIR / "scan.json"
 

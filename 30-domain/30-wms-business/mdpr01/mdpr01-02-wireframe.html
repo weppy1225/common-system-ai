@@ -1,0 +1,957 @@
+﻿<!--
+  purpose: wireframe-only
+  menuCode: mdpr01
+  menuName: 사은품관리
+  sourceOfTruth:
+    ui: mdpr01-02-ui.md
+  rules:
+    - This file is a static HTML wireframe for layout/UX review only.
+    - Do not copy raw HTML/CSS into production Vue components.
+    - Use project design-system components and AUIGrid in production.
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>사은품관리 [MDPR01]</title>
+    <link rel="stylesheet" href="../../../50-prototype/10-common/wms-ui.css">
+<style>
+/* 금액복사 버튼 — 파란색 강조 (고유 스타일) */
+.btn-amt-copy {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #3b82f6;
+  background: #eff6ff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.btn-amt-copy:hover { background: #dbeafe; border-color: #2563eb; }
+.btn-amt-copy:disabled { cursor: not-allowed; opacity: 0.4; }
+
+/* 적용여부 체크 표시 */
+.chk-icon { color: #16a34a; font-size: 14px; }
+
+/* 팝업 안내문구 */
+.popup-notice {
+  font-size: 12px;
+  color: #6b7280;
+  padding: 8px 0 0 0;
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── 헤더 ── -->
+  <div class="page-header">
+    <div class="page-title">
+      <strong>사은품관리</strong>
+      <span class="arrow">∨</span>
+    </div>
+    <button class="btn-search" onclick="doSearch()">검색</button>
+    <button class="btn-search" onclick="doReset()">초기화</button>
+    <button class="btn-search" onclick="openRule()" style="margin-left:auto">업무규칙</button>
+  </div>
+
+  <!-- ── 검색 영역 ── -->
+  <div class="search-area">
+    <table>
+      <colgroup>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+        <col style="width:82px"><col>
+      </colgroup>
+      <tbody>
+        <!-- 1행 -->
+        <tr>
+          <th>사업장</th>
+          <td>
+            <select id="s_bplc">
+              <option value="">전체</option>
+              <option value="1000">본사</option>
+              <option value="2000">서울센터</option>
+            </select>
+          </td>
+          <th>프로모션명</th>
+          <td><input type="text" id="s_promoNm"></td>
+          <th>프로모션유형</th>
+          <td>
+            <select id="s_promoType">
+              <option value="">전체</option>
+              <option value="금액">금액</option>
+              <option value="품목">품목</option>
+            </select>
+          </td>
+          <th>증정유형</th>
+          <td>
+            <select id="s_giftType">
+              <option value="">전체</option>
+              <option value="한번">한번</option>
+              <option value="여러번">여러번</option>
+            </select>
+          </td>
+          <th>대상구분</th>
+          <td>
+            <select id="s_targetDiv" onchange="onTargetDivChange()">
+              <option value="">전체</option>
+              <option value="금액">금액</option>
+              <option value="품목">품목</option>
+              <option value="대분류">대분류</option>
+            </select>
+          </td>
+        </tr>
+        <!-- 2행 -->
+        <tr>
+          <th>대상수량</th>
+          <td><input type="number" id="s_targetQty" min="0"></td>
+          <th>기준일자</th>
+          <td><input type="date" id="s_baseYmd"></td>
+          <th>시작일자</th>
+          <td><input type="date" id="s_startYmd"></td>
+          <th>종료일자</th>
+          <td><input type="date" id="s_endYmd"></td>
+          <td class="empty-lbl"></td>
+          <td></td>
+        </tr>
+        <!-- 3행 -->
+        <tr>
+          <th>품목번호</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="s_prodNo" readonly>
+              <button class="btn-popup" id="s_prodNoBtn" onclick="openPdPopup('s_prodNo')" title="품목검색">🔍</button>
+            </div>
+          </td>
+          <th>품목명</th>
+          <td>
+            <div class="input-with-popup">
+              <input type="text" id="s_prodNm" readonly>
+              <button class="btn-popup" id="s_prodNmBtn" onclick="openPdPopup('s_prodNm')" title="품목검색">🔍</button>
+            </div>
+          </td>
+          <th>대분류</th>
+          <td>
+            <select id="s_largeDiv" disabled>
+              <option value="">전체</option>
+              <option value="음료">음료</option>
+              <option value="건강식품">건강식품</option>
+              <option value="생활용품">생활용품</option>
+              <option value="식품">식품</option>
+            </select>
+          </td>
+          <th>적용여부</th>
+          <td>
+            <select id="s_useYn">
+              <option value="">전체</option>
+              <option value="Y">사용</option>
+              <option value="N">미사용</option>
+            </select>
+          </td>
+          <td class="empty-lbl"></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 메인 영역 ── -->
+  <div class="main-area">
+
+    <!-- 상단 그리드 (프로모션 목록) -->
+    <div class="panel panel-top">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <!-- 추가 -->
+          <button class="btn-icon" title="추가" onclick="openRegModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </button>
+          <!-- 수정 -->
+          <button class="btn-icon" title="수정" onclick="openEditModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <!-- 삭제 -->
+          <button class="btn-icon" title="삭제" onclick="doDeleteMain()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+              <line x1="10" y1="11" x2="10" y2="17"/>
+              <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+          </button>
+        </div>
+        <div class="toolbar-right"></div>
+      </div>
+      <div class="grid-wrap" id="mainWrap">
+        <table class="grid-table" id="mainTable">
+          <colgroup>
+            <col style="width:30px">
+            <col style="width:26px">
+            <col>
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:64px">
+            <col style="width:70px">
+            <col style="width:86px">
+            <col style="width:86px">
+            <col style="width:64px">
+            <col style="width:120px">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th><input type="checkbox" id="mainAllChk" onchange="toggleMainAll(this)" style="width:12px;height:12px"></th>
+              <th>프로모션명</th>
+              <th>프로모션유형</th>
+              <th>증정유형</th>
+              <th>대상구분</th>
+              <th>대상수량</th>
+              <th>시작일자</th>
+              <th>종료일자</th>
+              <th>적용여부</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody id="mainTbody"></tbody>
+        </table>
+      </div>
+      <div class="h-scroll-wrap" id="mainHScroll"><div class="h-scroll-inner" id="mainHInner"></div></div>
+      <div class="grid-footer">
+        <div class="pagination" id="mainPaging"></div>
+        <div class="page-size-wrap">
+          <select id="mainPageSize" onchange="changeMainPageSize()">
+            <option value="50">50</option><option value="100">100</option><option value="200">200</option>
+          </select>
+        </div>
+        <span class="row-count" id="mainRowCount"></span>
+      </div>
+    </div>
+
+    <!-- 하단 좌우 -->
+    <div class="bottom-row">
+
+      <!-- D1: 대상품목 -->
+      <div class="panel">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <!-- 행추가 -->
+            <button class="btn-icon" title="행추가" onclick="addD1Row()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/>
+                <line x1="3" y1="18" x2="15" y2="18"/><line x1="20" y1="9" x2="20" y2="15"/>
+                <line x1="17" y1="12" x2="23" y2="12"/>
+              </svg>
+            </button>
+            <!-- 행삭제 -->
+            <button class="btn-icon" title="행삭제" onclick="deleteD1Row()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/>
+                <line x1="3" y1="18" x2="15" y2="18"/><line x1="17" y1="12" x2="23" y2="12"/>
+              </svg>
+            </button>
+            <!-- 저장 -->
+            <button class="btn-icon" title="저장" onclick="saveD1()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+            </button>
+          </div>
+          <div class="toolbar-right"></div>
+        </div>
+        <div class="grid-wrap" id="d1Wrap">
+          <table class="multi-grid" id="d1Table">
+            <colgroup>
+              <col style="width:30px">
+              <col style="width:26px">
+              <col style="width:90px">
+              <col style="width:120px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th><input type="checkbox" id="d1AllChk" onchange="toggleD1All(this)" style="width:12px;height:12px"></th>
+                <th>대분류</th>
+                <th>대상품목번호</th>
+                <th>대상품목명</th>
+              </tr>
+            </thead>
+            <tbody id="d1Tbody"></tbody>
+          </table>
+        </div>
+        <div class="h-scroll-wrap" id="d1HScroll"><div class="h-scroll-inner" id="d1HInner"></div></div>
+      </div>
+
+      <!-- D2: 증정품목 -->
+      <div class="panel">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <!-- 행추가 -->
+            <button class="btn-icon" title="행추가" onclick="addD2Row()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/>
+                <line x1="3" y1="18" x2="15" y2="18"/><line x1="20" y1="9" x2="20" y2="15"/>
+                <line x1="17" y1="12" x2="23" y2="12"/>
+              </svg>
+            </button>
+            <!-- 행삭제 -->
+            <button class="btn-icon" title="행삭제" onclick="deleteD2Row()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/>
+                <line x1="3" y1="18" x2="15" y2="18"/><line x1="17" y1="12" x2="23" y2="12"/>
+              </svg>
+            </button>
+            <!-- 저장 -->
+            <button class="btn-icon" title="저장" onclick="saveD2()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+            </button>
+            <!-- 금액복사 -->
+            <button class="btn-amt-copy" id="btnAmtCopy" title="금액복사" onclick="doAmtCopy()">금액복사</button>
+          </div>
+          <div class="toolbar-right"></div>
+        </div>
+        <div class="grid-wrap" id="d2Wrap">
+          <table class="multi-grid" id="d2Table">
+            <colgroup>
+              <col style="width:30px">
+              <col style="width:26px">
+              <col style="width:100px">
+              <col style="width:120px">
+              <col>
+              <col style="width:60px">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th><input type="checkbox" id="d2AllChk" onchange="toggleD2All(this)" style="width:12px;height:12px"></th>
+                <th>적용금액/개수</th>
+                <th>증정품목번호</th>
+                <th>증정품목명</th>
+                <th>증정수량</th>
+              </tr>
+            </thead>
+            <tbody id="d2Tbody"></tbody>
+          </table>
+        </div>
+        <div class="h-scroll-wrap" id="d2HScroll"><div class="h-scroll-inner" id="d2HInner"></div></div>
+      </div>
+
+    </div><!-- /bottom-row -->
+  </div><!-- /main-area -->
+
+</div><!-- /page-wrap -->
+
+<!-- ── MDPR01P01 등록/수정 팝업 ── -->
+<div class="modal-bg" id="regModal">
+  <div class="modal" style="width:720px">
+    <div class="modal-header" id="regHeader">
+      <span id="regModalTitle">사은품관리 등록 [MDPR01P01]</span>
+      <button class="close-btn" onclick="closeRegModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <table class="form-table">
+        <colgroup>
+          <col style="width:100px"><col>
+          <col style="width:100px"><col>
+          <col style="width:100px"><col>
+        </colgroup>
+        <tbody>
+          <tr>
+            <th>사업장 <span class="required-mark">*</span></th>
+            <td>
+              <select id="f_bplc">
+                <option value="">선택</option>
+                <option value="1000">본사</option>
+                <option value="2000">서울센터</option>
+              </select>
+            </td>
+            <th>프로모션명 <span class="required-mark">*</span></th>
+            <td colspan="3"><input type="text" id="f_promoNm"></td>
+          </tr>
+          <tr>
+            <th>프로모션유형 <span class="required-mark">*</span></th>
+            <td>
+              <select id="f_promoType" onchange="onFormPromoTypeChange()">
+                <option value="">선택</option>
+                <option value="금액">금액</option>
+                <option value="품목">품목</option>
+              </select>
+            </td>
+            <th>증정유형 <span class="required-mark">*</span></th>
+            <td>
+              <select id="f_giftType">
+                <option value="">선택</option>
+                <option value="한번">한번</option>
+                <option value="여러번">여러번</option>
+              </select>
+            </td>
+            <th>대상구분 <span class="required-mark">*</span></th>
+            <td>
+              <select id="f_targetDiv">
+                <option value="">선택</option>
+                <option value="금액">금액</option>
+                <option value="품목">품목</option>
+                <option value="대분류">대분류</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>대상수량 <span class="required-mark">*</span></th>
+            <td><input type="number" id="f_targetQty" min="0"></td>
+            <th>적용시작일자 <span class="required-mark">*</span></th>
+            <td><input type="date" id="f_startYmd"></td>
+            <th>적용종료일자 <span class="required-mark">*</span></th>
+            <td><input type="date" id="f_endYmd"></td>
+          </tr>
+          <tr>
+            <th>적용여부</th>
+            <td>
+              <select id="f_useYn">
+                <option value="Y">사용</option>
+                <option value="N">미사용</option>
+              </select>
+            </td>
+            <td class="empty-lbl"></td><td></td>
+            <td class="empty-lbl"></td><td></td>
+          </tr>
+          <tr>
+            <th>비고</th>
+            <td colspan="5">
+              <textarea id="f_remark" rows="3"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="popup-notice">
+        ※ 프로모션 유형이 [금액]인 경우 증정유형은 [한번]만 가능합니다.<br>
+        ※ 프로모션 등록 후 대상상품(D1)과 증정상품(D2)을 등록하세요.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="regSubmitBtn" onclick="submitReg()">등록</button>
+      <button class="btn-modal-close" onclick="closeRegModal()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 업무규칙 모달 ── -->
+<div class="modal-bg" id="ruleModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-header" id="ruleHeader">
+      <span>업무규칙</span>
+      <button class="close-btn" onclick="closeRule()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="rule-title">화면구성</p>
+      <table class="rule-table">
+        <tr><th>메뉴그룹명</th><td>기준정보</td><th>메뉴그룹코드</th><td>MD8000</td></tr>
+        <tr><th>메뉴명</th><td>사은품관리</td><th>메뉴코드</th><td>MDPR01</td></tr>
+        <tr><th>UI유형</th><td colspan="3">그리드 3개 상단 하단좌측 하단우측</td></tr>
+        <tr><th>목적</th><td colspan="3">출고 시 사은품 증정을 위한 프로모션 기준정보 관리</td></tr>
+      </table>
+      <p class="rule-title">업무규칙</p>
+      <ol class="rule-list">
+        <li>프로모션을 먼저 등록한 후 대상품목(D1)·증정품목(D2)을 등록할 수 있다.</li>
+        <li>증정유형=여러번인 경우 D1(대상품목)은 1개만 등록 가능하다.</li>
+        <li>프로모션유형=금액인 경우 증정유형은 한번만 선택 가능하다.</li>
+        <li>대상구분=품목이면 [품목번호·품목명]만 활성화, 대상구분=대분류이면 [대분류]만 활성화된다.</li>
+        <li>금액복사: 기준금액×지정 개수만큼 배수 행 자동생성 (예: 30,000×10개 → 30,000/60,000…300,000)</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" onclick="closeRule()">닫 기</button>
+    </div>
+  </div>
+</div>
+
+    <script src="../../../50-prototype/10-common/wms-common.js"></script>
+<script src="./mdpr01-02-mock-data.js"></script>
+<script>
+/* ── 상태 변수 ── */
+var mainAll = [];
+var d1All   = [];
+var d2All   = [];
+var mainFiltered = [];
+var mainPage = 1;
+var mainPageSize = 50;
+var selectedMainIdx = -1;
+var selectedPromoId = null;
+var editMode = false;
+
+/* ── 초기화 ── */
+window.addEventListener('DOMContentLoaded', function() {
+  mainAll = JSON.parse(JSON.stringify(MDPR01_DATA.main));
+  d1All   = JSON.parse(JSON.stringify(MDPR01_DATA.d1));
+  d2All   = JSON.parse(JSON.stringify(MDPR01_DATA.d2));
+  doSearch();
+  initHScroll('mainWrap', 'mainHScroll', 'mainHInner', 'mainTable');
+  initHScroll('d1Wrap',   'd1HScroll',   'd1HInner',   'd1Table');
+  initHScroll('d2Wrap',   'd2HScroll',   'd2HInner',   'd2Table');
+});
+
+/* ── 검색 조건 대상구분 변경 ── */
+function onTargetDivChange() {
+  var v = document.getElementById('s_targetDiv').value;
+  var prodNoBtn  = document.getElementById('s_prodNoBtn');
+  var prodNmBtn  = document.getElementById('s_prodNmBtn');
+  var largeDivSel = document.getElementById('s_largeDiv');
+
+  if (v === '대분류') {
+    document.getElementById('s_prodNo').disabled = true;
+    document.getElementById('s_prodNm').disabled = true;
+    if (prodNoBtn) prodNoBtn.disabled = true;
+    if (prodNmBtn) prodNmBtn.disabled = true;
+    largeDivSel.disabled = false;
+  } else if (v === '품목') {
+    document.getElementById('s_prodNo').disabled = false;
+    document.getElementById('s_prodNm').disabled = false;
+    if (prodNoBtn) prodNoBtn.disabled = false;
+    if (prodNmBtn) prodNmBtn.disabled = false;
+    largeDivSel.disabled = true;
+    largeDivSel.value = '';
+  } else {
+    document.getElementById('s_prodNo').disabled = false;
+    document.getElementById('s_prodNm').disabled = false;
+    if (prodNoBtn) prodNoBtn.disabled = false;
+    if (prodNmBtn) prodNmBtn.disabled = false;
+    largeDivSel.disabled = true;
+    largeDivSel.value = '';
+  }
+}
+
+/* ── 검색 ── */
+function doSearch() {
+  var promoNm  = document.getElementById('s_promoNm').value.trim();
+  var promoType = document.getElementById('s_promoType').value;
+  var giftType  = document.getElementById('s_giftType').value;
+  var targetDiv = document.getElementById('s_targetDiv').value;
+  var useYn     = document.getElementById('s_useYn').value;
+
+  mainFiltered = mainAll.filter(function(r) {
+    if (promoNm   && r.promoNm.indexOf(promoNm) < 0)    return false;
+    if (promoType && r.promoType !== promoType)          return false;
+    if (giftType  && r.giftType  !== giftType)           return false;
+    if (targetDiv && r.targetDiv !== targetDiv)          return false;
+    if (useYn     && r.useYn     !== useYn)              return false;
+    return true;
+  });
+  mainPage = 1;
+  selectedMainIdx = -1;
+  selectedPromoId = null;
+  renderMainGrid();
+  renderD1Grid([]);
+  renderD2Grid([]);
+}
+
+/* ── 초기화 ── */
+function doReset() {
+  document.getElementById('s_promoNm').value = '';
+  document.getElementById('s_promoType').value = '';
+  document.getElementById('s_giftType').value = '';
+  document.getElementById('s_targetDiv').value = '';
+  document.getElementById('s_targetQty').value = '';
+  document.getElementById('s_baseYmd').value = '';
+  document.getElementById('s_startYmd').value = '';
+  document.getElementById('s_endYmd').value = '';
+  document.getElementById('s_prodNo').value = '';
+  document.getElementById('s_prodNm').value = '';
+  document.getElementById('s_largeDiv').value = '';
+  document.getElementById('s_useYn').value = '';
+  document.getElementById('s_prodNo').disabled = false;
+  document.getElementById('s_prodNm').disabled = false;
+  document.getElementById('s_prodNoBtn').disabled = false;
+  document.getElementById('s_prodNmBtn').disabled = false;
+  document.getElementById('s_largeDiv').disabled = true;
+  doSearch();
+}
+
+/* ── 메인 그리드 렌더 ── */
+function renderMainGrid() {
+  var tbody = document.getElementById('mainTbody');
+  var total = mainFiltered.length;
+  var size  = mainPageSize;
+  var start = (mainPage - 1) * size;
+  var rows  = mainFiltered.slice(start, start + size);
+  var html  = '';
+
+  rows.forEach(function(r, i) {
+    var absIdx = start + i;
+    var sel = (absIdx === selectedMainIdx) ? ' selected' : '';
+    html += '<tr class="' + sel + '"' +
+            ' onclick="selectMainRow(' + absIdx + ')"' +
+            ' ondblclick="openEditModal()">' +
+      '<td class="tc">' + (absIdx + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" class="main-chk" style="width:12px;height:12px" data-idx="' + absIdx + '"></td>' +
+      '<td class="tl">' + esc(r.promoNm) + '</td>' +
+      '<td class="tc">' + esc(r.promoType) + '</td>' +
+      '<td class="tc">' + esc(r.giftType)  + '</td>' +
+      '<td class="tc">' + esc(r.targetDiv) + '</td>' +
+      '<td class="tr">' + fmt(r.targetQty) + '</td>' +
+      '<td class="tc">' + esc(r.startYmd)  + '</td>' +
+      '<td class="tc">' + esc(r.endYmd)    + '</td>' +
+      '<td class="tc">' + (r.useYn === 'Y' ? '<span class="chk-icon">✔</span>' : '') + '</td>' +
+      '<td class="tl">' + esc(r.remark)    + '</td>' +
+    '</tr>';
+  });
+
+  tbody.innerHTML = html || '<tr><td colspan="11" class="tc" style="color:#9ca3af;padding:20px 0;">조회된 데이터가 없습니다.</td></tr>';
+  renderPagination('mainPaging', total, size, mainPage, 'goMainPage');
+  renderRowCount('mainRowCount', total, size, mainPage);
+  syncHScroll('mainHInner', 'mainTable');
+}
+
+function goMainPage(p) { mainPage = p; renderMainGrid(); }
+function changeMainPageSize() {
+  mainPageSize = parseInt(document.getElementById('mainPageSize').value);
+  mainPage = 1;
+  renderMainGrid();
+}
+
+function selectMainRow(idx) {
+  selectedMainIdx = idx;
+  selectedPromoId = mainFiltered[idx] ? mainFiltered[idx].promoId : null;
+  renderMainGrid();
+  if (selectedPromoId) {
+    var d1rows = d1All.filter(function(r) { return r.promoId === selectedPromoId; });
+    var d2rows = d2All.filter(function(r) { return r.promoId === selectedPromoId; });
+    renderD1Grid(d1rows);
+    renderD2Grid(d2rows);
+    /* 금액복사 버튼 활성/비활성 */
+    var promo = mainFiltered[idx];
+    var amtBtn = document.getElementById('btnAmtCopy');
+    if (amtBtn) amtBtn.disabled = (promo && promo.promoType === '품목');
+  }
+}
+
+function toggleMainAll(chk) {
+  var boxes = document.querySelectorAll('.main-chk');
+  boxes.forEach(function(b) { b.checked = chk.checked; });
+}
+
+/* ── D1 렌더 ── */
+function renderD1Grid(rows) {
+  var tbody = document.getElementById('d1Tbody');
+  var isLargeDiv = selectedPromoId && mainFiltered[selectedMainIdx] && mainFiltered[selectedMainIdx].targetDiv === '대분류';
+  var isProd     = selectedPromoId && mainFiltered[selectedMainIdx] && mainFiltered[selectedMainIdx].targetDiv === '품목';
+  var html = '';
+
+  rows.forEach(function(r, i) {
+    html += '<tr>' +
+      '<td class="tc">' + (i + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" class="d1-chk" style="width:12px;height:12px"></td>' +
+      '<td>' +
+        '<select class="d1-largediv" ' + (isLargeDiv ? '' : 'disabled') + '>' +
+          '<option value="">' + (r.largeDiv || '') + '</option>' +
+          '<option value="음료">음료</option>' +
+          '<option value="건강식품">건강식품</option>' +
+          '<option value="생활용품">생활용품</option>' +
+          '<option value="식품">식품</option>' +
+        '</select>' +
+      '</td>' +
+      '<td>' +
+        '<div class="inline-popup-cell">' +
+          '<input type="text" value="' + esc(r.targetProdNo) + '" ' + (isProd ? '' : 'disabled') + ' readonly>' +
+          '<button class="btn-inline-popup" ' + (isProd ? '' : 'disabled') + ' onclick="openPdPopupCb(function(pd){setD1Prod(' + i + ',pd)})">🔍</button>' +
+        '</div>' +
+      '</td>' +
+      '<td class="tl">' +
+        '<input type="text" value="' + esc(r.targetProdNm) + '" ' + (isProd ? '' : 'disabled') + ' readonly style="width:100%">' +
+      '</td>' +
+    '</tr>';
+  });
+
+  if (!rows.length) {
+    html = '<tr><td colspan="5" class="tc" style="color:#9ca3af;padding:16px 0;">프로모션을 선택하세요.</td></tr>';
+  }
+  tbody.innerHTML = html;
+  syncHScroll('d1HInner', 'd1Table');
+}
+
+function setD1Prod(idx, pd) {
+  var rows = document.getElementById('d1Tbody').querySelectorAll('tr');
+  if (rows[idx]) {
+    var inputs = rows[idx].querySelectorAll('input[type="text"]');
+    if (inputs[0]) inputs[0].value = pd.prodNo || '';
+    if (inputs[1]) inputs[1].value = pd.prodNm || '';
+  }
+}
+
+function toggleD1All(chk) {
+  document.querySelectorAll('.d1-chk').forEach(function(b) { b.checked = chk.checked; });
+}
+
+function addD1Row() {
+  if (!selectedPromoId) { alert('프로모션을 먼저 선택하세요.'); return; }
+  var promo = mainFiltered[selectedMainIdx];
+  if (promo && promo.giftType === '여러번') {
+    var cur = document.getElementById('d1Tbody').querySelectorAll('tr').length;
+    var hasData = document.getElementById('d1Tbody').querySelector('td[colspan]');
+    if (!hasData && cur >= 1) { alert('증정유형이 [여러번]인 경우 대상품목은 1개만 등록 가능합니다.'); return; }
+  }
+  var newRow = { d1Id: Date.now(), promoId: selectedPromoId, largeDiv:'', targetProdNo:'', targetProdNm:'' };
+  d1All.push(newRow);
+  var d1rows = d1All.filter(function(r) { return r.promoId === selectedPromoId; });
+  renderD1Grid(d1rows);
+}
+
+function deleteD1Row() {
+  var checked = document.querySelectorAll('.d1-chk:checked');
+  if (!checked.length) { alert('삭제할 행을 선택하세요.'); return; }
+  if (!confirm('선택한 ' + checked.length + '건을 삭제하시겠습니까?')) return;
+  var d1rows = d1All.filter(function(r) { return r.promoId === selectedPromoId; });
+  var delIdxs = [];
+  checked.forEach(function(chk) {
+    var tr = chk.closest('tr');
+    var idx = Array.from(tr.parentNode.children).indexOf(tr);
+    delIdxs.push(idx);
+  });
+  delIdxs.sort(function(a,b){ return b-a; }).forEach(function(i) {
+    var row = d1rows[i];
+    if (row) { var pos = d1All.indexOf(row); if (pos > -1) d1All.splice(pos, 1); }
+  });
+  renderD1Grid(d1All.filter(function(r) { return r.promoId === selectedPromoId; }));
+}
+
+function saveD1() { alert('대상품목이 저장되었습니다.'); }
+
+/* ── D2 렌더 ── */
+function renderD2Grid(rows) {
+  var tbody = document.getElementById('d2Tbody');
+  var html = '';
+
+  rows.forEach(function(r, i) {
+    html += '<tr>' +
+      '<td class="tc">' + (i + 1) + '</td>' +
+      '<td class="tc"><input type="checkbox" class="d2-chk" style="width:12px;height:12px"></td>' +
+      '<td><input type="number" value="' + (r.applyAmt || 0) + '" style="width:100%;text-align:right"></td>' +
+      '<td>' +
+        '<div class="inline-popup-cell">' +
+          '<input type="text" value="' + esc(r.giftProdNo) + '" readonly>' +
+          '<button class="btn-inline-popup" onclick="openPdPopupCb(function(pd){setD2Prod(' + i + ',pd)})">🔍</button>' +
+        '</div>' +
+      '</td>' +
+      '<td class="tl"><input type="text" value="' + esc(r.giftProdNm) + '" readonly style="width:100%"></td>' +
+      '<td><input type="number" value="' + (r.giftQty || 1) + '" min="1" style="width:100%;text-align:right"></td>' +
+    '</tr>';
+  });
+
+  if (!rows.length) {
+    html = '<tr><td colspan="6" class="tc" style="color:#9ca3af;padding:16px 0;">프로모션을 선택하세요.</td></tr>';
+  }
+  tbody.innerHTML = html;
+  syncHScroll('d2HInner', 'd2Table');
+}
+
+function setD2Prod(idx, pd) {
+  var rows = document.getElementById('d2Tbody').querySelectorAll('tr');
+  if (rows[idx]) {
+    var inputs = rows[idx].querySelectorAll('input[type="text"]');
+    if (inputs[0]) inputs[0].value = pd.prodNo || '';
+    if (inputs[1]) inputs[1].value = pd.prodNm || '';
+  }
+}
+
+function toggleD2All(chk) {
+  document.querySelectorAll('.d2-chk').forEach(function(b) { b.checked = chk.checked; });
+}
+
+function addD2Row() {
+  if (!selectedPromoId) { alert('프로모션을 먼저 선택하세요.'); return; }
+  var newRow = { d2Id: Date.now(), promoId: selectedPromoId, applyAmt:0, giftProdNo:'', giftProdNm:'', giftQty:1 };
+  d2All.push(newRow);
+  renderD2Grid(d2All.filter(function(r) { return r.promoId === selectedPromoId; }));
+}
+
+function deleteD2Row() {
+  var checked = document.querySelectorAll('.d2-chk:checked');
+  if (!checked.length) { alert('삭제할 행을 선택하세요.'); return; }
+  if (!confirm('선택한 ' + checked.length + '건을 삭제하시겠습니까?')) return;
+  var d2rows = d2All.filter(function(r) { return r.promoId === selectedPromoId; });
+  var delIdxs = [];
+  checked.forEach(function(chk) {
+    var tr = chk.closest('tr');
+    var idx = Array.from(tr.parentNode.children).indexOf(tr);
+    delIdxs.push(idx);
+  });
+  delIdxs.sort(function(a,b){ return b-a; }).forEach(function(i) {
+    var row = d2rows[i];
+    if (row) { var pos = d2All.indexOf(row); if (pos > -1) d2All.splice(pos, 1); }
+  });
+  renderD2Grid(d2All.filter(function(r) { return r.promoId === selectedPromoId; }));
+}
+
+function saveD2() { alert('증정품목이 저장되었습니다.'); }
+
+/* 금액복사: 기준금액 × n배 행 자동생성 */
+function doAmtCopy() {
+  if (!selectedPromoId) { alert('프로모션을 먼저 선택하세요.'); return; }
+  var base = parseInt(prompt('기준금액을 입력하세요.', '30000'));
+  if (isNaN(base) || base <= 0) return;
+  var cnt  = parseInt(prompt('복사 개수를 입력하세요. (예: 10)', '10'));
+  if (isNaN(cnt)  || cnt  <= 0) return;
+  for (var i = 1; i <= cnt; i++) {
+    d2All.push({ d2Id: Date.now() + i, promoId: selectedPromoId, applyAmt: base * i, giftProdNo:'', giftProdNm:'', giftQty:1 });
+  }
+  renderD2Grid(d2All.filter(function(r) { return r.promoId === selectedPromoId; }));
+}
+
+/* ── 등록/수정 팝업 ── */
+function openRegModal() {
+  editMode = false;
+  document.getElementById('regModalTitle').textContent = '사은품관리 등록 [MDPR01P01]';
+  document.getElementById('regSubmitBtn').textContent = '등록';
+  clearForm();
+  document.getElementById('f_bplc').disabled = false;
+  var modal = document.getElementById('regModal');
+  centerModal(modal);
+  modal.classList.add('open');
+}
+
+function openEditModal() {
+  if (selectedMainIdx < 0 || !mainFiltered[selectedMainIdx]) { alert('수정할 프로모션을 선택하세요.'); return; }
+  editMode = true;
+  var r = mainFiltered[selectedMainIdx];
+  document.getElementById('regModalTitle').textContent = '사은품관리 수정 [MDPR01P01]';
+  document.getElementById('regSubmitBtn').textContent = '저장';
+  document.getElementById('f_bplc').value = '1000';
+  document.getElementById('f_bplc').disabled = true;
+  document.getElementById('f_promoNm').value  = r.promoNm;
+  document.getElementById('f_promoType').value = r.promoType;
+  document.getElementById('f_giftType').value  = r.giftType;
+  document.getElementById('f_targetDiv').value = r.targetDiv;
+  document.getElementById('f_targetQty').value = r.targetQty;
+  document.getElementById('f_startYmd').value  = r.startYmd;
+  document.getElementById('f_endYmd').value    = r.endYmd;
+  document.getElementById('f_useYn').value     = r.useYn;
+  document.getElementById('f_remark').value    = r.remark;
+  onFormPromoTypeChange();
+  var modal = document.getElementById('regModal');
+  centerModal(modal);
+  modal.classList.add('open');
+}
+
+function closeRegModal() {
+  document.getElementById('regModal').classList.remove('open');
+}
+
+function clearForm() {
+  ['f_promoNm','f_startYmd','f_endYmd','f_remark'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  ['f_bplc','f_promoType','f_giftType','f_targetDiv','f_useYn'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f_targetQty').value = '';
+  document.getElementById('f_useYn').value = 'Y';
+}
+
+function onFormPromoTypeChange() {
+  var v = document.getElementById('f_promoType').value;
+  var giftTypeSel = document.getElementById('f_giftType');
+  if (v === '금액') {
+    giftTypeSel.value = '한번';
+    giftTypeSel.disabled = true;
+  } else {
+    giftTypeSel.disabled = false;
+  }
+}
+
+function submitReg() {
+  var promoNm  = document.getElementById('f_promoNm').value.trim();
+  var promoType = document.getElementById('f_promoType').value;
+  var giftType  = document.getElementById('f_giftType').value;
+  var targetDiv = document.getElementById('f_targetDiv').value;
+  var targetQty = document.getElementById('f_targetQty').value;
+  var startYmd  = document.getElementById('f_startYmd').value;
+  var endYmd    = document.getElementById('f_endYmd').value;
+
+  if (!promoNm)   { alert('프로모션명을 입력하세요.');   return; }
+  if (!promoType)  { alert('프로모션유형을 선택하세요.'); return; }
+  if (!giftType)   { alert('증정유형을 선택하세요.');     return; }
+  if (!targetDiv)  { alert('대상구분을 선택하세요.');     return; }
+  if (!targetQty)  { alert('대상수량을 입력하세요.');     return; }
+  if (!startYmd)   { alert('적용시작일자를 입력하세요.'); return; }
+  if (!endYmd)     { alert('적용종료일자를 입력하세요.'); return; }
+
+  if (editMode) {
+    var r = mainFiltered[selectedMainIdx];
+    if (r) {
+      var orig = mainAll.find(function(o) { return o.promoId === r.promoId; });
+      if (orig) {
+        orig.promoNm   = promoNm;
+        orig.promoType = promoType;
+        orig.giftType  = giftType;
+        orig.targetDiv = targetDiv;
+        orig.targetQty = parseInt(targetQty);
+        orig.startYmd  = startYmd;
+        orig.endYmd    = endYmd;
+        orig.useYn     = document.getElementById('f_useYn').value;
+        orig.remark    = document.getElementById('f_remark').value;
+      }
+    }
+    alert('수정되었습니다.');
+  } else {
+    var newId = 'PROMO-NEW-' + String(Date.now()).slice(-4);
+    mainAll.push({
+      promoId: newId,
+      promoNm: promoNm,
+      promoType: promoType,
+      giftType: giftType,
+      targetDiv: targetDiv,
+      targetQty: parseInt(targetQty),
+      startYmd: startYmd,
+      endYmd: endYmd,
+      useYn: document.getElementById('f_useYn').value,
+      remark: document.getElementById('f_remark').value
+    });
+    alert('등록되었습니다.');
+  }
+  closeRegModal();
+  doSearch();
+}
+
+/* ── 메인 삭제 ── */
+function doDeleteMain() {
+  var checked = document.querySelectorAll('.main-chk:checked');
+  if (!checked.length) { alert('삭제할 항목을 선택하세요.'); return; }
+  if (!confirm('선택한 ' + checked.length + '건을 삭제하시겠습니까?')) return;
+  var delIdxs = [];
+  checked.forEach(function(chk) { delIdxs.push(parseInt(chk.dataset.idx)); });
+  delIdxs.sort(function(a,b){ return b-a; }).forEach(function(i) {
+    var r = mainFiltered[i];
+    if (r) { var pos = mainAll.indexOf(r); if (pos > -1) mainAll.splice(pos, 1); }
+  });
+  selectedMainIdx = -1;
+  selectedPromoId = null;
+  doSearch();
+}
+
+/* ── 모달 드래그 초기화 ── */
+initModalDrag('regModal',  'regHeader');
+initModalDrag('ruleModal', 'ruleHeader');
+</script>
+</body>
+</html>

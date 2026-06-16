@@ -1,6 +1,9 @@
 ---
 name: SD_332
-description: 【공통코드정의서 엑셀 생성 (Windows/WSL/Linux/Mac 통합)】 사용자가 지정한 디렉토리의 DB 설정 파일을 자동 스캔하여 DB(PostgreSQL/MSSQL/MySQL/MariaDB)에 직접 접속하고, sm_comm_h/sm_comm_d 공통코드를 추출하여 PI_113-공통코드정의서 엑셀 파일을 자동 생성합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. /SD_332 {디렉토리경로} 형식으로 실행합니다. 공통코드정의서 작성, 공통코드 테일러링, 공통코드 엑셀 추출, DB 공통코드를 산출물로 만들기 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "PI_113 산출물 만들어줘", "공통코드 테일러링 해줘", "SD_332 실행해줘", "WSL에서 공통코드정의서 만들어줘", "Linux에서 공통코드 뽑아줘" 라고 말해도 이 스킬을 사용합니다.
+description: 실DB 접속 → 공통코드정의서 엑셀 생성 (sm_comm_h/sm_comm_d, Windows/WSL/Linux 자동 감지). /SD_332 {디렉토리경로}
+when_to_use: "공통코드정의서 만들어줘", "공통코드 뽑아줘", "공통코드 엑셀로 추출", "공통코드 테일러링 해줘" 요청 시 사용.
+argument-hint: "[디렉토리경로]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ---
 

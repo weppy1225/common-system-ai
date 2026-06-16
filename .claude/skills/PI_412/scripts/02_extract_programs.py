@@ -29,11 +29,11 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 REPO_BASE = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip())
-OUT_DIR = REPO_BASE / "output" / "04 구현(PI)"
+OUT_DIR = REPO_BASE / "20-deliverables" / "30-output" / "04 구현(PI)"
 TMP_DIR = OUT_DIR / "tmp"
 SCAN_JSON = TMP_DIR / "scan.json"
 OUT_JSON = TMP_DIR / "programs.json"
-TEMPLATE_XLSX = REPO_BASE / "template" / "04 구현(PI)" / "PI_412-프로그램목록.xlsx"
+TEMPLATE_XLSX = REPO_BASE / "20-deliverables" / "10-templates" / "04 구현(PI)" / "PI_412-프로그램목록.xlsx"
 
 KOREAN = re.compile(r"[가-힣]")
 

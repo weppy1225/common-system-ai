@@ -336,17 +336,14 @@ def should_scan(name):
 
 
 def read_text(path):
-    for enc in ("utf-8", "utf-8-sig", "cp949", "latin-1"):
+    for enc in ("utf-8", "utf-8-sig"):
         try:
             return path.read_text(encoding=enc, errors="strict")
         except UnicodeDecodeError:
             continue
         except Exception:
             return None
-    try:
-        return path.read_text(encoding="utf-8", errors="ignore")
-    except Exception:
-        return None
+    return path.read_text(encoding="utf-8", errors="replace")
 
 
 def scan_dir(root):

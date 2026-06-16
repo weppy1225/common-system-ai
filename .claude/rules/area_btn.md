@@ -1,12 +1,10 @@
 ---
 description: 그리드 상단 툴바 영역의 버튼 종류, 배치 순서, 스타일 규칙. CRUD 아이콘 버튼(btn-icon), 텍스트 버튼, 엑셀 버튼의 정렬·크기·색상을 정의한다.
-globs: ["**/*.html"]
-alwaysApply: false
+paths:
+  - "**/*.html"
 ---
 
 # 기능 버튼 영역 (Toolbar) 규칙
-
-검색 필터 영역 바로 아래, 데이터 그리드가 시작되기 전에 위치하는 기능 버튼(Toolbar) 영역에 적용되는 규칙이다.
 
 ---
 
@@ -54,3 +52,9 @@ alwaysApply: false
 - 기본 버튼 호버: `border-color: #9ca3af; background: #f9fafb; color: #111827`.
 - 보조 버튼(`.btn-aux`) 스타일: `color: #6b7280; font-weight: 400`, 호버 시 `color: #374151; background: #f9fafb`.
 - 강조 버튼(`.btn-primary`) 스타일: `background: #304a6e; border-color: #304a6e; color: #fff`, 호버 시 `background: #263858; border-color: #263858`.
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (기능 버튼 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

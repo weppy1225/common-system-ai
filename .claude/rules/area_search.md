@@ -1,12 +1,10 @@
 ---
 description: 화면 상단 검색 조건 입력 영역(search-area)을 포함한 HTML 작성 시 적용. 레이아웃, 레이블, 입력 컴포넌트, 헤더 버튼 배치 규칙을 정의한다.
-globs: ["**/*.html"]
-alwaysApply: false
+paths:
+  - "**/*.html"
 ---
 
 # 검색 필터 영역 규칙
-
-화면 상단에 위치하는 검색 조건 입력 영역에 적용되는 규칙이다.
 
 ---
 
@@ -69,3 +67,9 @@ alwaysApply: false
 - 검색 조건 영역(`.search-area`)은 `background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; flex-shrink: 0`으로 감싼다.
 - 검색 영역과 헤더 사이 간격은 `margin-top: -2px`로 조정하여 헤더와 자연스럽게 이어지도록 한다.
 - `btn-search` 호버 시 `color: #2a5a8f`도 함께 변경한다 (테두리·배경 변경과 동일 조건).
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (검색 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

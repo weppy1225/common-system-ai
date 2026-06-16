@@ -1,12 +1,10 @@
 ---
 description: 검색 결과 데이터 그리드(Data Grid) 영역 HTML 작성 시 적용. 헤더·셀·컬럼 너비·정렬·페이징·스크롤·다중 패널 높이 제어 규칙을 정의한다.
-globs: ["**/*.html"]
-alwaysApply: false
+paths:
+  - "**/*.html"
 ---
 
 # 결과 그리드 영역 규칙
-
-검색 결과가 출력되는 데이터 그리드(Data Grid) 영역에 적용되는 규칙이다.
 
 ---
 
@@ -236,3 +234,9 @@ page-wrap (height: 100vh, overflow: hidden)
 .h-scroll-wrap { flex-shrink: 0; height: 12px; }
 .grid-footer   { flex-shrink: 0; height: 40px; }
 ```
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스 (결과 그리드 영역 포함):
+→ `10-src-pattern/10-screen-design/10-web/00-overview.md`

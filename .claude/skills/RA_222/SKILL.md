@@ -1,6 +1,9 @@
 ---
 name: RA_222
-description: 【요구사항정의서 엑셀 생성 (Windows/WSL/Linux/Mac 통합)】 회의록 엑셀파일을 분석하여 요구사항정의서 엑셀 파일을 자동 생성합니다. 실행 환경(Windows PowerShell vs WSL/Linux/macOS Bash)을 자동 감지하여 해당 OS 분기 블록만 실행합니다. /RA_222 {고객사명} 형식으로 실행합니다. 요구사항정의서, 요구사항 도출, 회의록 분석, FUR 요건 정리, WMS 요구사항 작성 요청 시 반드시 이 스킬을 사용합니다. 사용자가 "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘", "RA_222 실행해줘", "WSL에서 요구사항정의서 만들어줘", "Linux에서 회의록 분석해줘" 라고 말해도 이 스킬을 사용합니다.
+description: 회의록 엑셀 분석 → 요구사항정의서 엑셀 자동 생성 (Windows/WSL/Linux 자동 감지). /RA_222 {고객사명}
+when_to_use: "요구사항 뽑아줘", "회의록 정리해줘", "RA 산출물 만들어줘", "요구사항정의서 만들어줘" 요청 시 사용.
+argument-hint: "[고객사명]"
+disable-model-invocation: true
 allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 ---
 
@@ -8,8 +11,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 
 업체명: **$ARGUMENTS**
 
-`input/RA.212/` 폴더의 회의록 Excel 파일들을 3-에이전트 파이프라인으로 분석하여
-`output/02 분析(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 파일을 생성한다.
+`20-deliverables/20-sources/RA.212/` 폴더의 회의록 Excel 파일들을 3-에이전트 파이프라인으로 분석하여
+`20-deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
 ---
 
@@ -30,16 +33,16 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 
 ### 업체명 확정
 
-`$ARGUMENTS`가 비어 있으면 `input/RA.212/` 파일명에서 자동 추출한다.
+`$ARGUMENTS`가 비어 있으면 `20-deliverables/20-sources/RA.212/` 파일명에서 자동 추출한다.
 파일명 패턴: `{코드}-{문서명}_{업체명}_{날짜}.xlsx` → 두 번째 `_` 구분자 사이 값.
 
 ### 출력 경로
 
 ```
-OUTPUT_DIR  = output/02 분析(RA)
-TMP_DIR     = output/02 분析(RA)/tmp
-OUTPUT_FILE = output/02 분析(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
-TEMPLATE    = template/02 분析(RA)/RA.314-요구사항정의서.xlsx
+OUTPUT_DIR  = 20-deliverables/30-output/02 분석(RA)
+TMP_DIR     = 20-deliverables/30-output/02 분석(RA)/tmp
+OUTPUT_FILE = 20-deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
+TEMPLATE    = 20-deliverables/10-templates/02 분석(RA)/RA.314-요구사항정의서.xlsx
 ```
 
 `OUTPUT_DIR` 과 `TMP_DIR` 폴더가 없으면 생성한다.
@@ -109,7 +112,7 @@ python3 .claude/skills/RA_222/scripts/03_generate_excel.py
 
 ### 에이전트 1 — 회의록 읽기
 
-**목적**: `input/RA.212/` 의 모든 xlsx 파일을 읽어 원문 내용을 JSON으로 추출한다.
+**목적**: `20-deliverables/20-sources/RA.212/` 의 모든 xlsx 파일을 읽어 원문 내용을 JSON으로 추출한다.
 
 **에이전트 프롬프트**:
 
@@ -134,7 +137,7 @@ python3 .claude/skills/RA_222/scripts/03_generate_excel.py
 ```
 업체명: {$ARGUMENTS 또는 파일명 자동 추출값}
 
-output/02 분析(RA)/tmp/meeting_raw.json 파일을 Read 툴로 읽어 회의록 내용을 분석하라.
+20-deliverables/30-output/02 분석(RA)/tmp/meeting_raw.json 파일을 Read 툴로 읽어 회의록 내용을 분석하라.
 
 [회의록 구조 파싱 힌트]
 - 각 sheet_name = 회의 날짜 (예: "20260319(목)") → 작성일자 추출
@@ -174,7 +177,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 - 메뉴현황에만 있고 회의록 협의 내용이 없으면 "메뉴 존재 확인" 수준으로만 기재
 - 부문 순서: CO → MD → IW → RM → IV → OW → IF → PDA → ERR
 
-분석 결과를 아래 JSON 구조로 output/02 분析(RA)/tmp/requirements.json 에 저장하라:
+분석 결과를 아래 JSON 구조로 20-deliverables/30-output/02 분석(RA)/tmp/requirements.json 에 저장하라:
 
 {
   "company": "{업체명}",
@@ -226,7 +229,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 - [ ] 부문 순서: CO → MD → IW → RM → IV → OW → IF → PDA → ERR
 - [ ] 요구처: I/F 항목은 IT솔루션팀, 나머지는 물류팀
 - [ ] 작성일자: 해당 협의가 이루어진 회의 날짜 기준
-- [ ] `output/02 분析(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 생성 확인
+- [ ] `20-deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 생성 확인
 
 ---
 
@@ -237,7 +240,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 
 실행 환경: Windows PowerShell  또는  Bash on Linux/Mac/WSL
 업체명:    {업체명}
-출력파일:  output/02 분析(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
+출력파일:  20-deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx
 
 요구사항 현황:
   - 공통(CO):   N건

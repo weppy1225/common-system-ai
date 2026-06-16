@@ -174,7 +174,7 @@ def parse_jdbc_url(url: str) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def read_file(path: Path) -> str:
-    for enc in ("utf-8", "utf-8-sig", "cp949", "euc-kr"):
+    for enc in ("utf-8", "utf-8-sig"):
         try:
             return path.read_text(encoding=enc)
         except UnicodeDecodeError:
