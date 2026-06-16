@@ -1,0 +1,486 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>앱 메인 / 설정 / 메뉴 - Cloud WMS</title>
+<link rel="stylesheet" href="../mobile.css">
+<style>
+.step-nav{display:flex;align-items:center;justify-content:space-between;background:#1c2333;color:#fff;padding:6px 14px;font-size:12px;flex-shrink:0;}
+.step-nav button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:13px;}
+.step-screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.step-screen.active{display:flex;}
+
+/* 공통 헤더 */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1.5px solid #e8eaed;background:#fff;flex-shrink:0;height:64px;}
+.app-header .hdr-left{display:flex;align-items:center;gap:10px;}
+.app-header .hdr-logo{display:flex;align-items:center;gap:2px;}
+.app-header .hdr-logo-cloud{color:#00afec;font-size:22px;}
+.app-header .hdr-logo-text{font-size:18px;font-weight:700;color:#333;}
+.app-header .hdr-logo-sub{font-size:14px;color:#888;letter-spacing:2px;font-weight:400;}
+.hdr-icon{position:relative;cursor:pointer;}
+.hdr-icon svg{width:28px;height:28px;}
+.hdr-badge{position:absolute;top:-4px;right:-6px;background:#e53935;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 5px;min-width:18px;text-align:center;}
+.hdr-logout{width:36px;height:36px;border:1.5px solid #bbb;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#f5f5f5;}
+
+/* 메인 콘텐츠 */
+.main-content{flex:1;overflow-y:auto;background:#f7f8fa;padding:0;}
+.main-chart-area{background:#fff;margin:16px;border-radius:14px;padding:28px 20px;box-shadow:0 1px 6px rgba(0,0,0,.06);min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.chart-placeholder{color:#bbb;font-size:14px;text-align:center;line-height:2;}
+.chart-title{font-size:15px;font-weight:700;color:#333;margin-bottom:6px;}
+
+/* 설정 화면 */
+.settings-header{display:flex;align-items:center;padding:14px 16px;border-bottom:1.5px solid #e8eaed;background:#fff;flex-shrink:0;height:64px;}
+.settings-back{font-size:22px;color:#555;cursor:pointer;margin-right:10px;line-height:1;}
+.settings-title{flex:1;text-align:center;font-size:18px;font-weight:600;color:#222;}
+.settings-tab{display:flex;background:#f0f0f0;margin:12px 16px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+.settings-tab button{flex:1;padding:10px 0;border:none;background:transparent;font-size:14px;color:#666;cursor:pointer;border-radius:10px;transition:all .15s;}
+.settings-tab button.active{background:#fff;font-weight:700;color:#222;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.settings-content{flex:1;overflow-y:auto;padding:0 16px;}
+.form-row{margin-bottom:12px;}
+.form-label{font-size:14px;color:#333;margin-bottom:4px;font-weight:500;}
+.form-label span.code{color:#e53935;font-weight:600;}
+.form-input{width:100%;height:44px;border:1.5px solid #d1d5db;border-radius:8px;padding:0 12px;font-size:15px;color:#111;background:#fff;outline:none;}
+.form-input:focus{border-color:#00afec;}
+.form-input.readonly{background:#f3f4f6;color:#666;}
+.form-row-inline{display:flex;gap:8px;align-items:stretch;}
+.form-row-inline .form-input{flex:1;}
+.btn-social{height:44px;padding:0 14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.btn-google{background:#00afec;color:#fff;}
+.btn-kakao{background:#00afec;color:#fff;}
+.settings-save{margin:16px 16px 12px;padding:14px 0;background:#00afec;color:#fff;font-size:16px;font-weight:700;border:none;border-radius:10px;width:calc(100% - 32px);cursor:pointer;flex-shrink:0;}
+
+/* 토글 스위치 */
+.toggle-list{margin:8px 0;}
+.toggle-item{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #e8eaed;}
+.toggle-item:last-child{border-bottom:none;}
+.toggle-label{font-size:16px;color:#222;font-weight:500;}
+.toggle-switch{position:relative;width:50px;height:28px;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;top:0;left:0;right:0;bottom:0;background:#4caf50;border-radius:14px;transition:.3s;}
+.toggle-track:before{content:'';position:absolute;width:22px;height:22px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle-switch input:not(:checked)+.toggle-track{background:#ccc;}
+.toggle-switch input:not(:checked)+.toggle-track:before{transform:translateX(0);}
+.toggle-switch input:checked+.toggle-track:before{transform:translateX(22px);}
+
+/* 알람 화면 */
+.alarm-list{flex:1;overflow-y:auto;background:#f0f0f0;padding:0;}
+.alarm-card{background:#fff;padding:16px 14px;border-bottom:1.5px solid #e8eaed;display:flex;align-items:flex-start;justify-content:space-between;}
+.alarm-card-body .alarm-type{font-size:18px;font-weight:700;color:#222;margin-bottom:3px;}
+.alarm-card-body .alarm-desc{font-size:14px;color:#999;}
+.alarm-close{font-size:28px;font-weight:700;color:#333;cursor:pointer;line-height:1;padding-left:12px;}
+.scroll-top-btn{position:absolute;bottom:76px;right:14px;width:44px;height:44px;background:#fff;border:1.5px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+
+/* 전체 메뉴 화면 */
+.menu-overlay{position:absolute;top:0;left:0;right:0;bottom:64px;background:rgba(160,160,160,.72);z-index:1;}
+.menu-sheet{position:absolute;bottom:54px;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:18px 16px 10px;z-index:2;}
+.menu-search-bar{display:flex;align-items:center;border:1.5px solid #e0e0e0;border-radius:12px;padding:0 14px;height:48px;background:#fff;margin-bottom:18px;}
+.menu-search-bar svg{color:#888;flex-shrink:0;}
+.menu-search-bar input{flex:1;border:none;outline:none;font-size:16px;color:#333;margin-left:10px;background:transparent;}
+.menu-search-bar input::placeholder{color:#bbb;}
+.menu-search-clear{font-size:20px;color:#bbb;cursor:pointer;padding:4px;}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.menu-grid-item{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f0f0f0;border-radius:14px;padding:18px 8px;font-size:16px;font-weight:600;color:#333;cursor:pointer;aspect-ratio:1;}
+.menu-grid-item:hover{background:#e8e8e8;}
+
+/* 하단 탭바 공통 */
+.tab-bar{display:flex;justify-content:space-around;align-items:center;height:54px;background:#fff;border-top:1.5px solid #e8eaed;flex-shrink:0;padding:0 4px;}
+.tab-item{display:flex;flex-direction:column;align-items:center;font-size:10px;color:#9ca3af;gap:2px;text-decoration:none;cursor:pointer;}
+.tab-item.active{color:#00afec;}
+.tab-item .tab-icon{font-size:20px;}
+.tab-item .tab-icon-main{font-size:22px;}
+
+/* pda-wrap 기본 */
+.pda-wrap{display:flex;flex-direction:column;height:100vh;background:#fff;position:relative;overflow:hidden;}
+</style>
+</head>
+<body style="margin:0;padding:0;background:#e5e5e5;">
+<div class="pda-wrap">
+  <div class="step-nav">
+    <button onclick="prevStep()">&#8249; 이전</button>
+    <span id="si">화면 1/6</span>
+    <button onclick="nextStep()">다음 &#8250;</button>
+  </div>
+
+  <!-- ===== STEP 1: 메인 페이지(기준) ===== -->
+  <div class="step-screen active" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+    <header class="app-header">
+      <div class="hdr-left">
+        <div class="hdr-icon" onclick="showStep(1)" title="설정">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div class="hdr-icon" onclick="showStep(4)" title="알림">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="hdr-badge">99</span>
+        </div>
+      </div>
+      <div class="hdr-logo">
+        <svg width="32" height="28" viewBox="0 0 40 32" fill="none"><ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke="#00afec" stroke-width="2.5"/><path d="M8 20 Q10 10 20 8 Q30 6 32 16" stroke="#00afec" stroke-width="2.5" fill="none"/><path d="M4 18 Q6 8 14 6" stroke="#00afec" stroke-width="2" fill="none"/></svg>
+        <span style="font-size:18px;font-weight:700;color:#00afec;letter-spacing:-1px;">WMS</span>
+        <span style="font-size:13px;color:#888;letter-spacing:2px;margin-left:3px;">CLOUD</span>
+      </div>
+      <div class="hdr-logout" title="로그아웃">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </header>
+    <main class="main-content">
+      <div class="main-chart-area">
+        <div class="chart-title" style="color:#aaa;">무언가의 차트 / 알림 안내 페이지</div>
+        <!-- 차트 플레이스홀더 -->
+        <svg width="220" height="100" viewBox="0 0 220 100" style="margin-top:12px;">
+          <rect x="10" y="40" width="30" height="55" rx="4" fill="#00afec" opacity=".5"/>
+          <rect x="55" y="20" width="30" height="75" rx="4" fill="#00afec" opacity=".7"/>
+          <rect x="100" y="55" width="30" height="40" rx="4" fill="#00afec" opacity=".5"/>
+          <rect x="145" y="30" width="30" height="65" rx="4" fill="#00afec" opacity=".8"/>
+          <rect x="190" y="45" width="30" height="50" rx="4" fill="#00afec" opacity=".6"/>
+        </svg>
+        <div style="color:#ccc;font-size:12px;margin-top:8px;">오늘의 작업 현황</div>
+      </div>
+      <div style="margin:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);text-align:center;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">입고 대기</div>
+          <div style="font-size:26px;font-weight:700;color:#00afec;">12</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);text-align:center;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">출고 대기</div>
+          <div style="font-size:26px;font-weight:700;color:#e53935;">8</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);text-align:center;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">피킹 진행</div>
+          <div style="font-size:26px;font-weight:700;color:#f57c00;">5</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);text-align:center;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">완료</div>
+          <div style="font-size:26px;font-weight:700;color:#34a853;">24</div>
+        </div>
+      </div>
+    </main>
+    <nav class="tab-bar">
+      <a onclick="showStep(5)" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#x22EE;&#x22EE;</span>
+        <span>메뉴</span>
+      </a>
+      <a href="./cw-inbound-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128230;</span>
+        <span>입고</span>
+      </a>
+      <a class="tab-item active" style="text-decoration:none;">
+        <span class="tab-icon-main">&#9729;</span>
+        <span>메인화면</span>
+      </a>
+      <a href="./cw-outbound.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128666;</span>
+        <span>출고</span>
+      </a>
+      <a href="./cw-inv-move-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#x1F504;</span>
+        <span>재고이동</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ===== STEP 2: 설정 - 사용자 탭 ===== -->
+  <div class="step-screen" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <header class="settings-header">
+      <span class="settings-back" onclick="showStep(0)">&#8592;</span>
+      <span class="settings-title">설정</span>
+      <span style="width:32px;"></span>
+    </header>
+    <div class="settings-tab">
+      <button class="active" onclick="switchSettingsTab(this,0)">사용자</button>
+      <button onclick="switchSettingsTab(this,1)">장비</button>
+      <button onclick="switchSettingsTab(this,2)">알람</button>
+    </div>
+    <!-- 사용자 탭 콘텐츠 -->
+    <div id="stab-user" class="settings-content" style="display:block;">
+      <div class="form-row">
+        <div class="form-label">사업장명 <span class="code">사업장코드 (20230001)</span></div>
+        <input type="text" class="form-input" placeholder="사업장명을 입력하세요.">
+      </div>
+      <div class="form-row">
+        <div class="form-label">물류센터명</div>
+        <input type="text" class="form-input" placeholder="센터명을 입력하세요.">
+      </div>
+      <div class="form-row">
+        <div class="form-label">관리자명</div>
+        <input type="text" class="form-input" placeholder="관리자명을 입력하세요.">
+      </div>
+      <div class="form-row">
+        <div class="form-label">ID</div>
+        <div class="form-row-inline">
+          <input type="text" class="form-input readonly" value="hkshin" readonly>
+          <button class="btn-social btn-google">구글연동</button>
+          <button class="btn-social btn-kakao">카카오연동</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">EMAIL</div>
+        <input type="email" class="form-input" value="hyunkyu2010@gamil.com">
+      </div>
+      <div class="form-row">
+        <div class="form-label">PASSWORD</div>
+        <input type="password" class="form-input" placeholder="* * * *">
+      </div>
+      <div class="form-row">
+        <input type="password" class="form-input" placeholder="* * * *">
+      </div>
+    </div>
+    <!-- 장비 탭 콘텐츠 -->
+    <div id="stab-device" class="settings-content" style="display:none;">
+      <div class="toggle-list">
+        <div class="toggle-item">
+          <span class="toggle-label">BIXOLON HANDY PRINTER</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">ZEBRA ZT410 PRINTER1</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">ZEBRA ZT410 PRINTER2</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+      </div>
+    </div>
+    <!-- 알람 탭 콘텐츠 -->
+    <div id="stab-alarm" class="settings-content" style="display:none;">
+      <div class="toggle-list">
+        <div class="toggle-item">
+          <span class="toggle-label">입고</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">피킹</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">출고</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+      </div>
+    </div>
+    <button class="settings-save">저장</button>
+  </div>
+
+  <!-- ===== STEP 3: 설정 - 장비 탭 ===== -->
+  <div class="step-screen" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <header class="settings-header">
+      <span class="settings-back" onclick="showStep(0)">&#8592;</span>
+      <span class="settings-title">설정</span>
+      <span style="width:32px;"></span>
+    </header>
+    <div class="settings-tab">
+      <button onclick="showStep(1)">사용자</button>
+      <button class="active">장비</button>
+      <button onclick="showStep(3)">알람</button>
+    </div>
+    <div class="settings-content" style="display:block;">
+      <div class="toggle-list">
+        <div class="toggle-item">
+          <span class="toggle-label">BIXOLON HANDY PRINTER</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">ZEBRA ZT410 PRINTER1</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">ZEBRA ZT410 PRINTER2</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+      </div>
+    </div>
+    <button class="settings-save">저장</button>
+  </div>
+
+  <!-- ===== STEP 4: 설정 - 알림 탭 ===== -->
+  <div class="step-screen" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <header class="settings-header">
+      <span class="settings-back" onclick="showStep(0)">&#8592;</span>
+      <span class="settings-title">설정</span>
+      <span style="width:32px;"></span>
+    </header>
+    <div class="settings-tab">
+      <button onclick="showStep(1)">사용자</button>
+      <button onclick="showStep(2)">장비</button>
+      <button class="active">알람</button>
+    </div>
+    <div class="settings-content" style="display:block;position:relative;">
+      <div class="toggle-list">
+        <div class="toggle-item">
+          <span class="toggle-label">입고</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">피킹</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-item">
+          <span class="toggle-label">출고</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:14px;right:0;width:44px;height:44px;background:#fff;border:1.5px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);">&#8593;</div>
+    </div>
+    <button class="settings-save">저장</button>
+  </div>
+
+  <!-- ===== STEP 5: 메뉴 페이지(알람) ===== -->
+  <div class="step-screen" style="display:none;flex-direction:column;flex:1;overflow:hidden;background:#f0f0f0;">
+    <header class="app-header">
+      <div class="hdr-left">
+        <div class="hdr-icon" onclick="showStep(1)" title="설정">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div class="hdr-icon" style="position:relative;" title="알림(활성)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" style="animation:bellShake .5s infinite alternate;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <!-- 진동 손 아이콘 오버레이 -->
+          <span style="position:absolute;top:-2px;left:6px;font-size:18px;">&#128075;</span>
+        </div>
+      </div>
+      <span style="font-size:18px;font-weight:700;color:#222;letter-spacing:.5px;">Cloud WMS</span>
+      <div class="hdr-logout" title="로그아웃">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </header>
+    <!-- 알람 목록 -->
+    <div class="alarm-list" style="position:relative;">
+      <div class="alarm-card">
+        <div class="alarm-card-body">
+          <div class="alarm-type">입고</div>
+          <div class="alarm-desc">입고요청이 있습니다.</div>
+        </div>
+        <span class="alarm-close" onclick="this.closest('.alarm-card').remove()">&#10005;</span>
+      </div>
+      <div class="alarm-card">
+        <div class="alarm-card-body">
+          <div class="alarm-type">피킹</div>
+          <div class="alarm-desc">피킹요청이 있습니다.</div>
+        </div>
+        <span class="alarm-close" onclick="this.closest('.alarm-card').remove()">&#10005;</span>
+      </div>
+      <div style="position:absolute;bottom:14px;right:14px;width:44px;height:44px;background:#fff;border:1.5px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);">&#8593;</div>
+    </div>
+    <nav class="tab-bar">
+      <a onclick="showStep(5)" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#x22EE;&#x22EE;</span>
+        <span>메뉴</span>
+      </a>
+      <a href="./cw-inbound-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128230;</span>
+        <span>입고</span>
+      </a>
+      <a onclick="showStep(0)" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon-main">&#9729;</span>
+        <span>메인화면</span>
+      </a>
+      <a href="./cw-outbound.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128666;</span>
+        <span>출고</span>
+      </a>
+      <a href="./cw-inv-move-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#x1F504;</span>
+        <span>재고이동</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ===== STEP 6: 전체메뉴 ===== -->
+  <div class="step-screen" style="display:none;flex-direction:column;flex:1;overflow:hidden;position:relative;">
+    <!-- 배경(메인화면 흐림) -->
+    <header class="app-header">
+      <div class="hdr-left">
+        <div class="hdr-icon" onclick="showStep(1)" title="설정">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div class="hdr-icon" onclick="showStep(4)" title="알림">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="hdr-badge">99</span>
+        </div>
+      </div>
+      <div class="hdr-logo">
+        <svg width="32" height="28" viewBox="0 0 40 32" fill="none"><ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke="#00afec" stroke-width="2.5"/><path d="M8 20 Q10 10 20 8 Q30 6 32 16" stroke="#00afec" stroke-width="2.5" fill="none"/><path d="M4 18 Q6 8 14 6" stroke="#00afec" stroke-width="2" fill="none"/></svg>
+        <span style="font-size:18px;font-weight:700;color:#00afec;letter-spacing:-1px;">WMS</span>
+        <span style="font-size:13px;color:#888;letter-spacing:2px;margin-left:3px;">CLOUD</span>
+      </div>
+      <div class="hdr-logout" title="로그아웃">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </header>
+    <!-- 어두운 오버레이 영역 -->
+    <div style="flex:1;background:rgba(160,160,160,.72);position:relative;">
+    </div>
+    <!-- 메뉴 시트 (하단에서 올라옴) -->
+    <div style="background:#fff;border-radius:20px 20px 0 0;padding:18px 16px 10px;flex-shrink:0;">
+      <div class="menu-search-bar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="메뉴명을 입력하세요.">
+        <span class="menu-search-clear">&#x2715;</span>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-grid-item">창고</div>
+        <div class="menu-grid-item">위치</div>
+        <div class="menu-grid-item">품목</div>
+        <div class="menu-grid-item">거래처</div>
+        <div class="menu-grid-item">사용자</div>
+        <div class="menu-grid-item">입고</div>
+        <div class="menu-grid-item">출고</div>
+        <div class="menu-grid-item">이동</div>
+        <div class="menu-grid-item">조정</div>
+        <div class="menu-grid-item">조회</div>
+      </div>
+    </div>
+    <nav class="tab-bar">
+      <a class="tab-item active" style="text-decoration:none;color:#00afec;">
+        <span class="tab-icon">&#x22EE;&#x22EE;</span>
+        <span>메뉴</span>
+      </a>
+      <a href="./cw-inbound-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128230;</span>
+        <span>입고</span>
+      </a>
+      <a onclick="showStep(0)" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon-main">&#9729;</span>
+        <span>메인화면</span>
+      </a>
+      <a href="./cw-outbound.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#128666;</span>
+        <span>출고</span>
+      </a>
+      <a href="./cw-inv-move-a.html" class="tab-item" style="text-decoration:none;">
+        <span class="tab-icon">&#x1F504;</span>
+        <span>재고이동</span>
+      </a>
+    </nav>
+  </div>
+
+</div><!-- /pda-wrap -->
+
+<script>
+var cur = 0;
+var ss = document.querySelectorAll('.step-screen');
+
+function showStep(n) {
+  ss[cur].classList.remove('active');
+  ss[cur].style.display = 'none';
+  cur = Math.max(0, Math.min(ss.length - 1, n));
+  ss[cur].classList.add('active');
+  ss[cur].style.display = 'flex';
+  document.getElementById('si').textContent = '화면 ' + (cur + 1) + '/' + ss.length;
+}
+
+function prevStep() { showStep(cur - 1); }
+function nextStep() { showStep(cur + 1); }
+
+// 설정 탭 내부 전환 (Step 2에서만)
+function switchSettingsTab(btn, tabIdx) {
+  var tabs = btn.closest('.settings-tab').querySelectorAll('button');
+  tabs.forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  var contents = ['stab-user', 'stab-device', 'stab-alarm'];
+  contents.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  var el = document.getElementById(contents[tabIdx]);
+  if (el) el.style.display = 'block';
+}
+</script>
+</body></html>

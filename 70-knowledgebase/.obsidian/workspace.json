@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "58ad2050aeba8cd5",
+    "type": "split",
+    "children": [
+      {
+        "id": "29dcb526e94e1d0f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6ef898352945c221",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "mdbz01/mdbz01-06-be-flow.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "mdbz01-06-be-flow"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a04fab16f4d385b8",
+    "type": "split",
+    "children": [
+      {
+        "id": "84580547c6aef977",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2334fe661615a4eb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "f0ec50c16c326783",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "b84e28381ab03040",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ff052a79382e54e2",
+    "type": "split",
+    "children": [
+      {
+        "id": "46e24135e663570e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "13e36de38fbd58cf",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "mdwh01/mdwh01-07-fe-flow.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "mdwh01-07-fe-flow 의 백링크"
+            }
+          },
+          {
+            "id": "8d2c97787f49e438",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "mdwh01/mdwh01-07-fe-flow.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "mdwh01-07-fe-flow 의 나가는 링크"
+            }
+          },
+          {
+            "id": "fd136995d5faf8a1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "a7205a88067774c5",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "f780e70fc5c29a5d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "mdwh01/mdwh01-07-fe-flow.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "mdwh01-07-fe-flow 의 개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "6ef898352945c221",
+  "lastOpenFiles": [
+    "mdbz01/mdbz01-07-fe-flow.md",
+    "mdbz01/mdbz01-99-issues.md",
+    "mdbz01/mdbz01-06-be-flow.md",
+    "mdbz01/mdbz01-05-api.md",
+    "mdbz01/mdbz01-04-be-mapper-sql.md",
+    "mdbz01/mdbz01-03-data-model.md",
+    "mdbz01/mdbz01-02-screen.md",
+    "mdbz01/mdbz01-01-basic-design.md",
+    "mdwh01/mdwh01-99-issues.md",
+    "mdwh01/mdwh01-99-issues.md.tmp.20648.abd551afb723",
+    "mdwh01/mdwh01-07-fe-flow.md",
+    "mdwh01/mdwh01-07-fe-flow.md.tmp.20648.5cabdf9ac2ca",
+    "mdwh01/mdwh01-06-be-flow.md",
+    "mdwh01/mdwh01-05-api.md",
+    "mdwh01/mdwh01-05-api.md.tmp.20648.62f8ceaaab1e",
+    "mdwh01/mdwh01-04-be-mapper-sql.md",
+    "mdwh01/mdwh01-04-be-mapper-sql.md.tmp.20648.ec6d30893dce",
+    "mdwh01/mdwh01-03-data-model.md",
+    "mdwh01/mdwh01-03-data-model.md.tmp.20648.c57d99cedd0f",
+    "mdwh01/mdwh01-02-screen.md",
+    "mdwh01/mdwh01-02-screen.md.tmp.20648.6f68c7b0ea62",
+    "mdwh01/mdwh01-01-basic-design.md",
+    "mdwh01/mdwh01-01-basic-design.md.tmp.20648.869dc2dffff9",
+    "mdwh01/bakup26061001/mdwh01-KB-verify-20260610.md",
+    "mdwh01/bakup26061001/mdwh01-99-issues.md",
+    "mdwh01/bakup26061001/mdwh01-07-fe-flow.md",
+    "mdwh01/bakup26061001/mdwh01-06-be-flow.md",
+    "mdwh01/bakup26061001/mdwh01-05-api.md",
+    "mdwh01/bakup26061001/mdwh01-04-be-mapper-sql.md",
+    "mdwh01/bakup26061001/mdwh01-03-data-model.md",
+    "mdwh01/bakup26061001/mdwh01-02-screen.md",
+    "mdwh01/bakup26061001/mdwh01-01-basic-design.md",
+    "mdwh01/bakup26061001",
+    "mdbz01/mdbz01-99-issues.md.tmp.20648.0f30baf57382",
+    "mdbz01/mdbz01-07-fe-flow.md.tmp.20648.338b0d2684e8",
+    "mdbz01/bakup26061001/mdbz01-KB-verify-20260610.md"
+  ]
+}
