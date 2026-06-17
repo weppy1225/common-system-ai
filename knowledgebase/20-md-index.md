@@ -1,71 +1,54 @@
 ---
-title: 도메인 지식베이스 문서 인덱스
-description: 30-domain/ 디렉토리 내 실제 존재하는 메뉴별 지식베이스 문서 인덱스. 어떤 메뉴에 어떤 설계 문서가 있는지 빠르게 파악할 때 사용.
+title: 메뉴별 설계 문서 인덱스
+description: spec/ 디렉토리 내 실제 존재하는 메뉴별 설계 문서 인덱스. 어떤 메뉴에 어떤 문서가 있는지 빠르게 파악할 때 사용. 검증용 wireframe은 prototype/ 참조.
 status: active
-version: 2.0.0
+version: 3.0.0
 wms_meta: true
 project: cloud-wms-doc
 agent_usage: reference
 domain: common
-last_verified: 2026-06-11
+last_verified: 2026-06-17
 tags:
   - index
-  - domain
-  - knowledge-base
+  - spec
 ---
 
-# 도메인 지식베이스 문서 인덱스
+# 메뉴별 설계 문서 인덱스
 
-`spec/` 아래 실제 존재하는 메뉴별 지식베이스 문서 목록이다.
+`spec/{메뉴}/` 아래 실제 존재하는 설계 문서 목록이다. 검증용 화면(wireframe·mock)은 `prototype/{메뉴}/`에 있다.
 
-## 문서 유형 범례
+## 문서 유형 범례 (spec/{메뉴}/)
 
-| 파일 접미사 | 내용 | 생성 스킬 |
+| 파일 접미사 | 내용 | 생성 |
 |---|---|---|
-| `-01-basic-design.md` | 기본설계 (업무정의·시나리오·업무규칙) | 수동 작성 |
-| `-02-ui.md` | 화면요건 (레이아웃·항목·업무규칙) | `/SD_310_UI` |
-| `-02-wireframe.html` | 프로토타입 HTML | `/SD_311` |
-| `-02-mock-data.js` | 프로토타입 테스트 데이터 | `/SD_311` |
+| `-00-domain.md` | 업무지식·노하우 (WHY) | **사람 전용 (스킬 금지)** |
+| `-01-basic-design.md` | 기본설계 (업무정의·시나리오) | 수동 |
+| `-02-ui.md` | 화면요건 (레이아웃·항목) | `/SD_310_UI` |
 | `-03-data-model.md` | DB 설계 (테이블·관계) | `/SD-db` |
-| `-04-be-mapper-sql.md` | 쿼리 명세 (복잡 SQL) | `/PI-be-mapper` 참조 |
-| `-05-api.md` | API 명세 (엔드포인트·DTO) ★허브 | `/SD-api` |
-| `-06-be-flow.md` | BE 흐름 (시퀀스·예외) | 수동 작성 |
-| `-07-fe-flow.md` | FE 흐름 (함수 시퀀스) | 수동 작성 |
-| `-99-issues.md` | 이슈 레지스터 | 수동 작성 |
+| `-04-be-mapper-sql.md` | 쿼리 명세 | `/PI-be-mapper` 참조 |
+| `-05-api.md` | API 명세 ★허브 | `/SD-api` |
+| `-06-be-flow.md` | BE 흐름 | 수동 |
+| `-07-fe-flow.md` | FE 흐름 | 수동 |
+| `-99-issues.md` | 설계 미결·하드코딩 등 | 수동 |
 
-> 정본 기준:
-> - 메뉴별 KB 설계 문서의 정본 작성·갱신은 `/SD-db`, `/SD-api` 를 사용한다.
-> - `/SD_331` ~ `/SD_334` 는 실DB 기준의 별도 추출·생성 산출물 체계이며, 위 KB 문서의 직접 생성 명령으로 보지 않는다.
+> 검증 화면(prototype/{메뉴}/): `{메뉴}-wireframe.html`(`/SD_311`) · `{메뉴}-mock-data.js`(`/SD_311`) · 모바일 `prototype/mobile/`(`/SD_312`)
+> 정본: 메뉴별 DB·API 설계 정본은 `/SD-db`·`/SD-api`. `/SD_331`~`/SD_334`는 실DB 기준 별도 추출 산출물.
 
 ## 메뉴별 문서 현황
 
-| 메뉴코드 | 메뉴명 | 보유 문서 수 | 경로 |
+| 메뉴코드 | 메뉴명 | spec 문서 | prototype |
 |---|---|---|---|
-| `mdbz01` | 사업장 | 8 | `spec/mdbz01/` |
-| `mdpr01` | 사은품관리 | 3 | `spec/mdpr01/` |
+| `mdbz01` | (확인필요) | 9 (`spec/mdbz01/`) | - |
+| `mdpr01` | 사은품관리 | 2 (`spec/mdpr01/`) | PC wireframe (`prototype/mdpr01/`) |
 
 ## 전체 문서 목록
 
-### mdbz01
+### mdbz01 (`spec/mdbz01/`)
+- `mdbz01-00-domain.md` — 업무지식 (사람 전용, 미작성)
+- `mdbz01-01-basic-design.md` ~ `mdbz01-07-fe-flow.md` — 기본설계·UI·DB·SQL·API·BE흐름·FE흐름
+- `mdbz01-99-issues.md` — 설계 미결사항
 
-- `mdbz01-01-basic-design.md` — 기본설계 (업무정의·시나리오·업무규칙)
-- `mdbz01-02-ui.md` — 화면요건 (레이아웃·항목·업무규칙)
-- `mdbz01-03-data-model.md` — DB 설계 (테이블·관계)
-- `mdbz01-04-be-mapper-sql.md` — 쿼리 명세 (복잡 SQL)
-- `mdbz01-05-api.md` — API 명세 (엔드포인트·DTO) ★허브
-- `mdbz01-06-be-flow.md` — BE 흐름 (시퀀스·예외)
-- `mdbz01-07-fe-flow.md` — FE 흐름 (함수 시퀀스)
-- `mdbz01-99-issues.md` — 이슈 레지스터
-
-### mdpr01
-
-- `mdpr01-02-mock-data.js` — 프로토타입 테스트 데이터
-- `mdpr01-02-ui.md` — 화면요건 (레이아웃·항목·업무규칙)
-- `mdpr01-02-wireframe.html` — 프로토타입 HTML
-
-## 공통 문서
-
-메뉴 폴더 밖에서 실제 확인된 공통 문서는 아래 2건이다.
-
-- `knowledgebase/00-overview.md`
-- `knowledgebase/20-md-index.md`
+### mdpr01 (`spec/mdpr01/`)
+- `mdpr01-00-domain.md` — 업무지식 (사람 전용, 미작성)
+- `mdpr01-02-ui.md` — 화면요건
+- (검증 화면: `prototype/mdpr01/mdpr01-wireframe.html` + `mdpr01-mock-data.js`)

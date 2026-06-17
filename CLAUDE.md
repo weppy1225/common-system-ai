@@ -13,16 +13,15 @@ WMS AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스
 ## 디렉토리 구조
 
 ```
-cloud-wms-doc\
+cloud-wms-ai\   (현 cloud-wms-doc)
 ├── .claude\
-│   ├── skills\       # 슬래시 커맨드 스킬
-│   └── rules\        # 항상 적용되는 UI·문서·코딩 규칙
-├── patterns\   # 소스코드 패턴 (DB·BE·FE·IF)
-├── deliverables\  # 산출물 (템플릿·원천·결과)
-├── 30-domain\        # 메뉴별 지식베이스
-├── prototype\     # 화면 프로토타입 배포 프레임
-├── knowledgebase/40-install-guide\        # 시스템 운영·인프라 가이드
-└── 90-archive\       # 아카이브 문서
+│   ├── skills\        # 슬래시 커맨드 스킬 (개발 자동화 + 산출물 자동화)
+│   └── rules\         # 항상 적용되는 UI·문서·코딩 규칙
+├── knowledgebase\    # 메뉴 횡단 공통 배경지식 (00-overview·10-domain·20-md-index·30-src-index·40-install-guide·50-dev-workflow)
+├── spec\             # 메뉴별 설계 정본 ({메뉴}/{메뉴}-00-domain ~ 07 + 99)
+├── prototype\        # 검증용 화면 (공용 셸 + 메뉴별 wireframe)
+├── patterns\         # 소스코드 패턴 (DB·BE·FE·IF)
+└── deliverables\     # 산출물 (템플릿·원천·결과)
 ```
 
 > 전체 디렉토리 구조·영역별 역할·KB 문서 역할 분리(SoT) 규칙: → [STRUCTURE.md](./STRUCTURE.md)
@@ -31,7 +30,7 @@ cloud-wms-doc\
 
 ```text
 prototype/
-├── index.html                              # 메인 프레임. 메뉴 클릭 시 ../spec/{메뉴코드}/{메뉴코드}-02-wireframe.html 로드
+├── index.html                              # 메인 프레임. 메뉴 클릭 시 {메뉴코드}/{메뉴코드}-wireframe.html 로드
 ├── _common/                              # 공통 UI
 │   ├── left-menu.html
 │   ├── CPCT01_popup.html
@@ -48,31 +47,35 @@ prototype/
     ├── assets/
     └── common/_template/                   # SD_312 생성 템플릿
 
-spec/{메뉴코드}/       # 메뉴별 지식베이스 + 프로토타입
+spec/{메뉴코드}/       # 메뉴별 설계 정본 (마크다운)
+├── {메뉴코드}-00-domain.md                 # 업무지식 WHY (사람 전용, 스킬 금지)
 ├── {메뉴코드}-01-basic-design.md
 ├── {메뉴코드}-02-ui.md                     # SD_310_UI 생성
-├── {메뉴코드}-02-wireframe.html            # SD_311 생성
-├── {메뉴코드}-02-mock-data.js              # SD_311 생성
 ├── {메뉴코드}-03-data-model.md
 ├── {메뉴코드}-04-be-mapper-sql.md
 ├── {메뉴코드}-05-api.md
 ├── {메뉴코드}-06-be-flow.md
 ├── {메뉴코드}-07-fe-flow.md
 └── {메뉴코드}-99-issues.md
+
+prototype/{메뉴코드}/  # 검증용 실행물 (SD_311 생성)
+├── {메뉴코드}-wireframe.html
+└── {메뉴코드}-mock-data.js
 ```
 
 ### 파일 역할
 
 | 파일 | 역할 |
 |---|---|
-| `prototype/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('../spec/{메뉴코드}/{메뉴코드}-02-wireframe.html')` 호출 |
+| `prototype/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('{메뉴코드}/{메뉴코드}-wireframe.html')` 호출 |
 | `prototype/_common/left-menu.html` | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용 |
 | `prototype/_common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
 | `prototype/_common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
 | `prototype/_common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
+| `spec/{메뉴코드}/{메뉴코드}-00-domain.md` | 업무지식·노하우(WHY). **사람 전용 — 자동화 스킬 생성·수정 금지** |
 | `spec/{메뉴코드}/{메뉴코드}-02-ui.md` | 화면요건정리 문서. `/SD_310_UI {메뉴코드}` 명령어의 입력 소스 |
-| `spec/{메뉴코드}/{메뉴코드}-02-wireframe.html` | 완성된 프로토타입. `prototype/index.html`의 iframe 안에서 로드됨 |
-| `spec/{메뉴코드}/{메뉴코드}-02-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
+| `prototype/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입. `prototype/index.html`의 iframe 안에서 로드됨 |
+| `prototype/{메뉴코드}/{메뉴코드}-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
 
 ### 팝업 통신 방식
 
