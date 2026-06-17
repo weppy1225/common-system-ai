@@ -34,5 +34,3 @@ input/
 # 생성 산출물 (스킬 출력 — 추적 안 함, 2026-06 통일)
 deliverables/30-output/
 
-# 생성 파일 지도 (scripts/gen-md-map.py 로 재생성)
-md-files.html
