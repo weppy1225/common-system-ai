@@ -14,7 +14,7 @@ last_verified: 2026-06-17
 
 # 폴더 구조 재설계 이전 계획서
 
-> ✅ **Phase A~F + 모바일 평탄화 완료 (2026-06-17, 브랜치 `restructure/folder-target`).** 후속 작업으로 남은 것: KB_100/KB_200 출력 대상 `spec/` 재설계.
+> ✅ **전체 완료 (2026-06-17, 브랜치 `restructure/folder-target`): Phase A~F + 모바일 평탄화 + KB_100/KB_200 재설계.** 후속 작업 없음.
 
 `STRUCTURE-TARGET.md`의 목표 구조로 현행 레포를 이전한다. 단순 치환이 아니라 **3개는 기계 치환 / 3개는 수작업 분할**이므로 단계를 나눈다.
 
