@@ -18,8 +18,8 @@
   그룹SQL    행마다 INSERT 수식. SQL row n → 코드그룹 row n+7
   상세SQL    행마다 INSERT 수식. SQL row n → 상세코드 row n+3
 
-입력: output/04 구현(PI)/tmp/common_codes.json
-출력: output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx
+입력: deliverables/30-output/04 구현(PI)/tmp/common_codes.json
+출력: deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx
 """
 
 from __future__ import annotations

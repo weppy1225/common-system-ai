@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 지정된 로컬 프로젝트 디렉토리(백엔드/프론트엔드/모노레포)를 자동 스캔하여 프로그램 목록을 추출하고
 `template/04 구현(PI)/PI_412-프로그램목록.xlsx` **템플릿을 복사하여 데이터를 채워**
-`output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 로 저장한다.
+`deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 로 저장한다.
 
 > **목적**: 고객사 인계용 산출물. PI_412 템플릿 형식(Lv1~Lv7 디렉토리 계층 + 모듈명/모듈설명/개발방식)을 그대로 사용하며, **파일 1개 = 1행** 단위로 집계한다.
 
@@ -55,10 +55,10 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-OUTPUT_DIR = output/04 구현(PI)
-TMP_DIR    = output/04 구현(PI)/tmp
+OUTPUT_DIR = deliverables/30-output/04 구현(PI)
+TMP_DIR    = deliverables/30-output/04 구현(PI)/tmp
 SCRIPTS    = .claude/skills/PI_412/scripts
-OUTFILE    = output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
+OUTFILE    = deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
 ```
 
 ---
@@ -124,7 +124,7 @@ if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; el
 BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
 FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
 
-OUTPUT_DIR="$DOC_ROOT/output/04 구현(PI)"
+OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/04 구현(PI)"
 TMP_DIR="$OUTPUT_DIR/tmp"
 SCRIPTS="$DOC_ROOT/.claude/skills/PI_412/scripts"
 ```
@@ -160,7 +160,7 @@ python3 .claude/skills/PI_412/scripts/03_generate_excel.py "{고객사명}"
 
 ```bash
 cd "$DOC_ROOT"
-rm -rf "output/04 구현(PI)/tmp"
+rm -rf "deliverables/30-output/04 구현(PI)/tmp"
 ```
 
 ---
@@ -234,7 +234,7 @@ rm -rf "output/04 구현(PI)/tmp"
 
 `scripts/03_generate_excel.py` 가 수행하는 일.
 
-1. **`template/04 구현(PI)/PI_412-프로그램목록.xlsx` 를 그대로 복사**해 `output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성. 표지/개정이력/프로그램목록 헤더 서식이 모두 보존된다.
+1. **`template/04 구현(PI)/PI_412-프로그램목록.xlsx` 를 그대로 복사**해 `deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성. 표지/개정이력/프로그램목록 헤더 서식이 모두 보존된다.
 2. **`프로그램목록_BE` 시트**: 3행부터 기존 데이터 셀 값을 비우고(스타일 보존), 새 데이터를 채워 넣는다. auto_filter 범위를 `A2:N{last_row}`로 갱신.
 3. **`프로그램목록_FE` 시트**: 동일하게 3행부터 데이터 교체. FE 후보가 0건이면 헤더만 남기고 auto_filter도 헤더 한 줄로 축소.
 4. **표지** / **개정이력** 시트는 손대지 않는다.
@@ -247,10 +247,10 @@ rm -rf "output/04 구현(PI)/tmp"
 - [ ] `$ARGUMENTS` 또는 사용자 입력으로 디렉토리·고객사명 확정
 - [ ] `tmp/scan.json` 생성 — 스택과 후보 파일 목록 확인
 - [ ] `tmp/programs.json` 생성 — 추출 항목 1건 이상
-- [ ] `output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성
+- [ ] `deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성
 - [ ] `프로그램목록_BE` / `프로그램목록_FE` 시트에 데이터·필터 적용 확인
 - [ ] `표지` / `개정이력` 시트가 템플릿 그대로 보존됐는지 확인
-- [ ] `output/04 구현(PI)/tmp/` 삭제 완료
+- [ ] `deliverables/30-output/04 구현(PI)/tmp/` 삭제 완료
 
 ---
 
@@ -262,7 +262,7 @@ rm -rf "output/04 구현(PI)/tmp"
 실행 환경:   Windows PowerShell   또는   Bash on Linux/Mac/WSL
 대상 디렉토리: {디렉토리경로}
 감지된 스택:   {예: spring, react}
-출력 파일:     output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
+출력 파일:     deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx
 
 수집 통계:
   - 백엔드(BE):  N건

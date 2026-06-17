@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 입력 FE 프로젝트: **$ARGUMENTS**
 
-`$ARGUMENTS` 경로(또는 사용자가 직접 입력하는 BASE_URL)에서 dev 서버를 확인하고, **Playwright 헤드리스 브라우저(데스크탑 1440×900, 한국어 로캘 ko-KR)** 로 **PC 메뉴별** 화면을 캡처한 뒤, **사용자매뉴얼 샘플 pptx 를 base로 python-pptx** 로 PC 사용자매뉴얼 PPTX를 `output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx` 파일로 생성한다.
+`$ARGUMENTS` 경로(또는 사용자가 직접 입력하는 BASE_URL)에서 dev 서버를 확인하고, **Playwright 헤드리스 브라우저(데스크탑 1440×900, 한국어 로캘 ko-KR)** 로 **PC 메뉴별** 화면을 캡처한 뒤, **사용자매뉴얼 샘플 pptx 를 base로 python-pptx** 로 PC 사용자매뉴얼 PPTX를 `deliverables/30-output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx` 파일로 생성한다.
 
 ---
 
@@ -85,10 +85,10 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ```
 BASE      = $DocRoot / $DOC_ROOT (자동 감지)
 TEMPLATE  = template/05 이행(TT)/사용자매뉴얼_샘플.pptx
-OUT_DIR   = output/05 이행(TT)
-TMP_DIR   = output/05 이행(TT)/tmp_541
+OUT_DIR   = deliverables/30-output/05 이행(TT)
+TMP_DIR   = deliverables/30-output/05 이행(TT)/tmp_541
 SCRIPTS   = .claude/skills/TT_541/scripts
-OUT_FILE  = output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx
+OUT_FILE  = deliverables/30-output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx
 ```
 
 > **TMP 디렉토리 구분:** TT_541 은 `tmp_541`, TT_542 는 `tmp_542`, TT_543 은 `tmp_543` 을 사용하여 동시 실행해도 충돌하지 않도록 한다.
@@ -227,7 +227,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 **스크립트**: `scripts/01_scan_project.js`
 **입력**: FE 프로젝트 경로
-**출력**: `output/05 이행(TT)/tmp_541/menu_candidates.json`
+**출력**: `deliverables/30-output/05 이행(TT)/tmp_541/menu_candidates.json`
 
 스크립트가 수행하는 것:
 
@@ -266,7 +266,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 5. **고객사명** 확정.
 6. **뷰포트** → 데스크탑 고정 (1440×900).
 
-확정된 값을 `output/05 이행(TT)/tmp_541/capture_config.json` 으로 저장
+확정된 값을 `deliverables/30-output/05 이행(TT)/tmp_541/capture_config.json` 으로 저장
 
 ```json
 {
@@ -320,7 +320,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 - `tmp_541/screens/{메뉴코드}/*.png`
 - `tmp_541/screens/{메뉴코드}/coords.json`
 
-**출력**: `output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx`
+**출력**: `deliverables/30-output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx`
 
 #### 템플릿 처리 규칙 (BLOCKING)
 
@@ -378,7 +378,7 @@ BASE_URL  : {BASE_URL}
 뷰포트    : 1440x900 (데스크탑)
 locale    : ko-KR
 
-산출물 파일 : output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx
+산출물 파일 : deliverables/30-output/05 이행(TT)/TT_541_사용자매뉴얼_PC_{고객사명}.pptx
 슬라이드  : 표지 1 + 목차 1 + 메뉴그룹 N + 화면 M = 총 K장
 캡처 PC 메뉴 ({N}개):
   - mdpr01  프로모션  (5장: 메인/검색/등록/행선택/수정)

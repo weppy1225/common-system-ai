@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 입력 FE/BE 프로젝트: **$ARGUMENTS**
 
-`$ARGUMENTS` 경로(FE 프로젝트 + BE 소스경로)에서 **관리자가 시스템설정·권한·메뉴·공통코드·사업장·센터·창고 등을 설정하는 관리형 메뉴**를 자동 탐지하고, 실제 dev/스테이징 서버를 **Playwright 헤드리스(한국어 로캘 ko-KR)** 로 접속하여 화면을 캡처한 뒤, `template/05 이행(TT)/사용자매뉴얼_샘플.pptx` 를 base로 **python-pptx** 로 관리자매뉴얼 PPTX 를 `output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 파일로 생성한다.
+`$ARGUMENTS` 경로(FE 프로젝트 + BE 소스경로)에서 **관리자가 시스템설정·권한·메뉴·공통코드·사업장·센터·창고 등을 설정하는 관리형 메뉴**를 자동 탐지하고, 실제 dev/스테이징 서버를 **Playwright 헤드리스(한국어 로캘 ko-KR)** 로 접속하여 화면을 캡처한 뒤, `template/05 이행(TT)/사용자매뉴얼_샘플.pptx` 를 base로 **python-pptx** 로 관리자매뉴얼 PPTX 를 `deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 파일로 생성한다.
 
 ---
 
@@ -80,10 +80,10 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ```
 BASE      = $DocRoot / $DOC_ROOT (자동 감지)
 TEMPLATE  = template/05 이행(TT)/사용자매뉴얼_샘플.pptx
-OUT_DIR   = output/05 이행(TT)
-TMP_DIR   = output/05 이행(TT)/tmp_543
+OUT_DIR   = deliverables/30-output/05 이행(TT)
+TMP_DIR   = deliverables/30-output/05 이행(TT)/tmp_543
 SCRIPTS   = .claude/skills/TT_543/scripts
-OUT_FILE  = output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx
+OUT_FILE  = deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx
 ```
 
 > **TMP 디렉토리 구분:** TT_541 은 `tmp_541`, TT_542 는 `tmp_542`, TT_543 은 `tmp_543` 사용.
@@ -196,7 +196,7 @@ python3 .claude/skills/TT_543/scripts/03_make_pptx.py
 ### B-5) 임시 파일 정리
 
 ```bash
-rm -rf "$DOC_ROOT/output/05 이행(TT)/tmp_543"
+rm -rf "$DOC_ROOT/deliverables/30-output/05 이행(TT)/tmp_543"
 ```
 
 ---
@@ -251,7 +251,7 @@ rm -rf "$DOC_ROOT/output/05 이행(TT)/tmp_543"
 ### 1단계 → FE + BE 프로젝트 스캔으로 관리자 메뉴 후보 추출
 
 **스크립트**: `scripts/01_scan_admin_menus.js`
-**출력**: `output/05 이행(TT)/tmp_543/admin_menu_candidates.json`
+**출력**: `deliverables/30-output/05 이행(TT)/tmp_543/admin_menu_candidates.json`
 
 스크립트가 수행하는 것:
 
@@ -287,7 +287,7 @@ rm -rf "$DOC_ROOT/output/05 이행(TT)/tmp_543"
 
 AskUserQuestion으로 BASE_URL / dev 서버 / 관리자 메뉴(multiSelect) / 관리자 로그인 정보 / 고객사명 / 뷰포트 확정.
 
-`output/05 이행(TT)/tmp_543/capture_config.json` 저장
+`deliverables/30-output/05 이행(TT)/tmp_543/capture_config.json` 저장
 
 ```json
 {
@@ -340,7 +340,7 @@ const ctx = await browser.newContext({
 ### 4단계 → PPTX 생성 (TT_541 형식 동일)
 
 **스크립트**: `scripts/03_make_pptx.py` (python-pptx)
-**출력**: `output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx`
+**출력**: `deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx`
 
 #### TT_541 과 완전히 동일하게 처리 (BLOCKING)
 
@@ -426,7 +426,7 @@ BE 경로      : {BE 프로젝트 경로}
 BASE_URL     : {BASE_URL}
 뷰포트      : {width}x{height}, locale=ko-KR
 
-산출물 파일    : output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx
+산출물 파일    : deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx
 슬라이드     : 표지 1 + 목차 1 + 메뉴그룹 N + 화면 M = 총 K장
 캡처 관리자 메뉴 ({N}개):
   [시스템관리]
@@ -475,7 +475,7 @@ PPTX 는 항상 `OUT_FILE` 경로에 **항상 새로 생성**한다.
 - [ ] 사용자가 관리자 메뉴 선택 + 관리자 로그인 정보 입력
 - [ ] `tmp_543/capture_config.json` 저장(`locale: ko-KR`)
 - [ ] 메뉴별 `tmp_543/screens/{메뉴코드}/*.png` 생성
-- [ ] `output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 생성 성공
+- [ ] `deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 생성 성공
 - [ ] PowerPoint 에서 도형 삽입 정상 여부 확인
 - [ ] `tmp_543/` 삭제
 

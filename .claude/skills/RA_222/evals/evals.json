@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "/RA_222 삼성물산",
-      "expected_output": "output/02 분석(RA)/RA.222-요구사항정의서_삼성물산_{YYMMDD}.xlsx 파일 생성. 부문별(CO/MD/IW/RM/IV/OW/IF/PDA/ERR) FUR ID 체계로 요구사항 분류. 요구사항 건수 부문별 집계 출력.",
+      "expected_output": "deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_삼성물산_{YYMMDD}.xlsx 파일 생성. 부문별(CO/MD/IW/RM/IV/OW/IF/PDA/ERR) FUR ID 체계로 요구사항 분류. 요구사항 건수 부문별 집계 출력.",
       "files": []
     },
     {

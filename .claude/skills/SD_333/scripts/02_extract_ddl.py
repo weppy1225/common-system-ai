@@ -5,8 +5,8 @@ SD_333_WIN 2단계 - psycopg2로 PostgreSQL 에 접속해 DDL .sql 파일 생성
 사용법:
     python 02_extract_ddl.py <고객사명>
 
-입력:  output/03 설계(SD)/tmp/db_target.json
-출력:  output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql
+입력:  deliverables/30-output/03 설계(SD)/tmp/db_target.json
+출력:  deliverables/30-output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql
 
 옵션:
     --check-only   psycopg2 import 만 검증하고 누락 시 안내 후 종료.

@@ -6,10 +6,10 @@ SD_334 3단계 - schema.json → vis-network 인터랙티브 DB 관계도 HTML �
     python3 03_generate_html.py <고객사명>
 
 입력:
-    output/03 설계(SD)/tmp/schema.json
+    deliverables/30-output/03 설계(SD)/tmp/schema.json
 
 출력:
-    output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html
+    deliverables/30-output/03 설계(SD)/SD_334_DB관계도_{고객사명}.html
 """
 
 import json
@@ -19,8 +19,8 @@ import re
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE_DIR / "output/03 설계(SD)/tmp"
-OUTPUT_DIR = BASE_DIR / "output/03 설계(SD)"
+TMP_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)/tmp"
+OUTPUT_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)"
 SCHEMA_FILE = TMP_DIR / "schema.json"
 
 

@@ -82,8 +82,8 @@ COMMENT ON TABLE sm_menu      IS '@migrate:07_menu 메뉴';
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-OUTPUT_DIR = output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}
-TMP_DIR    = output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/tmp
+OUTPUT_DIR = deliverables/30-output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}
+TMP_DIR    = deliverables/30-output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/tmp
 SCRIPTS    = .claude/skills/TT_550/scripts
 ```
 
@@ -271,7 +271,7 @@ python3 .claude/skills/TT_550/scripts/py/03_write_manifest.py
 ### B-6) 임시 파일 정리 (manifest.json 은 보존)
 
 ```bash
-rm -rf "$DOC_ROOT/output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/tmp"
+rm -rf "$DOC_ROOT/deliverables/30-output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/tmp"
 ```
 
 ---
@@ -566,7 +566,7 @@ Dump 결과 (3 groups, 5 tables, 244 rows):
   - sm_legacy_temp
   - mdm_obsolete
 
-출력 폴더:    output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/
+출력 폴더:    deliverables/30-output/05 이행(TT)/TT_550_DATA_{고객사명}_{YYMMDD}/
 파일 개수:    4 개 (.sql 3 + manifest.json 1, 전체 33.6 KB)
 
 대상 DB 자동 적용: 미실행 (사용자 No 선택)

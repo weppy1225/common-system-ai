@@ -10,7 +10,7 @@ allowed-tools: Bash, PowerShell, Read, AskUserQuestion
 # 프로그램 소스 ZIP 생성 (Windows/WSL/Linux/Mac 통합) [PI_411]
 
 지정된 로컬 git 저장소 디렉토리를 `git archive` 명령으로 ZIP 파일로 패키징하여
-`output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip` 파일로 저장한다.
+`deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip` 파일로 저장한다.
 
 > 사용 도구: 시스템에 설치된 `git`(필수). 원격 기준 zip이 필요한 경우에 한해 `gh`(선택). gh가 없거나 GitHub 외부 저장소면 `git archive`만 사용한다.
 >
@@ -60,8 +60,8 @@ allowed-tools: Bash, PowerShell, Read, AskUserQuestion
 
 ```
 BASE       = $DocRoot         (git rev-parse --show-toplevel)
-OUTPUT_DIR = output/04 구현(PI)
-OUTFILE    = output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip
+OUTPUT_DIR = deliverables/30-output/04 구현(PI)
+OUTFILE    = deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip
 ```
 
 ### 3) 포함/제외 정책 (handoff 모드)
@@ -305,12 +305,12 @@ DIRTY_COUNT=$(git status --porcelain | wc -l | tr -d ' ')
 ```bash
 DOC_ROOT=$(git rev-parse --show-toplevel)
 cd "$DOC_ROOT"
-mkdir -p "output/04 구현(PI)"
+mkdir -p "deliverables/30-output/04 구현(PI)"
 
 COMPANY="{고객사명}"
 SAFE_BRANCH=$(printf '%s' "$BRANCH" | tr '/' '_')
 PREFIX="${REPO_NAME}-${SAFE_BRANCH}/"
-OUTFILE="output/04 구현(PI)/PI_411_프로그램소스_${COMPANY}.zip"
+OUTFILE="deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_${COMPANY}.zip"
 ```
 
 ### B-3A) `full` 모드
@@ -411,7 +411,7 @@ echo "포함 항목: ${ENTRIES}개"
 - [ ] 디렉토리가 git 저장소임을 확인
 - [ ] 현재 브랜치/커밋/원격 URL/dirty 여부 수집
 - [ ] dirty면 사용자에게 안내 후 동의받고 진행
-- [ ] `output/04 구현(PI)/` 폴더 생성
+- [ ] `deliverables/30-output/04 구현(PI)/` 폴더 생성
 - [ ] 브랜치명의 `/`를 `_`로 치환 (`SafeBranch` / `SAFE_BRANCH`)
 - [ ] `handoff` 모드면 포함 경로 화이트리스트 빌드 + `src` 추적 검증
 - [ ] `git archive --format=zip --prefix=... --output=... [-- pathspecs]` 실행
@@ -441,7 +441,7 @@ ZIP 내부 prefix: {RepoName}-{Branch}/
 포함 경로:   src, build.xml, Jenkinsfile, ...
 제외 정책:   .claude/, .agents/, .settings/, lib-test/, DEV_DOC/, CLAUDE.md, AGENTS.md, .project, .classpath 등
 
-출력 파일:   output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip ({SizeHuman})
+출력 파일:   deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip ({SizeHuman})
 포함 항목:   {Entries}개
 ```
 

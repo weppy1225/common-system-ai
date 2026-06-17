@@ -13,7 +13,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 `$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일을 자동 스캔하고, 검출된 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 **직접 접속**하여 시스템 카탈로그(information_schema/pg_catalog/sys.*/user_*)에서 스키마(테이블·컬럼·인덱스·제약조건·FK)를 추출한 뒤,
 `template/03 설계(SD)/SD.212-테이블정의서.xlsx` 템플릿을 기반으로
-`output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 파일을 생성한다.
+`deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
 > 같은 산출물을 만드는 다른 명령:
 > - `/SD_212` — BE 프로젝트 내 테이블 MD 파일을 파싱해서 생성 (DB 접속 없음)
@@ -51,8 +51,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 ```
 TEMPLATE   = template/03 설계(SD)/SD.212-테이블정의서.xlsx
-OUTPUT_DIR = output/03 설계(SD)
-TMP_DIR    = output/03 설계(SD)/tmp
+OUTPUT_DIR = deliverables/30-output/03 설계(SD)
+TMP_DIR    = deliverables/30-output/03 설계(SD)/tmp
 SCRIPTS    = .claude/skills/SD_331/scripts
 ```
 
@@ -76,7 +76,7 @@ $BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
 
 **스크립트**: `scripts/01_scan_config.py`
 **입력**: 사용자 지정 디렉토리 경로
-**출력**: `output/03 설계(SD)/tmp/db_candidates.json`
+**출력**: `deliverables/30-output/03 설계(SD)/tmp/db_candidates.json`
 
 ```powershell
 Set-Location $DocRoot
@@ -93,7 +93,7 @@ python .claude/skills/SD_331/scripts/01_scan_config.py "{디렉토리경로}"
 
 선택된 후보의 password가 비어 있다면 **AskUserQuestion으로 password를 별도 질문한다.**
 
-확정된 접속정보를 `output/03 설계(SD)/tmp/db_target.json`로 저장한다.
+확정된 접속정보를 `deliverables/30-output/03 설계(SD)/tmp/db_target.json`로 저장한다.
 
 ### W-3) 의존성 확인 및 자동 설치
 
@@ -109,7 +109,7 @@ python .claude/skills/SD_331/scripts/02_extract_schema.py --check-only
 python .claude/skills/SD_331/scripts/02_extract_schema.py
 ```
 
-**출력**: `output/03 설계(SD)/tmp/schema.json`
+**출력**: `deliverables/30-output/03 설계(SD)/tmp/schema.json`
 
 ### W-5) Excel 생성
 
@@ -117,7 +117,7 @@ python .claude/skills/SD_331/scripts/02_extract_schema.py
 python .claude/skills/SD_331/scripts/03_generate_excel.py
 ```
 
-**출력**: `output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx`
+**출력**: `deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx`
 
 ### W-6) 임시 파일 정리 (필수)
 
@@ -140,8 +140,8 @@ BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
 FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
 
 TEMPLATE="$DOC_ROOT/template/03 설계(SD)/SD.212-테이블정의서.xlsx"
-OUTPUT_DIR="$DOC_ROOT/output/03 설계(SD)"
-TMP_DIR="$DOC_ROOT/output/03 설계(SD)/tmp"
+OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)"
+TMP_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)/tmp"
 SCRIPTS="$DOC_ROOT/.claude/skills/SD_331/scripts"
 ```
 
@@ -182,7 +182,7 @@ python3 .claude/skills/SD_331/scripts/03_generate_excel.py
 ### B-6) 임시 파일 정리 (필수)
 
 ```bash
-rm -rf "$DOC_ROOT/output/03 설계(SD)/tmp"
+rm -rf "$DOC_ROOT/deliverables/30-output/03 설계(SD)/tmp"
 ```
 
 ---
@@ -266,10 +266,10 @@ rm -rf "$DOC_ROOT/output/03 설계(SD)/tmp"
 - [ ] 누락된 password 확인 후 보강
 - [ ] 필요한 Python 라이브러리 import 가능 (`--check-only` 통과)
 - [ ] DB 연결 성공 및 `tmp/schema.json` 생성
-- [ ] 출력 파일 `output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 생성
+- [ ] 출력 파일 `deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 생성
 - [ ] Table List 시트 + 테이블별 시트가 모두 존재
 - [ ] 샘플 데이터(MDM_사업장 등)가 결과 파일에 남지 않음
-- [ ] **`output/03 설계(SD)/tmp/` 폴더 삭제 완료** (비밀번호 노출 방지)
+- [ ] **`deliverables/30-output/03 설계(SD)/tmp/` 폴더 삭제 완료** (비밀번호 노출 방지)
 
 ---
 
@@ -281,7 +281,7 @@ rm -rf "$DOC_ROOT/output/03 설계(SD)/tmp"
 실행 환경:   Windows PowerShell   또는   Bash on Linux/Mac/WSL
 대상 디렉토리: {디렉토리경로}
 DB: {driver} {host}:{port}/{database} (schema={schema})
-출력파일: output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
+출력파일: deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
 
 수집 통계:
   - 테이블:     N개

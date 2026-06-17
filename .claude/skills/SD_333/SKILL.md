@@ -55,8 +55,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-OUTPUT_DIR = output/03 설계(SD)
-TMP_DIR    = output/03 설계(SD)/tmp
+OUTPUT_DIR = deliverables/30-output/03 설계(SD)
+TMP_DIR    = deliverables/30-output/03 설계(SD)/tmp
 SCRIPTS    = .claude/skills/SD_333/scripts
 ```
 
@@ -146,7 +146,7 @@ python3 -u .claude/skills/SD_333/scripts/02_extract_ddl.py "{고객사명}"
 ### B-4) 임시 파일 정리 (필수)
 
 ```bash
-rm -rf "$DOC_ROOT/output/03 설계(SD)/tmp"
+rm -rf "$DOC_ROOT/deliverables/30-output/03 설계(SD)/tmp"
 ```
 
 ---
@@ -185,7 +185,7 @@ JDBC URL 파싱:
 
 선택된 후보의 password 가 비어 있으면 **AskUserQuestion으로 password 를 별도 질문**한다.
 
-확정된 접속정보는 `output/03 설계(SD)/tmp/db_target.json` 으로 저장한다.
+확정된 접속정보는 `deliverables/30-output/03 설계(SD)/tmp/db_target.json` 으로 저장한다.
 
 ```json
 {
@@ -220,7 +220,7 @@ JDBC URL 파싱:
 | 5 | FOREIGN KEY CONSTRAINTS | `pg_constraint` (contype='f') — ON UPDATE/DELETE 액션 포함 (`r/c/n`) |
 | 6 | INDEXES | `pg_indexes` (PK/UNIQUE constraint 와 동명인 인덱스는 제외) |
 
-3. 최종 SQL 본문을 `output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql` 에 **UTF-8 (BOM 없음)** 으로 저장한다.
+3. 최종 SQL 본문을 `deliverables/30-output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql` 에 **UTF-8 (BOM 없음)** 으로 저장한다.
 
 4. 통계 계산:
    - SEQUENCE / TABLE / PK / UNIQUE / FK / INDEX 건수
@@ -241,7 +241,7 @@ JDBC URL 파싱:
 - [ ] `tmp/db_candidates.json` 생성 — PostgreSQL 후보 1건 이상
 - [ ] 사용자가 후보 1개 확정 (`tmp/db_target.json` 저장, password 보강)
 - [ ] DB 연결 성공
-- [ ] `output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql` 생성
+- [ ] `deliverables/30-output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql` 생성
 - [ ] SEQUENCES / TABLES / PRIMARY KEY / UNIQUE / FOREIGN KEY / INDEXES 6개 섹션 모두 출력
 - [ ] `tmp/` 삭제 완료 (비밀번호 노출 방지)
 
@@ -265,7 +265,7 @@ DDL 현황:
   - FOREIGN KEY : N 건
   - INDEX       : N 건
 
-출력 파일: output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql
+출력 파일: deliverables/30-output/03 설계(SD)/SD_333_DB_Schema(DDL)_{고객사명}_{YYMMDD}.sql
 파일 크기: {N} KB ({N} 라인)
 ```
 

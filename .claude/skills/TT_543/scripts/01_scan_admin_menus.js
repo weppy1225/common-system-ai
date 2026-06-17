@@ -6,7 +6,7 @@
  *   node 01_scan_admin_menus.js "<FE 프로젝트 경로>" "<BE 프로젝트 경로>"
  *
  * 출력:
- *   output/05 이행(TT)/tmp_543/admin_menu_candidates.json
+ *   deliverables/30-output/05 이행(TT)/tmp_543/admin_menu_candidates.json
  *
  * 동작:
  *   1) FE 측 package.json / vite.config 등에서 dev 포트 추출

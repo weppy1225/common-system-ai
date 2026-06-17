@@ -6,7 +6,7 @@ SD_334 1단계 - 디렉토리 스캔으로 DB 접속정보 후보 추출.
     python3 01_scan_config.py <디렉토리경로>
 
 산출물:
-    output/03 설계(SD)/tmp/db_candidates.json
+    deliverables/30-output/03 설계(SD)/tmp/db_candidates.json
 
 YAML/TOML/JS 등 외부 라이브러리 없이 표준 라이브러리만 사용한다.
 완벽한 파싱은 어려우므로 라인 기반 정규식·간단한 구조 추적으로 후보를 모은다.
@@ -20,7 +20,7 @@ from pathlib import Path
 from urllib.parse import urlparse, unquote
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE_DIR / "output/03 설계(SD)/tmp"
+TMP_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)/tmp"
 
 DRIVER_ALIASES = {
     "postgres": "postgresql",

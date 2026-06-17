@@ -4,9 +4,9 @@
 [TT_542] 4단계 — 사용자 매뉴얼 PPTX 생성 (템플릿 기반, python-pptx)
 
 입력:
-  output/05 이행(TT)/tmp_542/capture_config.json
-  output/05 이행(TT)/tmp_542/screens/{메뉴코드}/*.png
-  output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
+  deliverables/30-output/05 이행(TT)/tmp_542/capture_config.json
+  deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/*.png
+  deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
 
 템플릿:
   template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx
@@ -15,7 +15,7 @@
   - 색상상수: 본 스크립트 상단의 COLOR_* 와 동일
 
 출력:
-  output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx
+  deliverables/30-output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{고객사명}.pptx
 
 설계 원칙:
   - 라벨/테두리/배지/커넥터/설명패널은 모두 python-pptx 도형(`add_shape`)으로 PPT 안에

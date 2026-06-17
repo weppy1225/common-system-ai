@@ -8,8 +8,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 # DB 관계도(ERD) HTML 자동 생성 (실DB, Windows/WSL/Linux/Mac 통합) [SD_334]
 
-`{BE경로}/src/main/resource/prop/application-test.properties` 에서 PostgreSQL 접속정보를 파싱하고, `psql`/`psql.exe` 또는 `python3 + psycopg2` 로 `pg_catalog` 를 조회하여 테이블·컬럼·FK 데이터를 추출한 뒤, 기존 `output/03 설계(SD)/SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용해서
-`output/03 설계(SD)/SD.211-ERD_{업체명}_{YYMMDD}.html` ERD 뷰어 파일을 생성(또는 갱신)한다.
+`{BE경로}/src/main/resource/prop/application-test.properties` 에서 PostgreSQL 접속정보를 파싱하고, `psql`/`psql.exe` 또는 `python3 + psycopg2` 로 `pg_catalog` 를 조회하여 테이블·컬럼·FK 데이터를 추출한 뒤, 기존 `deliverables/30-output/03 설계(SD)/SD.211-ERD_*.html` 최신 파일을 템플릿으로 재사용해서
+`deliverables/30-output/03 설계(SD)/SD.211-ERD_{업체명}_{YYMMDD}.html` ERD 뷰어 파일을 생성(또는 갱신)한다.
 
 > **재사용 방식**: 기존 HTML 파일의 `const TABLES=[...]` 와 `const FKS=[...]` 두 섹션만 DB 최신 상태로 교체한다. 뷰어 코드(CSS·JS 함수·SVG 마커·`SUBGROUP_DEF`·`MAPPING_TBLS`·`PARENT_GROUPS`·`getSubGroup`·`relayoutBySubGroup`·`drawLines`)는 템플릿 파일에 고정 보관되며 그대로 유지된다.
 
@@ -209,7 +209,7 @@ REPO_NAME=$(basename "$DOC_ROOT")
 if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
 BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
 
-OUTPUT_DIR="$DOC_ROOT/output/03 설계(SD)"
+OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)"
 ```
 
 ### B-1) DB 접속정보 파싱
@@ -246,7 +246,7 @@ FKS_JS=$($PSQL_CMD -c "$FKS_SQL" | grep -v '^$')
 
 ```bash
 DOC_ROOT=$(git rev-parse --show-toplevel)
-OUTPUT_DIR="$DOC_ROOT/output/03 설계(SD)"
+OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)"
 YYMMDD=$(date '+%y%m%d')
 SAFE_NAME=$(echo "$업체명" | tr '\\/:*?"<>|' '_')
 OUT_FILE="$OUTPUT_DIR/SD.211-ERD_${SAFE_NAME}_${YYMMDD}.html"
@@ -437,7 +437,7 @@ FK 관계선은 `drawLines()` 함수가 담당한다.
 업체명  : {업체명}
 DB      : {host}:{port}/{dbname}
 템플릿  : SD.211-ERD_{이전업체}_{이전날짜}.html
-출력파일: output/03 설계(SD)/SD.211-ERD_{업체명}_{YYMMDD}.html
+출력파일: deliverables/30-output/03 설계(SD)/SD.211-ERD_{업체명}_{YYMMDD}.html
 파일크기: {N} KB
 
 데이터 현황:
@@ -454,7 +454,7 @@ DB      : {host}:{port}/{dbname}
 
 ## 주의사항 (공통)
 
-- **템플릿 필수**: 최소 1개의 `SD.211-ERD_*.html` 파일이 `output/03 설계(SD)/` 에 존재해야 한다 (최초 1회는 수동 작성 필요).
+- **템플릿 필수**: 최소 1개의 `SD.211-ERD_*.html` 파일이 `deliverables/30-output/03 설계(SD)/` 에 존재해야 한다 (최초 1회는 수동 작성 필요).
 - **새 서브그룹 추가**: `SUBGROUP_DEF` / `getSubGroup` / `MAPPING_TBLS` 변경은 템플릿 HTML 파일 직접 수정.
 - **logical name 갱신**: `pg_description` 코멘트가 있으면 그것을 사용. 없으면 `phys` 그대로.
 

@@ -3,11 +3,11 @@
 SD_331 3단계 - 추출된 schema를 SD.212-테이블정의서 템플릿에 채워 Excel 생성.
 
 입력:
-    output/03 설계(SD)/tmp/schema.json
+    deliverables/30-output/03 설계(SD)/tmp/schema.json
     template/03 설계(SD)/SD.212-테이블정의서.xlsx
 
 출력:
-    output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
+    deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
 
 전략:
 1. 템플릿 복사
@@ -37,7 +37,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[4]
 TEMPLATE_PATH = BASE_DIR / "template/03 설계(SD)/SD.212-테이블정의서.xlsx"
-OUTPUT_DIR = BASE_DIR / "output/03 설계(SD)"
+OUTPUT_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)"
 TMP_DIR = OUTPUT_DIR / "tmp"
 SCHEMA_FILE = TMP_DIR / "schema.json"
 

@@ -8,8 +8,8 @@ sm_comm_h(공통코드 그룹), sm_comm_d(상세코드)를 조회한다.
 사용법:
   python3 02_extract_common_codes.py [--check-only]
 
-입력: output/04 구현(PI)/tmp/db_target.json
-출력: output/04 구현(PI)/tmp/common_codes.json
+입력: deliverables/30-output/04 구현(PI)/tmp/db_target.json
+출력: deliverables/30-output/04 구현(PI)/tmp/common_codes.json
 """
 
 from __future__ import annotations
