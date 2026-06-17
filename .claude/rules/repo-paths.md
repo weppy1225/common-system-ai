@@ -68,5 +68,5 @@ Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`
 
 - **BE 전용 스킬**: 작업 시작 시 `cd "$BE_DIR"` 후 진행하면 스킬 본문의 상대경로(`src/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)가 그대로 동작한다.
 - **FE 전용 스킬**: `cd "$FE_DIR"` 후 진행하면 `src/views/...`, `package.json` 이 그대로 동작한다.
-- **허브 문서와 BE/FE를 동시에 다루는 스킬**(예: SD-db, SD-api): `cd` 하지 말고 위 표의 기준 변수(`$AI_DIR` / `$BE_DIR`)를 경로 앞에 붙여 명시한다.
+- **허브 문서와 BE/FE를 동시에 다루는 스킬**(예: SD_db, SD_api): `cd` 하지 말고 위 표의 기준 변수(`$AI_DIR` / `$BE_DIR`)를 경로 앞에 붙여 명시한다.
 - **형제 레포(BE/FE)의 파일은 해당 스킬의 산출 대상이 아닌 한 읽기 전용으로 취급한다.**

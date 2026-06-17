@@ -1,6 +1,6 @@
 ---
-name: SD-api
-description: 화면설계·DB 기반 api.md(API 설계+기능명세) 작성. /SD-db 완료 후 실행. /SD-api {메뉴코드}
+name: SD_api
+description: 화면설계·DB 기반 api.md(API 설계+기능명세) 작성. /SD_db 완료 후 실행. /SD_api {메뉴코드}
 when_to_use: "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 만들어줘", "design-spec 실행해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Glob, Grep
 model: claude-opus-4-7
 ---
 
-# API 명세서 설계 [SD-api]
+# API 명세서 설계 [SD_api]
 
 다음 지시에 따라 기능 명세서(`api.md`)를 작성한다.
 
@@ -186,5 +186,5 @@ implements Serializable
 ```
 ✅ api.md 생성 완료
 
-다음 단계: /PI-be-all (또는 /PI-be-mapper → /PI-be-dao → /PI-be-comp 순서)
+다음 단계: /PI_be_all (또는 /PI_be_mapper → /PI_be_dao → /PI_be_comp 순서)
 ```

@@ -24,15 +24,15 @@ tags:
 | `-00-domain.md` | 업무지식·노하우 (WHY) | **사람 전용 (스킬 금지)** |
 | `-01-basic-design.md` | 기본설계 (업무정의·시나리오) | 수동 |
 | `-02-ui.md` | 화면요건 (레이아웃·항목) | `/SD_310_UI` |
-| `-03-data-model.md` | DB 설계 (테이블·관계) | `/SD-db` |
-| `-04-be-mapper-sql.md` | 쿼리 명세 | `/PI-be-mapper` 참조 |
-| `-05-api.md` | API 명세 ★허브 | `/SD-api` |
+| `-03-data-model.md` | DB 설계 (테이블·관계) | `/SD_db` |
+| `-04-be-mapper-sql.md` | 쿼리 명세 | `/PI_be_mapper` 참조 |
+| `-05-api.md` | API 명세 ★허브 | `/SD_api` |
 | `-06-be-flow.md` | BE 흐름 | 수동 |
 | `-07-fe-flow.md` | FE 흐름 | 수동 |
 | `-99-issues.md` | 설계 미결·하드코딩 등 | 수동 |
 
 > 검증 화면(prototype/{메뉴}/): `{메뉴}-wireframe.html`(`/SD_311`) · `{메뉴}-mock-data.js`(`/SD_311`) · 모바일 `prototype/{메뉴코드}m/`(`/SD_312`)
-> 정본: 메뉴별 DB·API 설계 정본은 `/SD-db`·`/SD-api`. `/SD_331`~`/SD_334`는 실DB 기준 별도 추출 산출물.
+> 정본: 메뉴별 DB·API 설계 정본은 `/SD_db`·`/SD_api`. `/SD_331`~`/SD_334`는 실DB 기준 별도 추출 산출물.
 
 ## 메뉴별 문서 현황
 

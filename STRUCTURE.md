@@ -68,9 +68,9 @@ spec/{메뉴}/
 ├── {메뉴}-00-domain.md         업무지식 WHY — 사람 전용, 자동화 스킬 생성·수정 금지
 ├── {메뉴}-01-basic-design.md   기본설계
 ├── {메뉴}-02-ui.md             화면요건            〔/SD_310_UI〕
-├── {메뉴}-03-data-model.md     DB 설계             〔/SD-db〕
+├── {메뉴}-03-data-model.md     DB 설계             〔/SD_db〕
 ├── {메뉴}-04-be-mapper-sql.md  쿼리 명세
-├── {메뉴}-05-api.md            API 명세 ★허브      〔/SD-api〕
+├── {메뉴}-05-api.md            API 명세 ★허브      〔/SD_api〕
 ├── {메뉴}-06-be-flow.md        BE 흐름
 ├── {메뉴}-07-fe-flow.md        FE 흐름
 └── {메뉴}-99-issues.md         설계 미결·하드코딩 등

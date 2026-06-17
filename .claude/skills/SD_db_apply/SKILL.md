@@ -1,6 +1,6 @@
 ---
-name: SD-db-apply
-description: db.md의 DDL을 psql로 test/dev DB에 반영 (Windows/WSL/Linux 자동 감지). /SD-db-apply {메뉴코드}
+name: SD_db_apply
+description: db.md의 DDL을 psql로 test/dev DB에 반영 (Windows/WSL/Linux 자동 감지). /SD_db_apply {메뉴코드}
 when_to_use: "DB 반영해줘", "DDL 실행해줘", "db.md DDL 적용해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# DB 설계사항 반영 [SD-db-apply]
+# DB 설계사항 반영 [SD_db_apply]
 
 **db.md의 DDL을 test 서버에 반영하고 DB 문서를 최신화**한다.
 
@@ -180,4 +180,4 @@ psql 실행 성공 후 아래 문서를 자동으로 업데이트한다.
 
 DB 반영 및 문서 최신화 완료 후:
 - `db.md` 섹션 7 체크리스트에서 해당 항목 체크
-- `/PI-be-mapper`로 Mapper 레이어 개발 시작 안내
+- `/PI_be_mapper`로 Mapper 레이어 개발 시작 안내

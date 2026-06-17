@@ -1,6 +1,6 @@
 ---
-name: PI-be-dao
-description: BE Dao 레이어 개발 (Mapper 위임·조합 + JUnit 검증). Mapper 완료 후 실행. /PI-be-dao {메뉴코드}
+name: PI_be_dao
+description: BE Dao 레이어 개발 (Mapper 위임·조합 + JUnit 검증). Mapper 완료 후 실행. /PI_be_dao {메뉴코드}
 when_to_use: "Dao 만들어줘", "Dao 레이어 개발해줘", "DAO 클래스 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# BE DAO 개발 [PI-be-dao]
+# BE DAO 개발 [PI_be_dao]
 
 다음 지시에 따라 **Dao 레이어**를 개발한다.
 
@@ -25,7 +25,7 @@ Dao 개발 전 아래가 완료되어 있어야 한다:
 - Mapper.java + Mapper.xml 작성 완료
 - Mapper JUnit 테스트 **통과** 완료
 
-완료되지 않았으면 `/PI-be-mapper` 먼저 실행 안내.
+완료되지 않았으면 `/PI_be_mapper` 먼저 실행 안내.
 
 ## 실행 절차
 
@@ -123,4 +123,4 @@ public class {메뉴코드}Dao {
 - ❌ FAIL → 에러 메시지 기반으로 원인 분석 후 코드 수정, 재실행
 
 ### Step 6 — 다음 단계 안내
-Dao 테스트 통과 후 `/PI-be-comp` 스킬로 Comp/TxComp 레이어 개발 안내
+Dao 테스트 통과 후 `/PI_be_comp` 스킬로 Comp/TxComp 레이어 개발 안내

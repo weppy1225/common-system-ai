@@ -83,9 +83,9 @@ spec/mdpr01/                       (예: 사은품관리)
 ├── mdpr01-00-domain.md         ★ 업무지식/노하우 (WHY) — 사람만 작성, 스킬 금지
 ├── mdpr01-01-basic-design.md      기본설계 — 메뉴 목적·범위·주요 기능
 ├── mdpr01-02-ui.md                화면요건 — 레이아웃·컴포넌트·버튼     〔/SD_310_UI〕
-├── mdpr01-03-data-model.md        데이터모델 — 테이블·컬럼·관계          〔/SD-db〕
+├── mdpr01-03-data-model.md        데이터모델 — 테이블·컬럼·관계          〔/SD_db〕
 ├── mdpr01-04-be-mapper-sql.md     BE 쿼리 — Mapper SQL 설계
-├── mdpr01-05-api.md               API 명세 — 엔드포인트·요청/응답        〔/SD-api〕
+├── mdpr01-05-api.md               API 명세 — 엔드포인트·요청/응답        〔/SD_api〕
 ├── mdpr01-06-be-flow.md           BE 흐름 — Controller→Comp→Dao 시퀀스
 ├── mdpr01-07-fe-flow.md           FE 흐름 — Vue 동작·API 호출 시퀀스
 └── mdpr01-99-issues.md            설계 미결·애매·하드코딩 등 남은 이슈

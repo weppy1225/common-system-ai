@@ -1,6 +1,6 @@
 ---
-name: PI-test-fe
-description: FE npm run test:unit 실행, 실패 시 원인 분석 (Windows/WSL/Linux 자동 감지). /PI-test-fe
+name: PI_test_fe
+description: FE npm run test:unit 실행, 실패 시 원인 분석 (Windows/WSL/Linux 자동 감지). /PI_test_fe
 when_to_use: "FE 테스트 실행해줘", "unit test 돌려줘", "vitest 실행해줘" 요청 시 사용.
 user-invocable: true
 disable-model-invocation: true
@@ -8,16 +8,16 @@ allowed-tools: Read, Bash, Grep
 model: claude-sonnet-4-6
 ---
 
-# FE 단위 테스트 실행 [PI-test-fe]
+# FE 단위 테스트 실행 [PI_test_fe]
 
 `npm run test:unit` 을 실행하고 결과를 분석·보고한다.
 
 ## 사용법
 
 ```
-/PI-test-fe
+/PI_test_fe
 또는
-/PI-test-fe {메뉴코드}    (특정 메뉴 테스트만 실행)
+/PI_test_fe {메뉴코드}    (특정 메뉴 테스트만 실행)
 ```
 
 ---

@@ -1,6 +1,6 @@
 ---
-name: SD-db
-description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. /SD-db {메뉴코드}
+name: SD_db
+description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. /SD_db {메뉴코드}
 when_to_use: "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,14 +8,14 @@ allowed-tools: Read, Write, Glob, Grep, Bash
 model: claude-opus-4-7
 ---
 
-# DB 설계 [SD-db]
+# DB 설계 [SD_db]
 
 다음 지시에 따라 **DB 설계 문서(db.md)**를 작성한다.
 
 ## 목적
 
 화면설계 파일을 기반으로 DB 변경사항(테이블 추가/컬럼 추가/공통코드 추가)을 도출하고
-**변경 중심의 간결한 설계 문서**를 작성하여 검토 → DB 반영(`/SD-db-apply`) → 개발 흐름을 지원한다.
+**변경 중심의 간결한 설계 문서**를 작성하여 검토 → DB 반영(`/SD_db_apply`) → 개발 흐름을 지원한다.
 
 ---
 
@@ -236,7 +236,7 @@ ORDER BY ordinal_position;
 
 - [ ] 검토자 확인 및 서명 (검토자: __________ / 일자: __________)
 - [ ] DOWN SQL 작성 완료 (롤백 시나리오 확인)
-- [ ] `/SD-db-apply` 실행하여 test 서버 반영 완료
+- [ ] `/SD_db_apply` 실행하여 test 서버 반영 완료
 ```
 
 ---
@@ -245,5 +245,5 @@ ORDER BY ordinal_position;
 
 db.md 작성 완료 후:
 1. 사용자에게 내용 검토 요청 (특히 섹션 6 DDL SQL)
-2. 확인 완료 시 `/SD-db-apply`로 DB 반영 안내
-3. DB 반영 완료 후 `/SD-api`로 기능 명세서 작성 안내
+2. 확인 완료 시 `/SD_db_apply`로 DB 반영 안내
+3. DB 반영 완료 후 `/SD_api`로 기능 명세서 작성 안내

@@ -1,6 +1,6 @@
 ---
-name: PI-test-be
-description: BE JUnit 단위테스트 + Bruno CLI API 테스트 실행 (Windows/WSL/Linux 자동 감지). /PI-test-be {메뉴코드}
+name: PI_test_be
+description: BE JUnit 단위테스트 + Bruno CLI API 테스트 실행 (Windows/WSL/Linux 자동 감지). /PI_test_be {메뉴코드}
 when_to_use: "BE 테스트 실행해줘", "JUnit 테스트 돌려줘", "단위테스트 실행해줘", "Bruno 테스트 실행해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -9,14 +9,14 @@ allowed-tools: Read, Bash, Glob
 model: claude-sonnet-4-6
 ---
 
-# BE 테스트 실행 [PI-test-be]
+# BE 테스트 실행 [PI_test_be]
 
 로컬 Gradle(또는 Ant)로 JUnit 레이어 테스트를 직접 실행하고, Controller는 Bruno CLI로 API 테스트한다.
 
 ## 실행 옵션
 
-- `/PI-test-be {메뉴코드}` — 특정 메뉴코드 테스트 (`ZTEST_{메뉴코드}*` 패턴)
-- `/PI-test-be` — 전체 JUnit 테스트 실행
+- `/PI_test_be {메뉴코드}` — 특정 메뉴코드 테스트 (`ZTEST_{메뉴코드}*` 패턴)
+- `/PI_test_be` — 전체 JUnit 테스트 실행
 
 ## 테스트 유형 선택
 
