@@ -2,7 +2,10 @@
 name: KB_200
 description: 【지식베이스 검증】 메뉴코드를 입력받아 7개 KB 문서와 실제 BE/FE 소스를 비교 분석하여 일치율·누락·과잉 항목을 리포트한다. 역공학 품질 검증 및 개발 완료 후 문서 동기화 확인에 사용한다. /KB_200 {메뉴코드} 형식으로 실행. 사용자가 "지식베이스 검증", "KB 검증", "문서 일치율 확인", "역공학 검증", "KB_200 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Write, Agent
+disable-model-invocation: true
 ---
+
+> ⚠ **재설계 대상 (동결)**: 폴더 재설계(STRUCTURE-TARGET.md)로 `70-knowledgebase/`는 폐지됐다. 검증 대상을 `spec/{메뉴코드}/` ↔ 라이브 소스 비교로 재설계하기 전까지 자동 호출을 차단한다. → MIGRATION-PLAN.md Phase F 이후 별도 작업.
 
 # 지식베이스 검증 [KB_200]
 

@@ -2,7 +2,10 @@
 name: KB_100
 description: 【지식베이스 자동 생성】 메뉴코드를 입력받아 cloud-wms-be(Java) + cloud-wms-fe(Vue) 소스를 분석하고 70-knowledgebase/{메뉴코드}/ 에 01~07 + 99 총 8개 문서를 자동 생성한다. /KB_100 {메뉴코드} 형식으로 실행. 기존 문서가 있으면 bakup{YYMMDD}{순번} 폴더로 백업 후 새로 생성한다. 사용자가 "지식베이스 만들어줘", "KB 문서 생성", "소스 분석 문서 뽑아줘", "KB_100 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Agent
+disable-model-invocation: true
 ---
+
+> ⚠ **재설계 대상 (동결)**: 폴더 재설계(STRUCTURE-TARGET.md)로 `70-knowledgebase/`는 폐지됐다. 출력 대상을 `spec/{메뉴코드}/` 초안으로 재설계하기 전까지 자동 호출을 차단한다. 재설계 시 `70-knowledgebase`→`spec`, `02-screen`→`02-ui`로 바꾸고 `{메뉴코드}-00-domain.md`는 생성하지 않는다. → MIGRATION-PLAN.md Phase F 이후 별도 작업.
 
 # 지식베이스 자동 생성 [KB_100]
 
