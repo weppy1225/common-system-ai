@@ -10,9 +10,9 @@ menu_code: mdbz01
 domain: master
 depends_on:
   - "patterns/30-backend/be-layer-pattern.md"
-  - "30-domain/30-wms-business/mdbz01/mdbz01-05-api.md"
-  - "30-domain/30-wms-business/mdbz01/mdbz01-03-data-model.md"
-  - "30-domain/30-wms-business/mdbz01/mdbz01-04-be-mapper-sql.md"
+  - "spec/mdbz01/mdbz01-05-api.md"
+  - "spec/mdbz01/mdbz01-03-data-model.md"
+  - "spec/mdbz01/mdbz01-04-be-mapper-sql.md"
 tags:
   - detail-design
   - backend

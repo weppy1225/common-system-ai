@@ -12,7 +12,7 @@
  *   1) package.json / vite.config / next.config 등에서 dev 포트 추출
  *   2) router 파일 또는 views/pages 디렉터리에서 라우터(사용자 메뉴) 추출
  *   3) menu-index.md / menus.json 파일이 있으면 메뉴명 매핑
- *   4) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md 또는 prototype/mobile/{그룹m}/{메뉴}.html 에서 메뉴명 보완
+ *   4) cloud-wms-doc 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md 또는 prototype/mobile/{그룹m}/{메뉴}.html 에서 메뉴명 보완
  *   5) PDA 메뉴만 추출 - 코드 끝 m, 경로 /bm/·/pda/·/mobile/, 부모 segment 가 *m 인 패턴 포함
  *   6) PC 메뉴(/be/...)는 자동 제외
  *   7) JSON 으로 저장
@@ -235,9 +235,9 @@ function extractRoutesFromFiles(rootPath) {
 function buildMenuNameMap(rootPath) {
     const map = {};
 
-    // a) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md
+    // a) cloud-wms-doc 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md
     // PC 메뉴 문서명을 PDA 메뉴명 보완에도 사용한다.
-    const distDir = path.join(REPO_ROOT, '30-domain', '30-wms-business');
+    const distDir = path.join(REPO_ROOT, 'spec');
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {

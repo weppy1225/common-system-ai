@@ -18,7 +18,7 @@ tags:
 
 ```
 workspace/
-├── wms-{프로젝트코드}-ai/    # AI 허브. 스킬·규칙·화면설계(30-domain)·프로토타입(prototype) 보유. 스킬 실행 위치(CWD)
+├── wms-{프로젝트코드}-ai/    # AI 허브. 스킬·규칙·화면설계(spec)·프로토타입(prototype) 보유. 스킬 실행 위치(CWD)
 ├── wms-{프로젝트코드}-be/    # 백엔드. src/main/java, DEV_DOC, gradle
 └── wms-{프로젝트코드}-fe/    # 프론트엔드. src/views, package.json
 ```
@@ -64,7 +64,7 @@ Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`
 |---|---|---|
 | `src/main/java/`, `src/main/resource/`, `DEV_DOC/`, `build/`, `./gradlew`, `db.md`, `api.md` 등 BE 산출물 | `$BE_DIR` | `$BE_DIR/src/main/java/be/...` |
 | `src/views/`, `package.json`, `vitest/` 등 FE 산출물 | `$FE_DIR` | `$FE_DIR/src/views/be/...` |
-| `30-domain/`, `prototype/`, `patterns/`, `deliverables/` 화면설계·문서 | `$AI_DIR` (허브, CWD) | `$AI_DIR/30-domain/30-wms-business/{메뉴코드}/...` |
+| `spec/`, `prototype/`, `patterns/`, `deliverables/` 화면설계·문서 | `$AI_DIR` (허브, CWD) | `$AI_DIR/spec/{메뉴코드}/...` |
 
 - **BE 전용 스킬**: 작업 시작 시 `cd "$BE_DIR"` 후 진행하면 스킬 본문의 상대경로(`src/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)가 그대로 동작한다.
 - **FE 전용 스킬**: `cd "$FE_DIR"` 후 진행하면 `src/views/...`, `package.json` 이 그대로 동작한다.

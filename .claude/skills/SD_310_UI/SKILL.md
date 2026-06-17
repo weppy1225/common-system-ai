@@ -9,7 +9,7 @@ allowed-tools: Bash, Read, Write
 
 메뉴코드: **$ARGUMENTS**
 
-`deliverables/20-sources/UI/ui-template.md` 규칙에 따라 사용자와 인터뷰하며 `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 를 생성한다.
+`deliverables/20-sources/UI/ui-template.md` 규칙에 따라 사용자와 인터뷰하며 `spec/{메뉴코드}/{메뉴코드}-02-ui.md` 를 생성한다.
 
 ---
 
@@ -189,7 +189,7 @@ UI유형: {유형}
 그리드: {그리드명 목록}
 팝업: {있음(필드 N개) / 없음}
 업무규칙: {N}개
-저장 경로: 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md
+저장 경로: spec/{메뉴코드}/{메뉴코드}-02-ui.md
 
 이대로 {메뉴코드}-02-ui.md를 생성할까요?
 (수정할 부분이 있으면 항목명과 내용을 알려주세요)
@@ -226,7 +226,7 @@ UI유형: {유형}
 
 ### 저장
 ```
-30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md
+spec/{메뉴코드}/{메뉴코드}-02-ui.md
 ```
 
 디렉토리 없으면 생성 후 저장. 완료 후 경로 출력.

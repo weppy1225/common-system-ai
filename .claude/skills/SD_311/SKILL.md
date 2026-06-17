@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 메뉴코드: **$ARGUMENTS**
 
-`30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **공통 CSS·JS + 정해진 템플릿 파일**을 의거해 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
+`spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **공통 CSS·JS + 정해진 템플릿 파일**을 의거해 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
 
 ---
 
@@ -44,7 +44,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 1단계 — 전체 파일 읽기
 
-1. `30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
+1. `spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
 2. `prototype/_common/icon-preview.html` 에서 사용 가능한 아이콘 목록 확인 (**이 파일에 없는 아이콘은 절대 사용 금지**)
 3. `prototype/_common/_template/base.html` 에서 레이아웃 기본 뼈대 파악
 4. 요건 문서의 **UI유형**에 해당하는 `_template/gridX-*.html` 1개를 메인 영역 템플릿으로 읽기
@@ -61,7 +61,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 3단계 — 목업 데이터 JS 생성
 
-파일: `30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-mock-data.js`
+파일: `spec/$ARGUMENTS/$ARGUMENTS-02-mock-data.js`
 
 - 첫 줄 주석: `/* $ARGUMENTS 목업 데이터 */`
 - 변수명: 메뉴코드 대문자 + `_DATA` (예: `MDFG01_DATA`)
@@ -137,11 +137,11 @@ const MDFG01_DATA = {
 
 1. `prototype/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
    ```html
-   <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('../spec/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 2. `prototype/_common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
    ```html
-   <li class="submenu-item" onclick="loadContent('../../30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('../../spec/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 3. 이미 등록된 메뉴코드면 중복 추가하지 않는다.
 

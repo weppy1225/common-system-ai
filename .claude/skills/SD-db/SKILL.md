@@ -36,14 +36,14 @@ model: claude-opus-4-7
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 # BE_DIR 은 repo-paths.md 규칙으로 결정
 
-# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 30-domain/ 에 위치
-UI_MD="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md"
+# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 spec/ 에 위치
+UI_MD="$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-ui.md"
 
 # wireframe: PC / PDA 모바일 자동 분기
-if [ -f "$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
+if [ -f "$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-wireframe.html" ]; then
   # PC 화면
-  WIREFRAME="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html"
-  MOCK_DATA="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-mock-data.js"
+  WIREFRAME="$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-wireframe.html"
+  MOCK_DATA="$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-mock-data.js"
 else
   # PDA 모바일 화면 — prototype/mobile/ 하위 그룹 폴더 검색
   WIREFRAME=$(find "$AI_DIR/prototype/mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
@@ -52,7 +52,7 @@ fi
 ```
 
 > 이 스킬에서 `DEV_DOC/...`, `db.md`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`, `$BE_DIR/.../db.md`).
-> `$BE_DIR` 또는 허브의 `30-domain/30-wms-business/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> `$BE_DIR` 또는 허브의 `spec/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ---
 
@@ -62,8 +62,8 @@ fi
 
 아래 경로에서 파일을 찾아 모두 읽는다 (위 "프로젝트 경로 도출"에서 구한 변수 사용):
 
-- `$UI_MD` (`30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md`) — UI 설계서 (화면 구성, 필드 목록, 업무 흐름)
-- `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `prototype/mobile/…/{메뉴코드대문자}.html`)
+- `$UI_MD` (`spec/{메뉴코드}/{메뉴코드}-02-ui.md`) — UI 설계서 (화면 구성, 필드 목록, 업무 흐름)
+- `$WIREFRAME` — 화면 프로토타입 (PC: `spec/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `prototype/mobile/…/{메뉴코드대문자}.html`)
 - `$MOCK_DATA` — 목업 데이터 (있는 경우)
 
 추가로 BE 스펙 폴더도 확인:

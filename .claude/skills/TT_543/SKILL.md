@@ -410,7 +410,7 @@ const ctx = await browser.newContext({
 
 변수명·DB 컬럼명·API 경로는 직접 노출하지 않는다.
 
-> 단, `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 는 이 스킬에서 사용하지 않는다. Vue 소스가 더 정확.
+> 단, `spec/{메뉴코드}/{메뉴코드}-02-ui.md` 는 이 스킬에서 사용하지 않는다. Vue 소스가 더 정확.
 
 ---
 

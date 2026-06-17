@@ -9,11 +9,11 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "30-domain/30-wms-business/mdbz01/mdbz01-02-ui.md"
-  - "30-domain/30-wms-business/mdbz01/mdbz01-03-data-model.md"
+  - "spec/mdbz01/mdbz01-02-ui.md"
+  - "spec/mdbz01/mdbz01-03-data-model.md"
 related:
-  - "30-domain/30-wms-business/mdbz01/mdbz01-06-be-flow.md"
-  - "30-domain/30-wms-business/mdbz01/mdbz01-07-fe-flow.md"
+  - "spec/mdbz01/mdbz01-06-be-flow.md"
+  - "spec/mdbz01/mdbz01-07-fe-flow.md"
 tags:
   - detail-design
   - api

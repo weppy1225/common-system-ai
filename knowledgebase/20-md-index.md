@@ -16,7 +16,7 @@ tags:
 
 # 도메인 지식베이스 문서 인덱스
 
-`30-domain/30-wms-business/` 아래 실제 존재하는 메뉴별 지식베이스 문서 목록이다.
+`spec/` 아래 실제 존재하는 메뉴별 지식베이스 문서 목록이다.
 
 ## 문서 유형 범례
 
@@ -41,8 +41,8 @@ tags:
 
 | 메뉴코드 | 메뉴명 | 보유 문서 수 | 경로 |
 |---|---|---|---|
-| `mdbz01` | 사업장 | 8 | `30-domain/30-wms-business/mdbz01/` |
-| `mdpr01` | 사은품관리 | 3 | `30-domain/30-wms-business/mdpr01/` |
+| `mdbz01` | 사업장 | 8 | `spec/mdbz01/` |
+| `mdpr01` | 사은품관리 | 3 | `spec/mdpr01/` |
 
 ## 전체 문서 목록
 
@@ -67,5 +67,5 @@ tags:
 
 메뉴 폴더 밖에서 실제 확인된 공통 문서는 아래 2건이다.
 
-- `30-domain/00-overview.md`
-- `30-domain/10-md-index.md`
+- `knowledgebase/00-overview.md`
+- `knowledgebase/20-md-index.md`
