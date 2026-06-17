@@ -14,7 +14,7 @@ JDBC URL의 wrapper prefix(log4jdbc, p6spy 등)는 제거한다.
   python3 01_scan_db_config.py "{디렉토리경로}"
 
 출력:
-  output/04 구현(PI)/tmp/db_candidates.json
+  deliverables/30-output/04 구현(PI)/tmp/db_candidates.json
   {
     "scanned_files": [...],
     "candidates": [

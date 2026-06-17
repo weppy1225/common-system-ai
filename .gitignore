@@ -30,3 +30,6 @@ input/
 
 # Obsidian 에디터 설정 (로컬)
 .obsidian/
+
+# 생성 산출물 (스킬 출력 — 추적 안 함, 2026-06 통일)
+deliverables/30-output/

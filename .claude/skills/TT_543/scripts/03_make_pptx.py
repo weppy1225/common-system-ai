@@ -4,9 +4,9 @@
 [TT_543] 4단계 — 운영자 매뉴얼 PPTX 생성 (템플릿 기반, python-pptx, Windows 경로)
 
 입력:
-  output/05 이행(TT)/tmp_543/capture_config.json
-  output/05 이행(TT)/tmp_543/screens/{메뉴코드}/*.png
-  output/05 이행(TT)/tmp_543/screens/{메뉴코드}/coords.json
+  deliverables/30-output/05 이행(TT)/tmp_543/capture_config.json
+  deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/*.png
+  deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/coords.json
 
 템플릿:
   template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx   ← TT_541 과 동일 파일
@@ -14,7 +14,7 @@
   - 제목바 #2D4B73 / 이미지영역 0~10in / 설명패널 10~13.33in / 페이지번호 우하단
 
 출력:
-  output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx
+  deliverables/30-output/05 이행(TT)/TT_543_운영자매뉴얼_{고객사명}.pptx
 
 설계 원칙 (TT_541 과 동일):
   - 라벨/테두리/배지/커넥터/설명패널은 모두 python-pptx 도형(`add_shape`)으로 PPT 안에

@@ -20,7 +20,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 > - 데이터는 3행부터 작성. `표지` / `개정이력` 시트는 손대지 않는다.
 > - `Sheet1` 의 플랫폼별 집계(WEB / PDA / I/F / 합계)도 자동 갱신.
 
-> **출력**: `output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
+> **출력**: `deliverables/30-output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx`
 
 > **핵심 도구**: Python + `openpyxl`. 외부 빌드/실행 도구는 필요 없다. 라이브러리는 누락 시 자동 설치.
 
@@ -62,9 +62,9 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 ```
 TEMPLATE   = template/04 구현(PI)/PI_212-단위테스트보고서.xlsx
-OUTPUT_DIR = output/04 구현(PI)
-TMP_DIR    = output/04 구현(PI)/tmp
-OUTFILE    = output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+OUTPUT_DIR = deliverables/30-output/04 구현(PI)
+TMP_DIR    = deliverables/30-output/04 구현(PI)/tmp
+OUTFILE    = deliverables/30-output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
 ```
 
 `OUTPUT_DIR` / `TMP_DIR` 이 없으면 생성한다. `{YYMMDD}` 는 오늘 날짜.
@@ -150,7 +150,7 @@ python3 -u .claude/skills/PI_421/scripts/02_generate_excel.py "{고객사명}" "
 
 ```bash
 cd "$DOC_ROOT"
-rm -rf "output/04 구현(PI)/tmp"
+rm -rf "deliverables/30-output/04 구현(PI)/tmp"
 ```
 
 ---
@@ -298,7 +298,7 @@ rm -rf "output/04 구현(PI)/tmp"
   - I/F : N건
   - 합계: N건  (결과: O={N} / 완료율 100.0%)
 
-출력 파일: output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
+출력 파일: deliverables/30-output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
 ```
 
 ---

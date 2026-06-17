@@ -5,14 +5,14 @@
  * 사용법:
  *   node 02_capture_screens.js
  *
- * 입력:  output/05 이행(TT)/tmp_542/capture_config.json
+ * 입력:  deliverables/30-output/05 이행(TT)/tmp_542/capture_config.json
  * 출력:
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/01-main.png
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/02-search-result.png
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/03-register-popup.png  (선택)
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/04-row-selected.png    (선택)
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/05-edit-popup.png      (선택)
- *   output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/01-main.png
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/02-search-result.png
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/03-register-popup.png  (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/04-row-selected.png    (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/05-edit-popup.png      (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
  *
  * 표준 시나리오:
  *   메뉴 진입 → 메인 캡처 → 검색 → 등록 팝업 → 행 선택 → 수정 팝업

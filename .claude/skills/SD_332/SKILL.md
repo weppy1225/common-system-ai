@@ -14,7 +14,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 `$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일(`application-local.properties`, `application-dev.properties`, `application*.yml` 등)을 자동 스캔하여 DB(PostgreSQL/MySQL/MariaDB/MSSQL)에 직접 접속한다.
 `sm_comm_h`(공통코드 그룹)과 `sm_comm_d`(상세코드)를 조회하여
 `template/04 구현(PI)/PI_113-공통코드정의서.xlsx` 템플릿에 데이터를 채워 넣고
-`output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 파일을 생성한다.
+`deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 파일을 생성한다.
 
 > **클라이언트 도구 불필요**: psql/mysql/sqlcmd 같은 OS 클라이언트 없이 Python 라이브러리(psycopg2-binary / pymysql / pymssql)만으로 직접 접속한다. 라이브러리는 필요 시 `pip install --user`로 자동 설치한다.
 
@@ -45,8 +45,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 ```
 TEMPLATE   = template/04 구현(PI)/PI_113-공통코드정의서.xlsx
-OUTPUT_DIR = output/04 구현(PI)
-TMP_DIR    = output/04 구현(PI)/tmp
+OUTPUT_DIR = deliverables/30-output/04 구현(PI)
+TMP_DIR    = deliverables/30-output/04 구현(PI)/tmp
 SCRIPTS    = .claude/skills/SD_332/scripts
 ```
 
@@ -142,7 +142,7 @@ python3 .claude/skills/SD_332/scripts/03_generate_excel.py
 ### B-5) 임시 파일 정리
 
 ```bash
-rm -rf "$DOC_ROOT/output/04 구현(PI)/tmp"
+rm -rf "$DOC_ROOT/deliverables/30-output/04 구현(PI)/tmp"
 ```
 
 ---
@@ -175,7 +175,7 @@ rm -rf "$DOC_ROOT/output/04 구현(PI)/tmp"
 2. **후보 1개**: 추천 정보로 진행할지 사용자에게 한 번 확인. password가 비어 있으면 별도로 묻는다.
 3. **후보 2개 이상**: AskUserQuestion으로 어떤 후보(profile)를 사용할지 선택받는다.
 
-확정된 접속정보를 `output/04 구현(PI)/tmp/db_target.json`로 저장한다.
+확정된 접속정보를 `deliverables/30-output/04 구현(PI)/tmp/db_target.json`로 저장한다.
 
 ```json
 {
@@ -280,7 +280,7 @@ E=ref_h_cd  F=ref_d_cd    G=disp_no     H=disp_yn   I=use_yn
 
 ## 임시 파일 정리 (필수)
 
-Excel 산출물이 정상적으로 생성된 직후 `output/04 구현(PI)/tmp/` 폴더를 즉시 삭제한다. 이 폴더에는 DB 비밀번호가 평문으로 저장된 `db_target.json` 이 포함되어 있으므로 작업 종료 시점에 반드시 제거해야 한다.
+Excel 산출물이 정상적으로 생성된 직후 `deliverables/30-output/04 구현(PI)/tmp/` 폴더를 즉시 삭제한다. 이 폴더에는 DB 비밀번호가 평문으로 저장된 `db_target.json` 이 포함되어 있으므로 작업 종료 시점에 반드시 제거해야 한다.
 
 **규칙**:
 - Excel 생성이 성공한 경우에만 자동 삭제한다. 중간 단계에서 실패하면 디버깅을 위해 `tmp/`를 남겨둔다.
@@ -297,10 +297,10 @@ Excel 산출물이 정상적으로 생성된 직후 `output/04 구현(PI)/tmp/` 
 - [ ] 누락된 password 확인 후 보강
 - [ ] 필요한 Python 라이브러리 import 가능 (`--check-only` 통과)
 - [ ] DB 연결 성공 및 `tmp/common_codes.json` 생성
-- [ ] 출력 파일 `output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 생성
+- [ ] 출력 파일 `deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 생성
 - [ ] `3.코드그룹` / `4.상세코드` 시트에 DB 데이터가 채워지고 샘플 데이터는 남지 않음
 - [ ] `그룹SQL` / `상세SQL` 수식이 데이터 행 수만큼 확장됨
-- [ ] `output/04 구현(PI)/tmp/` 폴더 자동 삭제 완료 (비밀번호 노출 방지)
+- [ ] `deliverables/30-output/04 구현(PI)/tmp/` 폴더 자동 삭제 완료 (비밀번호 노출 방지)
 
 ---
 
@@ -312,7 +312,7 @@ Excel 산출물이 정상적으로 생성된 직후 `output/04 구현(PI)/tmp/` 
 실행 환경:     Windows PowerShell   또는   Bash on Linux/Mac/WSL
 대상 디렉토리: {디렉토리경로}
 DB:           {driver} {host}:{port}/{database} (profile={profile})
-출력파일:     output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx
+출력파일:     deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx
 
 수집 통계:
   - 코드그룹(SM_COMM_H): N개

@@ -6,7 +6,7 @@
  *   node 01_scan_project.js "<FE 프로젝트 경로>"
  *
  * 출력:
- *   output/05 이행(TT)/tmp_541/menu_candidates.json
+ *   deliverables/30-output/05 이행(TT)/tmp_541/menu_candidates.json
  *
  * 동작:
  *   1) package.json / vite.config / next.config 등에서 dev 포트 추출

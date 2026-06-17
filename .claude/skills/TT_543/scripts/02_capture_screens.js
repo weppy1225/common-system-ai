@@ -5,15 +5,15 @@
  * 사용법:
  *   node 02_capture_screens.js
  *
- * 입력:  output/05 이행(TT)/tmp_543/capture_config.json
+ * 입력:  deliverables/30-output/05 이행(TT)/tmp_543/capture_config.json
  * 출력:
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/01-main.png
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/02-search-result.png
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/03-register-popup.png  (선택)
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/04-row-selected.png    (선택)
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/05-edit-popup.png      (선택)
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/coords.json
- *   output/05 이행(TT)/tmp_543/screens/{메뉴코드}/buttons/*.png
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/01-main.png
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/02-search-result.png
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/03-register-popup.png  (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/04-row-selected.png    (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/05-edit-popup.png      (선택)
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/coords.json
+ *   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/buttons/*.png
  *
  * 핵심:
  *   - 브라우저 locale = ko-KR, timezone = Asia/Seoul, Accept-Language = ko-KR

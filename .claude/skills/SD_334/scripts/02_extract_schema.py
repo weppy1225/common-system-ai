@@ -2,8 +2,8 @@
 """
 SD_334 2단계 - DB 직접 접속하여 스키마 추출.
 
-입력: output/03 설계(SD)/tmp/db_target.json
-출력: output/03 설계(SD)/tmp/schema.json
+입력: deliverables/30-output/03 설계(SD)/tmp/db_target.json
+출력: deliverables/30-output/03 설계(SD)/tmp/schema.json
 
 driver별 카탈로그 조회로 다음 정보를 수집한다.
 - 테이블 (logical/physical name, schema, comment)
@@ -24,7 +24,7 @@ import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE_DIR / "output/03 설계(SD)/tmp"
+TMP_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)/tmp"
 TARGET_FILE = TMP_DIR / "db_target.json"
 SCHEMA_FILE = TMP_DIR / "schema.json"
 
