@@ -16,7 +16,7 @@ last_verified: 2026-06-17
 
 WMS AI 프레임워크 허브 레포. 화면설계·지식베이스·소스패턴·산출물·BE/FE 자동화 스킬의 단일 허브.
 
-> 재설계 배경·결정 근거·이전 매핑: → `STRUCTURE-TARGET.md`(결정안), `MIGRATION-PLAN.md`(이전 기록).
+> 재설계 배경·결정 근거·이전 매핑: → `_archive/STRUCTURE-TARGET.md`(결정안), `_archive/MIGRATION-PLAN.md`(이전 기록).
 
 ---
 
