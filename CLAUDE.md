@@ -21,7 +21,7 @@ cloud-wms-doc\
 ├── deliverables\  # 산출물 (템플릿·원천·결과)
 ├── 30-domain\        # 메뉴별 지식베이스
 ├── 50-prototype\     # 화면 프로토타입 배포 프레임
-├── 60-system\        # 시스템 운영·인프라 가이드
+├── knowledgebase/40-install-guide\        # 시스템 운영·인프라 가이드
 └── 90-archive\       # 아카이브 문서
 ```
 

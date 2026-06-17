@@ -1,5 +1,5 @@
 ---
-title: 60-system 시스템 운영·인프라 가이드
+title: knowledgebase/40-install-guide 시스템 운영·인프라 가이드
 description: cloud-wms 시스템의 빌드·배포·설치·운영에 관한 가이드 문서 모음
 status: active
 version: 1.0.0
@@ -8,14 +8,14 @@ project: cloud-wms-doc
 agent_usage: reference
 ---
 
-# 60-system
+# knowledgebase/40-install-guide
 
 cloud-wms 시스템의 빌드·배포·설치·운영 가이드를 관리한다.
 
 ## 디렉토리 구조
 
 ```
-60-system/
+knowledgebase/40-install-guide/
 └── deploy/
     └── local-deploy-guide.md   # 로컬 Tomcat 빌드·배포·검증 절차
 ```

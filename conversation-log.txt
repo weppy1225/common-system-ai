@@ -18,7 +18,7 @@ cloud-wms-doc 대화 전체 기록
 - **patterns**: 소스 패턴 문서 (화면설계·DB·BE·FE·IF) — 약 30개
 - **deliverables**: 산출물 템플릿·소스·결과물
 - **30-domain**: 메뉴별 지식베이스 (mdbz01, mdpr01)
-- **60-system**: 시스템 운영·배포 가이드
+- **knowledgebase/40-install-guide**: 시스템 운영·배포 가이드
 - **70-knowledgebase**: AI 개발용 지식베이스 (mdbz01, mdwh01, _common)
 - **90-archive**: 이전 BE/FE 아카이브 문서
 
@@ -48,7 +48,7 @@ node_modules/output/_temp는 제외하고 실질적인 프로젝트 MD는 약 12
 - 🟢 **patterns** — 소스 패턴/가이드  
 - 🟠 **deliverables** — 산출물 소스  
 - 🔵 **30-domain** — 메뉴별 KB (화면설계 결과물)  
-- 🔴 **60-system** — 시스템 운영 가이드  
+- 🔴 **knowledgebase/40-install-guide** — 시스템 운영 가이드  
 - 🟩 **70-knowledgebase** — AI 개발용 역공학 KB  
 - ⬜ **90-archive** — 이전 BE/FE 아카이브  
 
