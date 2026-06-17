@@ -16,13 +16,13 @@ paths:
 
 | 주제 | 문서 | 적용 레이어 |
 |---|---|---|
-| 레이어별 코딩 패턴 전체 (패키지구조·어노테이션·네이밍·금지패턴) | `10-src-pattern/30-backend/30-convention/01-coding-convention.md` | 전체 레이어 |
-| Controller 작성 | `10-src-pattern/30-backend/40-guide/02-controller-writing-rules.md` | Controller |
-| Dao 작성 | `10-src-pattern/30-backend/40-guide/03-dao-writing-rules.md` | Dao |
-| Mapper.java 작성 | `10-src-pattern/30-backend/40-guide/04-mapper-writing-rules.md` | Mapper I/F |
-| Comp 작성 | `10-src-pattern/30-backend/40-guide/06-comp-writing-rules.md` | Comp |
-| CompUtil 작성 | `10-src-pattern/30-backend/40-guide/07-computil-writing-rules.md` | CompUtil |
-| TxComp 작성 | `10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md` | TxComp |
+| 레이어별 코딩 패턴 전체 (패키지구조·어노테이션·네이밍·금지패턴) | `patterns/30-backend/30-convention/01-coding-convention.md` | 전체 레이어 |
+| Controller 작성 | `patterns/30-backend/40-guide/02-controller-writing-rules.md` | Controller |
+| Dao 작성 | `patterns/30-backend/40-guide/03-dao-writing-rules.md` | Dao |
+| Mapper.java 작성 | `patterns/30-backend/40-guide/04-mapper-writing-rules.md` | Mapper I/F |
+| Comp 작성 | `patterns/30-backend/40-guide/06-comp-writing-rules.md` | Comp |
+| CompUtil 작성 | `patterns/30-backend/40-guide/07-computil-writing-rules.md` | CompUtil |
+| TxComp 작성 | `patterns/30-backend/40-guide/08-txcomp-writing-rules.md` | TxComp |
 
 ---
 
@@ -83,4 +83,4 @@ paths:
 ## 상세 패턴 문서
 
 레이어별 전체 코딩 패턴, 어노테이션, 네이밍, 예제 코드:
-→ `10-src-pattern/30-backend/30-convention/01-coding-convention.md`
+→ `patterns/30-backend/30-convention/01-coding-convention.md`

@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: 화면설계 산출물(50-prototype + 30-domain)을 서버의 dist/ 평탄 구조로 변환해 zinDev FTP에 배포. /deploy [{메뉴코드}]
+description: 화면설계 산출물(prototype + spec)을 서버의 dist/ 평탄 구조로 변환해 zinDev FTP에 배포. /deploy [{메뉴코드}]
 when_to_use: "배포해줘", "FTP 올려줘", "화면 올려줘", "메뉴 배포해줘" 요청 시 사용.
 argument-hint: "[메뉴코드(선택)]"
 disable-model-invocation: true
@@ -39,12 +39,12 @@ allowed-tools: Bash, Read, AskUserQuestion
 
 | 로컬 원본 | dist 대상 | 내부 경로 변환 |
 | --- | --- | --- |
-| `50-prototype/index.html` | `dist/index.html` | `loadContent('../30-domain/30-wms-business/{c}/{c}-02-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
-| `50-prototype/10-common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../../30-domain/30-wms-business/{c}/{c}-02-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
-| `50-prototype/10-common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
-| `30-domain/30-wms-business/{c}/{c}-02-wireframe.html` | `dist/{c}/wireframe.html` | `../../../50-prototype/10-common/` → `../common/`, `./{c}-02-mock-data.js` → `./mock-data.js` |
-| `30-domain/30-wms-business/{c}/{c}-02-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
-| `30-domain/30-wms-business/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 |
+| `prototype/index.html` | `dist/index.html` | `loadContent('../spec/{c}/{c}-02-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
+| `prototype/_common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../../spec/{c}/{c}-02-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
+| `prototype/_common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
+| `spec/{c}/{c}-02-wireframe.html` | `dist/{c}/wireframe.html` | `../../../prototype/_common/` → `../common/`, `./{c}-02-mock-data.js` → `./mock-data.js` |
+| `spec/{c}/{c}-02-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
+| `spec/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 |
 
 > `{c}` = 메뉴코드. `index.html` 과 `left-menu.html` 은 메뉴 링크가 추가되므로 항상 함께 배포한다.
 > `wms-ui.css` / `wms-common.js` 는 모든 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
@@ -71,11 +71,11 @@ allowed-tools: Bash, Read, AskUserQuestion
 ### 메뉴코드 없이 (`/deploy`)
 1. 최근 변경 메뉴코드를 감지한다.
 ```bash
-git diff --name-only HEAD | grep -oP '30-domain/30-wms-business/\K[^/]+(?=/)' | sort -u
+git diff --name-only HEAD | grep -oP 'spec/\K[^/]+(?=/)' | sort -u
 ```
 2. 1개면 해당 코드로 지정 배포한다.
 3. 여러 개면 사용자에게 배포 대상을 선택받는다.
-4. 0개면 전체(`30-domain/30-wms-business/` 모든 메뉴 + `index.html` + `common/`) 배포 여부를 사용자에게 확인받는다.
+4. 0개면 전체(`spec/` 모든 메뉴 + `index.html` + `common/`) 배포 여부를 사용자에게 확인받는다.
 
 ---
 
@@ -88,31 +88,31 @@ which curl >/dev/null 2>&1 && echo "USE_CURL" || echo "USE_FTP"
 
 ### 2단계. staging 빌드 (변환 적용)
 
-`/deploy {메뉴코드}` 의 경우 `CODES="$ARGUMENTS"`, `/deploy` 전체의 경우 `CODES=$(ls -d 30-domain/30-wms-business/*/ | xargs -n1 basename)`.
+`/deploy {메뉴코드}` 의 경우 `CODES="$ARGUMENTS"`, `/deploy` 전체의 경우 `CODES=$(ls -d spec/*/ | xargs -n1 basename)`.
 
 ```bash
 STAGE=$(mktemp -d)
 mkdir -p "$STAGE/common"
 
 # index.html — 메뉴 경로 평탄화
-sed -E "s#\.\./30-domain/30-wms-business/([a-z0-9]+)/\1-02-wireframe\.html#\1/wireframe.html#g" \
-    50-prototype/index.html > "$STAGE/index.html"
+sed -E "s#\.\./spec/([a-z0-9]+)/\1-02-wireframe\.html#\1/wireframe.html#g" \
+    prototype/index.html > "$STAGE/index.html"
 
 # common/left-menu.html — 메뉴 경로 평탄화 (common 기준 상대경로)
-sed -E "s#\.\./\.\./30-domain/30-wms-business/([a-z0-9]+)/\1-02-wireframe\.html#../\1/wireframe.html#g" \
-    50-prototype/10-common/left-menu.html > "$STAGE/common/left-menu.html"
+sed -E "s#\.\./\.\./spec/([a-z0-9]+)/\1-02-wireframe\.html#../\1/wireframe.html#g" \
+    prototype/_common/left-menu.html > "$STAGE/common/left-menu.html"
 
 # common/ 그 외 공통 자산 — 변환 없이 복사
 for f in wms-ui.css wms-common.js CPCT01_popup.html CPPD01_popup.html icon-preview.html; do
-  cp "50-prototype/10-common/$f" "$STAGE/common/$f"
+  cp "prototype/_common/$f" "$STAGE/common/$f"
 done
 
 # 메뉴별 산출물 — 리네임 + 내부 경로 변환
 for CODE in $CODES; do
-  SRC="30-domain/30-wms-business/$CODE"
+  SRC="spec/$CODE"
   [ -d "$SRC" ] || { echo "skip: $SRC 없음"; continue; }
   mkdir -p "$STAGE/$CODE"
-  sed -E -e "s#\.\./\.\./\.\./50-prototype/10-common/#../common/#g" \
+  sed -E -e "s#\.\./\.\./\.\./prototype/_common/#../common/#g" \
          -e "s#\./$CODE-02-mock-data\.js#./mock-data.js#g" \
       "$SRC/$CODE-02-wireframe.html" > "$STAGE/$CODE/wireframe.html"
   [ -f "$SRC/$CODE-02-mock-data.js" ] && cp "$SRC/$CODE-02-mock-data.js" "$STAGE/$CODE/mock-data.js"

@@ -86,7 +86,7 @@ UI유형은 아래와 같다
 - 기능 버튼은 그리드 좌측 상단에 좌측 정렬한다.
 - 명시적으로 요청하지 않은 버튼(엑셀등록, 엑셀다운로드 등)을 임의로 추가하지 않는다.
 - **모든 기능 버튼은 반드시 동작하도록 구현한다.** 빈 stub(`function doXxx() {}`)으로 남겨두지 않는다. 구현 후 동작 여부를 직접 확인한다.
-- **아이콘 버튼은 반드시 `50-prototype/10-common/icon-preview.html`에 정의된 아이콘만 사용한다.** icon-preview.html에 없는 아이콘은 임의로 만들거나 추가하지 않으며, 해당하는 아이콘이 없는 기능 버튼은 텍스트 버튼으로 처리한다.
+- **아이콘 버튼은 반드시 `prototype/_common/icon-preview.html`에 정의된 아이콘만 사용한다.** icon-preview.html에 없는 아이콘은 임의로 만들거나 추가하지 않으며, 해당하는 아이콘이 없는 기능 버튼은 텍스트 버튼으로 처리한다.
 
 ### 공통 팝업 (검색 팝업)
 - **거래처명 / 거래처번호** 입력 필드에는 반드시 `CPCT01_popup.html` 공통 팝업을 연결한다.
@@ -228,7 +228,7 @@ window.addEventListener('message', function(e) {
 ## 상세 패턴 문서
 
 화면설계 패턴 전체 인덱스:
-→ `10-src-pattern/10-screen-design/00-overview.md`
+→ `patterns/10-screen-design/00-overview.md`
 
 WEB 화면 영역별 패턴 인덱스:
-→ `10-src-pattern/10-screen-design/10-web/00-overview.md`
+→ `patterns/10-screen-design/10-web/00-overview.md`

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WMS 화면 (탭바 X 버튼 추가)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 왼쪽 메뉴 */
+        .left-menu {
+            width: 200px;
+            background-color: #1e2d4a;
+            border-right: none;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.18);
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .left-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+        .left-menu::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.12);
+            border-radius: 4px;
+        }
+
+        .menu-header {
+            padding: 20px 16px 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .wms-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .wms-title span {
+            font-size: 13px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.55);
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 30px;
+            padding: 6px 12px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: rgba(255,255,255,0.3);
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            font-size: 13px;
+            outline: none;
+            color: #ffffff;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.35);
+        }
+
+        .search-box span {
+            color: rgba(255,255,255,0.4);
+            font-size: 16px;
+            margin-right: 4px;
+        }
+
+        .menu-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
+        }
+
+        .menu-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .menu-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .menu-category {
+            margin-bottom: 1px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            background-color: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: background-color 0.15s, color 0.15s;
+            letter-spacing: 0.2px;
+        }
+
+        .category-header:hover {
+            background-color: rgba(255,255,255,0.07);
+            color: #ffffff;
+        }
+
+        .category-header.open {
+            background-color: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .category-header .arrow {
+            color: rgba(255,255,255,0.4);
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1;
+            transition: transform 0.2s, color 0.15s;
+            display: inline-block;
+        }
+
+        .category-header:hover .arrow,
+        .category-header.open .arrow {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .category-header .arrow.rotated {
+            transform: rotate(-90deg);
+        }
+
+        .submenu-list {
+            list-style: none;
+            background-color: rgba(0,0,0,0.18);
+            padding: 4px 0 6px 0;
+            display: block;
+        }
+
+        .submenu-list.collapsed {
+            display: none;
+        }
+
+        .submenu-item {
+            padding: 8px 16px 8px 28px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 3px solid transparent;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .submenu-item:hover {
+            background-color: rgba(255,255,255,0.08);
+            border-left-color: #5b9bd5;
+            color: #ffffff;
+        }
+
+        .submenu-item.active {
+            background-color: rgba(91,155,213,0.18);
+            border-left-color: #5b9bd5;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .bottom-placeholder {
+            height: 16px;
+        }
+
+        /* 오른쪽 컨텐츠 영역 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 상단 고정바 */
+        .top-bar {
+            height: 48px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px 0 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+        }
+
+        /* 왼쪽 영역 (햄버거 + 탭) */
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #e2e8f0 transparent;
+            padding-right: 8px;
+            min-width: 0;
+        }
+
+        .top-bar-left::-webkit-scrollbar { height: 3px; }
+        .top-bar-left::-webkit-scrollbar-thumb {
+            background-color: #e2e8f0;
+            border-radius: 4px;
+        }
+
+        /* 햄버거 버튼 */
+        .hamburger-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.15s;
+            flex-shrink: 0;
+        }
+
+        .hamburger-btn:hover { background-color: #f1f5f9; }
+
+        .hamburger-btn span {
+            width: 17px;
+            height: 2px;
+            background-color: #374151;
+            border-radius: 1px;
+        }
+
+        /* 탭바 래퍼 */
+        .tab-bar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+
+        /* 탭 아이템 — outline pill */
+        .tab-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0 7px 0 11px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            height: 26px;
+            background-color: #ffffff;
+        }
+
+        .tab-item:hover {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        /* 활성 탭 — 네이비 solid */
+        .tab-item.active {
+            background-color: #1e2d4a;
+            border-color: #1e2d4a;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .tab-item.active:hover {
+            background-color: #263858;
+            border-color: #263858;
+        }
+
+        /* 닫기 버튼 */
+        .close-btn {
+            width: 15px;
+            height: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-size: 10px;
+            line-height: 1;
+            color: #6b7280;
+            transition: all 0.15s;
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        .tab-item.active .close-btn { color: rgba(255,255,255,0.65); }
+
+        .close-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+            color: #111827;
+        }
+
+        .tab-item.active .close-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            color: #ffffff;
+        }
+
+        /* 오른쪽 영역 */
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        /* 사용자 정보 */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 3px 8px 3px 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .user-info:hover { background-color: #f1f5f9; }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background-color: #e5e7eb;
+            color: #374151;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        /* 두 줄 이름 */
+        .user-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .user-name-main {
+            font-size: 12px;
+            font-weight: 600;
+            color: #111827;
+            white-space: nowrap;
+        }
+
+        .user-name-sub {
+            font-size: 11px;
+            font-weight: 400;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* 우측 아이콘 버튼 (SVG 라인 스타일) */
+        .icon-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            background: transparent;
+        }
+
+        .icon-btn svg {
+            width: 17px;
+            height: 17px;
+            stroke: #6b7280;
+            fill: none;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.15s;
+        }
+
+        .icon-btn:hover { background-color: #f1f5f9; }
+        .icon-btn:hover svg { stroke: #1e2d4a; }
+
+        .icon-btn.logout:hover { background-color: #fef2f2; }
+        .icon-btn.logout:hover svg { stroke: #dc2626; }
+
+        .divider {
+            width: 1px;
+            height: 18px;
+            background-color: #e5e7eb;
+            margin: 0 5px;
+        }
+
+        /* 컨텐츠 영역 */
+        .content-area {
+            flex: 1;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        .content-placeholder {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 16px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+        }
+
+        /* ── 공통 팝업 레이어 ── */
+        .layer-bg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .layer-bg.show { display: flex; }
+        .layer-modal {
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            position: absolute;
+        }
+        .layer-modal iframe {
+            border: none;
+            display: block;
+        }
+        .layer-drag-handle {
+            position: absolute;
+            top: 0; left: 0; right: 40px;
+            height: 36px;
+            cursor: move;
+            user-select: none;
+            z-index: 1;
+            border-radius: 6px 6px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 왼쪽 메뉴 -->
+    <div class="left-menu">
+        <div class="menu-header">
+            <div class="wms-title">
+                WMS
+                <span>v2.0</span>
+            </div>
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="메뉴 검색">
+            </div>
+        </div>
+
+        <div class="menu-scroll">
+            <!-- 입고관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    입고관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">입고예정</li>
+                    <li class="submenu-item">입고처리</li>
+                    <li class="submenu-item">입고현황</li>
+                </ul>
+            </div>
+
+            <!-- 반품관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    반품관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">반품예정</li>
+                    <li class="submenu-item">반품처리</li>
+                </ul>
+            </div>
+
+            <!-- 재고관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    재고관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">재고이동</li>
+                    <li class="submenu-item">재고이동요청</li>
+                    <li class="submenu-item">재고조정</li>
+                    <li class="submenu-item">예외출고</li>
+                    <li class="submenu-item">SKU변경</li>
+                    <li class="submenu-item">파렛트분할</li>
+                    <li class="submenu-item">파렛트병합</li>
+                    <li class="submenu-item">세트작업</li>
+                                <li class="submenu-item" onclick="loadContent('../stdc01/stdc01-wireframe.html', '세트해체')">세트해체</li>
+                </ul>
+            </div>
+
+            <!-- 재고조회 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    재고조회
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">재고조회</li>
+                    <li class="submenu-item">재고조회(품목별)</li>
+                    <li class="submenu-item">재고조회(창고별)</li>
+                    <li class="submenu-item">재고조회(기간별)</li>
+                    <li class="submenu-item">수불조회</li>
+                    <li class="submenu-item">재고마감</li>
+                    <li class="submenu-item">SKU이력조회</li>
+                </ul>
+            </div>
+
+            <!-- 재고실사 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    재고실사
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">재고실사입정등록</li>
+                    <li class="submenu-item">실사재고등록</li>
+                    <li class="submenu-item">재고실사비교</li>
+                </ul>
+            </div>
+
+            <!-- 출고관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    출고관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">출하예정</li>
+                    <li class="submenu-item">송장발행</li>
+                    <li class="submenu-item">출고지시</li>
+                    <li class="submenu-item">출고지시(송장)</li>
+                    <li class="submenu-item">출고처리</li>
+                    <li class="submenu-item">송장처리</li>
+                    <li class="submenu-item">송장처리(바코드)</li>
+                    <li class="submenu-item">송장처리취소</li>
+                    <li class="submenu-item">상차처리</li>
+                    <li class="submenu-item">출하처리</li>
+                    <li class="submenu-item">출하처리취소</li>
+                    <li class="submenu-item">출하현황</li>
+                                <li class="submenu-item" onclick="loadContent('../obcr01/obcr01-wireframe.html', '배송차량등록')">배송차량등록</li>
+                </ul>
+            </div>
+
+            <!-- 기준정보 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    기준정보
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">사업장</li>
+                    <li class="submenu-item">창고</li>
+                    <li class="submenu-item">위치</li>
+                                <li class="submenu-item" onclick="loadContent('../mdpd01/mdpd01-wireframe.html', '품목')">품목</li>
+                                <li class="submenu-item" onclick="loadContent('../mdct01/mdct01-wireframe.html', '거래처관리')">거래처관리</li>
+                    <li class="submenu-item">업체품목</li>
+                    <li class="submenu-item">세트구성</li>
+                                <li class="submenu-item" onclick="loadContent('../dlvo01/dlvo01-wireframe.html', '배송차량등록')">배송차량등록</li>
+                    <li class="submenu-item">사용자</li>
+                                <li class="submenu-item" onclick="loadContent('../mdpr01/mdpr01-wireframe.html', '사은품관리')">사은품관리</li>
+                                <li class="submenu-item" onclick="loadContent('../mdcr01/mdcr01-wireframe.html', '차량관리')">차량관리</li>
+                </ul>
+            </div>
+
+            <!-- 시스템설정 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    시스템설정
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">품목설정</li>
+                    <li class="submenu-item">출하설정</li>
+                    <li class="submenu-item">출력물설정</li>
+                    <li class="submenu-item">사용자코드</li>
+                    <li class="submenu-item">권한그룹</li>
+                    <li class="submenu-item">메뉴별설정</li>
+                    <li class="submenu-item">보안설정</li>
+                    <li class="submenu-item">알람조회</li>
+                </ul>
+            </div>
+
+            <!-- I/F관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    I/F관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">I/F설정</li>
+                    <li class="submenu-item">I/F처리이력</li>
+                    <li class="submenu-item">택배사설정</li>
+                </ul>
+            </div>
+
+            <!-- 운영관리 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    운영관리
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">메뉴</li>
+                    <li class="submenu-item">공통코드</li>
+                    <li class="submenu-item">출력물관리</li>
+                    <li class="submenu-item">스케줄러</li>
+                    <li class="submenu-item">스케줄러 실행이력</li>
+                    <li class="submenu-item">스케줄러 변경이력</li>
+                </ul>
+            </div>
+
+            <!-- 시스템현황 -->
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleSubmenu(this)">
+                    시스템현황
+                    <span class="arrow">&lt;</span>
+                </div>
+                <ul class="submenu-list collapsed">
+                    <li class="submenu-item">시스템접근로그</li>
+                    <li class="submenu-item">시스템API로그</li>
+                    <li class="submenu-item">시스템에러로그</li>
+                    <li class="submenu-item">시스템메뉴로그</li>
+                    <li class="submenu-item">고객문의</li>
+                </ul>
+            </div>
+
+            <div class="bottom-placeholder"></div>
+        </div>
+    </div>
+
+    <!-- 오른쪽 컨텐츠 영역 -->
+    <div class="main-content">
+        <!-- 상단 고정바 -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <!-- 햄버거 버튼 -->
+                <div class="hamburger-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <!-- 탭바 -->
+                <div class="tab-bar" id="tabBar"></div>
+            </div>
+
+            <div class="top-bar-right">
+                <!-- 회원정보 (아이콘 + 두 줄) -->
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#6b7280" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="user-text">
+                        <span class="user-name-main">야임유어박스</span>
+                        <span class="user-name-sub">진테스트</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- 다국어 -->
+                <div class="icon-btn" title="다국어설정">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+
+                <!-- 알림 -->
+                <div class="icon-btn" title="알림">
+                    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+
+                <!-- 도움말 -->
+                <div class="icon-btn" title="도움말">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2.5"/></svg>
+                </div>
+
+                <!-- 로그아웃 -->
+                <div class="icon-btn logout" title="로그아웃">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 메인 컨텐츠 영역 (예시) -->
+        <div class="content-area">
+			<iframe id="main-content-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <!-- ── 공통 품목 팝업 레이어 ── -->
+    <div class="layer-bg" id="pdLayerBg">
+      <div class="layer-modal" id="pdLayerModal">
+        <div class="layer-drag-handle" id="pdDragHandle"></div>
+        <iframe id="pdLayerFrame" src="" width="920" height="520"></iframe>
+      </div>
+    </div>
+
+    <!-- ── 공통 거래처 팝업 레이어 ── -->
+    <div class="layer-bg" id="cpLayerBg">
+      <div class="layer-modal" id="cpLayerModal">
+        <div class="layer-drag-handle" id="cpDragHandle"></div>
+        <iframe id="cpLayerFrame" src="" width="800" height="480"></iframe>
+      </div>
+    </div>
+
+    <script>
+		function toggleSubmenu(headerElement) {
+			const categoryDiv = headerElement.closest('.menu-category');
+			const submenu = categoryDiv.querySelector('.submenu-list');
+			const arrow = headerElement.querySelector('.arrow');
+			
+			if (submenu) {
+				submenu.classList.toggle('collapsed');
+				headerElement.classList.toggle('open');
+				if (arrow) {
+					arrow.classList.toggle('rotated');
+				}
+			}
+		}
+
+		/* ===== 탭 관리 ===== */
+		var tabs = [];       // { id, name, page }
+		var activeTabId = null;
+		var tabIdCounter = 0;
+
+		// 메뉴 클릭 → 탭 추가 또는 활성화
+		function loadContent(page, menuName) {
+			// 이미 열린 탭이면 활성화만
+			var existing = tabs.find(function(t) { return t.page === page; });
+			if (existing) {
+				activateTab(existing.id);
+				return;
+			}
+			// 새 탭 추가
+			tabIdCounter++;
+			var tab = { id: tabIdCounter, name: menuName || page, page: page };
+			tabs.push(tab);
+			renderTabs();
+			activateTab(tab.id);
+		}
+
+		function activateTab(id) {
+			activeTabId = id;
+			var tab = tabs.find(function(t) { return t.id === id; });
+			if (tab) {
+				document.getElementById('main-content-frame').src = tab.page;
+			}
+			renderTabs();
+			updateMenuActive(tab ? tab.page : null);
+		}
+
+		function closeTab(id, evt) {
+			evt.stopPropagation();
+			var idx = tabs.findIndex(function(t) { return t.id === id; });
+			if (idx === -1) return;
+			tabs.splice(idx, 1);
+			// 닫은 탭이 활성 탭이면 다른 탭 활성화
+			if (activeTabId === id) {
+				if (tabs.length > 0) {
+					var nextIdx = Math.min(idx, tabs.length - 1);
+					activateTab(tabs[nextIdx].id);
+				} else {
+					activeTabId = null;
+					document.getElementById('main-content-frame').src = '';
+					renderTabs();
+					updateMenuActive(null);
+				}
+			} else {
+				renderTabs();
+			}
+		}
+
+		function renderTabs() {
+			var bar = document.getElementById('tabBar');
+			var html = '';
+			tabs.forEach(function(t) {
+				var cls = (t.id === activeTabId) ? 'tab-item active' : 'tab-item';
+				html += '<div class="' + cls + '" onclick="activateTab(' + t.id + ')">'
+					+ t.name
+					+ '<span class="close-btn" onclick="closeTab(' + t.id + ', event)">✕</span>'
+					+ '</div>';
+			});
+			bar.innerHTML = html;
+		}
+
+		// 왼쪽 메뉴 active 표시 동기화
+		function updateMenuActive(page) {
+			document.querySelectorAll('.submenu-item').forEach(function(el) {
+				el.classList.remove('active');
+				if (page && el.getAttribute('data-page') === page) {
+					el.classList.add('active');
+				}
+			});
+		}
+
+		// 초기화: 모든 submenu-item에 클릭 이벤트 바인딩
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('.submenu-item').forEach(function(el) {
+				var menuName = el.textContent.trim();
+				// 기존 onclick이 있는 항목에서 page 추출
+				var onclickAttr = el.getAttribute('onclick');
+				var page = null;
+				if (onclickAttr) {
+					var match = onclickAttr.match(/loadContent\('([^']+)'/);
+					if (match) page = match[1];
+				}
+				el.setAttribute('data-page', page || '');
+				// onclick 재설정
+				el.onclick = function() {
+					if (page) {
+						loadContent(page, menuName);
+					} else {
+						// html 파일 없는 메뉴는 빈 탭으로 추가
+						loadContent('about:blank', menuName);
+					}
+				};
+			});
+		});
+
+		/* ===== 공통 팝업 레이어 API ===== */
+		var _pdRequester = null;  // 품목 팝업을 요청한 자식 iframe의 window 참조
+		var _cpRequester = null;  // 거래처 팝업을 요청한 자식 iframe의 window 참조
+
+		// 품목 팝업 열기
+		function openPdLayer() {
+			centerModal('pdLayerModal');
+			document.getElementById('pdLayerFrame').src = './CPPD01_popup.html';
+			document.getElementById('pdLayerBg').classList.add('show');
+		}
+
+		// 품목 팝업 닫기
+		function closePdLayer() {
+			document.getElementById('pdLayerBg').classList.remove('show');
+			document.getElementById('pdLayerFrame').src = '';
+			_pdRequester = null;
+		}
+
+		// 거래처 팝업 열기
+		function openCpLayer() {
+			centerModal('cpLayerModal');
+			document.getElementById('cpLayerFrame').src = './CPCT01_popup.html';
+			document.getElementById('cpLayerBg').classList.add('show');
+		}
+
+		// 거래처 팝업 닫기
+		function closeCpLayer() {
+			document.getElementById('cpLayerBg').classList.remove('show');
+			document.getElementById('cpLayerFrame').src = '';
+			_cpRequester = null;
+		}
+
+		// postMessage 수신 (자식 iframe + 팝업 iframe 양쪽)
+		window.addEventListener('message', function(e) {
+			if (!e.data || !e.data.type) return;
+
+			// ── 자식 화면(mdfg01 등)에서 팝업 오픈 요청 ──
+			if (e.data.type === 'OPEN_PD_LAYER') {
+				_pdRequester = e.source;  // 요청한 iframe 참조 저장
+				openPdLayer();
+			}
+			if (e.data.type === 'OPEN_CP_LAYER') {
+				_cpRequester = e.source;
+				openCpLayer();
+			}
+
+			// ── 팝업 iframe에서 선택 완료 ──
+			if (e.data.type === 'CPPD01_select') {
+				// 요청한 자식 iframe에 결과 전달
+				if (_pdRequester) {
+					_pdRequester.postMessage({
+						type: 'PD_SELECTED',
+						prodNo: e.data.data.prodNo,
+						prodNm: e.data.data.prodNm
+					}, '*');
+				}
+				closePdLayer();
+			}
+			if (e.data.type === 'CPPD01_close') {
+				closePdLayer();
+			}
+
+			if (e.data.type === 'CPCT01_select') {
+				if (_cpRequester) {
+					_cpRequester.postMessage({
+						type: 'CP_SELECTED',
+						cpctNo: e.data.data.cpctNo,
+						cpctNm: e.data.data.cpctNm
+					}, '*');
+				}
+				closeCpLayer();
+			}
+			if (e.data.type === 'CPCT01_close') {
+				closeCpLayer();
+			}
+		});
+
+		// 오버레이 클릭 시 닫기
+		document.getElementById('pdLayerBg').addEventListener('click', function(e) {
+			if (e.target === this) closePdLayer();
+		});
+		document.getElementById('cpLayerBg').addEventListener('click', function(e) {
+			if (e.target === this) closeCpLayer();
+		});
+
+		/* ===== 모달 중앙 정렬 ===== */
+		function centerModal(modalId) {
+			var modal = document.getElementById(modalId);
+			var w = modal.offsetWidth || 920;
+			var h = modal.offsetHeight || 520;
+			modal.style.left = Math.max(0, (window.innerWidth - w) / 2) + 'px';
+			modal.style.top = Math.max(0, (window.innerHeight - h) / 2) + 'px';
+		}
+
+		/* ===== 드래그 이동 ===== */
+		function setupDrag(handleId, modalId) {
+			var handle = document.getElementById(handleId);
+			var modal = document.getElementById(modalId);
+			var dragging = false, ox = 0, oy = 0;
+
+			handle.addEventListener('mousedown', function(e) {
+				dragging = true;
+				ox = e.clientX - modal.offsetLeft;
+				oy = e.clientY - modal.offsetTop;
+				// 드래그 중 iframe이 마우스를 잡아먹지 않도록 차단
+				modal.querySelector('iframe').style.pointerEvents = 'none';
+				e.preventDefault();
+			});
+
+			document.addEventListener('mousemove', function(e) {
+				if (!dragging) return;
+				modal.style.left = (e.clientX - ox) + 'px';
+				modal.style.top = (e.clientY - oy) + 'px';
+			});
+
+			document.addEventListener('mouseup', function() {
+				if (!dragging) return;
+				dragging = false;
+				modal.querySelector('iframe').style.pointerEvents = 'auto';
+			});
+		}
+
+		setupDrag('pdDragHandle', 'pdLayerModal');
+		setupDrag('cpDragHandle', 'cpLayerModal');
+    </script>
+</body>
+</html>

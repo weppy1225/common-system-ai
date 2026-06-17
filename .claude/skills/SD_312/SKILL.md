@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 메뉴코드: **$ARGUMENTS**
 
-`30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **mobile.css + PDA 전용 레이아웃 템플릿 파일**을 의거해 모바일 PDA 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
+`spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **mobile.css + PDA 전용 레이아웃 템플릿 파일**을 의거해 모바일 PDA 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
 
 ---
 
@@ -18,17 +18,17 @@ allowed-tools: Bash, Read, Write, Edit
 
 | 파일 | 역할 |
 |---|---|
-| `50-prototype/20-mobile/mobile.css` | 모든 PDA 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
-| `50-prototype/20-mobile/common/_template/typeA.html` | PDA Type A: 목록형 템플릿 |
-| `50-prototype/20-mobile/common/_template/typeB.html` | PDA Type B: 처리형 템플릿 |
-| `50-prototype/20-mobile/common/_template/typeC.html` | PDA Type C: 탭형 템플릿 |
-| `50-prototype/20-mobile/common/_template/typeF.html` | PDA Type F: 설정형 템플릿 |
+| `prototype/_common-m/mobile.css` | 모든 PDA 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
+| `prototype/_common-m/common/_template/typeA.html` | PDA Type A: 목록형 템플릿 |
+| `prototype/_common-m/common/_template/typeB.html` | PDA Type B: 처리형 템플릿 |
+| `prototype/_common-m/common/_template/typeC.html` | PDA Type C: 탭형 템플릿 |
+| `prototype/_common-m/common/_template/typeF.html` | PDA Type F: 설정형 템플릿 |
 
 생성하는 HTML에는 반드시 아래가 포함되어야 한다.
 
 ```html
-<link rel="stylesheet" href="../mobile.css">
-<script src="./{메뉴코드대문자}-data.js"></script>
+<link rel="stylesheet" href="../_common-m/mobile.css">
+<script src="./{메뉴코드}m-mock-data.js"></script>
 ```
 
 **mobile.css에 이미 정의된 공통 스타일은 HTML `<style>` 블록에서 재정의하지 않는다.** 화면 고유 스타일(추가 색상 이동 레이아웃, 특수 상태)만 최소로 추가한다.
@@ -39,9 +39,9 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 1단계 — 전체 파일 읽기
 
-1. `30-domain/30-wms-business/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
-2. `50-prototype/20-mobile/ui-standard.html` 에서 PDA 레이아웃 기준 파악
-3. 요건 문서의 목적/UI유형에 맞는 `50-prototype/20-mobile/common/_template/type{X}.html` 1개
+1. `spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
+2. `prototype/_common-m/ui-standard.html` 에서 PDA 레이아웃 기준 파악
+3. 요건 문서의 목적/UI유형에 맞는 `prototype/_common-m/common/_template/type{X}.html` 1개
 
 ### 2단계 — 요건 파악
 
@@ -59,7 +59,7 @@ ui.md에서 아래 항목을 추출한다.
 
 ### 3단계 — 목업 데이터 JS 생성
 
-파일: `50-prototype/20-mobile/{그룹코드}/{메뉴코드대문자}-data.js`
+파일: `prototype/{메뉴코드}m/{메뉴코드}m-mock-data.js`
 
 - 첫 줄 주석: `/* {메뉴코드 소문자} 목업 데이터 */`
 - 변수명: 메뉴코드 대문자 + `_DATA` (예: `IVMV01_DATA`)
@@ -78,6 +78,8 @@ const IVMV01_DATA = {
 ```
 
 ### 4단계 — HTML 생성
+
+생성 위치: `prototype/{메뉴코드}m/{메뉴코드}m-wireframe.html`
 
 1. 요건에 맞는 `type{X}.html` 템플릿을 복사한다.
 2. 파일 최상단 주석을 삽입한다.
@@ -126,10 +128,10 @@ const IVMV01_DATA = {
 
 ### 5단계 — 메뉴 등록
 
-`50-prototype/20-mobile/menu.html`의 `<div class="menu-grid">` 안에 항목 추가:
+`prototype/_common-m/menu.html`의 `<div class="menu-grid">` 안에 항목 추가:
 
 ```html
-<div class="menu-cell" onclick="location.href='./{그룹코드}/{메뉴코드대문자}.html'">
+<div class="menu-cell" onclick="location.href='../{메뉴코드}m/{메뉴코드}m-wireframe.html'">
   <div class="menu-ico"><img src="./assets/{아이콘파일명}" alt="{메뉴명}"></div>
 </div>
 ```
@@ -174,7 +176,7 @@ ui.md의 **화면 목적**과 **UI유형**을 함께 참조하여 결정한다.
 
 ## 메뉴 아이콘 선택 기준
 
-`50-prototype/20-mobile/assets/` 에서 아이콘을 선택한다.
+`prototype/_common-m/assets/` 에서 아이콘을 선택한다.
 
 | 아이콘 파일명 | 사용 화면 |
 |---|---|
@@ -201,15 +203,15 @@ ui.md의 **화면 목적**과 **UI유형**을 함께 참조하여 결정한다.
 
 ## 완료 체크리스트
 
-- [ ] `{메뉴코드대문자}-data.js` 생성 (목록 10건 이상 또는 처리형 master 2건+items 3건 이상)
-- [ ] `{메뉴코드대문자}.html` 에 `<link rel="stylesheet" href="../mobile.css">` 포함
-- [ ] `{메뉴코드대문자}.html` 에 `<script src="./{메뉴코드대문자}-data.js"></script>` 포함
+- [ ] `{메뉴코드}m-mock-data.js` 생성 (목록 10건 이상 또는 처리형 master 2건+items 3건 이상)
+- [ ] `{메뉴코드}m-wireframe.html` 에 `<link rel="stylesheet" href="../_common-m/mobile.css">` 포함
+- [ ] `{메뉴코드}m-wireframe.html` 에 `<script src="./{메뉴코드}m-mock-data.js"></script>` 포함
 - [ ] mobile.css 공통 스타일을 화면 `<style>`에서 재정의하지 않음
 - [ ] `<title>`에 `{메뉴명} [{메뉴코드대문자}]` 정확히 표시
 - [ ] 파일 최상단 주석에 wireframe-only, 메뉴코드, 메뉴명, Type, 그룹코드 기재
 - [ ] 선택한 PDA 레이아웃 유형이 화면 목적과 일치
 - [ ] 모든 기능 버튼 실제 동작 (stub 없음)
 - [ ] 탭바 구성 → 활성 탭 정확히 표시
-- [ ] `50-prototype/20-mobile/menu.html` 에 메뉴 중복 없이 등록
+- [ ] `prototype/_common-m/menu.html` 에 메뉴 중복 없이 등록
 - [ ] 모바일 `<meta name="viewport" content="width=device-width, initial-scale=1.0">` 포함
 - [ ] `DOMContentLoaded` 이벤트로 데이터 초기 렌더링

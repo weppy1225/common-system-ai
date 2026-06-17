@@ -1,12 +1,14 @@
 ---
 name: KB_200
-description: 【지식베이스 검증】 메뉴코드를 입력받아 7개 KB 문서와 실제 BE/FE 소스를 비교 분석하여 일치율·누락·과잉 항목을 리포트한다. 역공학 품질 검증 및 개발 완료 후 문서 동기화 확인에 사용한다. /KB_200 {메뉴코드} 형식으로 실행. 사용자가 "지식베이스 검증", "KB 검증", "문서 일치율 확인", "역공학 검증", "KB_200 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 【설계 검증】 메뉴코드를 입력받아 spec/{메뉴코드}/ 설계 문서와 실제 BE/FE 소스를 비교 분석하여 일치율·누락·과잉(드리프트) 항목을 리포트한다. 역공학 품질 검증 및 개발 완료 후 설계-소스 동기화 확인에 사용한다. /KB_200 {메뉴코드} 형식으로 실행. 사용자가 "설계 검증", "KB 검증", "문서 일치율 확인", "드리프트 확인", "KB_200 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Write, Agent
 ---
 
-# 지식베이스 검증 [KB_200]
+# 설계-소스 검증 [KB_200]
 
 메뉴코드: **$ARGUMENTS**
+
+> **용도**: `spec/{메뉴코드}/` 설계 문서(의도)와 라이브 BE/FE 소스(현실)의 **드리프트**를 비교 리포트한다. 비교 대상은 소스 자체이며, 별도 스냅샷을 두지 않는다. `00-domain.md`(업무지식)는 소스로 검증할 수 없어 비교 대상에서 제외한다.
 
 ---
 
@@ -26,7 +28,7 @@ KB 문서 7개  →  추출: API·SQL·업무규칙·화면요소
 
 ## 1단계 — 메뉴 정보 조회 [메인 세션]
 
-`70-knowledgebase/menu-list.md` 를 Read 한다.
+`knowledgebase/menu-list.md` 를 Read 한다.
 `$ARGUMENTS`(대소문자 무관) 에 해당하는 행을 찾아 아래 값을 추출한다.
 
 | 변수 | 추출 방법 | 예시 |
@@ -37,7 +39,7 @@ KB 문서 7개  →  추출: API·SQL·업무규칙·화면요소
 
 메뉴코드 조회 실패 시: `menu-list.md 에서 {ARGUMENTS} 를 찾을 수 없습니다` 출력 후 종료.
 
-KB 문서 폴더(`70-knowledgebase/{MENU_CODE}/`)가 없거나 `.md` 파일이 0개이면:
+KB 문서 폴더(`spec/{MENU_CODE}/`)가 없거나 `.md` 파일이 0개이면:
 `KB 문서가 없습니다. 먼저 /KB_100 {메뉴코드} 를 실행하세요.` 출력 후 종료.
 
 ---
@@ -49,7 +51,7 @@ $DocRoot   = git rev-parse --show-toplevel
 $Workspace = Split-Path $DocRoot -Parent
 $BePath    = "$Workspace\cloud-wms-be\src\main\java\be\$GROUP_CODE\$MENU_CODE"
 $FePath    = "$Workspace\cloud-wms-fe\src\views\be\$GROUP_CODE\$MENU_CODE"
-$KbPath    = "70-knowledgebase\$MENU_CODE"
+$KbPath    = "spec\$MENU_CODE"
 $MenuUpper = $MENU_CODE.ToUpper()
 $Today     = Get-Date -Format "yyyy-MM-dd"
 $ReportFile = "$KbPath\${MENU_CODE}-KB-verify-$(Get-Date -Format 'yyyyMMdd').md"
@@ -94,7 +96,7 @@ STEP 1 — KB 문서 읽기
 아래 7개 파일을 모두 Read 한다. 없으면 건너뛴다.
 
 {KbPath}\{MENU_CODE}-01-basic-design.md
-{KbPath}\{MENU_CODE}-02-screen.md
+{KbPath}\{MENU_CODE}-02-ui.md
 {KbPath}\{MENU_CODE}-03-data-model.md
 {KbPath}\{MENU_CODE}-04-be-mapper-sql.md
 {KbPath}\{MENU_CODE}-05-api.md
@@ -112,7 +114,7 @@ STEP 1 — KB 문서 읽기
 [KB-RULE] 01-basic-design.md → 업무규칙(BR-N) 목록
   추출 형식: 규칙 번호 + 한 줄 설명
 
-[KB-SCREEN] 02-screen.md → 화면 구성 요소
+[KB-SCREEN] 02-ui.md → 화면 구성 요소
   추출 형식:
   - 검색 조건 항목 목록
   - 목록 그리드 컬럼 목록

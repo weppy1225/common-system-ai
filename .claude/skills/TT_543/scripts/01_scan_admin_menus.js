@@ -13,7 +13,7 @@
  *   2) FE 측 router/views/pages 에서 라우터 추출
  *   3) FE 측 관리자 메뉴 필터 적용 (path 또는 code 패턴 기준)
  *   4) BE 측 Controller / @RequestMapping 에서 URL prefix 를 추출하여 보강
- *   5) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md 또는 menu-index.md 에서 메뉴명 매핑
+ *   5) cloud-wms-doc 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md 또는 menu-index.md 에서 메뉴명 매핑
  *   6) JSON 으로 저장
  * 이 스크립트는 Windows 드라이브 경로(C:\...) 와 WSL 경로(/mnt/c/...)를 모두 받는다.
  */
@@ -330,8 +330,8 @@ function extractRoutesFromFiles(rootPath) {
 function buildMenuNameMap(rootPath) {
     const map = {};
 
-    // a) cloud-wms-doc 의 30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md
-    const distDir = path.join(REPO_ROOT, '30-domain', '30-wms-business');
+    // a) cloud-wms-doc 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md
+    const distDir = path.join(REPO_ROOT, 'spec');
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {

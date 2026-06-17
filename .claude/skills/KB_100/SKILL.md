@@ -1,12 +1,14 @@
 ---
 name: KB_100
-description: 【지식베이스 자동 생성】 메뉴코드를 입력받아 cloud-wms-be(Java) + cloud-wms-fe(Vue) 소스를 분석하고 70-knowledgebase/{메뉴코드}/ 에 01~07 + 99 총 8개 문서를 자동 생성한다. /KB_100 {메뉴코드} 형식으로 실행. 기존 문서가 있으면 bakup{YYMMDD}{순번} 폴더로 백업 후 새로 생성한다. 사용자가 "지식베이스 만들어줘", "KB 문서 생성", "소스 분석 문서 뽑아줘", "KB_100 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 【지식베이스 자동 생성】 메뉴코드를 입력받아 cloud-wms-be(Java) + cloud-wms-fe(Vue) 소스를 분석하고 spec/{메뉴코드}/ 에 01~07 + 99 총 8개 문서를 자동 생성한다. /KB_100 {메뉴코드} 형식으로 실행. 기존 문서가 있으면 bakup{YYMMDD}{순번} 폴더로 백업 후 새로 생성한다. 사용자가 "지식베이스 만들어줘", "KB 문서 생성", "소스 분석 문서 뽑아줘", "KB_100 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Agent
 ---
 
 # 지식베이스 자동 생성 [KB_100]
 
 메뉴코드: **$ARGUMENTS**
+
+> **용도·정책**: 설계 문서가 없는 **레거시 메뉴**의 BE/FE 소스를 역공학하여 `spec/{메뉴코드}/` 에 **초안(status: draft)** 을 생성한다. 사람이 검토 후 status를 올린다(SD 명령으로 재작성하면 그게 정본). **`{메뉴코드}-00-domain.md`(업무지식)는 사람 전용 — 생성하지도 덮어쓰지도 않는다.** 기존 문서가 있으면 백업 후 재생성하되 `00-domain`은 백업에서 제외(보존)한다.
 
 ---
 
@@ -24,7 +26,7 @@ allowed-tools: PowerShell, Read, Agent
 
 ## 1단계 — 메뉴 정보 조회 [메인 세션]
 
-`70-knowledgebase/menu-list.md` 를 Read 한다.
+`knowledgebase/menu-list.md` 를 Read 한다.
 `$ARGUMENTS` (대소문자 무관) 에 해당하는 행을 찾아 아래 값을 추출한다.
 
 | 변수 | 추출 방법 | 예시 |
@@ -61,7 +63,7 @@ $DocRoot    = git rev-parse --show-toplevel
 $Workspace  = Split-Path $DocRoot -Parent
 $BePath     = "$Workspace\cloud-wms-be\src\main\java\be\$GROUP_CODE\$MENU_CODE"
 $FePath     = "$Workspace\cloud-wms-fe\src\views\be\$GROUP_CODE\$MENU_CODE"
-$OutPath    = "70-knowledgebase\$MENU_CODE"
+$OutPath    = "spec\$MENU_CODE"
 $MenuUpper  = $MENU_CODE.ToUpper()   # 예: MDBZ01
 $Today      = Get-Date -Format "yyyy-MM-dd"
 ```
@@ -81,7 +83,7 @@ $seq = 1
 do { $bkName = "bakup${yymmdd}$($seq.ToString('D2'))"; $seq++ }
 while (Test-Path "$OutPath\$bkName")
 New-Item -ItemType Directory -Path "$OutPath\$bkName" -Force | Out-Null
-Get-ChildItem -Path $OutPath -Filter "*.md" | Move-Item -Destination "$OutPath\$bkName"
+Get-ChildItem -Path $OutPath -Filter "*.md" | Where-Object { $_.Name -notlike "*-00-domain.md" } | Move-Item -Destination "$OutPath\$bkName"
 Write-Host "백업 완료: $bkName"
 ```
 
@@ -186,7 +188,7 @@ OUT_PATH   : {OutPath}
 ---
 title: {MenuUpper} 기본설계 — {MENU_NM}
 description: {MENU_CODE} 메뉴의 업무 정의·관리대상·참여자·업무흐름·상태변화·업무규칙을 기술하는 업무 관점 기본설계서.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -195,17 +197,17 @@ menu_code: {MENU_CODE}
 domain: {DOMAIN}
 last_updated: "{Today}"
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-02-screen.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-99-issues.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-99-issues.md"
 tags: [basic-design, business, {DOMAIN}]
 ---
 
 ──────────────────────────
-■ 02 {OutPath}\{MENU_CODE}-02-screen.md
+■ 02 {OutPath}\{MENU_CODE}-02-ui.md
 ──────────────────────────
 분석 대상: Vue 파일 전체 <template> 블록
 목적: 화면이 어떤 기능을 제공하고 레이아웃이 어떻게 구성되는지 기술.
@@ -258,7 +260,7 @@ tags: [basic-design, business, {DOMAIN}]
 ---
 title: {MenuUpper} 화면 구조 (UI 명세)
 description: {MENU_CODE} {MENU_NM}의 화면 기능·레이아웃 명세. 화면 구성 영역, 검색 조건, 목록 컬럼, 팝업 항목을 구현 기술 없이 기술.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -266,10 +268,10 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
 tags: [detail-design, screen, ui, {DOMAIN}]
 ---
 
@@ -291,7 +293,7 @@ tags: [detail-design, screen, ui, {DOMAIN}]
 ---
 title: {MenuUpper} 데이터 모델 (테이블·관계·상태값)
 description: {MENU_CODE} {MENU_NM} 업무의 물리 테이블 매핑, 테이블 간 관계 의미, 상태값/코드 규칙을 설계 해석 수준으로 기술.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -299,11 +301,11 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
-  - "70-knowledgebase/_common/tech-stack.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
+  - "patterns/_common-arch/tech-stack.md"
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, data-model, {DOMAIN}]
 ---
 
@@ -313,11 +315,11 @@ tags: [detail-design, data-model, {DOMAIN}]
 분석 대상: {MenuUpper}Mapper.xml
 목적: 화면의 버튼·기능 단위로 어떤 SQL이 실행되는지 목록을 정의한다.
       상세 SQL 구현은 소스(Mapper.xml)에 있으므로 여기서는 목록만 관리한다.
-      02-screen의 화면·버튼 구성과 03-data-model의 테이블 목록을 기준으로 작성한다.
+      02-ui의 화면·버튼 구성과 03-data-model의 테이블 목록을 기준으로 작성한다.
 
 섹션 구성:
   SQL 목록 표 (화면 / 기능·버튼 / SQL명 / 유형)
-  - 화면: 02-screen 기준 화면명 (예: 메인, 사업장 등록 팝업)
+  - 화면: 02-ui 기준 화면명 (예: 메인, 사업장 등록 팝업)
   - 기능·버튼: 해당 SQL을 호출하는 버튼 또는 기능명 (예: 조회, 저장, 삭제)
   - SQL명: Mapper statement ID 그대로
   - 유형: SELECT / INSERT / UPDATE / DELETE
@@ -327,7 +329,7 @@ tags: [detail-design, data-model, {DOMAIN}]
 ---
 title: {MenuUpper} SQL 목록
 description: {MENU_CODE} {MENU_NM}에서 사용하는 SQL statement 목록. 상세 구현은 Mapper.xml 참조.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -335,10 +337,10 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, backend, sql, {DOMAIN}]
 ---
 
@@ -361,7 +363,7 @@ tags: [detail-design, backend, sql, {DOMAIN}]
 ---
 title: {MenuUpper} API 명세 (FE·BE 공용)
 description: {MENU_CODE} {MENU_NM}의 REST API 명세. FE/BE가 함께 참조하는 단일 계약 문서.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -369,11 +371,11 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-02-screen.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
 tags: [detail-design, api, {DOMAIN}]
 ---
 
@@ -425,7 +427,7 @@ tags: [detail-design, api, {DOMAIN}]
      ─────────────────────────
 
   2. 예외 처리 목록
-     - `_common/be-exceptions.md` 의 공통 예외는 기재하지 않는다
+     - `patterns/_common-arch/be-exceptions.md` 의 공통 예외는 기재하지 않는다
      - 이 메뉴 고유의 업무 예외만 기재한다 (조건 / 결과 표)
      - 소스의 예외 클래스명이 아니라 "어떤 상황에서 무슨 결과가 나오는지" 위주로 기술
      - 예: "이미 승인된 입고예정에 재승인 요청 → 중복 처리 오류 반환"
@@ -439,7 +441,7 @@ tags: [detail-design, api, {DOMAIN}]
 ---
 title: {MenuUpper} BE 구현 흐름 (서버 처리)
 description: {MENU_CODE} {MENU_NM}의 백엔드 컴포넌트 흐름. Controller-Comp-TxComp-Dao 간 시퀀스 다이어그램과 예외·이슈를 기술.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -447,10 +449,10 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/_common/be-architecture.md"
-  - "70-knowledgebase/_common/be-exceptions.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "patterns/_common-arch/be-architecture.md"
+  - "patterns/_common-arch/be-exceptions.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
 tags: [detail-design, backend, sequence, {DOMAIN}]
 ---
 
@@ -462,7 +464,7 @@ tags: [detail-design, backend, sequence, {DOMAIN}]
       소스 코드를 복사하지 않는다. 함수 간 호출 흐름과 API 연동 포인트만 다이어그램으로 표현한다.
 
 섹션 구성:
-  1. 파일 구성 (Vue파일명 / 화면형태 / 역할 표) — 이 메뉴 고유. 공통 패턴은 _common/fe-architecture.md 참조
+  1. 파일 구성 (Vue파일명 / 화면형태 / 역할 표) — 이 메뉴 고유. 공통 패턴은 patterns/_common-arch/fe-architecture.md 참조
 
   2. API별 시퀀스 다이어그램 — 05-api 엔드포인트 목록 기준으로 API마다 아래 형식으로 기술
      Vue 미호출(미연결) API는 🟠 표시
@@ -481,14 +483,14 @@ tags: [detail-design, backend, sequence, {DOMAIN}]
      ─────────────────────────
 
      규칙:
-     - 참여자(Actor)는 Vue 파일 단위로 구분 (공통 패턴은 _common/fe-architecture.md 참조)
+     - 참여자(Actor)는 Vue 파일 단위로 구분 (공통 패턴은 patterns/_common-arch/fe-architecture.md 참조)
      - 함수명은 소스 코드 그대로 사용 (vfn_xxx, lfn_xxx, onMounted 등)
      - API 호출은 HTTP 메서드 + 경로 명시 (예: POST /mdwh01/whs)
      - 팝업 연동은 열기/닫기/콜백(emit) 흐름 포함
      - 루프는 `loop [N건 반복]` 표기
 
   3. 메뉴 고유 구현 포인트
-     - _common/fe-architecture.md 의 공통 패턴과 다른 부분만 기재
+     - patterns/_common-arch/fe-architecture.md 의 공통 패턴과 다른 부분만 기재
      - 예: 특수한 그리드 편집 방식, 비표준 팝업 연동, 특이한 상태 초기화 로직 등
      - 없으면 "공통 패턴 외 특이사항 없음" 으로 기재
 
@@ -496,7 +498,7 @@ tags: [detail-design, backend, sequence, {DOMAIN}]
 ---
 title: {MenuUpper} FE 구현 흐름 (화면 처리)
 description: {MENU_CODE} {MENU_NM}의 프론트엔드 구현 흐름. 파일 구성, 업무별 함수 호출 시퀀스 다이어그램, 구현 포인트를 기술.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -504,9 +506,9 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "70-knowledgebase/_common/fe-architecture.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-02-screen.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "patterns/_common-arch/fe-architecture.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, frontend, vue, {DOMAIN}]
 ---
 
@@ -543,7 +545,7 @@ tags: [detail-design, frontend, vue, {DOMAIN}]
 ---
 title: {MenuUpper} Open Issues / 확인 필요 사항
 description: {MENU_CODE} {MENU_NM} 설계 문서화 과정에서 식별된 소스-문서 불일치·미연결 기능·정리 후보를 모은 확인/조치 레지스터.
-status: active
+status: draft
 version: 1.0.0
 wms_meta: true
 project: cloud-wms-doc
@@ -551,9 +553,9 @@ agent_usage: task
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 related:
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
-  - "70-knowledgebase/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
 tags: [open-issues, verification, {DOMAIN}]
 ---
 
@@ -572,10 +574,10 @@ tags: [open-issues, verification, {DOMAIN}]
 
 ## 5단계 — 완료 보고 [메인 세션]
 
-서브에이전트 완료 후 `70-knowledgebase/menu-list.md` 의 해당 행 상태를 `완료`로 갱신한다.
+서브에이전트 완료 후 `knowledgebase/menu-list.md` 의 해당 행 상태를 `완료`로 갱신한다.
 
 ```powershell
-$menuListPath = "70-knowledgebase\menu-list.md"
+$menuListPath = "spec\menu-list.md"
 (Get-Content $menuListPath -Encoding utf8) | ForEach-Object {
     if ($_ -match "\|\s*$MenuUpper\s*\|") {
         $_ -replace '\|\s*-\s*\|\s*$', '| 완료 |'
@@ -587,9 +589,9 @@ $menuListPath = "70-knowledgebase\menu-list.md"
 
 ```
 ✅ KB_100 완료: {MenuUpper} ({MENU_NM})
-  📁 70-knowledgebase/{MENU_CODE}/
+  📁 spec/{MENU_CODE}/
      ├── {MENU_CODE}-01-basic-design.md
-     ├── {MENU_CODE}-02-screen.md
+     ├── {MENU_CODE}-02-ui.md
      ├── {MENU_CODE}-03-data-model.md
      ├── {MENU_CODE}-04-be-mapper-sql.md
      ├── {MENU_CODE}-05-api.md

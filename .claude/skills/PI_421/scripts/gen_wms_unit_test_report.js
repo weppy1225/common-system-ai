@@ -3,8 +3,8 @@ const XlsxPopulate = require('xlsx-populate');
 const path = require('path');
 
 const BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..');
-const TEMPLATE = path.join(BASE_DIR, '20-deliverables', '10-templates', '04 구현(PI)', 'PI_212-단위테스트보고서.xlsx');
-const OUTPUT   = path.join(BASE_DIR, '20-deliverables', '30-output', '04 구현(PI)', 'PI_212-단위테스트보고서_WMS_260506.xlsx');
+const TEMPLATE = path.join(BASE_DIR, 'deliverables', '10-templates', '04 구현(PI)', 'PI_212-단위테스트보고서.xlsx');
+const OUTPUT   = path.join(BASE_DIR, 'deliverables', '30-output', '04 구현(PI)', 'PI_212-단위테스트보고서_WMS_260506.xlsx');
 
 const DATE_SERIAL = 46147; // 2026-05-06
 const REPORTER = '신현규';

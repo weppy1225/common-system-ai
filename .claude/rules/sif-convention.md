@@ -10,11 +10,11 @@ paths:
 
 | 주제 | 문서 |
 |---|---|
-| IF 연동 규칙 개요 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
-| E2W(ERP→WMS) 컨벤션 | `10-src-pattern/50-interface/10-convention/01-erp-to-wms-convention.md` |
-| 현재 IF 명세 | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-05-api.md` |
-| `sif_*` 테이블 스키마 | `10-src-pattern/20-database/00-overview.md` |
-| TxComp 기본 패턴 | `10-src-pattern/30-backend/40-guide/08-txcomp-writing-rules.md` |
+| IF 연동 규칙 개요 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| E2W(ERP→WMS) 컨벤션 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| 현재 IF 명세 | `spec/{메뉴코드}/{메뉴코드}-05-api.md` |
+| `sif_*` 테이블 스키마 | `patterns/20-database/00-overview.md` |
+| TxComp 기본 패턴 | `patterns/30-backend/40-guide/08-txcomp-writing-rules.md` |
 
 ---
 

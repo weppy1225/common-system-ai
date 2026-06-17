@@ -1,5 +1,5 @@
 """
-에이전트 3: 20-deliverables/30-output/02 분석(RA)/tmp/requirements.json 을 읽어
+에이전트 3: deliverables/30-output/02 분석(RA)/tmp/requirements.json 을 읽어
 요구사항정의서 xlsx 파일을 생성한다.
 
 사용법: python scripts/03_generate_excel.py
@@ -14,7 +14,7 @@ from collections import Counter
 BASE  = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip()
 TODAY = datetime.now().strftime("%y%m%d")
 
-outdir = os.path.join(BASE, "20-deliverables", "30-output", "02 분석(RA)")
+outdir = os.path.join(BASE, "deliverables", "30-output", "02 분석(RA)")
 os.makedirs(outdir, exist_ok=True)
 tmp = os.path.join(outdir, "tmp")
 
@@ -28,7 +28,7 @@ out_path = os.path.join(outdir, f"RA.222-요구사항정의서_{company}_{TODAY}
 
 # ── 템플릿 복사 ──────────────────────────────────────────────────────
 tpl_path = os.path.join(
-    BASE, "20-deliverables", "10-templates", "02 분석(RA)", "RA.314-요구사항정의서.xlsx"
+    BASE, "deliverables", "10-templates", "02 분석(RA)", "RA.314-요구사항정의서.xlsx"
 )
 if os.path.exists(tpl_path):
     shutil.copy2(tpl_path, out_path)

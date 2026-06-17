@@ -13,9 +13,9 @@ const TODAY    = '2026-05-06';
 const TODAY_NUM = 46147; // Excel serial date for 2026-05-06
 const MANAGER  = '신현규';
 const BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..');
-const XLSX = require(path.join(BASE_DIR, '20-deliverables', '30-output', '04 구현(PI)', 'node_modules', 'xlsx'));
-const TMPL = path.join(BASE_DIR, '20-deliverables', '10-templates', '04 구현(PI)', 'PI_212-단위테스트보고서.xlsx');
-const OUTDIR = path.join(BASE_DIR, '20-deliverables', '30-output', '04 구현(PI)');
+const XLSX = require(path.join(BASE_DIR, 'deliverables', '30-output', '04 구현(PI)', 'node_modules', 'xlsx'));
+const TMPL = path.join(BASE_DIR, 'deliverables', '10-templates', '04 구현(PI)', 'PI_212-단위테스트보고서.xlsx');
+const OUTDIR = path.join(BASE_DIR, 'deliverables', '30-output', '04 구현(PI)');
 const OUTFILE  = path.join(OUTDIR, `PI_212-단위테스트보고서_${PROJ_NM}_260506.xlsx`);
 
 // ───────────────────────────────────────────────────────────────────
