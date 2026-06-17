@@ -1,3 +1,14 @@
+---
+title: cloud-wms-be 로컬 빌드·배포 가이드
+description: cloud-wms-be 로컬 환경 빌드·기동·배포 준비 절차. 로컬에서 BE를 띄우거나 배포 준비 시 참조.
+status: active
+version: 1.0.0
+wms_meta: true
+project: cloud-wms-doc
+agent_usage: reference
+domain: system
+---
+
 # cloud-wms-be 로컬 빌드·배포 가이드
 
 ## 환경 정보
