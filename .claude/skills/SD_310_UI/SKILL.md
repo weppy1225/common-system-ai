@@ -9,12 +9,12 @@ allowed-tools: Bash, Read, Write
 
 메뉴코드: **$ARGUMENTS**
 
-`20-deliverables/20-sources/UI/ui-template.md` 규칙에 따라 사용자와 인터뷰하며 `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 를 생성한다.
+`deliverables/20-sources/UI/ui-template.md` 규칙에 따라 사용자와 인터뷰하며 `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` 를 생성한다.
 
 ---
 
 ## 시작 전 준비
-1. `20-deliverables/20-sources/UI/ui-template.md` 읽기 (출력형식·저장경로·컴포넌트 기준·정렬 기준 등등)
+1. `deliverables/20-sources/UI/ui-template.md` 읽기 (출력형식·저장경로·컴포넌트 기준·정렬 기준 등등)
 2. `$ARGUMENTS` 가 비어있으면 첫 질문에서 메뉴코드 수집
 3. 진행 중 사용자가 "패스" 또는 "없음" 입력 시 해당 항목 생략
 
@@ -201,7 +201,7 @@ UI유형: {유형}
 
 ## ui.md 생성 규칙
 
-`20-deliverables/20-sources/UI/ui-template.md` 의 출력 형식·컴포넌트 표기·정렬 기준·업무규칙 구분값을 따른다.
+`deliverables/20-sources/UI/ui-template.md` 의 출력 형식·컴포넌트 표기·정렬 기준·업무규칙 구분값을 따른다.
 
 ### 컴포넌트 표기 변환
 | 사용자 입력                  | ui.md 표기      |

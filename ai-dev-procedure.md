@@ -17,7 +17,7 @@ tags:
   - mockoon
   - playwright
 related:
-  - 10-src-pattern/30-backend/be-layer-pattern.md
+  - patterns/30-backend/be-layer-pattern.md
   - .claude/rules/backend-convention.md
   - .claude/rules/db-convention.md
 last_verified: 2026-06-10
@@ -97,7 +97,7 @@ psql -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME}
 > - 시퀀스명 (`{테이블명}_seq` 가정 금지)
 
 **컨벤션 참조**
-- 레이어 패턴: `10-src-pattern/30-backend/be-layer-pattern.md`
+- 레이어 패턴: `patterns/30-backend/be-layer-pattern.md`
 - 코딩 컨벤션: `.claude/rules/backend-convention.md`
 - MyBatis 쿼리: `.claude/rules/db-convention.md`
 - 재고 프레임워크: `.claude/rules/biz-framework.md`

@@ -23,8 +23,8 @@ const fs   = require('fs');
 const BASE_DIR        = path.resolve(__dirname, '..', '..', '..', '..');
 const DIST_DIR        = path.join(BASE_DIR, '30-domain', '30-wms-business');
 const DIST_MOBILE_DIR = path.join(BASE_DIR, '50-prototype', '20-mobile');
-const TEMPLATE        = path.join(BASE_DIR, '20-deliverables', '10-templates', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
-const OUTPUT_DIR      = path.join(BASE_DIR, '20-deliverables', '30-output', '04 구현(PI)');
+const TEMPLATE        = path.join(BASE_DIR, 'deliverables', '10-templates', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
+const OUTPUT_DIR      = path.join(BASE_DIR, 'deliverables', '30-output', '04 구현(PI)');
 const LIB_DIR         = path.join(OUTPUT_DIR, 'node_modules', 'xlsx-populate');
 
 // ── 인자 파싱 ────────────────────────────────────────────────────────────────

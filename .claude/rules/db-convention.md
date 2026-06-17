@@ -13,12 +13,12 @@ paths:
 
 | 주제 | 문서 |
 |---|---|
-| Mapper.java 시그니처·`@Param` | `10-src-pattern/30-backend/40-guide/04-mapper-writing-rules.md` |
-| Mapper.xml 쿼리 패턴 (SELECT/INSERT/UPDATE/DELETE·페이징·동적 SQL) | `10-src-pattern/30-backend/40-guide/05-mapper-xml-writing-rules.md` |
-| Dao의 Mapper 위임 | `10-src-pattern/30-backend/40-guide/03-dao-writing-rules.md` |
-| 테이블·컬럼 정의 | `10-src-pattern/20-database/00-overview.md` |
-| 공통코드(`_cd`) 값 | `10-src-pattern/20-database/40-schema/90-common-code.md` |
-| Mapper.java 시그니처·패턴·Dao 레이어 전체 구현 예제 | `10-src-pattern/20-database/30-convention/02-mybatis-convention.md` |
+| Mapper.java 시그니처·`@Param` | `patterns/30-backend/40-guide/04-mapper-writing-rules.md` |
+| Mapper.xml 쿼리 패턴 (SELECT/INSERT/UPDATE/DELETE·페이징·동적 SQL) | `patterns/30-backend/40-guide/05-mapper-xml-writing-rules.md` |
+| Dao의 Mapper 위임 | `patterns/30-backend/40-guide/03-dao-writing-rules.md` |
+| 테이블·컬럼 정의 | `patterns/20-database/00-overview.md` |
+| 공통코드(`_cd`) 값 | `patterns/20-database/40-schema/90-common-code.md` |
+| Mapper.java 시그니처·패턴·Dao 레이어 전체 구현 예제 | `patterns/20-database/30-convention/02-mybatis-convention.md` |
 
 ---
 
@@ -96,7 +96,7 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 ## 상세 패턴 문서
 
 Mapper.java 인터페이스, Mapper.xml 전체 구현 패턴, Dao 레이어, 동적 SQL 예제:
-→ `10-src-pattern/20-database/30-convention/02-mybatis-convention.md`
+→ `patterns/20-database/30-convention/02-mybatis-convention.md`
 
 SQL 텍스트 서식 (들여쓰기·anchor 규칙):
-→ `10-src-pattern/20-database/30-convention/01-sql-query-style.md`
+→ `patterns/20-database/30-convention/01-sql-query-style.md`

@@ -10,8 +10,8 @@ $ErrorActionPreference = "Stop"
 # ------------------------------------------------------------
 $repoRoot     = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..\..")).Path
 $tableDir     = Join-Path $repoRoot "90-archive\cloud-wms-be\DEV_DOC\ai-docs\10-database\90-schema\20-tables"
-$templatePath = Join-Path $repoRoot "20-deliverables\10-templates\03 설계(SD)\SD.212-테이블정의서.xlsx"
-$outputDir    = Join-Path $repoRoot "20-deliverables\30-output\03 설계(SD)"
+$templatePath = Join-Path $repoRoot "deliverables\10-templates\03 설계(SD)\SD.212-테이블정의서.xlsx"
+$outputDir    = Join-Path $repoRoot "deliverables\30-output\03 설계(SD)"
 $outputPath   = Join-Path $outputDir "SD.212-테이블정의서_반다이남코_260506.xlsx"
 
 if (-not (Test-Path $outputDir)) {

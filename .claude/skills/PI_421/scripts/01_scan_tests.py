@@ -5,7 +5,7 @@
     python 01_scan_tests.py <백엔드_디렉토리>
 
 출력:
-    20-deliverables/30-output/04 구현(PI)/tmp/tests.json
+    deliverables/30-output/04 구현(PI)/tmp/tests.json
 
 BASE_DIR을 `Path(__file__).resolve().parents[4]` 로 자동 추론하여
 Windows/WSL 어느 환경에서도 정상 동작한다.
@@ -22,7 +22,7 @@ from pathlib import Path
 # parents[0]=scripts  parents[1]=PI_421  parents[2]=skills
 # parents[3]=.claude  parents[4]=<프로젝트 루트>
 BASE_DIR = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE_DIR / "20-deliverables" / "30-output" / "04 구현(PI)" / "tmp"
+TMP_DIR = BASE_DIR / "deliverables" / "30-output" / "04 구현(PI)" / "tmp"
 OUT_JSON = TMP_DIR / "tests.json"
 
 EXCLUDE_DIRS = {
@@ -344,7 +344,7 @@ def make_content(test: dict) -> str:
 
 
 def load_program_name_dict() -> dict[str, str]:
-    tpl = BASE_DIR / "20-deliverables" / "10-templates" / "04 구현(PI)" / "PI_412-프로그램목록.xlsx"
+    tpl = BASE_DIR / "deliverables" / "10-templates" / "04 구현(PI)" / "PI_412-프로그램목록.xlsx"
     result: dict[str, str] = {}
     if not tpl.exists():
         return result

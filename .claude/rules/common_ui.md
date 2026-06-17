@@ -228,7 +228,7 @@ window.addEventListener('message', function(e) {
 ## 상세 패턴 문서
 
 화면설계 패턴 전체 인덱스:
-→ `10-src-pattern/10-screen-design/00-overview.md`
+→ `patterns/10-screen-design/00-overview.md`
 
 WEB 화면 영역별 패턴 인덱스:
-→ `10-src-pattern/10-screen-design/10-web/00-overview.md`
+→ `patterns/10-screen-design/10-web/00-overview.md`
