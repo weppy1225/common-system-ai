@@ -427,9 +427,6 @@
         .icon-btn.logout:hover { background-color: #fef2f2; }
         .icon-btn.logout:hover svg { stroke: #dc2626; }
 
-        .icon-btn.mobile-link:hover { background-color: #eff6ff; }
-        .icon-btn.mobile-link:hover svg { stroke: #00afec; }
-
         .divider {
             width: 1px;
             height: 18px;
@@ -543,7 +540,7 @@
                     <li class="submenu-item">파렛트분할</li>
                     <li class="submenu-item">파렛트병합</li>
                     <li class="submenu-item">세트작업</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/stdc01/stdc01-02-wireframe.html', '세트해체')">세트해체</li>
+                                <li class="submenu-item" onclick="loadContent('../stdc01/stdc01-wireframe.html', '세트해체')">세트해체</li>
                 </ul>
             </div>
 
@@ -596,7 +593,7 @@
                     <li class="submenu-item">출하처리</li>
                     <li class="submenu-item">출하처리취소</li>
                     <li class="submenu-item">출하현황</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/obcr01/obcr01-02-wireframe.html', '배송차량등록')">배송차량등록</li>
+                                <li class="submenu-item" onclick="loadContent('../obcr01/obcr01-wireframe.html', '배송차량등록')">배송차량등록</li>
                 </ul>
             </div>
 
@@ -610,14 +607,14 @@
                     <li class="submenu-item">사업장</li>
                     <li class="submenu-item">창고</li>
                     <li class="submenu-item">위치</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/mdpd01/mdpd01-02-wireframe.html', '품목')">품목</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/mdct01/mdct01-02-wireframe.html', '거래처관리')">거래처관리</li>
+                                <li class="submenu-item" onclick="loadContent('../mdpd01/mdpd01-wireframe.html', '품목')">품목</li>
+                                <li class="submenu-item" onclick="loadContent('../mdct01/mdct01-wireframe.html', '거래처관리')">거래처관리</li>
                     <li class="submenu-item">업체품목</li>
                     <li class="submenu-item">세트구성</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/dlvo01/dlvo01-02-wireframe.html', '배송차량등록')">배송차량등록</li>
+                                <li class="submenu-item" onclick="loadContent('../dlvo01/dlvo01-wireframe.html', '배송차량등록')">배송차량등록</li>
                     <li class="submenu-item">사용자</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/mdpr01/mdpr01-02-wireframe.html', '사은품관리')">사은품관리</li>
-                                <li class="submenu-item" onclick="loadContent('../30-domain/30-wms-business/mdcr01/mdcr01-02-wireframe.html', '차량관리')">차량관리</li>
+                                <li class="submenu-item" onclick="loadContent('../mdpr01/mdpr01-wireframe.html', '사은품관리')">사은품관리</li>
+                                <li class="submenu-item" onclick="loadContent('../mdcr01/mdcr01-wireframe.html', '차량관리')">차량관리</li>
                 </ul>
             </div>
 
@@ -738,13 +735,6 @@
                 <!-- 로그아웃 -->
                 <div class="icon-btn logout" title="로그아웃">
                     <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- 모바일 화면 -->
-                <div class="icon-btn mobile-link" title="모바일 화면" onclick="window.open('../dist-mobile/main.html', 'wms-mobile', 'width=430,height=860,resizable=yes,scrollbars=no')" style="cursor:pointer">
-                    <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/></svg>
                 </div>
             </div>
         </div>
@@ -892,7 +882,7 @@
 		// 품목 팝업 열기
 		function openPdLayer() {
 			centerModal('pdLayerModal');
-            document.getElementById('pdLayerFrame').src = './10-common/CPPD01_popup.html';
+			document.getElementById('pdLayerFrame').src = './CPPD01_popup.html';
 			document.getElementById('pdLayerBg').classList.add('show');
 		}
 
@@ -906,7 +896,7 @@
 		// 거래처 팝업 열기
 		function openCpLayer() {
 			centerModal('cpLayerModal');
-            document.getElementById('cpLayerFrame').src = './10-common/CPCT01_popup.html';
+			document.getElementById('cpLayerFrame').src = './CPCT01_popup.html';
 			document.getElementById('cpLayerBg').classList.add('show');
 		}
 

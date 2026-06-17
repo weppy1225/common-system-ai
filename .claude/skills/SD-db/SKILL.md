@@ -45,9 +45,9 @@ if [ -f "$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wire
   WIREFRAME="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html"
   MOCK_DATA="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-mock-data.js"
 else
-  # PDA 모바일 화면 — 50-prototype/20-mobile/ 하위 그룹 폴더 검색
-  WIREFRAME=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
-  MOCK_DATA=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}-data.js" 2>/dev/null | head -1)
+  # PDA 모바일 화면 — prototype/mobile/ 하위 그룹 폴더 검색
+  WIREFRAME=$(find "$AI_DIR/prototype/mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
+  MOCK_DATA=$(find "$AI_DIR/prototype/mobile" -iname "{메뉴코드대문자}-data.js" 2>/dev/null | head -1)
 fi
 ```
 
@@ -63,7 +63,7 @@ fi
 아래 경로에서 파일을 찾아 모두 읽는다 (위 "프로젝트 경로 도출"에서 구한 변수 사용):
 
 - `$UI_MD` (`30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md`) — UI 설계서 (화면 구성, 필드 목록, 업무 흐름)
-- `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `50-prototype/20-mobile/…/{메뉴코드대문자}.html`)
+- `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `prototype/mobile/…/{메뉴코드대문자}.html`)
 - `$MOCK_DATA` — 목업 데이터 (있는 경우)
 
 추가로 BE 스펙 폴더도 확인:

@@ -50,8 +50,8 @@ tags:
 
 | 파일 | 역할 |
 |---|---|
-| `50-prototype/10-common/wms-ui.css` | 공통 스타일시트 |
-| `50-prototype/10-common/wms-common.js` | 공통 스크립트 |
-| `50-prototype/10-common/CPCT01_popup.html` | 거래처 검색 공통 팝업 |
-| `50-prototype/10-common/CPPD01_popup.html` | 품목 검색 공통 팝업 |
-| `50-prototype/10-common/icon-preview.html` | 사용 가능 SVG 아이콘 목록 |
+| `prototype/_common/wms-ui.css` | 공통 스타일시트 |
+| `prototype/_common/wms-common.js` | 공통 스크립트 |
+| `prototype/_common/CPCT01_popup.html` | 거래처 검색 공통 팝업 |
+| `prototype/_common/CPPD01_popup.html` | 품목 검색 공통 팝업 |
+| `prototype/_common/icon-preview.html` | 사용 가능 SVG 아이콘 목록 |

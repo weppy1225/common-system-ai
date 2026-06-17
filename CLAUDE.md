@@ -20,7 +20,7 @@ cloud-wms-doc\
 ├── patterns\   # 소스코드 패턴 (DB·BE·FE·IF)
 ├── deliverables\  # 산출물 (템플릿·원천·결과)
 ├── 30-domain\        # 메뉴별 지식베이스
-├── 50-prototype\     # 화면 프로토타입 배포 프레임
+├── prototype\     # 화면 프로토타입 배포 프레임
 ├── knowledgebase/40-install-guide\        # 시스템 운영·인프라 가이드
 └── 90-archive\       # 아카이브 문서
 ```
@@ -30,9 +30,9 @@ cloud-wms-doc\
 ## 프로토타입 파일 구조
 
 ```text
-50-prototype/
+prototype/
 ├── index.html                              # 메인 프레임. 메뉴 클릭 시 ../30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html 로드
-├── 10-common/                              # 공통 UI
+├── _common/                              # 공통 UI
 │   ├── left-menu.html
 │   ├── CPCT01_popup.html
 │   ├── CPPD01_popup.html
@@ -40,7 +40,7 @@ cloud-wms-doc\
 │   ├── wms-ui.css
 │   ├── wms-common.js
 │   └── _template/                          # SD_311 생성 템플릿
-└── 20-mobile/                              # PDA 모바일 프로토타입
+└── mobile/                              # PDA 모바일 프로토타입
     ├── menu.html
     ├── main.html
     ├── mobile.css
@@ -65,13 +65,13 @@ cloud-wms-doc\
 
 | 파일 | 역할 |
 |---|---|
-| `50-prototype/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('../30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html')` 호출 |
-| `50-prototype/10-common/left-menu.html` | `index.html`과 동일 파일. `10-common/` 경로에서 직접 접근할 때 사용 |
-| `50-prototype/10-common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
-| `50-prototype/10-common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
-| `50-prototype/10-common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
+| `prototype/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('../30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html')` 호출 |
+| `prototype/_common/left-menu.html` | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용 |
+| `prototype/_common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
+| `prototype/_common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
+| `prototype/_common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
 | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md` | 화면요건정리 문서. `/SD_310_UI {메뉴코드}` 명령어의 입력 소스 |
-| `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` | 완성된 프로토타입. `50-prototype/index.html`의 iframe 안에서 로드됨 |
+| `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` | 완성된 프로토타입. `prototype/index.html`의 iframe 안에서 로드됨 |
 | `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
 
 ### 팝업 통신 방식

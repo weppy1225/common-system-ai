@@ -31,8 +31,8 @@ if [ -f "$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wire
   # PC 화면
   WIREFRAME="$AI_DIR/30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html"
 else
-  # PDA 모바일 화면 — 50-prototype/20-mobile/ 하위 그룹 폴더 검색
-  WIREFRAME=$(find "$AI_DIR/50-prototype/20-mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
+  # PDA 모바일 화면 — prototype/mobile/ 하위 그룹 폴더 검색
+  WIREFRAME=$(find "$AI_DIR/prototype/mobile" -iname "{메뉴코드대문자}.html" 2>/dev/null | head -1)
 fi
 ```
 
@@ -68,7 +68,7 @@ fi
 1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` — 메뉴코드·네이밍 규칙
 2. 기능 폴더의 `db.md` — DB 설계 결과 (존재하는 경우 **우선 참조**)
 3. `$UI_MD` (`30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
-4. `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `50-prototype/20-mobile/…/{메뉴코드대문자}.html`)
+4. `$WIREFRAME` — 화면 프로토타입 (PC: `30-domain/30-wms-business/{메뉴코드}/{메뉴코드}-02-wireframe.html` / PDA: `prototype/mobile/…/{메뉴코드대문자}.html`)
 5. `$BE_DIR/DEV_DOC/ai-docs/10-database/00-database-overview.md` — 관련 테이블 분석
 6. 해당 도메인 테이블 컬럼 명세 (`$BE_DIR/DEV_DOC/ai-docs/10-database/90-schema/20-tables/`)
 7. `$BE_DIR/DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` — 코딩 컨벤션
