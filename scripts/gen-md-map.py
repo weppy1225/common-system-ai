@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-cloud-wms-doc 파일·폴더 지도(md-files.html) 생성기.
+cloud-wms-doc 파일·폴더 지도(knowledgebase/20-md-index.html) 생성기.
 
 실행: python scripts/gen-md-map.py   (CWD 무관 — 레포 루트 기준으로 동작)
-출력: 레포 루트의 md-files.html  (※ gitignore 대상, 생성물)
+출력: 레포 루트의 knowledgebase/20-md-index.html  (※ gitignore 대상, 생성물)
 
 - 전체 폴더 구조 + MD 파일을 영역별/계층별 트리로 렌더링 (접기·검색 지원)
 - 비-MD 파일은 폴더별 개수만 표시 (node_modules·이미지 노이즈 제외)
@@ -235,5 +235,5 @@ doc = ('<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>cloud-
  + '<div class="chips"><span class="chip on" onclick="fa(this,\'\')">전체</span>' + chips + '</div>'
  + ''.join(cards)
  + '<script>' + JS + '</script></body></html>')
-open('md-files.html', 'w', encoding='utf-8').write(doc)
-print('md-files.html 생성 완료 (md ' + str(mdtotal) + '개)')
+open('knowledgebase/20-md-index.html', 'w', encoding='utf-8').write(doc)
+print('knowledgebase/20-md-index.html 생성 완료 (md ' + str(mdtotal) + '개)')
