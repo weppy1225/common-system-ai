@@ -100,11 +100,11 @@ function collectUiMds() {
   return results;
 }
 
-// ── prototype/mobile/menu.html 파싱 (PDA) ─────────────────────────────────────────
+// ── prototype/_common-m/menu.html 파싱 (PDA) ─────────────────────────────────────────
 function collectPdaMenus() {
   const menuHtml = path.join(DIST_MOBILE_DIR, 'menu.html');
   if (!fs.existsSync(menuHtml)) {
-    console.warn('[WARN] prototype/mobile/menu.html 없음 — PDA 메뉴 건너뜀');
+    console.warn('[WARN] prototype/_common-m/menu.html 없음 — PDA 메뉴 건너뜀');
     return [];
   }
   const html = fs.readFileSync(menuHtml, 'utf8');
@@ -251,7 +251,7 @@ function writeCases(sheet, cases) {
   const pdaMenus = collectPdaMenus();
   const menus = [...webMenus, ...pdaMenus];
   if (menus.length === 0) {
-    console.error('[ERROR] 메뉴를 찾지 못했습니다. spec/*/*-02-ui.md 또는 prototype/mobile/menu.html 확인.');
+    console.error('[ERROR] 메뉴를 찾지 못했습니다. spec/*/*-02-ui.md 또는 prototype/_common-m/menu.html 확인.');
     process.exit(1);
   }
   console.log(`[1/3] 메뉴 스캔 완료: WEB ${webMenus.length}개 / PDA ${pdaMenus.length}개`);

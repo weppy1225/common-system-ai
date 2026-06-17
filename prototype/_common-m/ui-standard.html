@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMS Mobile UI 표준</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#f4f6f9;color:#111;font-size:13px}
+
+/* ── Page layout ── */
+.page{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+
+/* ── Top banner ── */
+.banner{
+  background:linear-gradient(135deg,#00afec,#0080b8);
+  border-radius:12px;padding:24px 28px;margin-bottom:28px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:#fff;
+}
+.banner-title{font-size:22px;font-weight:700;letter-spacing:.5px}
+.banner-sub{font-size:12px;opacity:.8;margin-top:4px}
+.banner-meta{text-align:right;font-size:12px;opacity:.75;line-height:1.7}
+
+/* ── Section ── */
+.sec{margin-bottom:36px}
+.sec-hdr{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+  border-bottom:2px solid #e5e7eb;padding-bottom:8px;
+}
+.sec-num{
+  width:24px;height:24px;background:#00afec;color:#fff;
+  border-radius:50%;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.sec-title{font-size:16px;font-weight:700;color:#111827}
+
+/* ── Screen map grid ── */
+.screen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.screen-card{
+  background:#fff;border:1px solid #e5e7eb;border-radius:10px;
+  padding:14px;cursor:pointer;transition:all .15s;
+  text-decoration:none;color:inherit;display:block;
+}
+.screen-card:hover{border-color:#00afec;box-shadow:0 2px 10px rgba(0,175,236,.15);transform:translateY(-1px)}
+.sc-icon{width:40px;height:40px;border-radius:10px;background:#e0f4fd;margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.sc-icon img{width:32px;height:32px;object-fit:contain}
+.sc-name{font-size:14px;font-weight:700;color:#111827;margin-bottom:3px}
+.sc-code{font-size:11px;color:#6b7280;margin-bottom:6px}
+.sc-badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px}
+.badge-typeA{background:#dbeafe;color:#1d4ed8}
+.badge-typeB{background:#d1fae5;color:#065f46}
+.badge-typeC{background:#fef3c7;color:#92400e}
+.badge-typeF{background:#ede9fe;color:#5b21b6}
+.badge-special{background:#f3f4f6;color:#374151}
+.badge-tab{background:#e0f4fd;color:#0369a1}
+
+/* group label */
+.group-label{
+  font-size:11px;font-weight:700;color:#6b7280;
+  text-transform:uppercase;letter-spacing:.8px;
+  margin:16px 0 8px;
+}
+.group-label:first-child{margin-top:0}
+
+/* ── Layout type cards ── */
+.type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.type-grid{grid-template-columns:repeat(2,1fr)}}
+
+.type-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden}
+.type-card-hdr{
+  padding:10px 14px;border-bottom:1px solid #f0f0f0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.type-name{font-size:14px;font-weight:700;color:#111827}
+.type-screens{font-size:11px;color:#6b7280}
+.type-desc{font-size:11px;color:#555;padding:8px 14px 10px;border-bottom:1px solid #f5f5f5}
+
+/* PDA mini frame */
+.pda-frame{
+  width:160px;height:310px;
+  border:2px solid #e5e7eb;border-radius:16px;
+  overflow:hidden;margin:12px auto;
+  display:flex;flex-direction:column;
+  background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08);
+  position:relative;font-size:8px;
+}
+.f-hdr{height:22px;background:#00afec;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;flex-shrink:0}
+.f-search{height:18px;background:#f9f9f9;border-bottom:1px solid #eee;display:flex;align-items:center;padding:0 6px;gap:3px;flex-shrink:0}
+.f-search-bar{flex:1;height:10px;background:#fff;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;padding:0 4px;gap:2px}
+.f-search-ico{width:6px;height:6px;border:1px solid #aaa;border-radius:50%;border-right:none;transform:rotate(-45deg);border-bottom:none;position:relative}
+.f-search-txt{font-size:5px;color:#aaa;flex:1}
+.f-search-btn{width:9px;height:9px;background:#eee;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:5px;color:#888;flex-shrink:0}
+
+.f-tabs{height:20px;display:flex;border-bottom:1px solid #e5e5e5;flex-shrink:0}
+.f-tab{flex:1;display:flex;align-items:center;justify-content:center;font-size:7px;color:#999;border-bottom:2px solid transparent}
+.f-tab.on{color:#00afec;border-bottom-color:#00afec;font-weight:700}
+
+.f-drop{height:16px;display:flex;border-bottom:1px solid #eee;flex-shrink:0}
+.f-drop-item{flex:1;border-right:1px solid #eee;display:flex;align-items:center;padding:0 5px;font-size:6px;color:#555}
+.f-drop-item:last-child{border-right:none}
+.f-drop-arrow{font-size:6px;color:#aaa;margin-left:auto}
+
+.f-content{flex:1;overflow:hidden;padding:4px 4px}
+
+.f-card{
+  display:flex;margin-bottom:4px;
+  border-radius:5px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);
+  flex-shrink:0;
+}
+.f-card-sts{
+  width:14px;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:4.5px;font-weight:700;
+  writing-mode:vertical-rl;
+}
+.f-card-body{flex:1;background:#fff;border:1px solid #f5f5f5;border-left:none;padding:3px 4px}
+.f-card-r1{display:flex;justify-content:space-between;font-size:4.5px;color:#888;margin-bottom:1px}
+.f-card-r2{font-size:5.5px;font-weight:700;color:#000}
+.f-card-r3{font-size:4px;color:#555;margin-top:1px}
+
+.f-proc-hdr{background:#f9f9f9;padding:4px 5px;border-bottom:1px solid #eee;flex-shrink:0}
+.f-proc-row{display:flex;font-size:5px;padding:1px 0}
+.f-proc-lbl{color:#888;width:32px}
+.f-proc-val{color:#000;font-weight:600}
+
+.f-chk-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:3px 5px;background:#f5f7fa;border-bottom:1px solid #e8e8e8;
+  font-size:5px;flex-shrink:0;
+}
+.f-proc-card{margin:3px 4px;border:1px solid #f0f0f0;border-radius:4px;overflow:hidden}
+.f-proc-card-hdr{padding:3px 4px;background:#fafafa;border-bottom:1px solid #f0f0f0;display:flex;gap:3px;align-items:center}
+.f-proc-card-name{font-size:5.5px;font-weight:700;color:#000;flex:1}
+.f-qty-row{display:flex;background:#fff}
+.f-qty-cell{flex:1;text-align:center;padding:3px 0;border-right:1px solid #f0f0f0;font-size:5px;color:#555}
+.f-qty-cell:last-child{border-right:none}
+.f-qty-num{font-size:9px;color:#000;font-weight:700;display:block}
+
+.f-footer{height:22px;background:#fff;border-top:1px solid #dfdfdf;display:flex;flex-shrink:0}
+.f-tab-item{flex:1;display:flex;align-items:center;justify-content:center;border-top:2px solid transparent;font-size:5px;color:#888}
+.f-tab-item.on{border-top-color:#00afec;color:#00afec}
+
+.f-cta{height:22px;background:#fff;border-top:1px solid #dfdfdf;display:flex;gap:4px;padding:3px 5px;flex-shrink:0}
+.f-cta-btn{flex:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fff}
+
+.f-setting-grp{padding:3px 6px;font-size:5.5px;color:#888;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.f-setting-acc{display:flex;align-items:center;justify-content:space-between;padding:5px 6px;border-bottom:1px solid #f0f0f0}
+.f-setting-name{font-size:8px;font-weight:700;color:#00afec}
+.f-setting-btn{font-size:5px;border:1px solid #ddd;border-radius:8px;padding:1px 4px;color:#555;background:#fff}
+.f-setting-nav{display:flex;align-items:center;justify-content:space-between;padding:6px;border-bottom:1px solid #f0f0f0}
+.f-setting-nav-lbl{font-size:6.5px;font-weight:700;color:#000}
+
+.f-chips{display:flex;gap:3px;padding:4px 5px;background:#fff;overflow-x:auto;flex-shrink:0;border-bottom:1px solid #eee}
+.f-chip{font-size:5px;padding:2px 5px;border:1px solid #ddd;border-radius:5px;color:#555;background:#f5f5f5;white-space:nowrap}
+.f-chip.on{border-color:#00afec;color:#00afec;background:#fff}
+
+/* type card detail */
+.type-card-detail{padding:8px 14px;font-size:11px;color:#374151}
+.type-card-detail li{margin-bottom:3px;padding-left:4px;list-style:none}
+.type-card-detail li::before{content:"▸ ";color:#00afec}
+
+/* ── Component spec ── */
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:800px){.comp-grid{grid-template-columns:repeat(2,1fr)}}
+
+.comp-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden}
+.comp-card-hdr{background:#f9fafb;padding:9px 14px;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:700;color:#304a6e}
+.comp-card-body{padding:12px 14px}
+
+/* ── Status table ── */
+.sts-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb}
+.sts-table th{background:#f3f4f6;padding:8px 14px;text-align:left;font-size:12px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb}
+.sts-table td{padding:8px 14px;border-bottom:1px solid #f5f5f5;font-size:12px;vertical-align:middle}
+.sts-table tr:last-child td{border-bottom:none}
+.sts-swatch{width:50px;height:22px;border-radius:4px;display:inline-block}
+.sts-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;color:#fff}
+
+/* ── Nav flow ── */
+.flow-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px 18px}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.flow-row:last-child{margin-bottom:0}
+.flow-lbl{font-size:11px;font-weight:700;color:#6b7280;width:70px;flex-shrink:0}
+.flow-item{background:#e0f4fd;color:#0369a1;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px}
+.flow-arrow{color:#9ca3af;font-size:12px}
+.flow-item.detail{background:#fef3c7;color:#92400e}
+.flow-item.proc{background:#d1fae5;color:#065f46}
+
+/* ── Responsive tweaks ── */
+@media(max-width:700px){
+  .type-grid{grid-template-columns:1fr 1fr}
+  .comp-grid{grid-template-columns:1fr}
+  .screen-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Banner ── -->
+  <div class="banner">
+    <div>
+      <div class="banner-title">WMS Mobile UI 표준</div>
+      <div class="banner-sub">반다이남코 코리아 — PDA 모바일 와이어프레임 레이아웃 기준서</div>
+    </div>
+    <div class="banner-meta">
+      뷰포트: 430 × 860 px<br>
+      기준 CSS: mobile.css<br>
+      2026-05-11
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       1. 전체 화면 구성
+  ══════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-num">1</div>
+      <div class="sec-title">전체 화면 구성</div>
+    </div>
+
+    <div class="group-label">기본 화면</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./main.html" target="_blank">
+        <div class="sc-icon" style="background:#e0f4fd"><img src="./assets/icon-footerLogo.png" alt="메인"></div>
+        <div class="sc-name">메인화면 (대시보드)</div>
+        <div class="sc-code">main.html</div>
+        <div class="sc-badges"><span class="badge badge-special">Special</span><span class="badge badge-tab">탭: 입고현황/출고현황</span></div>
+      </a>
+      <a class="screen-card" href="./menu.html" target="_blank">
+        <div class="sc-icon" style="background:#f3f4f6"><img src="./assets/icon-mobileMenu.png" alt="메뉴"></div>
+        <div class="sc-name">메뉴</div>
+        <div class="sc-code">menu.html</div>
+        <div class="sc-badges"><span class="badge badge-special">Special</span><span class="badge badge-special">3열 그리드</span></div>
+      </a>
+    </div>
+
+    <div class="group-label" style="margin-top:18px">입고 도메인</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./../ivmv01m/ivmv01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-iwrq.png" alt="입고예정"></div>
+        <div class="sc-name">입고예정</div>
+        <div class="sc-code">IVMV01 · iv3000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A</span><span class="badge badge-tab">탭바: 입고 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../ivad01m/ivad01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-iwrq.png" alt="입고상세"></div>
+        <div class="sc-name">입고예정 상세</div>
+        <div class="sc-code">IVAD01 · iv3000m</div>
+        <div class="sc-badges"><span class="badge badge-typeB">Type B</span><span class="badge badge-special">← 뒤로</span></div>
+      </a>
+      <a class="screen-card" href="./../iwpc01m/iwpc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-iwrq.png" alt="입고처리"></div>
+        <div class="sc-name">입고처리</div>
+        <div class="sc-code">IWPC01 · iw1000m</div>
+        <div class="sc-badges"><span class="badge badge-typeB">Type B</span><span class="badge badge-special">← 뒤로</span></div>
+      </a>
+      <a class="screen-card" href="./../rtpc01m/rtpc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-return.png" alt="반품"></div>
+        <div class="sc-name">반품처리</div>
+        <div class="sc-code">RTPC01 · rt2000m</div>
+        <div class="sc-badges"><span class="badge badge-typeB">Type B</span><span class="badge badge-special">← 뒤로</span></div>
+      </a>
+    </div>
+
+    <div class="group-label" style="margin-top:18px">피킹/검수 도메인</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./../owrq01m/owrq01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-owrq.png" alt="피킹"></div>
+        <div class="sc-name">피킹목록</div>
+        <div class="sc-code">OWRQ01 · ow5000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A</span><span class="badge badge-tab">탭바: 피킹 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../ldpc01m/ldpc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-owld.png" alt="검수"></div>
+        <div class="sc-name">검수목록</div>
+        <div class="sc-code">LDPC01 · ow5000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A</span><span class="badge badge-tab">탭바: 피킹 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../owpc01m/owpc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-owrq.png" alt="출고처리"></div>
+        <div class="sc-name">출고처리</div>
+        <div class="sc-code">OWPC01 · ow5000m</div>
+        <div class="sc-badges"><span class="badge badge-typeB">Type B</span><span class="badge badge-special">← 뒤로</span></div>
+      </a>
+    </div>
+
+    <div class="group-label" style="margin-top:18px">재고이동 도메인</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./../strg01m/strg01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-ivmv.png" alt="재고이동"></div>
+        <div class="sc-name">재고이동</div>
+        <div class="sc-code">STRG01 · iv3200m</div>
+        <div class="sc-badges"><span class="badge badge-typeC">Type C</span><span class="badge badge-tab">탭바: 재고이동 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../ivmvrq01m/ivmvrq01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-ivmv-rq.png" alt="재고이동요청"></div>
+        <div class="sc-name">재고이동요청</div>
+        <div class="sc-code">IVMVRQ01 · iv3000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A</span><span class="badge badge-tab">탭바: 재고이동 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../spmv01m/spmv01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-ivad.png" alt="보충이동확인"></div>
+        <div class="sc-name">보충이동확인</div>
+        <div class="sc-code">SPMV01 · iv3000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A</span><span class="badge badge-tab">탭바: 재고이동 ●</span></div>
+      </a>
+    </div>
+
+    <div class="group-label" style="margin-top:18px">재고조회 도메인</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./../brsc01m/brsc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-brsc.png" alt="재고조회"></div>
+        <div class="sc-name">재고조회</div>
+        <div class="sc-code">BRSC01 · iv3100m</div>
+        <div class="sc-badges"><span class="badge badge-typeC">Type C</span><span class="badge badge-tab">탭바: 재고이동 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../flsc01m/flsc01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-mdlc.png" alt="고정위치조회"></div>
+        <div class="sc-name">고정위치조회</div>
+        <div class="sc-code">FLSC01 · iv3100m</div>
+        <div class="sc-badges"><span class="badge badge-typeC">Type C</span><span class="badge badge-tab">탭바: 재고이동 ●</span></div>
+      </a>
+    </div>
+
+    <div class="group-label" style="margin-top:18px">기준정보 / 설정</div>
+    <div class="screen-grid">
+      <a class="screen-card" href="./../mdpd01m/mdpd01m-wireframe.html" target="_blank">
+        <div class="sc-icon" style="background:#e0f4fd;color:#0369a1;font-size:20px;justify-content:center">📦</div>
+        <div class="sc-name">품목</div>
+        <div class="sc-code">MDPD01 · md8000m</div>
+        <div class="sc-badges"><span class="badge badge-typeA">Type A+F</span><span class="badge badge-tab">탭바: 메뉴 ●</span></div>
+      </a>
+      <a class="screen-card" href="./../smst01m/smst01m-wireframe.html" target="_blank">
+        <div class="sc-icon"><img src="./assets/icon-menuSetting.png" alt="설정"></div>
+        <div class="sc-name">설정</div>
+        <div class="sc-code">SMST01 · sm9000m</div>
+        <div class="sc-badges"><span class="badge badge-typeF">Type F</span><span class="badge badge-tab">탭바: 메뉴 ●</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       2. 레이아웃 유형
+  ══════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-num">2</div>
+      <div class="sec-title">레이아웃 유형 정의</div>
+    </div>
+
+    <div class="type-grid">
+
+      <!-- Type A -->
+      <div class="type-card">
+        <div class="type-card-hdr">
+          <span class="type-name"><span class="badge badge-typeA">Type A</span> 목록형</span>
+          <span class="type-screens">6개 화면</span>
+        </div>
+        <div class="type-desc">카드 목록 + 필터 시트. 상태 뱃지(세로 텍스트) + 카드 바디(태그/번호/날짜/건수).</div>
+        <div class="pda-frame">
+          <div class="f-hdr">입고예정</div>
+          <div class="f-search">
+            <div class="f-search-bar">
+              <div class="f-search-ico"></div>
+              <div class="f-search-txt">입고번호 입력</div>
+            </div>
+            <div class="f-search-btn">▦</div>
+            <div class="f-search-btn">☰</div>
+          </div>
+          <div class="f-content">
+            <div class="f-card">
+              <div class="f-card-sts" style="background:#999">대기</div>
+              <div class="f-card-body">
+                <div class="f-card-r1"><span style="background:#e0f4fd;color:#0369a1;padding:0 3px;border-radius:2px">반다이남코</span><span>2026-05-06</span></div>
+                <div class="f-card-r2">IV26050600001</div>
+                <div class="f-card-r3">공급사명 <span style="color:#00afec">4건 ›</span></div>
+              </div>
+            </div>
+            <div class="f-card">
+              <div class="f-card-sts" style="background:#9ebf43">처리중</div>
+              <div class="f-card-body">
+                <div class="f-card-r1"><span style="background:#e0f4fd;color:#0369a1;padding:0 3px;border-radius:2px">반다이남코</span><span>2026-05-05</span></div>
+                <div class="f-card-r2">IV26050500001</div>
+                <div class="f-card-r3">공급사명 <span style="color:#00afec">2건 ›</span></div>
+              </div>
+            </div>
+            <div class="f-card">
+              <div class="f-card-sts" style="background:#424242">확정</div>
+              <div class="f-card-body">
+                <div class="f-card-r1"><span style="background:#e0f4fd;color:#0369a1;padding:0 3px;border-radius:2px">반다이남코</span><span>2026-05-04</span></div>
+                <div class="f-card-r2">IV26050400002</div>
+                <div class="f-card-r3">공급사명 <span style="color:#00afec">7건 ›</span></div>
+              </div>
+            </div>
+            <div class="f-card">
+              <div class="f-card-sts" style="background:#999">대기</div>
+              <div class="f-card-body">
+                <div class="f-card-r1"><span style="background:#e0f4fd;color:#0369a1;padding:0 3px;border-radius:2px">반다이남코</span><span>2026-05-03</span></div>
+                <div class="f-card-r2">IV26050300001</div>
+                <div class="f-card-r3">공급사명 <span style="color:#00afec">1건 ›</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="f-footer">
+            <div class="f-tab-item">🏠</div>
+            <div class="f-tab-item on" style="font-size:5px">입고</div>
+            <div class="f-tab-item">피킹</div>
+            <div class="f-tab-item">이동</div>
+            <div class="f-tab-item">메뉴</div>
+          </div>
+        </div>
+        <div class="type-card-detail">
+          <ul>
+            <li>헤더: 타이틀만 (back 버튼 없음)</li>
+            <li>검색바: 🔍 + 입력 + ▦ + ☰</li>
+            <li>카드: 상태(세로) + 태그/번호/날짜/건수</li>
+            <li>필터: 슬라이드업 Bottom Sheet</li>
+            <li>하단: 5탭 탭바</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Type B -->
+      <div class="type-card">
+        <div class="type-card-hdr">
+          <span class="type-name"><span class="badge badge-typeB">Type B</span> 처리형</span>
+          <span class="type-screens">4개 화면</span>
+        </div>
+        <div class="type-desc">처리 헤더(문서 요약) + 전체선택 바 + 품목 카드(수량 입력) + 하단 확정 버튼.</div>
+        <div class="pda-frame">
+          <div class="f-hdr">
+            <span style="position:absolute;left:6px;font-size:9px">‹</span>
+            입고처리
+          </div>
+          <div class="f-proc-hdr">
+            <div class="f-proc-row"><span class="f-proc-lbl">입고번호</span><span class="f-proc-val">IV26050600001</span></div>
+            <div class="f-proc-row"><span class="f-proc-lbl">공급사</span><span class="f-proc-val">반다이남코 코리아</span></div>
+            <div class="f-proc-row"><span class="f-proc-lbl">입고예정일</span><span class="f-proc-val">2026-05-06</span></div>
+          </div>
+          <div class="f-chk-bar">
+            <span>☐ 전체선택</span>
+            <span style="color:#00afec;font-weight:700">0/4개</span>
+          </div>
+          <div class="f-content">
+            <div class="f-proc-card">
+              <div class="f-proc-card-hdr">
+                <span style="font-size:5px;color:#888">☐</span>
+                <span class="f-proc-card-name">SKZOO NANO PuppyM</span>
+              </div>
+              <div class="f-qty-row">
+                <div class="f-qty-cell"><span class="f-qty-num">10</span>예정</div>
+                <div class="f-qty-cell"><span class="f-qty-num" style="color:#00afec">0</span>처리</div>
+                <div class="f-qty-cell"><span class="f-qty-num">EA</span>단위</div>
+              </div>
+            </div>
+            <div class="f-proc-card">
+              <div class="f-proc-card-hdr">
+                <span style="font-size:5px;color:#888">☐</span>
+                <span class="f-proc-card-name">나루토 72 series 03</span>
+              </div>
+              <div class="f-qty-row">
+                <div class="f-qty-cell"><span class="f-qty-num">5</span>예정</div>
+                <div class="f-qty-cell"><span class="f-qty-num" style="color:#00afec">0</span>처리</div>
+                <div class="f-qty-cell"><span class="f-qty-num">BOX</span>단위</div>
+              </div>
+            </div>
+          </div>
+          <div class="f-cta">
+            <div class="f-cta-btn" style="background:#e5ebee;color:#5e7481">취소</div>
+            <div class="f-cta-btn" style="background:#00afec">입고확정</div>
+          </div>
+          <div class="f-footer">
+            <div class="f-tab-item">🏠</div>
+            <div class="f-tab-item on" style="font-size:5px">입고</div>
+            <div class="f-tab-item">피킹</div>
+            <div class="f-tab-item">이동</div>
+            <div class="f-tab-item">메뉴</div>
+          </div>
+        </div>
+        <div class="type-card-detail">
+          <ul>
+            <li>헤더: ‹ 뒤로 + 타이틀</li>
+            <li>처리 헤더: 문서번호/거래처/날짜</li>
+            <li>전체선택 바: 체크박스 + N/M개</li>
+            <li>품목 카드: 코드/명 + 예정/처리/단위</li>
+            <li>하단: 취소 + 확정 CTA 버튼</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Type C -->
+      <div class="type-card">
+        <div class="type-card-hdr">
+          <span class="type-name"><span class="badge badge-typeC">Type C</span> 탭형</span>
+          <span class="type-screens">3개 화면</span>
+        </div>
+        <div class="type-desc">화면 내 탭(품목/위치) + 검색바 + 검색 결과 표시. 탭별 필터 조건이 다름.</div>
+        <div class="pda-frame">
+          <div class="f-hdr">재고이동</div>
+          <div class="f-tabs">
+            <div class="f-tab on">품목이동</div>
+            <div class="f-tab">위치스캔</div>
+          </div>
+          <div class="f-search" style="margin-top:0">
+            <div class="f-search-bar">
+              <div class="f-search-ico"></div>
+              <div class="f-search-txt">품목코드/위치코드</div>
+            </div>
+            <div class="f-search-btn">▦</div>
+          </div>
+          <div class="f-content" style="padding:3px 4px">
+            <div style="margin:2px 0;border:1px solid #e8e8e8;border-radius:4px;padding:4px;background:#F0FBFF;border-color:#00afec">
+              <div style="font-size:5px;color:#888">P-001</div>
+              <div style="font-size:6px;font-weight:700;color:#000">SKZOO NANO PuppyM</div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:5px">
+                <span style="color:#555">위치: A-01-01 · EA</span>
+                <span style="background:#e0f4fd;color:#0369a1;padding:1px 4px;border-radius:4px">재고 50</span>
+              </div>
+            </div>
+            <div style="margin:2px 0;border:1px solid #f0f0f0;border-radius:4px;padding:4px">
+              <div style="font-size:5px;color:#888">P-002</div>
+              <div style="font-size:6px;font-weight:700;color:#000">나루토 72 series 03</div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:5px">
+                <span style="color:#555">위치: B-02-03 · BOX</span>
+                <span style="background:#e0f4fd;color:#0369a1;padding:1px 4px;border-radius:4px">재고 120</span>
+              </div>
+            </div>
+          </div>
+          <div class="f-footer">
+            <div class="f-tab-item">🏠</div>
+            <div class="f-tab-item">입고</div>
+            <div class="f-tab-item">피킹</div>
+            <div class="f-tab-item on" style="font-size:5px">재고이동</div>
+            <div class="f-tab-item">메뉴</div>
+          </div>
+        </div>
+        <div class="type-card-detail">
+          <ul>
+            <li>헤더: 타이틀 + 우측 보조 버튼(이력 등)</li>
+            <li>화면탭: 품목이동 / 위치스캔 등</li>
+            <li>드롭다운(선택형): 창고/카테고리</li>
+            <li>검색바: 🔍 + 입력 + ▦</li>
+            <li>결과: 카드형 정보 표시</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Type F -->
+      <div class="type-card">
+        <div class="type-card-hdr">
+          <span class="type-name"><span class="badge badge-typeF">Type F</span> 설정형</span>
+          <span class="type-screens">2개 화면</span>
+        </div>
+        <div class="type-desc">섹션 헤더 + 네비게이션 목록. 계정정보, 개인설정, 알람 등 설정 항목 나열.</div>
+        <div class="pda-frame">
+          <div class="f-hdr">설정</div>
+          <div style="flex:1;overflow:hidden">
+            <div class="f-setting-grp">계정정보</div>
+            <div class="f-setting-acc">
+              <span class="f-setting-name">테스트01</span>
+              <span class="f-setting-btn">로그아웃</span>
+            </div>
+            <div class="f-setting-nav">
+              <span class="f-setting-nav-lbl">개인정보설정</span>
+              <span style="color:#ccc;font-size:9px">›</span>
+            </div>
+            <div class="f-setting-grp" style="margin-top:4px">알람</div>
+            <div class="f-setting-nav">
+              <span class="f-setting-nav-lbl">알람설정</span>
+              <span style="color:#ccc;font-size:9px">›</span>
+            </div>
+          </div>
+          <div class="f-footer">
+            <div class="f-tab-item">🏠</div>
+            <div class="f-tab-item">입고</div>
+            <div class="f-tab-item">피킹</div>
+            <div class="f-tab-item">이동</div>
+            <div class="f-tab-item on">메뉴</div>
+          </div>
+        </div>
+        <div class="type-card-detail">
+          <ul>
+            <li>헤더: 타이틀만</li>
+            <li>섹션 헤더: 회색 소제목</li>
+            <li>계정 행: 사용자명(파란색) + 로그아웃</li>
+            <li>네비 행: 명칭 + › 화살표</li>
+            <li>하단: 5탭 탭바 (메뉴 ●)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /type-grid -->
+  </div>
+
+  <!-- ══════════════════════════════════════
+       3. 공통 컴포넌트
+  ══════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-num">3</div>
+      <div class="sec-title">공통 컴포넌트</div>
+    </div>
+
+    <div class="comp-grid">
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">헤더 (.pda-header)</div>
+        <div class="comp-card-body">
+          <div style="background:#00afec;height:47px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;margin-bottom:10px">타이틀</div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">높이</td><td style="font-weight:600">47px</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">배경색</td><td style="font-weight:600">#00afec</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">텍스트</td><td style="font-weight:600">#fff, 17.6px, 700</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">뒤로가기</td><td style="font-weight:600">← 아이콘 (Type B만)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">검색바 (.search-bar)</div>
+        <div class="comp-card-body">
+          <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;height:37px;display:flex;align-items:center;padding:0 10px;gap:6px;margin-bottom:10px">
+            <span style="font-size:14px;opacity:.4">🔍</span>
+            <span style="flex:1;font-size:11px;color:#aaa">입력 placeholder</span>
+            <span style="font-size:14px;opacity:.6">▦</span>
+            <span style="font-size:14px;opacity:.6">☰</span>
+          </div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">높이</td><td style="font-weight:600">37px</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">배경</td><td style="font-weight:600">#f9f9f9, 테두리 #eee</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">좌측</td><td style="font-weight:600">icon-search.png (20px)</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">우측</td><td style="font-weight:600">icon-schBarcode + icon-filter</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">하단 탭바 (.tab-bar)</div>
+        <div class="comp-card-body">
+          <div style="display:flex;height:44px;border:1px solid #dfdfdf;border-radius:8px;overflow:hidden;margin-bottom:10px">
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-top:2px solid #00afec;color:#00afec">🏠</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-top:2px solid transparent;color:#888">입고</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-top:2px solid transparent;color:#888">피킹</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-top:2px solid transparent;color:#888">이동</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-top:2px solid transparent;color:#888">메뉴</div>
+          </div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">높이</td><td style="font-weight:600">60px</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">활성 표시</td><td style="font-weight:600">border-top: 2px solid #00afec<br>+ CSS filter 블루 적용</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">탭 순서</td><td style="font-weight:600">메인화면 | 입고 | 피킹 | 재고이동 | 메뉴</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">필터 시트 (.filter-sheet)</div>
+        <div class="comp-card-body">
+          <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:10px">
+            <div style="padding:8px 12px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between">
+              <span style="font-size:12px;font-weight:700">필터 제목</span>
+              <span style="color:#888">✕</span>
+            </div>
+            <div style="padding:8px 12px">
+              <div style="font-size:10px;font-weight:600;margin-bottom:6px">섹션 레이블</div>
+              <div style="display:flex;gap:4px">
+                <span style="padding:2px 8px;border:1px solid #00afec;border-radius:6px;font-size:10px;color:#00afec;background:#fff">전체</span>
+                <span style="padding:2px 8px;border:1px solid #ddd;border-radius:6px;font-size:10px;color:#555;background:#f5f7fa">옵션A</span>
+                <span style="padding:2px 8px;border:1px solid #ddd;border-radius:6px;font-size:10px;color:#555;background:#f5f7fa">옵션B</span>
+              </div>
+            </div>
+          </div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">위치</td><td style="font-weight:600">fixed bottom, z-index:201</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">열림 애니</td><td style="font-weight:600">translateY(100%) → 0</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">칩 선택</td><td style="font-weight:600">border #00afec + color #00afec</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">카드 (.card-row)</div>
+        <div class="comp-card-body">
+          <div style="display:flex;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:10px">
+            <div style="width:42px;background:#9ebf43;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;writing-mode:vertical-rl;letter-spacing:2px;padding:10px 0">처리중</div>
+            <div style="flex:1;background:#fff;border:1px solid #f5f5f5;border-left:none;padding:8px 10px">
+              <div style="display:flex;gap:3px;margin-bottom:4px">
+                <span style="font-size:10px;background:#e9e9e9;padding:1px 6px;border-radius:5px;color:#555">반다이남코</span>
+                <span style="font-size:10px;background:#e9e9e9;padding:1px 6px;border-radius:5px;color:#555">국내입고</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#555;margin-bottom:3px">
+                <span>IV26050600001</span><span>2026-05-06</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:14px;font-weight:700">반다이남코 코리아</span>
+                <span style="color:#00afec;font-size:11px">4건 ›</span>
+              </div>
+            </div>
+          </div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">상태 폭</td><td style="font-weight:600">50px, writing-mode:vertical-rl</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">radius</td><td style="font-weight:600">12px</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">active</td><td style="font-weight:600">transform:scale(.98)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-card-hdr">입력 컴포넌트</div>
+        <div class="comp-card-body">
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;color:#6b7280;margin-bottom:3px">pda-inp (인라인 텍스트 입력)</div>
+            <input style="width:100%;height:32px;border:0;border-bottom:1px solid #dcd9d9;font-size:14px;padding:0 4px;outline:none;font-family:inherit" placeholder="텍스트 입력">
+          </div>
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;color:#6b7280;margin-bottom:3px">pda-sel (셀렉트 박스)</div>
+            <select style="width:100%;height:48px;border:0;border-bottom:1px solid #dcd9d9;font-size:16px;color:#555;padding:0 4px;font-family:inherit">
+              <option>전체</option><option>옵션A</option>
+            </select>
+          </div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse">
+            <tr><td style="color:#6b7280;padding:2px 0;width:80px">inp 높이</td><td style="font-weight:600">32px, border-bottom only</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">sel 높이</td><td style="font-weight:600">48px, border-bottom only</td></tr>
+            <tr><td style="color:#6b7280;padding:2px 0">버튼 높이</td><td style="font-weight:600">37px, border-radius 10px</td></tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       4. 상태 코드 & 컬러
+  ══════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-num">4</div>
+      <div class="sec-title">상태 코드 &amp; 컬러</div>
+    </div>
+    <table class="sts-table">
+      <thead>
+        <tr>
+          <th>코드</th>
+          <th>명칭</th>
+          <th>배경색</th>
+          <th>CSS 클래스</th>
+          <th>미리보기</th>
+          <th>적용 화면</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>00</code></td>
+          <td>대기 / 예정</td>
+          <td>#999999</td>
+          <td><code>.sts-00</code></td>
+          <td><span class="sts-badge" style="background:#999">예정</span></td>
+          <td>입고예정, 피킹목록, 재고이동요청</td>
+        </tr>
+        <tr>
+          <td><code>11</code></td>
+          <td>대기</td>
+          <td>#999999</td>
+          <td><code>.sts-11</code></td>
+          <td><span class="sts-badge" style="background:#999">대기</span></td>
+          <td>sts-00과 동일</td>
+        </tr>
+        <tr>
+          <td><code>17</code></td>
+          <td>준비</td>
+          <td>#d99cff</td>
+          <td><code>.sts-17</code></td>
+          <td><span class="sts-badge" style="background:#d99cff;color:#333">준비</span></td>
+          <td>입고예정, 배송요청</td>
+        </tr>
+        <tr>
+          <td><code>55</code></td>
+          <td>처리중</td>
+          <td>#9ebf43</td>
+          <td><code>.sts-55</code></td>
+          <td><span class="sts-badge" style="background:#9ebf43">처리중</span></td>
+          <td>입고처리, 피킹, 재고이동요청</td>
+        </tr>
+        <tr>
+          <td><code>77</code></td>
+          <td>확정</td>
+          <td>#424242</td>
+          <td><code>.sts-77</code></td>
+          <td><span class="sts-badge" style="background:#424242">확정</span></td>
+          <td>전체 목록형 화면</td>
+        </tr>
+        <tr>
+          <td><code>78</code></td>
+          <td>확정(보류)</td>
+          <td>#6e6e6e</td>
+          <td><code>.sts-78</code></td>
+          <td><span class="sts-badge" style="background:#6e6e6e">보류</span></td>
+          <td>–</td>
+        </tr>
+        <tr>
+          <td><code>79</code></td>
+          <td>완료</td>
+          <td>#6694da</td>
+          <td><code>.sts-79</code></td>
+          <td><span class="sts-badge" style="background:#6694da">완료</span></td>
+          <td>–</td>
+        </tr>
+        <tr>
+          <td><code>99</code></td>
+          <td>취소</td>
+          <td>#eb757b</td>
+          <td><code>.sts-99</code></td>
+          <td><span class="sts-badge" style="background:#eb757b">취소</span></td>
+          <td>전체 목록형 화면</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       5. 화면 이동 흐름
+  ══════════════════════════════════════ -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-num">5</div>
+      <div class="sec-title">화면 이동 흐름</div>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow-row">
+        <div class="flow-lbl">앱 진입</div>
+        <div class="flow-item">main.html</div>
+        <div class="flow-arrow">→ 탭바</div>
+        <div class="flow-item">IVMV01 / OWRQ01 / STRG01 / menu.html</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">입고</div>
+        <div class="flow-item">IVMV01</div>
+        <div class="flow-arrow">→ 카드 클릭</div>
+        <div class="flow-item detail">IVAD01</div>
+        <div class="flow-arrow">→ 처리 버튼</div>
+        <div class="flow-item proc">IWPC01</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">피킹</div>
+        <div class="flow-item">OWRQ01</div>
+        <div class="flow-arrow">→ 카드 클릭</div>
+        <div class="flow-item detail">OWPC01</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">검수</div>
+        <div class="flow-item">LDPC01</div>
+        <div class="flow-arrow">→ 카드 클릭</div>
+        <div class="flow-item detail">LDPC02 (처리)</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">재고이동</div>
+        <div class="flow-item">STRG01</div>
+        <div class="flow-arrow">탭 내 처리</div>
+        <div class="flow-item proc">품목이동 / 위치스캔</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">이동요청</div>
+        <div class="flow-item">IVMVRQ01</div>
+        <div class="flow-arrow">→ 카드 클릭</div>
+        <div class="flow-item detail">처리 화면</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">보충확인</div>
+        <div class="flow-item">SPMV01</div>
+        <div class="flow-arrow">→ 카드 클릭</div>
+        <div class="flow-item proc">보충확인 처리</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">재고조회</div>
+        <div class="flow-item">BRSC01</div>
+        <div class="flow-arrow">탭 전환</div>
+        <div class="flow-item detail">품목탭 / 위치탭</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">고정위치</div>
+        <div class="flow-item">FLSC01</div>
+        <div class="flow-arrow">탭 전환</div>
+        <div class="flow-item detail">품목탭 / 위치탭</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-lbl">설정</div>
+        <div class="flow-item">SMST01</div>
+        <div class="flow-arrow">→ 항목 클릭</div>
+        <div class="flow-item detail">개인정보설정 / 알람설정</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

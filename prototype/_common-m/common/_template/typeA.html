@@ -1,0 +1,145 @@
+<!--
+  wireframe-only | {{MENU_CODE}} | {{MENU_NAME}} | Type A (목록형) | {{GROUP_CODE}}
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{MENU_NAME}} [{{MENU_CODE}}]</title>
+<link rel="stylesheet" href="../_common-m/mobile.css">
+<style>
+{{CUSTOM_CSS}}
+</style>
+</head>
+<body>
+<div class="pda-wrap">
+
+  <!-- ── 헤더 ── -->
+  <header class="pda-header">
+    <div class="header-spacer"></div>
+    <div class="header-title">{{MENU_NAME}}</div>
+    <div class="header-right"></div>
+  </header>
+
+  <!-- ── 검색바 ── -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="search-ico"><img src="../_common-m/assets/icon-search.png" alt="검색"></span>
+      <input type="text" id="searchInput" placeholder="{{SEARCH_PLACEHOLDER}}" oninput="renderCards()">
+      <button class="search-act-btn" title="바코드 스캔" onclick="alert('[스캔]\n바코드 스캐너를 실행합니다.')">
+        <img src="../_common-m/assets/icon-schBarcode.png" alt="바코드">
+      </button>
+      <button class="search-act-btn" title="필터" onclick="openFilter()">
+        <img src="../_common-m/assets/icon-filter.png" alt="필터">
+      </button>
+    </div>
+  </div>
+
+  <!-- ── 카드 목록 ── -->
+  <main class="pda-content">
+    <div class="card-list" id="cardList"></div>
+  </main>
+
+  <!-- ── 하단 탭바 ── -->
+  {{TAB_BAR}}
+
+</div>
+
+<!-- ── 필터 시트 ── -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
+<div class="filter-sheet" id="filterSheet">
+  <div class="filter-hdr">
+    <span class="filter-ttl">{{FILTER_TITLE}}</span>
+    <button class="filter-close-btn" onclick="closeFilter()">✕</button>
+  </div>
+
+  {{FILTER_SECTIONS}}
+
+  <div class="filter-ftr">
+    <button class="pda-btn btn-gray" onclick="resetFilter()">초기화</button>
+    <button class="pda-btn btn-blue" onclick="applyFilter()">적용</button>
+  </div>
+</div>
+
+<script src="./{{MENU_CODE}}-data.js"></script>
+<script>
+var allData = [];
+var filterSts = '';
+
+function openFilter() {
+  document.getElementById('filterOverlay').classList.add('show');
+  document.getElementById('filterSheet').classList.add('show');
+}
+function closeFilter() {
+  document.getElementById('filterOverlay').classList.remove('show');
+  document.getElementById('filterSheet').classList.remove('show');
+}
+function resetFilter() {
+  filterSts = '';
+  document.querySelectorAll('.chip').forEach(function(c) {
+    c.classList.toggle('on', c.dataset.v === '');
+  });
+}
+function applyFilter() {
+  closeFilter();
+  renderCards();
+}
+
+document.querySelectorAll('.chip-wrap').forEach(function(wrap) {
+  wrap.addEventListener('click', function(e) {
+    var btn = e.target.closest('.chip');
+    if (!btn) return;
+    wrap.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('on'); });
+    btn.classList.add('on');
+    if (wrap.id === 'stsChips') filterSts = btn.dataset.v;
+  });
+});
+
+function renderCards() {
+  var q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  var data = allData.filter(function(r) {
+    if (filterSts && r.sts !== filterSts) return false;
+    if (q && JSON.stringify(r).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+
+  var html = '';
+  if (!data.length) {
+    html = '<div class="empty-msg">조회된 데이터가 없습니다.</div>';
+  } else {
+    data.forEach(function(r) {
+      var tags = (r.tags || []).map(function(t) {
+        return '<span class="c-tag">' + t + '</span>';
+      }).join('');
+      html += '<div class="card-row" onclick="goDetail(\'' + r.no + '\')">'
+        + '<div class="card-sts sts-' + (r.sts || '00') + '">' + (r.stsNm || getStsTxt(r.sts)) + '</div>'
+        + '<div class="card-body">'
+        + '<div class="card-tags">' + tags + '</div>'
+        + '<div class="card-r1"><span>' + (r.no || '') + '</span><span>' + (r.date || '') + '</span></div>'
+        + '<div class="card-r2"><span>' + (r.custNm || '') + '</span>'
+        + '<span class="card-cnt">' + (r.cnt || 0) + '건 ›</span></div>'
+        + '</div></div>';
+    });
+  }
+  document.getElementById('cardList').innerHTML = html;
+}
+
+function getStsTxt(sts) {
+  var map = { '00':'대기','11':'대기','17':'준비','55':'처리중','77':'확정','78':'보류','79':'완료','99':'취소' };
+  return map[sts] || sts || '';
+}
+
+function goDetail(no) {
+  alert('[상세]\n' + no + '\n상세화면으로 이동합니다.');
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  allData = JSON.parse(JSON.stringify({{DATA_VAR}}.list));
+  renderCards();
+});
+
+{{SCRIPT_BODY}}
+</script>
+</body>
+</html>

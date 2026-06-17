@@ -78,13 +78,14 @@ spec/{메뉴}/
 
 ---
 
-## prototype/ (PC=`{메뉴}`, 모바일=`{메뉴}m` — 모바일 평탄화는 별도 작업)
+## prototype/ (PC=`{메뉴}`, 모바일=`{메뉴}m`)
 
 ```
 prototype/
 ├── _common/             PC 공용 셸 (index, 메뉴, 팝업, wms-ui.css, wms-common.js)
-├── mobile/              모바일 셸 + 메뉴 (현행 {그룹}m 구조 유지)
-└── {메뉴}/              PC 검증물 — {메뉴}-wireframe.html + {메뉴}-mock-data.js  〔/SD_311〕
+├── _common-m/           모바일 공용 셸 (menu·main·mobile.css·ui-standard·assets·common/_template)
+├── {메뉴}/              PC 검증물 — {메뉴}-wireframe.html + {메뉴}-mock-data.js   〔/SD_311〕
+└── {메뉴}m/             모바일 검증물 — {메뉴}m-wireframe.html + {메뉴}m-mock-data.js  〔/SD_312〕
 ```
 
 ---

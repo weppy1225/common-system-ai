@@ -31,7 +31,7 @@ tags:
 | `-07-fe-flow.md` | FE 흐름 | 수동 |
 | `-99-issues.md` | 설계 미결·하드코딩 등 | 수동 |
 
-> 검증 화면(prototype/{메뉴}/): `{메뉴}-wireframe.html`(`/SD_311`) · `{메뉴}-mock-data.js`(`/SD_311`) · 모바일 `prototype/mobile/`(`/SD_312`)
+> 검증 화면(prototype/{메뉴}/): `{메뉴}-wireframe.html`(`/SD_311`) · `{메뉴}-mock-data.js`(`/SD_311`) · 모바일 `prototype/{메뉴코드}m/`(`/SD_312`)
 > 정본: 메뉴별 DB·API 설계 정본은 `/SD-db`·`/SD-api`. `/SD_331`~`/SD_334`는 실DB 기준 별도 추출 산출물.
 
 ## 메뉴별 문서 현황
