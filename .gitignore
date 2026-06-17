@@ -16,3 +16,10 @@ __pycache__/
 # 기타
 *.lock
 *.zip
+
+# 세션 로그·로컬 입력·빌드/벤치 산출물 (2026-06 정리)
+conversation-log.txt
+dist/
+dist-mobile/
+input/
+.claude/bench_pi422/

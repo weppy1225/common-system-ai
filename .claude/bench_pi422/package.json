@@ -1,9 +1,0 @@
-{
-  "name": "bench-pi422",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "exceljs": "^4.4.0",
-    "xlsx-populate": "^1.21.0"
-  }
-}
