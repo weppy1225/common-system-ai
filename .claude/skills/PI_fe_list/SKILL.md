@@ -1,6 +1,6 @@
 ---
-name: PI-fe-list
-description: FE 검색·목록 화면({메뉴코드}.vue)만 생성. /PI-fe-list {메뉴코드}
+name: PI_fe_list
+description: FE 검색·목록 화면({메뉴코드}.vue)만 생성. /PI_fe_list {메뉴코드}
 when_to_use: "FE 목록 화면 만들어줘", "검색 그리드 개발해줘", "목록 vue 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,15 +8,15 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# FE 검색조건·결과목록 화면 개발 [PI-fe-list]
+# FE 검색조건·결과목록 화면 개발 [PI_fe_list]
 
 BE spec.md 기반으로 `{메뉴코드}.vue` 목록 화면을 생성한다. 기본형은 목록 + `{메뉴코드}Edt` 연결이지만, 실제 FE 표본처럼 `mdbz01Sch.vue`/`mdbz01Set.vue` 분리나 `Ivst01Edt`/`Ivst01Proc`/`Ivst01Cancel`/`Ivst01ProcCancel`/`Ivst01ReqInvenMove` 같은 다중 팝업 연결도 고려한다.
 
 ## 사용법
 
 ```
-/PI-fe-list {메뉴코드}
-예: /PI-fe-list mdct01
+/PI_fe_list {메뉴코드}
+예: /PI_fe_list mdct01
 ```
 
 ## 실행 절차
@@ -137,7 +137,7 @@ API 연결:
   리스트: POST /{메뉴코드}/{리소스}s
 
 후속 수동 작업:
-  - 실제 확인한 팝업 파일 생성: /PI-fe-edit {메뉴코드}
+  - 실제 확인한 팝업 파일 생성: /PI_fe_edit {메뉴코드}
   - router.js 라우트 등록
   - 메뉴 DB 등록
 ```
@@ -145,5 +145,5 @@ API 연결:
 ## 주의사항
 
 - BE spec에 없는 정보는 추측 말고 `// TODO:` 주석으로 표시
-- 팝업까지 동시에 필요하면 `/PI-fe-all` 사용
+- 팝업까지 동시에 필요하면 `/PI_fe_all` 사용
 - BE 저장소(`$BE_DIR`) 파일은 읽기만 함, 수정 금지

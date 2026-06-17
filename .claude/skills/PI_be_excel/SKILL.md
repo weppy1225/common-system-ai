@@ -1,6 +1,6 @@
 ---
-name: PI-be-excel
-description: BE 엑셀 업로드 서브패키지 개발 (ExcelUpload Controller·서비스 + JUnit). 메인 레이어 완료 후 실행. /PI-be-excel {메뉴코드}
+name: PI_be_excel
+description: BE 엑셀 업로드 서브패키지 개발 (ExcelUpload Controller·서비스 + JUnit). 메인 레이어 완료 후 실행. /PI_be_excel {메뉴코드}
 when_to_use: "엑셀 업로드 만들어줘", "엑셀 일괄등록 만들어줘", "ExcelComp 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# BE 엑셀 업로드 개발 [PI-be-excel]
+# BE 엑셀 업로드 개발 [PI_be_excel]
 
 다음 지시에 따라 **엑셀 업로드 서브패키지**를 개발한다.
 

@@ -1,6 +1,6 @@
 ---
-name: PI-be-mapper
-description: BE Mapper 레이어 개발 (Mapper.java + Mapper.xml, MyBatis 쿼리 + JUnit). /PI-be-mapper {메뉴코드}
+name: PI_be_mapper
+description: BE Mapper 레이어 개발 (Mapper.java + Mapper.xml, MyBatis 쿼리 + JUnit). /PI_be_mapper {메뉴코드}
 when_to_use: "Mapper 만들어줘", "MyBatis 쿼리 작성해줘", "Mapper.xml 만들어줘", "Mapper 레이어 개발해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# BE Mapper 개발 [PI-be-mapper]
+# BE Mapper 개발 [PI_be_mapper]
 
 다음 지시에 따라 **Mapper 레이어(Mapper.java + Mapper.xml)**를 개발한다.
 

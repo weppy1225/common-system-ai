@@ -35,9 +35,9 @@ BE와 FE 각각 **코드 개발 → 단위테스트 → 기동/목업 → 통합
 | 산출물 | 위치 | 생성 스킬 |
 |---|---|---|
 | 화면요건 (`*-02-ui.md`) | `spec/{메뉴코드}/` | `/SD_310_UI` |
-| DB 설계 (`db.md`) | `spec/{메뉴코드}/` | `/SD-db` |
-| DB 반영 완료 (test/dev) | PostgreSQL | `/SD-db-apply` |
-| API 명세 (`api.md`) | `spec/{메뉴코드}/` | `/SD-api` |
+| DB 설계 (`db.md`) | `spec/{메뉴코드}/` | `/SD_db` |
+| DB 반영 완료 (test/dev) | PostgreSQL | `/SD_db_apply` |
+| API 명세 (`api.md`) | `spec/{메뉴코드}/` | `/SD_api` |
 
 > 위 4가지 산출물이 갖춰진 뒤 BE 개발을 시작한다. FE 개발은 BE spec.md가 추가로 필요하다.
 
@@ -58,15 +58,15 @@ Mapper → Dao           레이어별 순차 실행       애플리케이션 정
 
 | 순서 | 레이어 | 생성 파일 | 스킬 |
 |---|---|---|---|
-| 1 | Mapper | `{메뉴코드}Mapper.java` + `{메뉴코드}Mapper.xml` | `/PI-be-mapper` |
-| 2 | Dao | `{메뉴코드}Dao.java` | `/PI-be-dao` |
-| 3 | CompUtil *(선택)* | `{메뉴코드}CompUtil.java` | `/PI-be-comp` 내 포함 |
-| 4 | TxComp *(선택)* | `{메뉴코드}TxComp.java` | `/PI-be-comp` 내 포함 |
-| 5 | Comp | `{메뉴코드}Comp.java` | `/PI-be-comp` |
-| 6 | Controller | `{메뉴코드}Controller.java` | `/PI-be-comp` 내 포함 |
+| 1 | Mapper | `{메뉴코드}Mapper.java` + `{메뉴코드}Mapper.xml` | `/PI_be_mapper` |
+| 2 | Dao | `{메뉴코드}Dao.java` | `/PI_be_dao` |
+| 3 | CompUtil *(선택)* | `{메뉴코드}CompUtil.java` | `/PI_be_comp` 내 포함 |
+| 4 | TxComp *(선택)* | `{메뉴코드}TxComp.java` | `/PI_be_comp` 내 포함 |
+| 5 | Comp | `{메뉴코드}Comp.java` | `/PI_be_comp` |
+| 6 | Controller | `{메뉴코드}Controller.java` | `/PI_be_comp` 내 포함 |
 
-> 전체 레이어 일괄 개발 시 `/PI-be-all {메뉴코드}` 사용.  
-> 재고 처리(입출고 확정) 포함 시 `/PI-be-inven {메뉴코드}` 추가 실행.
+> 전체 레이어 일괄 개발 시 `/PI_be_all {메뉴코드}` 사용.  
+> 재고 처리(입출고 확정) 포함 시 `/PI_be_inven {메뉴코드}` 추가 실행.
 
 **DB 스키마 직접 확인 (BLOCKING)**
 
@@ -144,7 +144,7 @@ cd C:\zinide\workspace\cloud-wms-be
 #### 스킬 사용
 
 ```
-/PI-test-be {메뉴코드}
+/PI_test_be {메뉴코드}
 ```
 
 #### 단위테스트 완료 기준
@@ -225,10 +225,10 @@ bru run "src/test/bruno/{메뉴그룹}/{메뉴코드}" --env local --reporter-js
 #### 스킬 사용
 
 ```
-/PI-test-be {메뉴코드}
+/PI_test_be {메뉴코드}
 ```
 
-> `/PI-test-be` 스킬은 JUnit([2]) + Bruno([4])를 순차 실행한다.
+> `/PI_test_be` 스킬은 JUnit([2]) + Bruno([4])를 순차 실행한다.
 
 #### Bruno 통합테스트 완료 기준
 
@@ -272,9 +272,9 @@ cloud-wms-fe/
 
 | 상황 | 스킬 |
 |---|---|
-| 목록 + 팝업 동시 개발 | `/PI-fe-all {메뉴코드}` |
-| 목록 화면만 | `/PI-fe-list {메뉴코드}` |
-| 등록/수정 팝업만 | `/PI-fe-edit {메뉴코드}` |
+| 목록 + 팝업 동시 개발 | `/PI_fe_all {메뉴코드}` |
+| 목록 화면만 | `/PI_fe_list {메뉴코드}` |
+| 등록/수정 팝업만 | `/PI_fe_edit {메뉴코드}` |
 
 #### 코드 개발 완료 기준
 
@@ -319,7 +319,7 @@ npm run test:unit -- --watch
 #### 스킬 사용
 
 ```
-/PI-test-fe
+/PI_test_fe
 ```
 
 #### Vitest 완료 기준
@@ -450,25 +450,25 @@ npx playwright test --project=chromium
 ### BE
 
 ```
-/SD-db {메뉴코드}          # DB 설계
-/SD-db-apply {메뉴코드}    # DB 반영
-/SD-api {메뉴코드}         # API 명세
+/SD_db {메뉴코드}          # DB 설계
+/SD_db_apply {메뉴코드}    # DB 반영
+/SD_api {메뉴코드}         # API 명세
          ↓
-/PI-be-all {메뉴코드}      # [1] 코드 개발 (전 레이어)
+/PI_be_all {메뉴코드}      # [1] 코드 개발 (전 레이어)
          ↓
-/PI-test-be {메뉴코드}     # [2] JUnit 단위테스트
+/PI_test_be {메뉴코드}     # [2] JUnit 단위테스트
          ↓
 .\gradlew bootRun          # [3] Boot Run 기동 확인
          ↓
-/PI-test-be {메뉴코드}     # [4] Bruno 통합테스트 (스킬 내 포함)
+/PI_test_be {메뉴코드}     # [4] Bruno 통합테스트 (스킬 내 포함)
 ```
 
 ### FE
 
 ```
-/PI-fe-all {메뉴코드}      # [1] 코드 개발 (목록 + 팝업)
+/PI_fe_all {메뉴코드}      # [1] 코드 개발 (목록 + 팝업)
          ↓
-/PI-test-fe                # [2] Vitest 단위테스트
+/PI_test_fe                # [2] Vitest 단위테스트
          ↓
 mockoon-cli start ...      # [3] Mockoon 기동 후 수동 확인
          ↓

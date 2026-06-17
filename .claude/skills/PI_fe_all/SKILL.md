@@ -1,6 +1,6 @@
 ---
-name: PI-fe-all
-description: FE 목록 화면 + 팝업 전체 생성 (기본 `{메뉴코드}.vue` + `{메뉴코드}Edt.vue`, 변형 `Sch`/`Set`/업무별 팝업 포함). /PI-fe-all {메뉴코드}
+name: PI_fe_all
+description: FE 목록 화면 + 팝업 전체 생성 (기본 `{메뉴코드}.vue` + `{메뉴코드}Edt.vue`, 변형 `Sch`/`Set`/업무별 팝업 포함). /PI_fe_all {메뉴코드}
 when_to_use: "FE 전체 개발해줘", "목록이랑 팝업 다 만들어줘", "FE 화면 처음부터 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,15 +8,15 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# FE 전체 화면 개발 (목록+팝업) [PI-fe-all]
+# FE 전체 화면 개발 (목록+팝업) [PI_fe_all]
 
 BE spec.md 기반으로 목록 화면과 팝업 컴포넌트를 한 번에 생성한다. 기본형은 `{메뉴코드}.vue` + `{메뉴코드}Edt.vue`이며, 실제 FE 표본처럼 `mdbz01Sch.vue`(검색), `mdbz01Set.vue`(설정), `Ivst01Proc`/`Ivst01Cancel`/`Ivst01ProcCancel`/`Ivst01ReqInvenMove` 같은 업무별 다중 팝업 조합도 허용한다.
 
 ## 사용법
 
 ```
-/PI-fe-all {메뉴코드}
-예: /PI-fe-all mdct01
+/PI_fe_all {메뉴코드}
+예: /PI_fe_all mdct01
 ```
 
 ## 실행 절차

@@ -1,6 +1,6 @@
 ---
-name: PI-be-comp
-description: BE 비즈니스 레이어 개발 (CompUtil→TxComp→Comp→Controller). Mapper·Dao 완료 후 실행. /PI-be-comp {메뉴코드}
+name: PI_be_comp
+description: BE 비즈니스 레이어 개발 (CompUtil→TxComp→Comp→Controller). Mapper·Dao 완료 후 실행. /PI_be_comp {메뉴코드}
 when_to_use: "Comp 만들어줘", "Controller 만들어줘", "비즈니스 레이어 만들어줘", "Comp TxComp Controller 개발" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# BE Comp 개발 [PI-be-comp]
+# BE Comp 개발 [PI_be_comp]
 
 다음 지시에 따라 **CompUtil → TxComp → Comp → Controller 레이어**를 개발한다.
 

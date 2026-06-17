@@ -1,6 +1,6 @@
 ---
-name: PI-be-inven
-description: BE 재고 확정 TxComp 개발 (InvenManager iw/ow/im/ad/rt 연동). /PI-be-inven {메뉴코드}
+name: PI_be_inven
+description: BE 재고 확정 TxComp 개발 (InvenManager iw/ow/im/ad/rt 연동). /PI_be_inven {메뉴코드}
 when_to_use: "입고 확정 만들어줘", "출고 확정 개발해줘", "재고 모듈 만들어줘", "InvenManager 연동해줘", "재고 증감 처리 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-opus-4-7
 ---
 
-# BE 재고 모듈 개발 [PI-be-inven]
+# BE 재고 모듈 개발 [PI_be_inven]
 
 다음 지시에 따라 **입출고 확정 TxComp (InvenManager 연동)**를 개발한다.
 

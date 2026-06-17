@@ -1,6 +1,6 @@
 ---
-name: PI-be-all
-description: BE 전체 레이어 일괄 개발 (Mapper→Dao→TxComp→Comp→Controller, 각 레이어 JUnit 통과 후 진행). /PI-be-all {메뉴코드}
+name: PI_be_all
+description: BE 전체 레이어 일괄 개발 (Mapper→Dao→TxComp→Comp→Controller, 각 레이어 JUnit 통과 후 진행). /PI_be_all {메뉴코드}
 when_to_use: "BE 전체 개발", "백엔드 전부 만들어줘", "전 레이어 개발", "백엔드 코드 다 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
@@ -8,12 +8,12 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 model: claude-sonnet-4-6
 ---
 
-# BE 전체 개발 [PI-be-all]
+# BE 전체 개발 [PI_be_all]
 
 다음 지시에 따라 **Mapper → Dao → CompUtil → TxComp → Comp → Controller** 전 레이어를 한 번에 개발한다.
 
 > **일반 메뉴 기능 개발용** — SIF 인터페이스 개발은 별도 스킬 사용
-> 개별 스킬(`/PI-be-mapper`, `/PI-be-dao`, `/PI-be-comp`)을 순차 통합한 명령어다.
+> 개별 스킬(`/PI_be_mapper`, `/PI_be_dao`, `/PI_be_comp`)을 순차 통합한 명령어다.
 > 각 레이어 JUnit 테스트 통과는 여전히 BLOCKING 조건이다 — 실패 시 수정 후 재실행.
 
 ---

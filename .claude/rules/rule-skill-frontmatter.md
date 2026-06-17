@@ -73,12 +73,14 @@ paths:
 
 skill 은 `description` 자동트리거가 기본이며, 추가로 `paths` / 호출제어 / 인자힌트 / 도구권한 등을 지정한다.
 
+> **명명 규칙 (2026-06 통일)**: 스킬 디렉토리명(=슬래시 명령어)은 **언더스코어(snake_case)** 로 통일한다. 하이픈 금지. 번호형(`SD_311`)·동작형(`PI_be_all`) 모두 언더스코어를 쓴다. → `/PI` 입력 시 구분자 예측이 일관된다.
+
 ### 4-1. 기본 예시
 
 ```yaml
 ---
-name: PI-be-mapper
-description: BE Mapper 레이어 개발 (Mapper.java + Mapper.xml, MyBatis 쿼리 + JUnit). /PI-be-mapper {메뉴코드}
+name: PI_be_mapper
+description: BE Mapper 레이어 개발 (Mapper.java + Mapper.xml, MyBatis 쿼리 + JUnit). /PI_be_mapper {메뉴코드}
 when_to_use: "Mapper 만들어줘", "MyBatis 쿼리 작성해줘", "Mapper.xml 만들어줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
@@ -117,7 +119,7 @@ model: claude-sonnet-4-6
 
 ### 4-4. description / when_to_use 작성 가이드
 
-- `description` 은 **동작 요약 + 슬래시 호출 형식** 만 적는다 (예: `BE 전체 레이어 일괄 개발. /PI-be-all {메뉴코드}`).
+- `description` 은 **동작 요약 + 슬래시 호출 형식** 만 적는다 (예: `BE 전체 레이어 일괄 개발. /PI_be_all {메뉴코드}`).
 - 트리거 문구("…만들어줘", "…돌려줘") 는 **`when_to_use` 로 분리**한다. 1,536자 캡을 description 이 다 쓰지 않도록 한다.
 - `description` 한 줄 + `when_to_use` 한 줄 구조가 자동트리거 정확도가 가장 높다.
 
@@ -161,7 +163,7 @@ arguments: [component, from, to]
 
 - 일반 Markdown frontmatter(meta) 규칙: → `.claude/rules/md-frontmatter.md`
 - 실제 rule frontmatter 예: `.claude/rules/area_btn.md`(동적로딩), `.claude/rules/repo-paths.md`(항상로딩)
-- 실제 skill frontmatter 예: `.claude/skills/PI-be-mapper/SKILL.md`
+- 실제 skill frontmatter 예: `.claude/skills/PI_be_mapper/SKILL.md`
 - Claude Code 공식 문서:
   - [Memory · Path-scoped rules](https://code.claude.com/docs/en/memory#path-specific-rules)
   - [Skills · Frontmatter reference](https://code.claude.com/docs/en/skills#frontmatter-reference)
