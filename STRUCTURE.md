@@ -2,14 +2,14 @@
 title: cloud-wms-ai 레포 전체 디렉토리 구조 및 영역 역할
 description: 레포 최상위 디렉토리 구조, 각 영역의 역할, 메뉴별 산출 위치와 경계 규칙. 프롬프트 개정·문서 생성/재생성의 기준 문서. (2026-06 재설계 적용)
 status: active
-version: 2.0.0
+version: 2.1.0
 wms_meta: true
 project: cloud-wms-doc
 agent_usage: reference
 domain: common
 applies_to:
   - "**"
-last_verified: 2026-06-17
+last_verified: 2026-06-18
 ---
 
 # cloud-wms-ai 레포 전체 디렉토리 구조
@@ -31,7 +31,8 @@ cloud-wms-ai\   (현 cloud-wms-doc)
 ├── spec\             # 메뉴별 설계 정본 (마크다운)
 ├── prototype\        # 검증용 화면 (공용 셸 + 메뉴별 wireframe)
 ├── patterns\         # 소스코드 패턴 (HOW)
-└── deliverables\     # 고객 제출 산출물
+├── deliverables\     # 고객 제출 산출물
+└── scripts\          # 레포 유틸 스크립트 (문서 색인 생성 등)
 ```
 
 | 폴더 | 역할 | 읽는 사람 | 매체 |
@@ -41,8 +42,10 @@ cloud-wms-ai\   (현 cloud-wms-doc)
 | `prototype/` | 화면이 이렇게 생겼다 (검증용) | PL·PM·고객 | 실행 HTML/JS |
 | `patterns/` | 코드는 이 패턴으로 짜라 | AI·개발자 | 마크다운 |
 | `deliverables/` | 고객 제출 문서 | 고객 | 문서·엑셀·PPT |
+| `scripts/` | 레포 유틸 스크립트 (콘텐츠 아님) | 개발자 | 파이썬 |
 
 원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `knowledgebase/`·`spec/{메뉴}/` 안에서만 쓴다.
+`scripts/`는 콘텐츠가 아니라 도구다. 현재 `gen-md-map.py`(레포 문서 지도 → `knowledgebase/20-md-index.html` 생성기) 보유.
 
 ---
 
@@ -53,6 +56,7 @@ knowledgebase/
 ├── 00-overview.md       개요
 ├── 10-domain/           메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람 작성)
 ├── 20-md-index.md       MD 문서 색인 (문서 위치)
+├── 20-md-index.html     ↑의 HTML 뷰 — scripts/gen-md-map.py 생성물 (직접 편집 금지)
 ├── 30-src-index/        소스코드 색인 (코드 위치 — 실제 코드는 BE/FE 레포)
 ├── 40-install-guide/    설치·셋업
 ├── 50-dev-workflow/     개발 워크플로우
@@ -86,6 +90,21 @@ prototype/
 ├── _common-m/           모바일 공용 셸 (menu·main·mobile.css·ui-standard·assets·common/_template)
 ├── {메뉴}/              PC 검증물 — {메뉴}-wireframe.html + {메뉴}-mock-data.js   〔/SD_311〕
 └── {메뉴}m/             모바일 검증물 — {메뉴}m-wireframe.html + {메뉴}m-mock-data.js  〔/SD_312〕
+```
+
+---
+
+## patterns/ (코드 작성 패턴 — HOW)
+
+```
+patterns/
+├── 00-overview.md       패턴 개요
+├── 10-screen-design/    화면설계 패턴 (10-web · 20-pda)
+├── 20-database/         DB 패턴 (도메인·타입·변경이력)
+├── 30-backend/          BE 패턴 (10-architecture · 20-rule)
+├── 40-frontend/         FE 패턴 (10-architecture · 20-convention)
+├── 50-interface/        연동 패턴 (10-api · 10-convention)
+└── _common-arch/        공통 아키텍처 (be/fe-architecture·exceptions)
 ```
 
 ---
