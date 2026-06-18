@@ -32,8 +32,8 @@ allowed-tools: Bash, Read, Write, Edit
 생성하는 HTML에는 반드시 아래 2줄이 포함되어야 한다.
 
 ```html
-<link rel="stylesheet" href="../../../prototype/_common/wms-ui.css">
-<script src="../../../prototype/_common/wms-common.js"></script>
+<link rel="stylesheet" href="../_common/wms-ui.css">
+<script src="../_common/wms-common.js"></script>
 ```
 
 **wms-ui.css 에 이미 정의된 공통 스타일은 HTML `<style>` 블록에서 재정의하지 않는다.** 화면 고유 스타일(특정 색상, 특수 레이아웃, 추가 컴포넌트)만 최소로 추가한다.
@@ -61,7 +61,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 3단계 — 목업 데이터 JS 생성
 
-파일: `spec/$ARGUMENTS/$ARGUMENTS-02-mock-data.js`
+파일: `prototype/$ARGUMENTS/$ARGUMENTS-mock-data.js`
 
 - 첫 줄 주석: `/* $ARGUMENTS 목업 데이터 */`
 - 변수명: 메뉴코드 대문자 + `_DATA` (예: `MDFG01_DATA`)
@@ -78,6 +78,8 @@ const MDFG01_DATA = {
 ```
 
 ### 4단계 — HTML 생성
+
+생성 위치: `prototype/$ARGUMENTS/$ARGUMENTS-wireframe.html`
 
 1. `base.html` 을 복사한다.
 2. UI유형에 맞는 `gridX-*.html` 내용을 `{{MAIN_AREA}}` 위치에 삽입한다.
@@ -137,20 +139,20 @@ const MDFG01_DATA = {
 
 1. `prototype/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
    ```html
-   <li class="submenu-item" onclick="loadContent('../spec/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('$ARGUMENTS/$ARGUMENTS-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 2. `prototype/_common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
    ```html
-   <li class="submenu-item" onclick="loadContent('../../spec/$ARGUMENTS/$ARGUMENTS-02-wireframe.html', '{메뉴명}')">{메뉴명}</li>
+   <li class="submenu-item" onclick="loadContent('../$ARGUMENTS/$ARGUMENTS-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
 3. 이미 등록된 메뉴코드면 중복 추가하지 않는다.
 
 ---
 
 ### 6단계 — 완료 체크리스트
-- [ ] `$ARGUMENTS-02-mock-data.js` 생성 (메인 10건 이상·서브 5건 이상)
-- [ ] `$ARGUMENTS-02-wireframe.html` 에 `<link rel="stylesheet" href="../../../prototype/_common/wms-ui.css">` 포함
-- [ ] `$ARGUMENTS-02-wireframe.html` 에 `<script src="../../../prototype/_common/wms-common.js"></script>` 포함
+- [ ] `$ARGUMENTS-mock-data.js` 생성 (메인 10건 이상·서브 5건 이상)
+- [ ] `$ARGUMENTS-wireframe.html` 에 `<link rel="stylesheet" href="../_common/wms-ui.css">` 포함
+- [ ] `$ARGUMENTS-wireframe.html` 에 `<script src="../_common/wms-common.js"></script>` 포함
 - [ ] 공통 스타일 CSS를 화면 `<style>` 에서 재정의하지 않음
 - [ ] `<title>` 및 헤더에 `{메뉴명} [{메뉴코드}]` 정확히 표시
 - [ ] 검색 영역 컬럼/컴포넌트가 요건과 일치
