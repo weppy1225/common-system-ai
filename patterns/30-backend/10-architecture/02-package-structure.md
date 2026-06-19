@@ -1,6 +1,6 @@
 ---
 title: 백엔드 패키지 구조
-description: cloud-wms-be의 Java 소스 패키지 구조(be/bm/fw/sif/test/vm)와 파일 명명 규칙을 참조할 때 사용
+description: BE의 Java 소스 패키지 구조(be/bm/fw/sif/test/vm)와 파일 명명 규칙을 참조할 때 사용
 status: active
 version: 1.0.0
 wms_meta: true
@@ -17,7 +17,7 @@ tags:
 # 백엔드 패키지 구조 (Backend Package Structure)
 
 ## 문서 개요
-- **프로젝트**: cloud-wms-be (Spring MVC 기반 WMS 시스템)
+- **프로젝트**: BE 레포 (Spring MVC 기반 WMS 시스템)
 - **최종 업데이트**: 2026년 2월 23일
 - **범위**: 전체 소스 구조, 패키지 구성, 파일 위치, 명명 규칙
 

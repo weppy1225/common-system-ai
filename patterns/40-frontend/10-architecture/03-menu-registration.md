@@ -29,7 +29,7 @@ tags:
 ### 파일 위치
 
 ```
-cloud-wms-fe/src/router/modules/be/{업무군코드}.js
+$FE_DIR/src/router/modules/be/{업무군코드}.js
 ```
 
 업무군 코드별 파일 예시: `iv3000.js`, `iw1000.js`, `md8000.js`

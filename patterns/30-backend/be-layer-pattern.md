@@ -46,7 +46,7 @@ tags:
 | `NotMeetConditionsException` | 업무 조건 미충족 |
 | `ResponseErrorException` | 시스템 오류 |
 
-> 출처: `../cloud-wms-be/src/main/java/fw/exception/warn/*.java`, `../cloud-wms-be/src/main/java/fw/exception/ResponseErrorException.java`
+> 출처: `$BE_DIR/src/main/java/fw/exception/warn/*.java`, `$BE_DIR/src/main/java/fw/exception/ResponseErrorException.java`
 
 ## 4. 공통 응답 패턴
 
@@ -57,4 +57,4 @@ tags:
 | `swalTitle`, `swalText`, `swalType` | 화면 메시지 표시용 공통 필드 |
 | 데이터 키 (예: `biz`, `bizCenter`, `bizList`) | 조회 응답 |
 
-> 출처: `../cloud-wms-be/src/main/java/fw/bean/ResponseData.java`
+> 출처: `$BE_DIR/src/main/java/fw/bean/ResponseData.java`

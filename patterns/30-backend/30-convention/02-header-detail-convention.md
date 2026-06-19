@@ -530,9 +530,9 @@ WMSPool.PROCESSING // "55" - 처리 상태
 WMSPool.COMPLETION // "77" - 확정 상태
 ```
 
-> 출처: `../cloud-wms-be/src/main/java/fw/constant/WMSPool.java`
+> 출처: `$BE_DIR/src/main/java/fw/constant/WMSPool.java`
 >
-> 미확인: `WMSPool.CONFIRMED` 상수와 값 `"20"`은 `../cloud-wms-be`에서 확인되지 않았다. `iwrq01` 소스에서는 `WMSPool.STAND_BY`만 직접 사용한다.
+> 미확인: `WMSPool.CONFIRMED` 상수와 값 `"20"`은 `$BE_DIR`에서 확인되지 않았다. `iwrq01` 소스에서는 `WMSPool.STAND_BY`만 직접 사용한다.
 
 ---
 
@@ -560,7 +560,7 @@ List<String> docNoList = batchBean.getDocNoList();
 ```
 
 > **규칙**: 문서번호 채번은 반드시 Dao에서 처리. Comp/Controller에서 직접 호출 금지.
-> 출처: `../cloud-wms-be/src/main/java/be/iw1000/iwrq01/IWRQ01Dao.java`
+> 출처: `$BE_DIR/src/main/java/be/iw1000/iwrq01/IWRQ01Dao.java`
 >
 > 미확인: 예시 `"IW20260101001"` 자체는 `DocNoGenerator` 출력값을 직접 확인하지 못했으므로 형식 예시로 단정하지 않는다. 실제 조합 근거는 `IWRQ01Dao.getInwhNo()`의 `InvenPool.IW`, `baseYmd`, `incCnt` 호출이다.
 

@@ -20,9 +20,9 @@ tags:
 
 ## 1. 프로젝트 개요
 
-- **이름**: cloud-wms-fe (창고관리시스템 프론트엔드)
+- **이름**: FE 레포 (창고관리시스템 프론트엔드)
 - **스택**: Vue 3 + Vite + Pinia + Vue Router + AUI Grid + axios + vue-i18n
-- **대응 백엔드**: `cloud-wms-be` (Spring + MyBatis)
+- **대응 백엔드**: BE 레포 (Spring + MyBatis)
 - **이중 UI**: PC(`src/views/be`) / 모바일(`src/views/bm`)
 - **메뉴 코드 체계**: 메뉴코드는 **영문소문자 4자 + 숫자 2자** 고정 — 상세는 `patterns/40-frontend/20-convention/01-naming.md`. 예: `md8000 > mdct01` (거래처), `iv3000 > ivst01` (재고현황)
 

@@ -85,7 +85,7 @@ tags:
 > 각 메뉴 `{메뉴}-data-model.md`는 **업무-테이블 매핑·관계·상태값 의미**만 다룬다. **컬럼 단위 타입·길이·NN·default의 정답(Source of Truth)은 살아있는 DB**이며, 정적 산출물(테이블정의서 xlsx 등)은 생성 시점 스냅샷이라 최신이 아닐 수 있다. 정확한 값이 필요하면 **DB를 직접 조회**한다.
 
 - **DB:** PostgreSQL, schema `public`.
-- **접속 정보 위치:** `cloud-wms-be/src/main/resource/prop/application-{dev|test|prod}.properties`. **비밀정보는 문서에 적지 않고 이 파일에서 읽는다.**
+- **접속 정보 위치:** `$BE_DIR/src/main/resource/prop/application-{dev|test|prod}.properties`. **비밀정보는 문서에 적지 않고 이 파일에서 읽는다.**
 
 **확인 방법 — DB 직접 조회 (`information_schema`):** 메뉴별 테이블 목록만 `IN (...)`에 넣어 조회한다.
 ```sql

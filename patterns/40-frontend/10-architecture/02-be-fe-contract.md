@@ -18,7 +18,7 @@ related:
 
 # BE ↔ FE 연동 규약
 
-대응 백엔드: `cloud-wms-be` (Spring + MyBatis).
+대응 백엔드: BE 레포 (Spring + MyBatis).
 
 ## 1. API 경로 규약
 

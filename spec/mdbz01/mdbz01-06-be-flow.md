@@ -208,7 +208,7 @@ sequenceDiagram
 
 ### 3-6. 대행의뢰신청업체 조회
 
-**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
+**주의: 이 플로우는 현재 FE Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
 
 ```mermaid
 sequenceDiagram
@@ -223,7 +223,7 @@ sequenceDiagram
 
 ### 3-7. 의뢰 수락/거절
 
-**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
+**주의: 이 플로우는 현재 FE Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
 
 ```mermaid
 sequenceDiagram
@@ -324,7 +324,7 @@ sequenceDiagram
 
 ### 3-12. 의뢰 취소 (의뢰자)
 
-**주의: 이 플로우는 현재 cloud-wms-fe Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
+**주의: 이 플로우는 현재 FE Vue 화면에 연결되어 있지 않으며, [mdbz01-99-issues.md](./mdbz01-99-issues.md)의 ISSUE-01을 참조한다.**
 
 ```mermaid
 sequenceDiagram

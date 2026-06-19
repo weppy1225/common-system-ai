@@ -1,6 +1,6 @@
 ---
 title: FE 폴더 구조
-description: cloud-wms-fe 소스 디렉토리 구조, views/be 패턴, components 책임 분리, api/router 구조를 설명한다. FE 파일 생성 위치 결정 시 필수 참조.
+description: FE 소스 디렉토리 구조, views/be 패턴, components 책임 분리, api/router 구조를 설명한다. FE 파일 생성 위치 결정 시 필수 참조.
 status: active
 version: 1.0.0
 wms_meta: true

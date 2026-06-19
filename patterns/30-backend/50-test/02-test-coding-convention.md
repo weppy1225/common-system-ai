@@ -337,7 +337,7 @@ rtnBean.setModDt(DateTool.now());
 | Hamcrest | `org.hamcrest.Matchers.containsString` (static import) |
 
 > **javax vs jakarta**: 이 프로젝트는 `javax.validation` 을 사용합니다. `jakarta.validation` 사용 금지.
-> 버전 근거: `../cloud-wms-be/build.gradle` 기준 `org.springframework.boot` `2.7.18`, 테스트는 `useJUnitPlatform()`으로 JUnit 5를 사용한다.
+> 버전 근거: `$BE_DIR/build.gradle` 기준 `org.springframework.boot` `2.7.18`, 테스트는 `useJUnitPlatform()`으로 JUnit 5를 사용한다.
 
 ---
 
