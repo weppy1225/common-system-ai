@@ -46,6 +46,11 @@ def collect_scan_files():
 
 
 def main():
+    # Windows 콘솔(cp949)에서 em-dash 등 출력 시 크래시 방지
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     scan_files = collect_scan_files()
     referenced = set()   # 참조된 patterns/*.md (repo-상대 정규화)
     broken = []          # (참조한 문서, 깨진 경로)
