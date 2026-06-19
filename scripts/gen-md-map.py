@@ -166,7 +166,7 @@ def render(node, prefix):
     for f in sorted(node['files']):
         r = file_role(f)
         rt = ('<span class="fr" title="' + html.escape(r) + '">' + html.escape(short(r)) + '</span>') if r else ''
-        out += ('<div class="file"><a href="' + html.escape(f) + '">' + html.escape(f.split('/')[-1]) + '</a>' + rt + '<span class="z">' + sz(f) + '</span></div>')
+        out += ('<div class="file"><a href="../' + html.escape(f) + '">' + html.escape(f.split('/')[-1]) + '</a>' + rt + '<span class="z">' + sz(f) + '</span></div>')
     return out
 
 cards = []
