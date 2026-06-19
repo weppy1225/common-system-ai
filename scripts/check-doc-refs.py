@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+check-doc-refs.py — rules <-> patterns 문서 참조 무결성 가드
+
+검출 항목:
+  ERROR  깨진 참조 — 문서가 가리키는 patterns/*.md 경로가 실제로 없음
+  WARN   미참조 패턴 — patterns/*.md(00-overview 제외)를 아무 문서도 참조하지 않음 (신규 문서 누락 후보)
+
+스캔 대상: .claude/rules/, patterns/, knowledgebase/, CLAUDE.md, STRUCTURE.md, README.md
+
+종료 코드: ERROR 있으면 1, 없으면 0 (CI/커밋 훅 게이트용)
+
+실행: python scripts/check-doc-refs.py
+"""
+import os
+import re
+import sys
+import glob
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 참조를 스캔할 문서들
+SCAN_DIRS = [".claude/rules", "patterns", "knowledgebase"]
+SCAN_FILES = ["CLAUDE.md", "STRUCTURE.md", "README.md"]
+
+# patterns/...md 형태의 repo-상대 참조
+RE_PATTERN_REF = re.compile(r"patterns/[A-Za-z0-9/_.\-]+\.md")
+# 마크다운 상대 링크 (./xxx.md, ../xxx.md)
+RE_REL_LINK = re.compile(r"\]\((\.{1,2}/[A-Za-z0-9/_.\-]+\.md)\)")
+
+
+def norm(p):
+    return os.path.normpath(p).replace(os.sep, "/")
+
+
+def collect_scan_files():
+    files = []
+    for d in SCAN_DIRS:
+        files += glob.glob(os.path.join(ROOT, d, "**", "*.md"), recursive=True)
+    for f in SCAN_FILES:
+        fp = os.path.join(ROOT, f)
+        if os.path.isfile(fp):
+            files.append(fp)
+    return files
+
+
+def main():
+    scan_files = collect_scan_files()
+    referenced = set()   # 참조된 patterns/*.md (repo-상대 정규화)
+    broken = []          # (참조한 문서, 깨진 경로)
+
+    for sf in scan_files:
+        sf_rel = norm(os.path.relpath(sf, ROOT))
+        sf_dir = os.path.dirname(sf)
+        with open(sf, encoding="utf-8") as fh:
+            text = fh.read()
+
+        refs = set(RE_PATTERN_REF.findall(text))
+        # 상대 링크는 해당 파일 기준으로 resolve
+        for rel in RE_REL_LINK.findall(text):
+            resolved = norm(os.path.relpath(os.path.join(sf_dir, rel), ROOT))
+            if resolved.startswith("patterns/"):
+                refs.add(resolved)
+
+        for ref in refs:
+            ref_n = norm(ref)
+            referenced.add(ref_n)
+            if not os.path.isfile(os.path.join(ROOT, ref_n)):
+                broken.append((sf_rel, ref_n))
+
+    # 미참조 패턴 문서 (00-overview.md = 인덱스이므로 제외)
+    all_patterns = {
+        norm(os.path.relpath(p, ROOT))
+        for p in glob.glob(os.path.join(ROOT, "patterns", "**", "*.md"), recursive=True)
+    }
+    orphans = sorted(
+        p for p in all_patterns
+        if not p.endswith("00-overview.md") and p not in referenced
+    )
+
+    print("=== rules <-> patterns 참조 무결성 ===")
+    print(f"스캔 문서 {len(scan_files)}개 | 참조 {len(referenced)}개 | 패턴 문서 {len(all_patterns)}개\n")
+
+    if broken:
+        print(f"[ERROR] 깨진 참조 {len(broken)}건:")
+        for src, ref in sorted(broken):
+            print(f"  - {src}  ->  {ref}  (없음)")
+    else:
+        print("[OK] 깨진 참조 없음")
+
+    if orphans:
+        print(f"\n[WARN] 미참조 패턴 문서 {len(orphans)}건 (rule/문서에서 안 가리킴 — 누락 후보):")
+        for o in orphans:
+            print(f"  - {o}")
+    else:
+        print("[OK] 미참조 패턴 문서 없음")
+
+    return 1 if broken else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -6,15 +6,18 @@ paths:
 
 # WMS SIF 외부연동 컨벤션 (ERP/OMS/WES/DLV)
 
-## 참조 문서
+## 참조 문서 (SSoT)
 
 | 주제 | 문서 |
 |---|---|
-| IF 연동 규칙 개요 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
-| E2W(ERP→WMS) 컨벤션 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| E2W(ERP→WMS 수신) 코드 컨벤션·클래스 명명·예외·테스트 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
+| W2E(WMS→ERP 송신) 코드 템플릿·Retrofit2·SifWms* 클래스 위치 | `patterns/50-interface/10-convention/02-wms-to-erp-convention.md` |
 | 현재 IF 명세 | `spec/{메뉴코드}/{메뉴코드}-05-api.md` |
 | `sif_*` 테이블 스키마 | `patterns/20-database/00-overview.md` |
 | TxComp 기본 패턴 | `patterns/30-backend/40-guide/08-txcomp-writing-rules.md` |
+
+> 이 문서는 SIF 개발의 **판단 기준**(방향별 패키지·레이어 구성·예외 선택·BLOCKING 규칙)만 담는다.
+> **실제 코드 템플릿**(W2E 진입점·Retrofit2·클래스 위치)은 위 표의 패턴 문서를 참조한다.
 
 ---
 
@@ -44,35 +47,6 @@ paths:
 
 ---
 
-## W2E 송신 진입점 템플릿
-
-```java
-@Service @RequiredArgsConstructor(onConstructor = @__(@Autowired)) @Slf4j
-public class XXPC01SifProcComp extends SifWmsProcComp {
-    XXPC01SifProcApi xxpc01SifProcApi;
-    private final SifWmsPool.API procApi = SifWmsPool.API.getEnum(SifWmsPool.W2O_XX_PROC);
-
-    @PostConstruct
-    private void postConstruct() {
-        xxpc01SifProcApi = SifWmsProcApiServiceUtil.createService(XXPC01SifProcApi.class);
-    }
-
-    public ResponseData sendSifXxProcs(Integer bizSeq, List<XXPC01XxTran> data, String userId, String userNm) {
-        SifWmsTable apiData = super.getProcApiUrl(bizSeq, procApi.getApiId());
-        if (EmptyTool.empty(apiData) || StringPool.N.equals(apiData.getUseYn())) {
-            log.warn("IF 비활성 또는 설정 없음"); return new ResponseData();
-        }
-        SifWmsProcRequest<XXPC01SifProcXx> body =
-            new XXPC01SifProcCompUtil().makeRequestBody(bizSeq, SifWmsPool.PROC_TYPE_PROCESS, data, userId, userNm);
-        return sendXxIf(procApi, apiData, bizSeq, body);
-    }
-}
-```
-
-Retrofit2 API 인터페이스: `@POST/@PATCH/@PUT("{url}") + @Path(encoded=true) + @Body` 조합 사용.
-
----
-
 ## SIF 전용 예외 (`CompWarnException` 금지)
 
 `SifApiConnectionException` / `SifRequestFormatException` / `SifResponseFormatException`
@@ -94,12 +68,7 @@ SifWmsPool.PROC_TYPE_CANCEL  = "CANCEL"
 
 ## E2W/W2E 핵심 체크리스트
 
-**W2E 송신:**
-- [ ] `SifWmsProcComp` 상속 / `@PostConstruct`에서 `createService()`
-- [ ] `SifWmsPool.API.getEnum()` 으로 API ID 확보
-- [ ] `apiData == null || use_yn='N'` early return
-- [ ] RequestBody는 `SifProcCompUtil`로 분리
-- [ ] `@SifValid` 필수값 검증, `result.getSucceed()` 체크
+**W2E 송신**: → `patterns/50-interface/10-convention/02-wms-to-erp-convention.md §4` 참조
 
 **E2W 수신:**
 - [ ] 수신 데이터 `sif_*` 이력 INSERT
@@ -122,11 +91,4 @@ SifWmsPool.PROC_TYPE_CANCEL  = "CANCEL"
 
 ## 주요 클래스 위치
 
-| 클래스 | 경로 |
-|---|---|
-| `SifPool` | `sif/abc/SifPool.java` (수정 금지) |
-| `SifWmsPool` | `sif/wms/abc/SifWmsPool.java` |
-| `SifWmsProcComp` | `sif/wms/proc/abc/SifWmsProcComp.java` |
-| `SifWmsProcApiServiceUtil` | `sif/wms/proc/SifWmsProcApiServiceUtil.java` |
-| `SifWmsLog` | `sif/wms/abc/SifWmsLog.java` |
-| `@SifValid` | `sif/abc/annotation/` |
+→ `patterns/50-interface/10-convention/02-wms-to-erp-convention.md §3` 참조 (SifPool·SifWmsPool·SifWmsProcComp 등).

@@ -21,8 +21,7 @@ last_verified: 2026-04-07
 # CompUtil 작성규칙 (CompUtil Writing Rules)
 
 > **규칙 참조**: 클래스 어노테이션·CompUtil 생성 판단 기준은
-> [30-convention/01-coding-convention.md](../30-convention/01-coding-convention.md) 및
-> `.claude/rules/backend-convention.md` §2 참조.
+> [30-convention/01-coding-convention.md](../30-convention/01-coding-convention.md) 참조.
 > 이 문서는 CompUtil 작성 시 참고할 **실제 코드 패턴·예시**만 기술합니다.
 
 ## 1. 개요

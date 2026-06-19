@@ -251,5 +251,4 @@ int delete{리소스}sTX(Integer bizSeq, List<Integer> {리소스}Seqs)
 1. **파일과 DB는 동일 트랜잭션**: 파일 업로드 성공 → DB 저장, 실패 시 전체 롤백
 2. **부분 성공 방지**: 다건 삭제는 모두 성공 또는 모두 실패
 3. **메서드 단위 `@Transactional`**: 클래스 레벨 및 Comp/Dao/Controller 선언 금지. 기존 미준수 코드는 수정 대상 파일 작업 시 TxComp 메서드로 이동한다.
-4. **InvenManager / DocNoGenerator 호출은 TxComp에서만**: 상세는
-   `.claude/rules/biz-framework.md` 참조
+4. **InvenManager / DocNoGenerator 호출은 TxComp에서만**: Comp·Dao·Controller에서 직접 호출 금지.

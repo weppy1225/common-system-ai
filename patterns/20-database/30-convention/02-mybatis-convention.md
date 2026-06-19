@@ -383,4 +383,3 @@ ${@fw.config.DBConfig@DB_PREFIX}FN_CONCAT('%', #{itemNm}, '%')
 ## 9. 참조
 
 - SQL 텍스트 서식 (들여쓰기·anchor 규칙·대소문자): → [01-sql-query-style.md](./01-sql-query-style.md)
-- 쿼리 작성 판단 기준 / 체크리스트: → [../../.claude/rules/db-convention.md](../../.claude/rules/db-convention.md)

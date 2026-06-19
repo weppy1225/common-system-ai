@@ -45,7 +45,9 @@ cloud-wms-ai\   (현 cloud-wms-doc)
 | `scripts/` | 레포 유틸 스크립트 (콘텐츠 아님) | 개발자 | 파이썬 |
 
 원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `knowledgebase/`·`spec/{메뉴}/` 안에서만 쓴다.
-`scripts/`는 콘텐츠가 아니라 도구다. 현재 `gen-md-map.py`(레포 문서 지도 → `knowledgebase/20-md-index.html` 생성기) 보유.
+`scripts/`는 콘텐츠가 아니라 도구다.
+- `gen-md-map.py` — 레포 문서 지도 → `knowledgebase/20-md-index.html` 생성기
+- `check-doc-refs.py` — rules↔patterns 참조 무결성 가드. 깨진 참조(ERROR)·미참조 패턴 문서(WARN)를 검출. `python scripts/check-doc-refs.py`, ERROR 있으면 종료코드 1.
 
 ---
 

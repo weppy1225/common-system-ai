@@ -25,6 +25,7 @@ WMS SIF(System Interface) 외부연동 개발 패턴 및 API 명세 모음.
 | `10-api/` | 인터페이스 API 목록 및 상세 명세 |
 | `90-history/` | 명세·API 변경 이력 |
 
-## 관련 규칙
+## 코딩 컨벤션
 
-- 개발 시 반드시 `.claude/rules/sif-convention.md` 참조
+- E2W(ERP→WMS 수신): `10-convention/01-erp-to-wms-convention.md`
+- W2E(WMS→ERP 송신): `10-convention/02-wms-to-erp-convention.md`

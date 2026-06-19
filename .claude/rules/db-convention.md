@@ -24,15 +24,11 @@ paths:
 
 ## §1 Mapper 메서드 네이밍
 
-| 접두사 | 의미 |
-|---|---|
-| `search*` | 목록 조회 (페이징 포함) |
-| `select*` | 단건 조회 |
-| `insert*` | 등록 |
-| `update*` | 수정 |
-| `delete*` | 삭제 처리 (`use_yn='N'` / `del_yn='Y'` / 물리삭제 중 실제 테이블 정책 적용) |
-| `exist*` | 존재 여부 확인 (boolean) |
-| `count*` | 건수 조회 |
+메서드 접두사 표(SSoT) → `patterns/20-database/30-convention/02-mybatis-convention.md §2.2` 참조
+(`search*s`·`select*`·`insert*`/`insert*s`·`update*`/`update*s`·`delete*`/`delete*s`·`check*`·`get*`).
+
+- 존재/중복 검증 조회는 `check*` 사용 (`exist*` 아님).
+- 건수·단일 값 조회는 `get*` 사용 (`count*` 아님).
 
 ## §2 `@Param` 사용 기준
 

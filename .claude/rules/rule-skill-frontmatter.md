@@ -69,6 +69,25 @@ paths:
 
 ---
 
+### 3-1. Rule 본문 내 patterns 참조 규칙
+
+- rule 본문에는 patterns 문서 내용을 길게 인라인하지 않는다. rule은 판단 기준과 금지/필수 규칙만 담고, 상세 구현 패턴은 `patterns/**/00-overview.md` 또는 핵심 SSoT leaf 문서로 연결한다.
+- rule이 특정 영역 전체를 안내해야 하면 개별 leaf 문서를 모두 나열하지 말고 가장 가까운 `00-overview.md`를 우선 참조한다.
+- 특정 leaf 문서가 없으면 잘못 구현될 정도로 중요한 경우에만 rule에서 leaf 문서를 직접 참조한다.
+- 신규 `patterns/**/*.md` 문서를 추가할 때는 해당 디렉토리 또는 상위 영역의 `00-overview.md`에 반드시 인덱스 항목을 추가한다. 모든 rule에 신규 leaf를 직접 추가하지 않는다.
+- 신규 문서가 기존 rule의 핵심 SSoT를 대체하거나, rule의 필수 판단 기준이 되는 경우에만 관련 rule의 `참조 문서 (SSoT)` 표도 함께 갱신한다.
+- rule의 참조 표는 "문서 목록"이 아니라 "AI가 어떤 문서를 먼저 열어야 하는지 알려주는 라우팅 표"로 작성한다.
+- 참조 경로는 저장소 루트 기준 상대 경로로 쓰고, 작성 후 실제 파일 존재 여부를 확인한다.
+
+| 참조 대상 | 권장 방식 | 예 |
+|---|---|---|
+| 영역 전체 | 가장 가까운 `00-overview.md` | `patterns/10-screen-design/10-web/00-overview.md` |
+| DB 전반 | DB overview | `patterns/20-database/00-overview.md` |
+| 구현을 좌우하는 핵심 규칙 | leaf 직접 참조 | `patterns/30-backend/40-guide/05-mapper-xml-writing-rules.md` |
+| SIF 방향별 핵심 컨벤션 | leaf 직접 참조 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
+
+---
+
 ## 4. Skill frontmatter (`.claude/skills/*/SKILL.md`)
 
 skill 은 `description` 자동트리거가 기본이며, 추가로 `paths` / 호출제어 / 인자힌트 / 도구권한 등을 지정한다.
@@ -156,6 +175,10 @@ arguments: [component, from, to]
 - [ ] 인자 받는 skill 에 `argument-hint` 를 붙였는가?
 - [ ] skill `allowed-tools` 를 실제 사용하는 도구로만 한정했는가?
 - [ ] `paths` 글로브 값을 추정 없이 실제 대상으로 확인했는가?
+- [ ] rule 본문에 상세 패턴을 과도하게 인라인하지 않고 `patterns` 문서로 분리했는가?
+- [ ] 영역 전체 참조는 개별 leaf 나열보다 가장 가까운 `00-overview.md`를 우선 사용했는가?
+- [ ] 신규 `patterns/**/*.md` 추가 시 해당 `00-overview.md` 인덱스를 갱신했는가?
+- [ ] rule에서 직접 참조한 leaf 문서는 핵심 SSoT 또는 BLOCKING 판단 기준인가?
 
 ---
 
