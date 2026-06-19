@@ -8,7 +8,7 @@ workspace 하위 3개 레포는 git 운영 방식이 다르다. 작업 전 **어
 
 | 레포 | 운영 개념 | 방식 |
 |---|---|---|
-| `cloud-wms-doc` (AI 허브, 현재) | 없음 | main 직접 푸시 |
+| `cloud-wms-ai` (AI 허브, 현재) | 없음 | main 직접 푸시 |
 | `cloud-wms-be` | 있음 | 운영 전/후로 다름 |
 | `cloud-wms-fe` | 있음 | 운영 전/후로 다름 |
 

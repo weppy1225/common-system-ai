@@ -18,7 +18,7 @@ tags:
 
 ```
 workspace/
-├── {프로젝트}-ai/    # AI 허브 (현재 cloud-wms-doc). 스킬·규칙·spec·prototype 보유. 스킬 실행 위치(CWD)
+├── {프로젝트}-ai/    # AI 허브 (예: cloud-wms-ai). 스킬·규칙·spec·prototype 보유. 스킬 실행 위치(CWD)
 ├── {프로젝트}-be/    # 백엔드. src/main/java, DEV_DOC, gradle
 └── {프로젝트}-fe/    # 프론트엔드. src/views, package.json
 ```

@@ -1,4 +1,4 @@
-# cloud-wms-doc
+# cloud-wms-ai
 
 WMS AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스코드 패턴·산출물·BE/FE 개발 자동화 스킬을 통합 관리하며, AI 에이전트(Claude Code·Codex)가 WMS 개발 전 주기를 수행하기 위한 지식·규칙·명령의 단일 허브로 동작한다.
 
@@ -13,7 +13,7 @@ WMS AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스
 ## 디렉토리 구조
 
 ```
-cloud-wms-ai\   (현 cloud-wms-doc)
+cloud-wms-ai\
 ├── .claude\
 │   ├── skills\        # 슬래시 커맨드 스킬 (개발 자동화 + 산출물 자동화)
 │   └── rules\         # 항상 적용되는 UI·문서·코딩 규칙
