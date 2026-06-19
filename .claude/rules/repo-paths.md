@@ -14,7 +14,7 @@ tags:
 
 # 워크스페이스 레포 경로 규칙
 
-모든 프로젝트는 `workspace/` 디렉토리 아래 **프로젝트당 3개 레포**로 구성된다. 레포명은 **`{프로젝트}-{역할}`** 형식이고, 역할 접미사는 **항상 맨 끝**에 온다: AI 허브 `-ai`(현재는 `-doc`), 백엔드 `-be`, 프론트 `-fe`.
+모든 프로젝트는 `workspace/` 디렉토리 아래 **프로젝트당 3개 레포**로 구성된다. 레포명은 **`{프로젝트}-{역할}`** 형식이고, 역할 접미사는 **항상 맨 끝**에 온다: AI 허브 `-ai`, 백엔드 `-be`, 프론트 `-fe`.
 
 ```
 workspace/
@@ -34,10 +34,10 @@ workspace/
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 WS=$(dirname "$AI_DIR")
 
-# 프로젝트 접두어 = 허브 폴더명에서 마지막 역할 토큰(-doc/-ai 등) 제거
-#   cloud-wms-doc → cloud-wms · cloud-wms-ai → cloud-wms · bnk-wms-ai → bnk-wms
-BASE=$(basename "$AI_DIR")
-PREFIX=${BASE%-*}
+# 프로젝트 접두어 = 허브 폴더명에서 끝의 역할 토큰(-ai/-be/-fe)만 떼어낸 부분.
+#   "{프로젝트}-{역할}" 형식에서 "-역할"을 제거 → "{프로젝트}".
+AI_NAME=$(basename "$AI_DIR")      # 허브 레포 폴더명 (예: cloud-wms-ai)
+PREFIX=${AI_NAME%-*}               # 역할 토큰 제거 → 예: cloud-wms
 
 # 형제 = 같은 접두어 + -be / -fe (없으면 *-be / *-fe 탐색 폴백)
 BE_DIR="$WS/${PREFIX}-be"
@@ -46,12 +46,20 @@ BE_DIR="$WS/${PREFIX}-be"
 FE_DIR="$WS/${PREFIX}-fe"
 [ -d "$FE_DIR" ] || FE_DIR=$(find "$WS" -maxdepth 1 -type d -name '*-fe' | head -1)
 
-echo "AI_DIR=$AI_DIR"; echo "PREFIX=$PREFIX"; echo "BE_DIR=$BE_DIR"; echo "FE_DIR=$FE_DIR"
+# 레포 이름(NAME) — 산문·로그·메시지에서 "프로젝트명 단어"가 필요할 때.
+# DIR 의 basename 으로 뽑는다(${PREFIX}-be 가 아니라) → find 폴백으로 실폴더명이
+# 접두어와 달라도 실제 폴더명을 그대로 따른다.
+BE_NAME=$(basename "$BE_DIR")      # cloud-wms-be
+FE_NAME=$(basename "$FE_DIR")      # cloud-wms-fe
+
+echo "AI_DIR=$AI_DIR  AI_NAME=$AI_NAME  PREFIX=$PREFIX"
+echo "BE_DIR=$BE_DIR  BE_NAME=$BE_NAME"
+echo "FE_DIR=$FE_DIR  FE_NAME=$FE_NAME"
 ```
 
 `BE_DIR` 또는 `FE_DIR` 이 비어 있으면(형제 레포를 못 찾으면) **사용자에게 경로를 직접 묻는다.**
 
-Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`Split-Path`, `Get-ChildItem -Directory -Filter '*-be'`).
+Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`Split-Path`, `Get-ChildItem -Directory -Filter '*-be'`). 이름은 `$AI_NAME = Split-Path $AI_DIR -Leaf`, `$BE_NAME = Split-Path $BE_DIR -Leaf`, `$FE_NAME = Split-Path $FE_DIR -Leaf` 로 뽑는다.
 
 ---
 
@@ -62,8 +70,10 @@ Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다(`
 | `src/main/java/`, `src/main/resource/`, `DEV_DOC/`, `build/`, `./gradlew`, `db.md`, `api.md` 등 BE 산출물 | `$BE_DIR` | `$BE_DIR/src/main/java/be/...` |
 | `src/views/`, `package.json`, `vitest/` 등 FE 산출물 | `$FE_DIR` | `$FE_DIR/src/views/be/...` |
 | `spec/`, `prototype/`, `patterns/`, `deliverables/` 화면설계·문서 | `$AI_DIR` (허브, CWD) | `$AI_DIR/spec/{메뉴코드}/...` |
+| 프로젝트명 단어(산문·로그·메시지에 들어가는 레포명) | `$AI_NAME` / `$BE_NAME` / `$FE_NAME` | `"BE(\`$BE_NAME\`) 소스를 읽는다"` |
 
 - **BE 전용 스킬**: 작업 시작 시 `cd "$BE_DIR"` 후 진행하면 스킬 본문의 상대경로(`src/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)가 그대로 동작한다.
 - **FE 전용 스킬**: `cd "$FE_DIR"` 후 진행하면 `src/views/...`, `package.json` 이 그대로 동작한다.
 - **허브 문서와 BE/FE를 동시에 다루는 스킬**(예: SD_db, SD_api): `cd` 하지 말고 위 표의 기준 변수(`$AI_DIR` / `$BE_DIR`)를 경로 앞에 붙여 명시한다.
+- **경로 vs 이름 구분**: 파일·디렉토리 **경로**가 필요하면 `$AI_DIR`/`$BE_DIR`/`$FE_DIR`(절대경로)을, 산문·로그·메시지에 들어가는 **레포명 단어**가 필요하면 `$AI_NAME`/`$BE_NAME`/`$FE_NAME` 을 쓴다 — 둘을 섞지 않는다. (`*_NAME` 은 항상 대응 `*_DIR` 의 basename 이다.)
 - **형제 레포(BE/FE)의 파일은 해당 스킬의 산출 대상이 아닌 한 읽기 전용으로 취급한다.**
