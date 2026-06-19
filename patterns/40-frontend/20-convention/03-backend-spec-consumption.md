@@ -4,7 +4,7 @@ description: FE AI가 BE spec 산출물을 직접 읽고 코드와 메뉴 문서
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: frontend
 tags:

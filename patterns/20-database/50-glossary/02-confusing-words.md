@@ -4,7 +4,7 @@ description: WMS 개발 시 혼동하기 쉬운 약어(IW, RQ, PC 등)를 확인
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

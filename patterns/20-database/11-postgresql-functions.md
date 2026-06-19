@@ -4,7 +4,7 @@ description: WMS DB에서 사용하는 PostgreSQL 커스텀 함수 목록과 사
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: database
 tags:

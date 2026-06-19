@@ -26,6 +26,7 @@ WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}
 - 값은 추정하지 않는다. 실제 파일, 명령 문서, 코드, DB 문서에서 확인한 값만 적는다.
 - key는 영문 snake_case를 사용한다.
 - 배열 값은 YAML list를 사용한다.
+- `repo_role`은 문서가 속한 레포의 **역할**만 적는다(`ai-hub` / `be` / `fe`). 브랜드·도메인이 들어간 실제 레포명(`cloud-wms-doc` 등)을 넣지 않는다 — 리브랜딩(예: cloud→bandai) 시 문서 일괄 수정이 발생하기 때문이다. 실제 레포 정체성은 git·폴더명에서 런타임 도출한다(→ `repo-paths.md`).
 - 경로는 저장소 루트 기준 상대 경로를 사용한다.
 - 민감정보, DB 접속정보, 토큰, 고객 데이터는 넣지 않는다.
 - Claude Code와 Codex가 공식적으로 해석하는 frontmatter와 WMS 내부 메타데이터를 섞어 설명하지 않는다.
@@ -48,7 +49,7 @@ description: AI 에이전트가 이 문서를 언제 써야 하는지 한 문장
 status: draft | active | deprecated | archived
 version: 1.0.0
 wms_meta: true
-project: 실제 레포명
+repo_role: ai-hub | be | fe
 applies_to:
   - path/or/glob
 agent_usage: instruction | memory | rule | workflow | command | skill | agent | spec | plan | task | output | reference
@@ -91,6 +92,6 @@ last_verified: YYYY-MM-DD
 - `agent_usage`가 문서의 역할을 정확히 나타내는가?
 - WMS 내부 필드를 쓴다면 `wms_meta: true`가 있는가?
 - `SKILL.md`는 Claude Code/Codex 공식 필드(`name`, `description` 등)를 우선 사용했는가?
-- `project`가 실제 레포명과 맞는가?
+- `repo_role`이 레포 역할(`ai-hub`/`be`/`fe`)로 적혔는가? (실제 레포명·브랜드명을 넣지 않았는가?)
 - `applies_to`, `inputs`, `outputs`, `related` 경로가 실제 근거와 맞는가?
 - 민감정보나 확인되지 않은 값이 없는가?

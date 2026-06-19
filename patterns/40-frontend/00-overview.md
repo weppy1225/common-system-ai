@@ -4,7 +4,7 @@ description: FE 개발 AI가 가장 먼저 읽어야 하는 문서. 프로젝트
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: frontend
 tags:

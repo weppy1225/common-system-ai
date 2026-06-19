@@ -4,7 +4,7 @@ description: WMS 출하(wms_outbiz_*), 출고(wms_outwh_*), 송장(wms_invoice_*
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

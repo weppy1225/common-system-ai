@@ -4,7 +4,7 @@ description: Controller·Comp·TxComp·Dao·Mapper·Bean 레이어 작성 시 �
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: backend
 tags:

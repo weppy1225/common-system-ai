@@ -4,7 +4,7 @@ description: WMS UI 화면요건 Markdown 문서를 생성할 때 출력 경로,
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 ---
 

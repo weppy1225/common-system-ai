@@ -4,7 +4,7 @@ description: 모든 메뉴에 공통으로 적용되는 F/W 수준의 예외 처
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: common
 ---

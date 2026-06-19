@@ -4,7 +4,7 @@ description: SD_312로 생성하는 PDA 모바일 화면 설계·프로토타입
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 ---
 

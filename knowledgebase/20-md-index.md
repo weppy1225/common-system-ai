@@ -4,7 +4,7 @@ description: spec/{메뉴}/ 설계 문서의 접미사별 의미·생성 스킬 
 status: active
 version: 4.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: common
 last_verified: 2026-06-18

@@ -4,7 +4,7 @@ description: WMS 백엔드에서 사용하는 프레임워크·라이브러리·
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: backend
 tags:

@@ -4,7 +4,7 @@ description: MyBatis Mapper.xml 파일 헤더·SELECT/INSERT/UPDATE/DELETE·WHER
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: backend
 tags:

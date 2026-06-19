@@ -4,7 +4,7 @@ description: mdpr01 사은품관리 화면의 검색영역, 프로모션 목록,
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: spec
 menu_code: mdpr01
 domain: master

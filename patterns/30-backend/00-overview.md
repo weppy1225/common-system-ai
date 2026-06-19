@@ -4,7 +4,7 @@ description: 백엔드 아키텍처·API/메뉴코드 규칙·코딩 컨벤션·
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 ---
 

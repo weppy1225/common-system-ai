@@ -4,7 +4,7 @@ description: WMS 시스템 관리(sm_*) 테이블 목록과 공통 컬럼 규칙
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

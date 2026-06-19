@@ -4,7 +4,7 @@ description: mdbz01 사업장의 화면 구성·레이아웃·UX 명세. Vue 파
 status: active
 version: 3.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01
 domain: master

@@ -4,7 +4,7 @@ description: FE와 BE 간 HTTP 메서드·URL 패턴·응답 네이밍·인증·
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: frontend
 tags:

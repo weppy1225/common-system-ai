@@ -4,7 +4,7 @@ description: WMS ERP/OMS/WES/DLV 외부연동 SIF 개발 패턴과 API 명세를
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: interface
 tags:

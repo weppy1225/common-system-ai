@@ -4,7 +4,7 @@ description: WMS에서 사용하는 공통코드(sm_comm_h/sm_comm_d) 헤더 목
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

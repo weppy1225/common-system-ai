@@ -4,7 +4,7 @@ description: ZText/ZSelect/ZCodeSelect/ZCodeMulti/ZRadio/ZCheckbox/ZCalendar/ZCa
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: frontend
 tags:

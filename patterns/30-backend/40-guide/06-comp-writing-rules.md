@@ -4,7 +4,7 @@ description: {MenuCode}Comp 클래스 선언·CRUD 메서드 패턴·유효성 �
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: backend
 tags:

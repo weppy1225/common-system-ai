@@ -4,7 +4,7 @@ description: mdpc01 PC관리 화면의 검색영역, PC 목록 그리드, 등록
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: spec
 menu_code: mdpc01
 domain: master

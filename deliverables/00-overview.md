@@ -4,7 +4,7 @@ description: 프로젝트 산출물 템플릿(10-templates)·원천자료(20-sou
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 ---
 

@@ -4,7 +4,7 @@ description: WMS 프로젝트에서 SQL 쿼리를 작성하거나 리뷰할 때 
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

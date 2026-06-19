@@ -4,7 +4,7 @@ description: AI가 개발 전에 읽는 메뉴 횡단 공통 배경지식 라이
 status: active
 version: 2.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: common
 last_verified: 2026-06-17

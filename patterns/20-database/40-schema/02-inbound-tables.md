@@ -4,7 +4,7 @@ description: WMS 입하(wms_inbiz_*) 및 입고(wms_inwh_*) 테이블 목록과 
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

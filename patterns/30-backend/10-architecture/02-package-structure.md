@@ -4,7 +4,7 @@ description: cloud-wms-be의 Java 소스 패키지 구조(be/bm/fw/sif/test/vm)�
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: backend
 tags:

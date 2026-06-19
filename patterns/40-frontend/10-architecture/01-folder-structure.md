@@ -4,7 +4,7 @@ description: cloud-wms-fe 소스 디렉토리 구조, views/be 패턴, component
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: frontend
 tags:

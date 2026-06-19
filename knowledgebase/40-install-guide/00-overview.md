@@ -4,7 +4,7 @@ description: cloud-wms 시스템의 빌드·배포·설치·운영에 관한 가
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 ---
 

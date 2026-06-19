@@ -4,7 +4,7 @@ description: mdbz01 사업장의 백엔드 업무별 시퀀스 다이어그램, 
 status: active
 version: 2.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01
 domain: master

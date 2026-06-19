@@ -4,7 +4,7 @@ description: mdbz01 사업장 설계 문서화 과정에서 식별된 소스-문
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: task
 menu_code: mdbz01
 domain: master

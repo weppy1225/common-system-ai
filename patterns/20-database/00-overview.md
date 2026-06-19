@@ -4,7 +4,7 @@ description: WMS PostgreSQL DB의 전체 스키마 구조, 도메인 구성, 테
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: database
 tags:

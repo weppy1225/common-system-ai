@@ -4,7 +4,7 @@ description: AI 에이전트(Claude Code)가 WMS BE·FE 개발을 수행할 때 
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: common
 tags:

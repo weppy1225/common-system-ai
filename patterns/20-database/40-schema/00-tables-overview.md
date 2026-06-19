@@ -4,7 +4,7 @@ description: WMS 전체 테이블 목록과 도메인별 그룹을 확인할 때
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

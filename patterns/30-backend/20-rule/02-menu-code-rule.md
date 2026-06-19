@@ -4,7 +4,7 @@ description: 신규 메뉴 개발 시 메뉴코드 채번·패키지 경로·API
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: rule
 domain: backend
 tags:

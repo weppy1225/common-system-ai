@@ -4,7 +4,7 @@ description: WMS BE 전 메뉴에 공통 적용되는 Controller-Comp-TxComp-Dao
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: common
 last_verified: "2026-06-09"

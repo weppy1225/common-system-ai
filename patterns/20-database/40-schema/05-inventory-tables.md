@@ -4,7 +4,7 @@ description: WMS 재고(wms_inven_*) 테이블 목록과 공통 컬럼 규칙을
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: database
 tags:

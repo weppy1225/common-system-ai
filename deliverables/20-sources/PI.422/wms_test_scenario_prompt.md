@@ -4,7 +4,7 @@ description: TxComp 기반 WMS 통합테스트 시나리오 문서를 생성할 
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 ---
 

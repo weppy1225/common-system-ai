@@ -4,7 +4,7 @@ description: 공통코드 조회·캐싱·변환 Pinia 스토어 사용법. conv
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: instruction
 domain: frontend
 tags:

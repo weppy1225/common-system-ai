@@ -4,7 +4,7 @@ description: WMS DB 테이블에 시퀀스(SEQUENCE)를 생성할 때 반드시 
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: rule
 domain: database
 tags:

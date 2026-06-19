@@ -4,7 +4,7 @@ description: ERP→WMS 품목 등록(E2W_PROD_REG) API Request/Response 필드 �
 status: active
 version: 1.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: interface
 tags:

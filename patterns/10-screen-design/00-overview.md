@@ -4,7 +4,7 @@ description: WMS WEB/PDA 화면 설계 및 프로토타입 작성 패턴 문서 
 status: active
 version: 1.1.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: reference
 domain: frontend
 tags:

@@ -1,10 +1,10 @@
 ---
 title: 워크스페이스 레포 경로 규칙
-description: AI 허브(wms-{code}-ai)에서 형제 BE/FE 레포의 src 경로를 결정하는 규칙. BE/FE 코드 생성·테스트·DB·spec 스킬 실행 전 STEP 0 에서 항상 적용한다.
+description: AI 허브에서 형제 BE/FE 레포의 src 경로를 결정하는 규칙. 허브 폴더명에서 역할 접미사만 떼어 형제를 도출하므로 레포명이 바뀌어도 동작한다. BE/FE 코드 생성·테스트·DB·spec 스킬 실행 전 STEP 0 에서 항상 적용한다.
 status: active
 version: 1.0.0
 wms_meta: true
-project: wms-{code}-ai
+repo_role: ai-hub
 agent_usage: rule
 tags:
   - workspace
@@ -14,18 +14,16 @@ tags:
 
 # 워크스페이스 레포 경로 규칙
 
-모든 프로젝트는 `workspace/` 디렉토리 아래 **프로젝트당 3개 레포**로 구성된다.
+모든 프로젝트는 `workspace/` 디렉토리 아래 **프로젝트당 3개 레포**로 구성된다. 레포명은 **`{프로젝트}-{역할}`** 형식이고, 역할 접미사는 **항상 맨 끝**에 온다: AI 허브 `-ai`(현재는 `-doc`), 백엔드 `-be`, 프론트 `-fe`.
 
 ```
 workspace/
-├── wms-{프로젝트코드}-ai/    # AI 허브. 스킬·규칙·화면설계(spec)·프로토타입(prototype) 보유. 스킬 실행 위치(CWD)
-├── wms-{프로젝트코드}-be/    # 백엔드. src/main/java, DEV_DOC, gradle
-└── wms-{프로젝트코드}-fe/    # 프론트엔드. src/views, package.json
+├── {프로젝트}-ai/    # AI 허브 (현재 cloud-wms-doc). 스킬·규칙·spec·prototype 보유. 스킬 실행 위치(CWD)
+├── {프로젝트}-be/    # 백엔드. src/main/java, DEV_DOC, gradle
+└── {프로젝트}-fe/    # 프론트엔드. src/views, package.json
 ```
 
-스킬은 **항상 AI 허브(`wms-{프로젝트코드}-ai`)에서 실행**된다. 따라서 BE/FE 코드 생성·테스트는 `..`(workspace) 기준 형제 레포의 `src` 디렉토리를 대상으로 한다.
-
-> 현재 실제 레포명이 `cloud-wms-doc` / `cloud-wms-be` / `cloud-wms-fe` 인 경우도 아래 폴백 규칙으로 동일하게 동작한다.
+스킬은 **항상 AI 허브에서 실행**된다. 형제 BE/FE 레포는 **허브 폴더명에서 역할 접미사만 떼어** 도출한다(아래). 따라서 `cloud-wms-*` → `bnk-wms-*` 처럼 **이름이 바뀌어도 규칙은 그대로** 동작한다. (역할 접미사 `-be`/`-fe`만 유지하면 됨)
 
 ---
 
@@ -36,20 +34,19 @@ workspace/
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 WS=$(dirname "$AI_DIR")
 
-# 프로젝트 코드: wms-{code}-ai 형식이면 {code} 추출 (아니면 빈 값)
-PROJECT_CODE=$(basename "$AI_DIR" | sed -nE 's/^wms-(.+)-ai$/\1/p')
+# 프로젝트 접두어 = 허브 폴더명에서 마지막 역할 토큰(-doc/-ai 등) 제거
+#   cloud-wms-doc → cloud-wms · cloud-wms-ai → cloud-wms · bnk-wms-ai → bnk-wms
+BASE=$(basename "$AI_DIR")
+PREFIX=${BASE%-*}
 
-# BE 레포: wms-{code}-be 우선 → cloud-wms-be 폴백 → *-be 탐색
-BE_DIR="$WS/wms-${PROJECT_CODE}-be"
-{ [ -n "$PROJECT_CODE" ] && [ -d "$BE_DIR" ]; } || BE_DIR="$WS/cloud-wms-be"
+# 형제 = 같은 접두어 + -be / -fe (없으면 *-be / *-fe 탐색 폴백)
+BE_DIR="$WS/${PREFIX}-be"
 [ -d "$BE_DIR" ] || BE_DIR=$(find "$WS" -maxdepth 1 -type d -name '*-be' | head -1)
 
-# FE 레포: wms-{code}-fe 우선 → cloud-wms-fe 폴백 → *-fe 탐색
-FE_DIR="$WS/wms-${PROJECT_CODE}-fe"
-{ [ -n "$PROJECT_CODE" ] && [ -d "$FE_DIR" ]; } || FE_DIR="$WS/cloud-wms-fe"
+FE_DIR="$WS/${PREFIX}-fe"
 [ -d "$FE_DIR" ] || FE_DIR=$(find "$WS" -maxdepth 1 -type d -name '*-fe' | head -1)
 
-echo "AI_DIR=$AI_DIR"; echo "BE_DIR=$BE_DIR"; echo "FE_DIR=$FE_DIR"
+echo "AI_DIR=$AI_DIR"; echo "PREFIX=$PREFIX"; echo "BE_DIR=$BE_DIR"; echo "FE_DIR=$FE_DIR"
 ```
 
 `BE_DIR` 또는 `FE_DIR` 이 비어 있으면(형제 레포를 못 찾으면) **사용자에게 경로를 직접 묻는다.**

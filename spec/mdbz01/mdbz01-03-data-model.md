@@ -4,7 +4,7 @@ description: mdbz01 사업장 업무의 물리 테이블 매핑, 상태 흐름, 
 status: active
 version: 2.0.0
 wms_meta: true
-project: cloud-wms-doc
+repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01
 domain: master
