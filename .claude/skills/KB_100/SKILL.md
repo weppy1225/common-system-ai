@@ -61,8 +61,14 @@ PowerShell로 워크스페이스 루트를 계산한다.
 ```powershell
 $DocRoot    = git rev-parse --show-toplevel
 $Workspace  = Split-Path $DocRoot -Parent
-$BePath     = "$Workspace\cloud-wms-be\src\main\java\be\$GROUP_CODE\$MENU_CODE"
-$FePath     = "$Workspace\cloud-wms-fe\src\views\be\$GROUP_CODE\$MENU_CODE"
+# 형제 레포는 허브 폴더명에서 역할 접미사만 떼어 도출 (→ .claude/rules/repo-paths.md)
+$Prefix     = (Split-Path $DocRoot -Leaf) -replace '-[^-]+$',''   # 허브 폴더명에서 끝의 역할 토큰(-ai 등) 제거 → 프로젝트 접두어
+$BeDir      = Join-Path $Workspace "$Prefix-be"
+if (-not (Test-Path $BeDir)) { $BeDir = (Get-ChildItem $Workspace -Directory -Filter '*-be' | Select-Object -First 1).FullName }
+$FeDir      = Join-Path $Workspace "$Prefix-fe"
+if (-not (Test-Path $FeDir)) { $FeDir = (Get-ChildItem $Workspace -Directory -Filter '*-fe' | Select-Object -First 1).FullName }
+$BePath     = "$BeDir\src\main\java\be\$GROUP_CODE\$MENU_CODE"
+$FePath     = "$FeDir\src\views\be\$GROUP_CODE\$MENU_CODE"
 $OutPath    = "spec\$MENU_CODE"
 $MenuUpper  = $MENU_CODE.ToUpper()   # 예: MDBZ01
 $Today      = Get-Date -Format "yyyy-MM-dd"

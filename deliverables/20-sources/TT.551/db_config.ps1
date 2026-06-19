@@ -29,8 +29,11 @@ $PSQL    = if ($PG_BIN) { "$PG_BIN\psql.exe"    } else { "psql"    }
 
 # 프로젝트 루트 (TT_551 → 05 이행(TT) → output → 루트)
 $PROJECT_ROOT    = (Resolve-Path "$PSScriptRoot\..\..\..").Path
-# BE 프로젝트 루트 (cloud-wms-doc 와 같은 워크스페이스 내 형제 프로젝트)
-$BE_PROJECT_ROOT = Join-Path (Split-Path $PROJECT_ROOT) "cloud-wms-be"
+# BE 프로젝트 루트 (AI 허브와 같은 워크스페이스 내 형제 프로젝트 — 허브 폴더명에서 접두어 도출)
+$WORKSPACE       = Split-Path $PROJECT_ROOT
+$REPO_PREFIX     = (Split-Path $PROJECT_ROOT -Leaf) -replace '-[^-]+$',''   # 허브 폴더명에서 끝의 역할 토큰(-ai 등) 제거 → 프로젝트 접두어
+$BE_PROJECT_ROOT = Join-Path $WORKSPACE "$REPO_PREFIX-be"
+if (-not (Test-Path $BE_PROJECT_ROOT)) { $BE_PROJECT_ROOT = (Get-ChildItem $WORKSPACE -Directory -Filter '*-be' | Select-Object -First 1).FullName }
 
 # test DB 컬럼 순서 기반 CSV 반환 — \copy FROM 컬럼 리스트 지정에 사용
 # 목적: test DB와 dev DB 컬럼 순서가 다를 때 \copy 데이터 오염 방지

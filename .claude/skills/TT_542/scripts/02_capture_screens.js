@@ -239,7 +239,7 @@ const SEL = {
 };
 
 // ── 팝업 좌표 픽셀 분석 (v-show / display:none 토글 fallback) ──
-const POPUP_HEADER_RGB = [48, 74, 110]; // #304a6e (cloud-wms-doc 프라이머리)
+const POPUP_HEADER_RGB = [48, 74, 110]; // #304a6e (cloud-wms-ai 프라이머리)
 const ALT_HEADER_RGB = [75, 104, 145];   // #4b6891 (wms-bnk-fe 팝업 헤더)
 const COLOR_TOL = 16;
 
@@ -385,7 +385,7 @@ async function captureToolbarButtons(page, dir, existingMap) {
         '.content-header-fncR [class*="Img"][title]',
         // wms-bnk-fe content-warpper 우측 추가 보강
         '.content-warpper .content-header button',
-        // cloud-wms-doc wireframe fallback
+        // cloud-wms-ai wireframe fallback
         '.toolbar button[title]',
         '.toolbar button',
         '.toolbar-left button',

@@ -98,8 +98,8 @@ OUT_FILE  = deliverables/30-output/05 이행(TT)/TT_542_사용자매뉴얼_PDA_{
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$FeRoot    = Join-Path $Workspace "wms-$ProjCode-fe"
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
+$FeRoot    = Join-Path $Workspace "$RepoPrefix-fe"
 ```
 
 ### W-1) 의존성 자동 설치
@@ -149,8 +149,8 @@ python ".claude\skills\TT_542\scripts\03_make_pptx.py"
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
-FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
+REPO_PREFIX="${REPO_NAME%-*}"
+FE_ROOT="$WORKSPACE/${REPO_PREFIX}-fe"
 ```
 
 ### B-1) 의존성 자동 설치

@@ -98,9 +98,9 @@ OUT_FILE  = deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고�
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$FeRoot    = Join-Path $Workspace "wms-$ProjCode-fe"
-$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
+$FeRoot    = Join-Path $Workspace "$RepoPrefix-fe"
+$BeRoot    = Join-Path $Workspace "$RepoPrefix-be"
 ```
 
 ### W-1) 의존성 자동 설치
@@ -156,9 +156,9 @@ Remove-Item -Recurse -Force "$DocRoot\output\05 이행(TT)\tmp_543"
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
-FE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-fe"
-BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
+REPO_PREFIX="${REPO_NAME%-*}"
+FE_ROOT="$WORKSPACE/${REPO_PREFIX}-fe"
+BE_ROOT="$WORKSPACE/${REPO_PREFIX}-be"
 ```
 
 ### B-1) 의존성 자동 설치

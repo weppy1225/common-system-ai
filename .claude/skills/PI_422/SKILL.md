@@ -68,7 +68,7 @@ XLSX_LIB    = deliverables/30-output/04 구현(PI)/node_modules/xlsx-populate
 $DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
 ```
 
 ### W-1) xlsx-populate 라이브러리 확인
@@ -97,7 +97,7 @@ node ".claude/skills/PI_422/scripts/gen_pi422.js" "{고객사명}" "{담당자�
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
+REPO_PREFIX="${REPO_NAME%-*}"
 
 DIST_DIR="$DOC_ROOT/dist"
 OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/04 구현(PI)"

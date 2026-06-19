@@ -125,8 +125,8 @@ OUTPUT_DIR/
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
+$BeRoot    = Join-Path $Workspace "$RepoPrefix-be"
 ```
 
 ### W-1) 실행 모드 자동 감지
@@ -221,8 +221,8 @@ Remove-Item -Recurse -Force "$DocRoot\output\05 이행(TT)\TT_550_DATA_{고객�
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
-BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
+REPO_PREFIX="${REPO_NAME%-*}"
+BE_ROOT="$WORKSPACE/${REPO_PREFIX}-be"
 
 BASE="$DOC_ROOT"
 SCRIPTS="$BASE/.claude/skills/TT_550/scripts"

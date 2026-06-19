@@ -101,8 +101,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 $DocRoot   = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName  = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
-$BeRoot    = Join-Path $Workspace "wms-$ProjCode-be"
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
+$BeRoot    = Join-Path $Workspace "$RepoPrefix-be"
 ```
 
 경로:
@@ -206,8 +206,8 @@ $html = [regex]::Replace($html, 'ERD Viewer · [^<]+', "ERD Viewer · $safeName 
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
-BE_ROOT="$WORKSPACE/wms-${PROJ_CODE}-be"
+REPO_PREFIX="${REPO_NAME%-*}"
+BE_ROOT="$WORKSPACE/${REPO_PREFIX}-be"
 
 OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)"
 ```

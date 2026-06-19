@@ -57,7 +57,7 @@ TEMPLATE    = deliverables/10-templates/02 분석(RA)/RA.314-요구사항정의�
 $DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 $Workspace = Split-Path $DocRoot -Parent
 $RepoName = Split-Path $DocRoot -Leaf
-if ($RepoName -match '^wms-(.+)-doc$') { $ProjCode = $Matches[1] } else { $ProjCode = "cloud" }
+$RepoPrefix = $RepoName -replace '-[^-]+$',''
 ```
 
 ### W-1) 에이전트 1 호출 명령 (회의록 읽기)
@@ -84,7 +84,7 @@ python ".claude\skills\RA_222\scripts\03_generate_excel.py"
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WORKSPACE=$(dirname "$DOC_ROOT")
 REPO_NAME=$(basename "$DOC_ROOT")
-if [[ "$REPO_NAME" =~ ^wms-(.+)-doc$ ]]; then PROJ_CODE="${BASH_REMATCH[1]}"; else PROJ_CODE="cloud"; fi
+REPO_PREFIX="${REPO_NAME%-*}"
 ```
 
 ### B-1) 에이전트 1 호출 명령 (회의록 읽기)
