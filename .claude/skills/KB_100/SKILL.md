@@ -26,7 +26,7 @@ allowed-tools: PowerShell, Read, Agent
 
 ## 1단계 — 메뉴 정보 조회 [메인 세션]
 
-`knowledgebase/menu-list.md` 를 Read 한다.
+`knowledgebase/15-menu-list.md` 를 Read 한다.
 `$ARGUMENTS` (대소문자 무관) 에 해당하는 행을 찾아 아래 값을 추출한다.
 
 | 변수 | 추출 방법 | 예시 |
@@ -50,7 +50,7 @@ allowed-tools: PowerShell, Read, Agent
 | IF* | interface |
 | 기타 | common |
 
-메뉴코드 조회 실패 시: `menu-list.md 에서 {ARGUMENTS} 를 찾을 수 없습니다` 출력 후 종료.
+메뉴코드 조회 실패 시: `15-menu-list.md 에서 {ARGUMENTS} 를 찾을 수 없습니다` 출력 후 종료.
 
 ---
 
@@ -574,10 +574,10 @@ tags: [open-issues, verification, {DOMAIN}]
 
 ## 5단계 — 완료 보고 [메인 세션]
 
-서브에이전트 완료 후 `knowledgebase/menu-list.md` 의 해당 행 상태를 `완료`로 갱신한다.
+서브에이전트 완료 후 `knowledgebase/15-menu-list.md` 의 해당 행 상태를 `완료`로 갱신한다.
 
 ```powershell
-$menuListPath = "spec\menu-list.md"
+$menuListPath = "knowledgebase\15-menu-list.md"
 (Get-Content $menuListPath -Encoding utf8) | ForEach-Object {
     if ($_ -match "\|\s*$MenuUpper\s*\|") {
         $_ -replace '\|\s*-\s*\|\s*$', '| 완료 |'

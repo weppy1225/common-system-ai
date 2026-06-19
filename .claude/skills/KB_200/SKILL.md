@@ -28,7 +28,7 @@ KB 문서 7개  →  추출: API·SQL·업무규칙·화면요소
 
 ## 1단계 — 메뉴 정보 조회 [메인 세션]
 
-`knowledgebase/menu-list.md` 를 Read 한다.
+`knowledgebase/15-menu-list.md` 를 Read 한다.
 `$ARGUMENTS`(대소문자 무관) 에 해당하는 행을 찾아 아래 값을 추출한다.
 
 | 변수 | 추출 방법 | 예시 |
@@ -37,7 +37,7 @@ KB 문서 7개  →  추출: API·SQL·업무규칙·화면요소
 | `MENU_NM` | 메뉴명 | `사업장` |
 | `GROUP_CODE` | 상위코드 소문자 | `md8000` |
 
-메뉴코드 조회 실패 시: `menu-list.md 에서 {ARGUMENTS} 를 찾을 수 없습니다` 출력 후 종료.
+메뉴코드 조회 실패 시: `15-menu-list.md 에서 {ARGUMENTS} 를 찾을 수 없습니다` 출력 후 종료.
 
 KB 문서 폴더(`spec/{MENU_CODE}/`)가 없거나 `.md` 파일이 0개이면:
 `KB 문서가 없습니다. 먼저 /KB_100 {메뉴코드} 를 실행하세요.` 출력 후 종료.
