@@ -7,7 +7,6 @@ meta:
   description: WMS DB 컬럼명에 대한 한글 설명을 찾아볼 때 읽는다
   status: active
   version: 1.0.0
-  wms_meta: true
   repo_role: ai-hub
   agent_usage: reference
   domain: database

@@ -3,7 +3,6 @@ title: MDBZ01 SQL 명세 (데이터 접근 설계)
 description: mdbz01 사업장에서 사용하는 SQL의 목록·용도·파라미터·예시를 설계 문서 형태로 기술.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

@@ -3,7 +3,6 @@ title: Z* 버튼 / 편집 팝업 규약
 description: ZBtn/ZBtnReg/ZBtnMod/ZBtnDel 등 버튼 컴포넌트 사용법과 LayerPopup 기반 편집 팝업 구현 패턴(openPopup 시그니처, emit, 리셋). FE 버튼 및 팝업 개발 시 필수 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

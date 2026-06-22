@@ -3,7 +3,6 @@ title: Controller 작성규칙
 description: {MenuCode}Controller 클래스 선언·메서드 패턴·파라미터 어노테이션·응답 처리 코드 예시를 코드 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

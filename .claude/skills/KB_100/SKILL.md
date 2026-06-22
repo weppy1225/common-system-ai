@@ -196,7 +196,6 @@ title: {MenuUpper} 기본설계 — {MENU_NM}
 description: {MENU_CODE} 메뉴의 업무 정의·관리대상·참여자·업무흐름·상태변화·업무규칙을 기술하는 업무 관점 기본설계서.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -268,7 +267,6 @@ title: {MenuUpper} 화면 구조 (UI 명세)
 description: {MENU_CODE} {MENU_NM}의 화면 기능·레이아웃 명세. 화면 구성 영역, 검색 조건, 목록 컬럼, 팝업 항목을 구현 기술 없이 기술.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -301,7 +299,6 @@ title: {MenuUpper} 데이터 모델 (테이블·관계·상태값)
 description: {MENU_CODE} {MENU_NM} 업무의 물리 테이블 매핑, 테이블 간 관계 의미, 상태값/코드 규칙을 설계 해석 수준으로 기술.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -337,7 +334,6 @@ title: {MenuUpper} SQL 목록
 description: {MENU_CODE} {MENU_NM}에서 사용하는 SQL statement 목록. 상세 구현은 Mapper.xml 참조.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -371,7 +367,6 @@ title: {MenuUpper} API 명세 (FE·BE 공용)
 description: {MENU_CODE} {MENU_NM}의 REST API 명세. FE/BE가 함께 참조하는 단일 계약 문서.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -449,7 +444,6 @@ title: {MenuUpper} BE 구현 흐름 (서버 처리)
 description: {MENU_CODE} {MENU_NM}의 백엔드 컴포넌트 흐름. Controller-Comp-TxComp-Dao 간 시퀀스 다이어그램과 예외·이슈를 기술.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -506,7 +500,6 @@ title: {MenuUpper} FE 구현 흐름 (화면 처리)
 description: {MENU_CODE} {MENU_NM}의 프론트엔드 구현 흐름. 파일 구성, 업무별 함수 호출 시퀀스 다이어그램, 구현 포인트를 기술.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
@@ -553,7 +546,6 @@ title: {MenuUpper} Open Issues / 확인 필요 사항
 description: {MENU_CODE} {MENU_NM} 설계 문서화 과정에서 식별된 소스-문서 불일치·미연결 기능·정리 후보를 모은 확인/조치 레지스터.
 status: draft
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: task
 menu_code: {MENU_CODE}

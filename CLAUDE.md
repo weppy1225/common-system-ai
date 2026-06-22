@@ -38,8 +38,8 @@ prototype/{프로젝트}/
 │   ├── CPCT01_popup.html
 │   ├── CPPD01_popup.html
 │   ├── icon-preview.html
-│   ├── wms-ui.css
-│   ├── wms-common.js
+│   ├── common.css
+│   ├── common.js
 │   └── _template/                          # SD_311 생성 템플릿
 └── mobile/                              # PDA 모바일 프로토타입
     ├── menu.html

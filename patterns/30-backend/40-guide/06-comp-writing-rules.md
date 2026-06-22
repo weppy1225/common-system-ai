@@ -3,7 +3,6 @@ title: Comp 작성규칙
 description: {MenuCode}Comp 클래스 선언·CRUD 메서드 패턴·유효성 검증·TxComp 호출 코드 예시를 코드 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

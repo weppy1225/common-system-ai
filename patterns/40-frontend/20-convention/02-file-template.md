@@ -3,7 +3,6 @@ title: FE 표준 .vue 파일 템플릿
 description: 신규 CRUD 화면 개발 시 복사해서 시작하는 리스트 화면({메뉴코드}.vue)과 편집 팝업({메뉴코드}Edt.vue) 스켈레톤 템플릿.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

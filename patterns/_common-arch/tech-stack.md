@@ -3,7 +3,6 @@ title: WMS 공통 기술 스택 / 레이어 아키텍처
 description: common-system 전 메뉴에 공통 적용되는 BE/FE 기술 스택·레이어 아키텍처·데이터 모델 컬럼 타입 SoT(라이브 DB 직접 조회) 규칙. 메뉴별 상세설계에서 중복 기술하지 않고 이 문서를 참조한다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common

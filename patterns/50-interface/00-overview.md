@@ -3,7 +3,6 @@ title: 인터페이스 패턴 개요
 description: WMS ERP/OMS/WES/DLV 외부연동 SIF 개발 패턴과 API 명세를 참조할 때 사용
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: interface

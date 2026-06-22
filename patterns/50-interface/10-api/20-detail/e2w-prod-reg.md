@@ -3,7 +3,6 @@ title: ERP 품목 등록 인터페이스 정의
 description: ERP→WMS 품목 등록(E2W_PROD_REG) API Request/Response 필드 및 처리 흐름 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: interface

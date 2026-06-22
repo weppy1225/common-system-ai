@@ -3,7 +3,6 @@ title: 백엔드 패키지 구조
 description: BE의 Java 소스 패키지 구조(be/bm/fw/sif/test/vm)와 파일 명명 규칙을 참조할 때 사용
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: backend

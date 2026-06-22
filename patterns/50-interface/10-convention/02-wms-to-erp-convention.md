@@ -3,7 +3,6 @@ title: WMS→ERP 송신 (W2E) 코딩 컨벤션
 description: WMS→외부(ERP/OMS) 송신(W2E) SIF 모듈 개발 시 진입점 클래스 템플릿·Retrofit2 API 인터페이스·SifWms* 클래스 위치를 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: interface

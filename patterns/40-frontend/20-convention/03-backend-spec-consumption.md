@@ -3,7 +3,6 @@ title: BE 스펙 소비(Consume) 컨벤션
 description: FE AI가 BE spec 산출물을 직접 읽고 코드와 메뉴 문서에 반영할 때 따르는 단일 소스. BE 스펙 원천 경로, 우선순위, 직접 소비 정책, 메뉴 작업 확인 순서를 정의한다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

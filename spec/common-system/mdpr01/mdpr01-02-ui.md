@@ -3,7 +3,6 @@ title: MDPR01 화면요건정리 — 사은품관리
 description: mdpr01 사은품관리 화면의 검색영역, 프로모션 목록, 대상품목·증정품목 그리드, 팝업, 업무규칙을 확인할 때 참조하는 UI 명세 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdpr01

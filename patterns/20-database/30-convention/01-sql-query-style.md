@@ -3,7 +3,6 @@ title: SQL 쿼리 스타일 가이드
 description: WMS 프로젝트에서 SQL 쿼리를 작성하거나 리뷰할 때 적용해야 하는 서식(들여쓰기·정렬·대소문자) 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

@@ -3,7 +3,6 @@ title: WMS BE 공통 예외 처리
 description: 모든 메뉴에 공통으로 적용되는 F/W 수준의 예외 처리 목록. 06-be-flow 작성 시 참조하여 중복 기재하지 않는다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common

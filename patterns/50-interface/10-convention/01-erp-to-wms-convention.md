@@ -3,7 +3,6 @@ title: ERP 인터페이스 (E2W) 코딩 컨벤션
 description: ERP→WMS 수신(E2W) SIF 모듈 개발 시 패키지 구조·클래스 명명·예외 처리·테스트 패턴 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: interface

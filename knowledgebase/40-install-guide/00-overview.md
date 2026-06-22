@@ -3,7 +3,6 @@ title: knowledgebase/40-install-guide 시스템 운영·인프라 가이드
 description: common-system 시스템의 빌드·배포·설치·운영에 관한 가이드 문서 모음
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 ---

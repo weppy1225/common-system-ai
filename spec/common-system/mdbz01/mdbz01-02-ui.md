@@ -3,7 +3,6 @@ title: MDBZ01 화면 명세 (UI)
 description: mdbz01 사업장의 화면 구성·레이아웃·UX 명세. Vue 파일 매핑 포함.
 status: active
 version: 3.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

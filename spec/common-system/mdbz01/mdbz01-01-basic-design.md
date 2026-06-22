@@ -3,7 +3,6 @@ title: MDBZ01 기본설계 — 사업장
 description: mdbz01 메뉴의 업무 정의·관리대상·참여자·업무흐름·업무규칙을 기술하는 업무 관점 기본설계서.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

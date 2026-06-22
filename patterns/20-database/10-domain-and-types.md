@@ -3,7 +3,6 @@ title: 도메인 및 데이터 타입 정의
 description: WMS DB 컬럼 설계 시 데이터 타입 및 기본값을 결정할 때 참조하는 도메인 정의표
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: database

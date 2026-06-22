@@ -3,7 +3,6 @@ title: 시스템 아키텍처
 description: WMS 전체 시스템 구성(3-Tier, UI/BIZ/DB 계층)과 사용자 관점 아키텍처를 참조할 때 사용
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: backend

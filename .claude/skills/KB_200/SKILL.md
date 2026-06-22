@@ -235,7 +235,6 @@ title: {MenuUpper} 지식베이스 검증 리포트
 description: KB 문서와 실제 소스의 일치율·누락·과잉 항목을 비교 분석한 검증 리포트
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: output
 menu_code: {MENU_CODE}

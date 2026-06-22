@@ -3,7 +3,6 @@ title: spec 문서 구성 규약 (메뉴별 설계 문서)
 description: spec/{프로젝트}/{메뉴}/ 설계 문서의 접미사별 의미·생성 스킬 규약. 실제 전체 파일 인벤토리는 20-md-index.html(파일 지도) 참조.
 status: active
 version: 4.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common

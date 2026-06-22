@@ -3,7 +3,6 @@ title: TxComp 작성규칙
 description: {MenuCode}TxComp 클래스 선언·@Transactional 메서드 패턴·파일 처리 매트릭스·InvenManager 호출 코드 예시를 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

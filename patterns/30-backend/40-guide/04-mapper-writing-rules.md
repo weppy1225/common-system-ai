@@ -3,7 +3,6 @@ title: Mapper 작성규칙
 description: {MenuCode}Mapper 인터페이스 선언·@Param 사용 패턴·메서드 시그니처·반환 타입 코드 예시를 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

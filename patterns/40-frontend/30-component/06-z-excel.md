@@ -3,7 +3,6 @@ title: 엑셀 컴포넌트 (ZXls*)
 description: ZXlsUp/ZXlsAllUp/ZXlsDown/ZXlsTmpl 엑셀 업로드·다운로드 컴포넌트 사용법. 엑셀 일괄등록·다운로드 구현 시 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

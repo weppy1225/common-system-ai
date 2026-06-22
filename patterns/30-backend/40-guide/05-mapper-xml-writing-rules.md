@@ -3,7 +3,6 @@ title: Mapper XML 작성규칙
 description: MyBatis Mapper.xml 파일 헤더·SELECT/INSERT/UPDATE/DELETE·WHERE절·JOIN·DB 함수 등 실제 XML 코드 패턴을 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

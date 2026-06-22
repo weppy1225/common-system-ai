@@ -3,7 +3,6 @@ title: MDBZ01 Open Issues / 확인 필요 사항
 description: mdbz01 사업장 설계 문서화 과정에서 식별된 소스-문서 불일치·미연결 기능·정리 후보를 모은 확인/조치 레지스터.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: task
 menu_code: mdbz01

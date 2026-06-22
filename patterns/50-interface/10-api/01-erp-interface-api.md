@@ -3,7 +3,6 @@ title: ERP 연동 API 목록
 description: WMS ERP 연동 인터페이스 API 목록 및 엔드포인트 확인 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: interface

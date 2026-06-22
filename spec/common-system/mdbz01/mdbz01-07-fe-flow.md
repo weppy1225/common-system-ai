@@ -3,7 +3,6 @@ title: MDBZ01 FE 구현 흐름 (화면 처리)
 description: mdbz01 사업장의 프론트엔드 업무별 함수 호출 시퀀스 다이어그램, 구현 포인트. Vue 파일 목록은 02-ui.md 참조.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

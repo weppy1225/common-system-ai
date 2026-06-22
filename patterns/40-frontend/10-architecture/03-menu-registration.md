@@ -3,7 +3,6 @@ title: 신규 메뉴 등록 절차
 description: 신규 화면 개발 후 FE 라우터 등록, DB sm_menu 등록, 권한 부여까지 전체 절차. 메뉴 추가 시 반드시 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

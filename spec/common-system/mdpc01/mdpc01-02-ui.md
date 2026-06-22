@@ -3,7 +3,6 @@ title: MDPC01 화면요건정리 — PC관리
 description: mdpc01 PC관리 화면의 검색영역, PC 목록 그리드, 등록/수정 팝업, 업무규칙을 확인할 때 참조하는 UI 명세 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdpc01

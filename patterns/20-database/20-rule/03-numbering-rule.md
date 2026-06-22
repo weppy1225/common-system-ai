@@ -3,7 +3,6 @@ title: 업무번호 생성 규칙
 description: WMS 입고/출고/반품 등 업무번호를 채번할 때 규칙과 DocNoGenerator 사용법을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: database

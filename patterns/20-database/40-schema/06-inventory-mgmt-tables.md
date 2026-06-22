@@ -3,7 +3,6 @@ title: 재고관리 테이블 정의서
 description: WMS 재고조정(wms_inven_ad_*), 예외출고(wms_inven_etc_*), 재고이동(wms_inven_mv_*), 품목전환(wms_inven_rp_*), 세트작업(wms_inven_st_*) 테이블 목록을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

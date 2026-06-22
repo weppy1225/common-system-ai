@@ -3,7 +3,6 @@ title: patterns 소스코드 패턴 표준화 인덱스
 description: WEB/PDA 화면 설계와 DB, 백엔드, 프론트엔드 소스코드 패턴 표준 문서를 모아두는 진입점
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 ---

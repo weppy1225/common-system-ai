@@ -3,7 +3,6 @@ title: MDBZ01 API 명세 (FE·BE 공용)
 description: mdbz01 사업장의 REST API 명세. FE/BE가 함께 참조하는 단일 계약 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

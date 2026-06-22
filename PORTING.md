@@ -3,7 +3,6 @@ title: 포팅·리브랜딩 가이드
 description: 공유 AI 허브(common-system-ai) 프레임워크에 새 프로젝트를 붙이거나, 프레임워크 자체를 리브랜딩할 때 무엇을·어디를·왜 하는지 설명한다. 프로젝트 정체성은 워크스페이스 폴더명에서 도출하고, 프로젝트별 산출물은 spec/{프로젝트}·prototype/{프로젝트} 하위에 둔다.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 related:

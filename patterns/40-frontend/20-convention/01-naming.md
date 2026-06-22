@@ -3,7 +3,6 @@ title: FE 네이밍 규칙
 description: vfn_/gfn_/sfn_/lfn_ 함수 접두사, Z* 컴포넌트 명명, 메뉴코드 형식, 변수 관례, 공통코드 네이밍 규칙. FE 코드 작성 시 반드시 준수해야 하는 규칙.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: frontend

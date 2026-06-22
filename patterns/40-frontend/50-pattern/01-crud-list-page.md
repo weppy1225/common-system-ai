@@ -3,7 +3,6 @@ title: CRUD 리스트 페이지 패턴
 description: 검색→그리드→등록/수정/삭제 팝업 플로우의 전체 구현 패턴. searchRef 검색영역, 조회 함수, 수정 팝업 호출, 삭제, 등록/수정 HTTP 메서드(PUT/PATCH) 규약 포함. FE CRUD 메뉴 개발 시 기준 레시피.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

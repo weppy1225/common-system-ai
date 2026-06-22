@@ -3,7 +3,6 @@ title: 메뉴코드 체계 및 개발 가이드
 description: 신규 메뉴 개발 시 메뉴코드 채번·패키지 경로·API URL 규칙과 전체 메뉴 구조를 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: backend

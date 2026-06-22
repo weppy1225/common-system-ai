@@ -3,7 +3,6 @@ title: Dao 작성규칙
 description: {MenuCode}Dao 클래스 선언·CRUD 메서드 패턴·반환 타입 규칙·EmptyTool 활용 코드 예시를 코드 작성 시 참조
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

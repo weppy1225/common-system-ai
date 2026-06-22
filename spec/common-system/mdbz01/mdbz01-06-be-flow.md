@@ -3,7 +3,6 @@ title: MDBZ01 BE 구현 흐름 (서버 처리)
 description: mdbz01 사업장의 백엔드 업무별 시퀀스 다이어그램, 예외 처리 목록, 기술 이슈.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

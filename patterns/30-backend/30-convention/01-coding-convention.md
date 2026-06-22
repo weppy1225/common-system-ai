@@ -3,7 +3,6 @@ title: 백엔드 코딩 컨벤션
 description: Controller·Comp·TxComp·Dao·Mapper·Bean 레이어 작성 시 적용할 어노테이션·네이밍·예외처리·이력컬럼 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

@@ -3,7 +3,6 @@ title: 주석 네이밍 규칙
 description: WMS DB 테이블과 컬럼에 COMMENT ON 주석을 작성할 때 반드시 따라야 하는 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: database

@@ -3,7 +3,6 @@ title: ZAuiGrid 사용 가이드
 description: AUI Grid 래퍼 컴포넌트 ZAuiGrid의 기본 선언, 자주 쓰는 메서드, 컬럼 레이아웃, 이벤트, 엑셀 내보내기, 편집 그리드 변경 감지 패턴. FE 그리드 구현 시 필수 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

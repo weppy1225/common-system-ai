@@ -3,7 +3,6 @@ title: 데이터베이스 변경 이력
 description: WMS DB 스키마 변경 이력을 확인하거나 새로운 변경사항을 기록할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: database

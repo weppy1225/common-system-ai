@@ -3,7 +3,6 @@ title: Z* 검색 팝업 (comPopup) 카탈로그
 description: ZContPopup/ZProdPopup/ZLocPopup 등 공통 검색 팝업 컴포넌트 목록, callback 방식 규약, 라벨 인쇄 팝업 패턴. 기준정보 선택 UI 구현 시 새로 만들기 전 반드시 확인.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

@@ -3,7 +3,6 @@ title: WMS FE AI 문서 진입점
 description: FE 개발 AI가 가장 먼저 읽어야 하는 문서. 프로젝트 개요, 작업 순서, 핵심 원칙, 업무군 코드 맵을 포함한다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: frontend

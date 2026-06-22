@@ -3,7 +3,6 @@ title: MDBZ01 데이터 모델 (테이블·상태·코드)
 description: mdbz01 사업장 업무의 물리 테이블 매핑, 상태 흐름, 상태값/코드 규칙, 데이터 연쇄 규칙. 상태 관련 모든 정의의 단일 원천(Single Source of Truth).
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: spec
 menu_code: mdbz01

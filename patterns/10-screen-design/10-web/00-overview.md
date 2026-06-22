@@ -3,7 +3,6 @@ title: WEB 화면 설계 패턴
 description: WMS PC 웹 화면 설계 패턴. 검색영역·그리드·툴바·팝업의 레이아웃·CSS·동작 규칙 인덱스.
 status: active
 version: 1.1.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: frontend
@@ -50,8 +49,8 @@ tags:
 
 | 파일                                    | 역할               |
 | ------------------------------------- | ---------------- |
-| `prototype/{프로젝트}/_common/wms-ui.css`        | 공통 스타일시트         |
-| `prototype/{프로젝트}/_common/wms-common.js`     | 공통 스크립트          |
+| `prototype/{프로젝트}/_common/common.css`        | 공통 스타일시트         |
+| `prototype/{프로젝트}/_common/common.js`     | 공통 스크립트          |
 | `prototype/{프로젝트}/_common/CPCT01_popup.html` | 거래처 검색 공통 팝업     |
 | `prototype/{프로젝트}/_common/CPPD01_popup.html` | 품목 검색 공통 팝업      |
 | `prototype/{프로젝트}/_common/icon-preview.html` | 사용 가능 SVG 아이콘 목록 |

@@ -3,7 +3,6 @@ title: WMS 테이블 목록 및 설명
 description: WMS 전체 테이블 목록과 도메인별 그룹을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

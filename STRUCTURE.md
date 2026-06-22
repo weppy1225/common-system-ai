@@ -3,7 +3,6 @@ title: common-system-ai 레포 전체 디렉토리 구조 및 영역 역할
 description: 레포 최상위 디렉토리 구조, 각 영역의 역할, 메뉴별 산출 위치와 경계 규칙. 프롬프트 개정·문서 생성/재생성의 기준 문서. (2026-06 재설계 적용)
 status: active
 version: 2.1.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common
@@ -88,7 +87,7 @@ spec/{프로젝트}/{메뉴}/
 
 ```
 prototype/
-├── _common/             PC 공용 셸 (index, 메뉴, 팝업, wms-ui.css, wms-common.js)
+├── _common/             PC 공용 셸 (index, 메뉴, 팝업, common.css, common.js)
 ├── _common-m/           모바일 공용 셸 (menu·main·mobile.css·ui-standard·assets·common/_template)
 ├── {메뉴}/              PC 검증물 — {메뉴}-wireframe.html + {메뉴}-mock-data.js   〔/SD_311〕
 └── {메뉴}m/             모바일 검증물 — {메뉴}m-wireframe.html + {메뉴}m-mock-data.js  〔/SD_312〕

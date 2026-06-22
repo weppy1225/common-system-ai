@@ -3,7 +3,6 @@ title: 출고 업무 워크플로우
 description: 즉시출하·출고출하·상차처리·송장처리 등 출고 프로세스별 단계와 관련 테이블을 참조할 때 사용
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: backend

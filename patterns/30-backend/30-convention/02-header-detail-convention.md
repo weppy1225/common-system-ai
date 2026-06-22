@@ -3,7 +3,6 @@ title: 백엔드 코딩 컨벤션 — 헤더+상세 구조 메뉴
 description: 헤더+상세 2단 구조·문서번호 채번·상태 관리가 포함된 메뉴(예:IWRQ01) 개발 시 적용할 코딩 컨벤션
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

@@ -3,7 +3,6 @@ title: 시퀀스 생성 규칙
 description: WMS DB 테이블에 시퀀스(SEQUENCE)를 생성할 때 반드시 따라야 하는 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: database

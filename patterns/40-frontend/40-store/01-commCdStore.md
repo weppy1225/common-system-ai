@@ -3,7 +3,6 @@ title: 공통코드 스토어 (commCdStore)
 description: 공통코드 조회·캐싱·변환 Pinia 스토어 사용법. convertCommDNms/getCommHCd API, 배치 캐싱 동작, bizSeq 규약. 공통코드 사용 시 반드시 이 스토어를 경유해야 한다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

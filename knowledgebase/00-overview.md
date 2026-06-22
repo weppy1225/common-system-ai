@@ -3,7 +3,6 @@ title: knowledgebase 라이브러리 개요
 description: AI가 개발 전에 읽는 메뉴 횡단 공통 배경지식 라이브러리. 번호=읽는 순서. 메뉴별 설계는 spec/, 검증 화면은 prototype/ 에 있다.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common

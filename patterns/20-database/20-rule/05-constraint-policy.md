@@ -3,7 +3,6 @@ title: 제약조건 정책
 description: WMS DB 테이블에 PK, FK, UNIQUE, NOT NULL, CHECK, INDEX 제약조건을 적용할 때 반드시 따라야 하는 정책
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 domain: database

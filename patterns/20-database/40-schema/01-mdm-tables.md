@@ -3,7 +3,6 @@ title: 기준정보(MDM) 테이블 정의서
 description: WMS 기준정보(mdm_*) 테이블 목록과 공통 컬럼 규칙을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

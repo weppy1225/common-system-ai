@@ -3,7 +3,6 @@ title: BE ↔ FE 연동 규약
 description: FE와 BE 간 HTTP 메서드·URL 패턴·응답 네이밍·인증·에러 처리 런타임 계약을 정의한다. FE API 호출 코드 작성 시 반드시 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: frontend

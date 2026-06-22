@@ -3,7 +3,6 @@ title: 백엔드 프로젝트 라이브러리 목록
 description: BE에서 사용하는 모든 JAR 라이브러리와 버전 정보를 참조할 때 사용
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: backend

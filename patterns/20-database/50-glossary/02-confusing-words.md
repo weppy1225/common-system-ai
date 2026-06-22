@@ -3,7 +3,6 @@ title: 헷갈리는 약어 정리
 description: WMS 개발 시 혼동하기 쉬운 약어(IW, RQ, PC 등)를 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

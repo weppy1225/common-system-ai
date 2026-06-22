@@ -3,7 +3,6 @@ title: 폼 입력 컴포넌트 (Z*)
 description: ZText/ZSelect/ZCodeSelect/ZCodeMulti/ZRadio/ZCheckbox/ZCalendar/ZCalendarRange 컴포넌트 사용법과 Vuelidate 유효성 검사 패턴. FE 폼 입력 구현 시 필수 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: frontend

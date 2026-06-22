@@ -3,7 +3,6 @@ title: 데이터베이스 레이어 코딩 컨벤션 (MyBatis)
 description: WMS 프로젝트에서 Mapper.java와 Mapper.xml을 작성할 때 따라야 하는 MyBatis 구현 패턴 및 Dao 레이어 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

@@ -3,7 +3,6 @@ title: WMS 메뉴코드 목록
 description: 전체 WMS 메뉴코드·메뉴명·상위그룹 레지스트리. 메뉴 단위 스킬(KB_100/KB_200 등)이 메뉴 정보를 조회할 때 사용.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: common

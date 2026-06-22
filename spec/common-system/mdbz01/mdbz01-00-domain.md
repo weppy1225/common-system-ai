@@ -3,7 +3,6 @@ title: mdbz01 업무지식
 description: mdbz01 메뉴의 업무 규칙·배경·노하우(WHY). 소스 코드로는 알 수 없는 업무 지식을 사람이 직접 기록한다. 자동화 스킬(SD·KB)은 이 파일을 생성·수정하지 않는다.
 status: draft
 version: 0.1.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 menu_code: mdbz01

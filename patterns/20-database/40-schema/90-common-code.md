@@ -3,7 +3,6 @@ title: 공통 코드 목록
 description: WMS에서 사용하는 공통코드(sm_comm_h/sm_comm_d) 헤더 목록과 각 코드 상세값을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

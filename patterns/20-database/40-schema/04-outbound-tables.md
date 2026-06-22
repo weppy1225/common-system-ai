@@ -3,7 +3,6 @@ title: 출하/출고/송장/상차 테이블 정의서
 description: WMS 출하(wms_outbiz_*), 출고(wms_outwh_*), 송장(wms_invoice_*), 상차(wms_load_*) 테이블 목록을 확인할 때 읽는다
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: database

@@ -3,7 +3,6 @@ title: 백엔드 테스트 코딩 컨벤션
 description: JUnit 테스트 클래스 구조·어노테이션·assert 패턴·엣지케이스 매트릭스 등 테스트 코드 작성 규칙
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: backend

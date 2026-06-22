@@ -3,7 +3,6 @@ title: 워크스페이스 레포 경로 규칙
 description: AI 허브에서 형제 BE/FE 레포의 src 경로를 결정하는 규칙. 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출하고, AI 허브(common-system-ai)는 모든 프로젝트 공통이다. BE/FE 코드 생성·테스트·DB·spec 스킬 실행 전 STEP 0 에서 항상 적용한다.
 status: active
 version: 2.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: rule
 tags:
