@@ -6,6 +6,8 @@ paths:
 
 # WMS SIF 외부연동 컨벤션 (ERP/OMS/WES/DLV)
 
+> **적용 도메인: WMS 전용.** E2W/W2E 방향·`SifWms*` 클래스·`sif_*` 이력 테이블 패턴은 WMS SIF 기준이다. 컨벤션 골격(방향별 패키지·레이어·예외)은 `knowledgebase/domains/wms/interface-convention/` 의 도메인 표준을 참조한다. 다른 도메인은 자체 SIF 규칙을 둔다.
+
 ## 참조 문서 (SSoT)
 
 | 주제 | 문서 |

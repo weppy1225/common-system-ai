@@ -1,6 +1,6 @@
 ---
 title: 메뉴코드 체계 및 개발 가이드
-description: 신규 메뉴 개발 시 메뉴코드 채번·패키지 경로·API URL 규칙과 전체 메뉴 구조를 참조
+description: 신규 메뉴 개발 시 메뉴코드 채번·패키지 경로·API URL 규칙을 참조 (전체 메뉴 목록은 spec/{프로젝트}/_knowledge/menu-list.md)
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -120,7 +120,7 @@ PC:     /{bizSeq}/{하위코드소문자}/{리소스명복수}
 
 ### 메뉴코드 채번 방법
 
-1. 아래 전체 메뉴 구조에서 적절한 **상위 메뉴** 확인
+1. 프로젝트 메뉴 레지스트리(`spec/{프로젝트}/_knowledge/menu-list.md`)에서 적절한 **상위 메뉴** 확인
 2. 동일 상위 메뉴 내 미사용 코드 채번 (기존 코드 중복 없이)
 3. 새 업무 영역이면 기존 번호대에 맞춰 상위 메뉴부터 추가
 
@@ -150,126 +150,8 @@ bean/
 
 ---
 
-## 4. PC 전체 메뉴 구조
+## 4. 전체 메뉴 구조
 
-| 상위코드 | 상위메뉴명 | 하위코드 | 하위메뉴명 | Java 패키지 경로 | 영문 키워드 |
-|---------|-----------|---------|-----------|----------------|------------|
-| **IW1000** | **입고관리** | | | `be/iw1000/` | Inbound Warehouse |
-| | | IWRQ01 | 입고예정 | `be/iw1000/iwrq01` | Inwh Request |
-| | | IWPC01 | 입고처리 | `be/iw1000/iwpc01` | Inwh Process |
-| | | IWSC01 | 입고현황 | `be/iw1000/iwsc01` | Inwh Status Condition |
-| | | IWLB01 | 라벨품목 | `be/iw1000/iwlb01` | Inwh Label |
-| **RT2000** | **반품관리** | | | `be/rt2000/` | Return |
-| | | RTRQ01 | 반품예정 | `be/rt2000/rtrq01` | Return Request |
-| | | RTPC01 | 반품처리 | `be/rt2000/rtpc01` | Return Process |
-| **IV3000** | **재고관리** | | | `be/iv3000/` | Inventory Management |
-| | | IVMV01 | 재고이동 | `be/iv3000/ivmv01` | Inventory Move |
-| | | IVMVRQ01 | 재고이동요청 | `be/iv3000/ivmvrq01` | Inventory Move Request |
-| | | IVAD01 | 재고조정 | `be/iv3000/ivad01` | Inventory Adjust |
-| | | IVEXRQ01 | 예외출고 | `be/iv3000/ivexrq01` | Inventory Exception Request |
-| | | IVSK01 | SKU변경 | `be/iv3000/ivsk01` | SKU Change |
-| | | SKSP01 | 파렛트분할 | `be/iv3000/sksp01` | Pallet Split |
-| | | SKMG01 | 파렛트병합 | `be/iv3000/skmg01` | Pallet Merge |
-| | | IVST01 | 세트작업 | `be/iv3000/ivst01` | Inventory Set |
-| **IV3100** | **재고조회** | | | `be/iv3100/` | Inventory View |
-| | | IVPD01 | 재고조회(품목별) | `be/iv3100/ivpd01` | Inventory Product |
-| | | IVWH01 | 재고조회(창고별) | `be/iv3100/ivwh01` | Inventory Warehouse |
-| | | IVPR01 | 재고조회(기간별) | `be/iv3100/ivpr01` | Inventory Period |
-| | | IVIO01 | 수불조회 | `be/iv3100/ivio01` | Inventory In/Out |
-| | | IVMC01 | 재고마감 | `be/iv3100/ivmc01` | Inventory Month Close |
-| | | SKHT01 | SKU이력조회 | `be/iv3100/skht01` | SKU History |
-| **IV3200** | **재고실사** | | | `be/iv3200/` | Stock Take |
-| | | STSC01 | 재고실사일정등록 | `be/iv3200/stsc01` | Stock Take Schedule |
-| | | STRG01 | 실사재고등록 | `be/iv3200/strg01` | Stock Take Register |
-| | | STCP01 | 재고실사비교 | `be/iv3200/stcp01` | Stock Take Compare |
-| **OW5000** | **출고관리** | | | `be/ow5000/` | Outbound |
-| | | OBRQ01 | 출하예정 | `be/ow5000/obrq01` | Outbound Request |
-| | | DLPB01 | 송장발행 | `be/ow5000/dlpb01` | Delivery Publish |
-| | | DLPBWE01 | 송장발행(WES) | `be/ow5000/dlpbwe01` | Delivery Publish WES |
-| | | OWRB01 | 출고지시 | `be/ow5000/owrq01/owrb01` | Outwh Request B2B |
-| | | OWRC01 | 출고지시(송장) | `be/ow5000/owrq01/owrc01` | Outwh Request B2B Invoice |
-| | | OWPC01 | 출고처리 | `be/ow5000/owpc01` | Outwh Process |
-| | | DLPC01 | 송장처리 | `be/ow5000/dlpc01` | Delivery Process |
-| | | DLPC02 | 송장처리(바코드) | `be/ow5000/dlpc02` | Delivery Process Barcode |
-| | | DLPCWE01 | 송장처리(WES) | `be/ow5000/dlpcwe01` | Delivery Process WES |
-| | | DLCX01 | 송장처리취소 | `be/ow5000/dlcx01` | Delivery Process Cancel |
-| | | LDPC01 | 상차처리 | `be/ow5000/ldpc01` | Loading Process |
-| | | OBPC01 | 출하처리 | `be/ow5000/obpc01` | Outbound Process |
-| | | OBCX01 | 출하처리취소 | `be/ow5000/obcx01` | Outbound Process Cancel |
-| | | OBSC01 | 출하현황 | `be/ow5000/obsc01` | Outbound Status Condition |
-| **MD8000** | **기준정보** | | | `be/md8000/` | Master Data |
-| | | MDBZ01 | 사업장 | `be/md8000/mdbz01` | Master Biz |
-| | | MDWH01 | 창고 | `be/md8000/mdwh01` | Master Warehouse |
-| | | MDLC01 | 위치(로케이션) | `be/md8000/mdlc01` | Master Location |
-| | | MDCT01 | 거래처 | `be/md8000/mdct01` | Master Contractor |
-| | | MDPD01 | 품목 | `be/md8000/mdpd01` | Master Product |
-| | | MDCP01 | 업체품목 | `be/md8000/mdcp01` | Master Contractor Product |
-| | | MDSP01 | 화주 | `be/md8000/mdsp01` | Master Shipper |
-| | | MDST01 | 세트구성 | `be/md8000/mdst01` | Master Set Config |
-| | | MDUS01 | 사용자 | `be/md8000/mdus01` | Master User |
-| | | MDCR01 | 차량 | `be/md8000/mdcr01` | Master Car |
-| **SM9000** | **시스템설정** | | | `be/sm9000/` | System Management |
-| | | SMMG01 | 권한그룹 | `be/sm9000/smmg01` | System Manager Group |
-| | | USCD01 | 사용자코드 | `be/sm9000/uscd01` | User Code |
-| | | ALSH01 | 알람조회 | `be/sm9000/alsh01` | Alarm Search |
-| | | MNST01 | 메뉴별설정 | `be/sm9000/mnst01` | Menu Setting |
-| | | OBST01 | 출하설정 | `be/sm9000/obst01` | Outbound Setting |
-| | | PDST01 | 품목설정 | `be/sm9000/pdst01` | Product Setting |
-| | | LPST01 | 출력물설정 | `be/sm9000/lpst01` | Label Print Setting |
-| | | SCST01 | 보안설정 | `be/sm9000/scst01` | Security Setting |
-| | | SMST01 | SSE전송 | `be/sm9000/smst01` | System SSE |
-| **MM9200** | **운영관리** | | | `be/mm9200/` | Management |
-| | | SMCC01 | 공통코드 | `be/mm9200/smcc01` | System Common Code |
-| | | SMMN01 | 메뉴관리 | `be/mm9200/smmn01` | System Menu Management |
-| | | SCRG01 | 스케줄러 | `be/mm9200/scrg01` | Scheduler Register |
-| | | SCCH01 | 스케줄러변경이력 | `be/mm9200/scch01` | Scheduler Change History |
-| | | SCEX01 | 스케줄러실행이력 | `be/mm9200/scex01` | Scheduler Execution |
-| | | MDLP01 | 출력물관리 | `be/mm9200/mdlp01` | Label Paper Management |
-| **IF9100** | **IF관리** | | | `be/if9100/` | Interface |
-| | | IFST01 | I/F설정 | `be/if9100/ifst01` | IF Setting |
-| | | DVST01 | 택배사설정 | `be/if9100/dvst01` | Delivery Setting |
-| | | IFBH01 | I/F처리이력 | `be/if9100/ifbh01` | IF Batch History |
-| **CM9400** | **소통관리** | | | `be/cm9400/` | Communication |
-| | | ALST01 | 알람설정 | `be/cm9400/alst01` | Alarm Setting |
-| **SS9300** | **시스템현황** | | | `be/ss9300/` | System Status |
-| | | LGAP01 | API로그 | `be/ss9300/lgap01` | Log API |
-| | | LGCO01 | 접근로그 | `be/ss9300/lgco01` | Log Connection |
-| | | LGER01 | 에러로그 | `be/ss9300/lger01` | Log Error |
-| | | LGMN01 | 메뉴로그 | `be/ss9300/lgmn01` | Log Menu |
-| | | SMBD01 | 고객문의 | `be/ss9300/smbd01` | Board |
+전체 메뉴(상위/하위 코드·메뉴명·Java 패키지 경로·영문 키워드)는 **프로젝트마다 다른 확정 데이터**라 이 규칙에 박제하지 않는다 — 메뉴 추가·변경 시 곧바로 드리프트가 생기기 때문이다.
 
----
-
-## 5. 모바일 전체 메뉴 구조
-
-> ⚠️ 모바일 패키지명은 실제 `src/main/java/bm/` 디렉토리 기준 (메뉴코드와 다를 수 있음)
-
-| 상위코드 | 상위메뉴명 | 하위코드 | 하위메뉴명 | Java 패키지 경로 | 영문 키워드 |
-|---------|-----------|---------|-----------|----------------|------------|
-| **IW1000M** | **[입고관리]** | | | `bm/iw1000m/` | Inbound Mobile |
-| | | IWPC01M | 입고처리 | `bm/iw1000m/iwpc01m` | Inwh Process Mobile |
-| **RT2000M** | **[반품관리]** | | | `bm/rt2000m/` | Return Mobile |
-| | | RTPC01M | 반품처리 | `bm/rt2000m/rtpc01m` | Return Process Mobile |
-| **IV3000M** | **[재고관리]** | | | `bm/iv3000m/` | Inventory Mobile |
-| | | IVAD01M | 재고조정 | `bm/iv3000m/ivad01m` | Inventory Adjust Mobile |
-| | | IVMV01M | 재고이동 | `bm/iv3000m/ivmv01m` | Inventory Move Mobile |
-| | | IVMVRQ01M | 재고이동요청 | `bm/iv3000m/ivmvrq01m` | Inventory Move Request Mobile |
-| | | SKSP01M | 파렛트분할 | `bm/iv3000m/sksp01m` | Pallet Split Mobile |
-| | | SKMG01M | 파렛트병합 | `bm/iv3000m/skmg01m` | Pallet Merge Mobile |
-| **IV3100M** | **[재고조회]** | | | `bm/iv3100m/` | Inventory View Mobile |
-| | | BRSC01M | 재고조회 | `bm/iv3100m/brsc01m` | Barcode Status Condition Mobile |
-| **IV3200M** | **[재고실사]** | | | `bm/iv3200m/` | Stock Take Mobile |
-| | | STSC01M | 재고실사일정 | `bm/iv3200m/stsc01m` | Stock Take Schedule Mobile |
-| | | STRG01M | 실사재고등록 | `bm/iv3200m/strg01m` | Stock Take Register Mobile |
-| **OW5000M** | **[출고관리]** | | | `bm/ow5000m/` | Outbound Mobile |
-| | | OWPC01M | 출고처리 | `bm/ow5000m/owpc01m` | Outwh Process Mobile |
-| | | DLPC01M | 송장처리 | `bm/ow5000m/dlpc01m` | Delivery Process Mobile |
-| | | LDPC01M | 상차처리 | `bm/ow5000m/ldpc01m` | Loading Process Mobile |
-| | | OBRQ01M | 출하예정 | `bm/ow5000m/obrq01m` | Outbound Request Mobile |
-| | | OBPC01M | 출하처리 | `bm/ow5000m/obpc01m` | Outbound Process Mobile |
-| **MD8000M** | **[기준정보]** | | | `bm/md8000m/` | Master Data Mobile |
-| | | MDBZ01M | 사업장 | `bm/md8000m/mdbz01m` | Master Biz Mobile |
-| **SM9000M** | **[시스템설정]** | | | `bm/sm9000m/` | System Mobile |
-| | | ALSH01M | 알람조회 | `bm/sm9000m/alsh01m` | Alarm Search Mobile |
-| | | ALST01M | 알람설정 | `bm/sm9000m/alst01m` | Alarm Setting Mobile |
-| | | SMST01M | 설정 | `bm/sm9000m/smst01m` | System Setting Mobile |
+→ 프로젝트별 메뉴 레지스트리: **`spec/{프로젝트}/_knowledge/menu-list.md`** (PC·모바일 전체 메뉴 포함)

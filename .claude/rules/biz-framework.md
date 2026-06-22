@@ -6,6 +6,8 @@ paths:
 
 # 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
 
+> **적용 도메인: WMS 전용.** InvenManager(재고 증감)·InvenPool 상수·`wms_inven*` 처리는 WMS 재고 프레임워크다. 다른 도메인(예: OMS)은 자체 비즈니스 프레임워크 규칙을 별도로 둔다. DocNoGenerator(문서번호 채번)는 도메인 무관 공통.
+
 ---
 
 ## 참조 문서 (SSoT)

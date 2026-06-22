@@ -1,6 +1,6 @@
 ---
 title: 데이터베이스 개요
-description: WMS PostgreSQL DB의 전체 스키마 구조, 도메인 구성, 테이블 prefix 분류, 상세 문서 목록을 파악해야 할 때 읽는다
+description: 업무 시스템 PostgreSQL DB의 전체 스키마 구조·도메인 구성·테이블 prefix 분류를 파악해야 할 때 읽는다 (상세 카탈로그는 spec/{프로젝트}/_knowledge/db-schema/)
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -28,11 +28,11 @@ tags:
 
 ## 2. 시스템 목적
 
-WMS(창고관리시스템) 운영 데이터 저장
+업무 시스템 운영 데이터 저장 (현재 프로젝트 도메인 예: WMS — 창고관리)
 
 ## 3. 스키마 구조
 
-DB의 전체 스키마 구조입니다. **public 스키마 하나에 WMS 관리 대상 테이블 104개 + Quartz 스케줄러 테이블 11개 = 총 115개**가 있으며, 테이블 prefix 기준으로 도메인이 구분되어 있습니다.
+DB의 전체 스키마 구조입니다. **public 단일 스키마에 업무 테이블 + Quartz 스케줄러 테이블(11개)**이 있으며, 테이블 prefix 기준으로 도메인이 구분되어 있습니다. 실제 테이블 목록·개수 등 상세 카탈로그는 → `spec/{프로젝트}/_knowledge/db-schema/00-tables-overview.md`.
 
 ### 3.1 스키마 구성
 - **public**: 전체 테이블이 위치한 단일 스키마
