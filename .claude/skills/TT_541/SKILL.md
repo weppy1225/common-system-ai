@@ -29,7 +29,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
 ## 실행 변수
-- FE 프로젝트 경로 → `C:\zinide\workspace\wms-{프로젝트코드}-fe` (Win) 또는 `/mnt/c/zinide/workspace/wms-{프로젝트코드}-fe` (WSL)
+- FE 프로젝트 경로 → `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` (Win) 또는 `/mnt/c/zinide/workspace-{프로젝트}/{프로젝트}-fe` (WSL)
 - BE 프로젝트 경로 → (사용 안 함. FE만 필요)
 - ex) BASE_URL → `localhost:5173`
 - 로그인 정보 → `test / 1111`
@@ -71,7 +71,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 | 입력 | 설명 | 예시 |
 |---|---|---|
-| **FE 프로젝트 경로** | dev 서버를 켤 프로젝트 루트 디렉토리 | `C:\zinide\workspace\wms-cloud-fe` 또는 `/mnt/c/...` |
+| **FE 프로젝트 경로** | dev 서버를 켤 프로젝트 루트 디렉토리 | `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` 또는 `/mnt/c/...` |
 | **BASE_URL** | 이미 켜져 있는 dev/스테이징 서버. 없으면 사용자에게 `npm run dev` 실행 요청 | `http://localhost:5173` |
 | **고객사명** | 산출물 파일명 `TT_541_사용자매뉴얼_PC_{고객사명}.pptx`. OS 금지문자(`\ / : * ? " < > |`) 자동 `_` 교체 | `진아이드물류` |
 | **로그인 필요 여부** | Y면 `로그인 URL 직접 input`, `ID`, `PW`, `Origin/API URL(선택)` | Y/N |
@@ -241,7 +241,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 ```json
 {
-  "fePath": "C:\\zinide\\workspace\\wms-cloud-fe",
+  "fePath": "C:\\zinide\\workspace-{프로젝트}\\{프로젝트}-fe",
   "framework": "vue3-vite",
   "devPort": 5173,
   "guessedBaseUrl": "http://localhost:5173",

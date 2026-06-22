@@ -44,7 +44,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 | 입력 | 설명 |
 |---|---|
-| 디렉토리 경로 | 스캔할 프로젝트 루트의 절대경로. 모노레포면 루트, 단일 스택이면 해당 저장소 루트. (예: `C:\zinide\workspace\wms-bnk-be` 또는 `/mnt/c/zinide/workspace/wms-bnk-be`) |
+| 디렉토리 경로 | 스캔할 프로젝트 루트의 절대경로. 모노레포면 루트, 단일 스택이면 해당 저장소 루트. (예: `C:\zinide\workspace-{프로젝트}\{프로젝트}-be` 또는 `/mnt/c/zinide/workspace-{프로젝트}/{프로젝트}-be`) |
 | 고객사명 | 출력 파일명에 들어감. 한글/공백 가능. 운영체제 예약 문자(`<>:"|?*\\/`)는 자동 `_` 치환. |
 
 `$ARGUMENTS`가 1개의 토큰이면 디렉토리로 간주하고 고객사명만 별도로 묻는다.

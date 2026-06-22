@@ -3,7 +3,6 @@ title: UI 화면요건 문서 템플릿 (ui.md)
 description: WMS UI 화면요건 Markdown 문서를 생성할 때 출력 경로, 문서 구조, 고정 작성 규칙을 참조하는 템플릿 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 ---
@@ -18,7 +17,7 @@ agent_usage: reference
 ## 출력 파일명 및 저장경로
 
 ```
-C:\zinide\workspace\common-system-ai\spec\30-wms-business\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
+C:\zinide\workspace-common-system\common-system-ai\spec\common-system\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
 ```
 
 예) 메뉴코드 MDPR01 → `spec/common-system/mdpr01/mdpr01-02-ui.md`

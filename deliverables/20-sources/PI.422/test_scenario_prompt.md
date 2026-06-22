@@ -3,7 +3,6 @@ title: WMS 통합테스트 시나리오 문서 작성 요청
 description: TxComp 기반 WMS 통합테스트 시나리오 문서를 생성할 때 아키텍처 맥락, 분석 대상, 산출물 형식을 지시하는 프롬프트 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 ---

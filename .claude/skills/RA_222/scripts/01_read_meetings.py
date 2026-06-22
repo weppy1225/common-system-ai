@@ -3,7 +3,7 @@
 deliverables/30-output/02 분석(RA)/tmp/meeting_raw.json 에 저장한다.
 
 사용법: python scripts/01_read_meetings.py
-작업 디렉토리: /mnt/c/zinide/workspace/common-system-ai
+작업 디렉토리: /mnt/c/zinide/workspace-common-system/common-system-ai
 """
 import openpyxl, json, os, glob, subprocess
 from datetime import datetime

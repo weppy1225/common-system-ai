@@ -26,8 +26,8 @@ allowed-tools: Bash, Read, Write, Edit
 
 | 파일 | 역할 |
 |---|---|
-| `prototype/$PROJECT/_common/wms-ui.css`      | 모든 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
-| `prototype/$PROJECT/_common/wms-common.js`   | 공통 팝업(openCpPopup/openPdPopup), 페이징 유틸, 수평 스크롤 initHScroll/syncHScroll, esc, fmt |
+| `prototype/$PROJECT/_common/common.css`      | 모든 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
+| `prototype/$PROJECT/_common/common.js`   | 공통 팝업(openCpPopup/openPdPopup), 페이징 유틸, 수평 스크롤 initHScroll/syncHScroll, esc, fmt |
 | `prototype/$PROJECT/_common/_template/base.html`        | 전체 레이아웃 기본 뼈대 |
 | `prototype/$PROJECT/_common/_template/grid1.html`       | UI유형: 그리드 1개 |
 | `prototype/$PROJECT/_common/_template/grid2-tb.html`    | UI유형: 그리드 2개 (상하) |
@@ -38,11 +38,11 @@ allowed-tools: Bash, Read, Write, Edit
 생성하는 HTML에는 반드시 아래 2줄이 포함되어야 한다.
 
 ```html
-<link rel="stylesheet" href="../_common/wms-ui.css">
-<script src="../_common/wms-common.js"></script>
+<link rel="stylesheet" href="../_common/common.css">
+<script src="../_common/common.js"></script>
 ```
 
-**wms-ui.css 에 이미 정의된 공통 스타일은 HTML `<style>` 블록에서 재정의하지 않는다.** 화면 고유 스타일(특정 색상, 특수 레이아웃, 추가 컴포넌트)만 최소로 추가한다.
+**common.css 에 이미 정의된 공통 스타일은 HTML `<style>` 블록에서 재정의하지 않는다.** 화면 고유 스타일(특정 색상, 특수 레이아웃, 추가 컴포넌트)만 최소로 추가한다.
 
 ---
 
@@ -112,7 +112,7 @@ const MDFG01_DATA = {
 | `{{MENU_CODE}}`    | 메뉴코드 소문자 |
 | `{{MENU_CODE_UP}}` | 메뉴코드 대문자 |
 | `{{MENU_NAME}}`    | 메뉴명 |
-| `{{CUSTOM_CSS}}`   | 화면 고유 CSS (없으면 공란) — **wms-ui.css 중복 금지** |
+| `{{CUSTOM_CSS}}`   | 화면 고유 CSS (없으면 공란) — **common.css 중복 금지** |
 | `{{SEARCH_ROWS}}`  | 검색 영역 `<tr>...</tr>` |
 | `{{GRID_MAIN_TOOLBAR}}` · `{{GRID_MAIN_COLGROUP}}` · `{{GRID_MAIN_THEAD}}` | 메인 그리드 구성 |
 | `{{GRID_D1_*}}` · `{{GRID_D2_*}}` | 서브 그리드 구성 (해당 UI유형만) |
@@ -123,14 +123,14 @@ const MDFG01_DATA = {
 
 #### 절대 금지
 
-- `window.open()` 사용 → 공통 팝업은 `openCpPopup(targetId)` / `openPdPopup(targetId)` 사용 (wms-common.js에 정의됨)
+- `window.open()` 사용 → 공통 팝업은 `openCpPopup(targetId)` / `openPdPopup(targetId)` 사용 (common.js에 정의됨)
 - 인라인 `style`로 `overflow` / `width` / `height` 직접 지정 (공통 클래스 사용)
 - 그리드 셀 내에 텍스트 넘침 처리 없이 방치
 - 사용여부 컬럼에 badge 색상 (텍스트만)
 - ui.md에 없는 버튼(엑셀등록, 엑셀다운로드 등) 임의 추가
 - 입력 필드에 placeholder 임의 추가
 - 빈 stub 함수 (`function doXxx() {}`)
-- **wms-ui.css 에 있는 공통 CSS 재정의** — `.panel`, `.grid-wrap`, `.toolbar`, `.modal`, `.btn` 등
+- **common.css 에 있는 공통 CSS 재정의** — `.panel`, `.grid-wrap`, `.toolbar`, `.modal`, `.btn` 등
 
 #### 반드시 구현
 
@@ -157,8 +157,8 @@ const MDFG01_DATA = {
 
 ### 6단계 — 완료 체크리스트
 - [ ] `$ARGUMENTS-mock-data.js` 생성 (메인 10건 이상·서브 5건 이상)
-- [ ] `$ARGUMENTS-wireframe.html` 에 `<link rel="stylesheet" href="../_common/wms-ui.css">` 포함
-- [ ] `$ARGUMENTS-wireframe.html` 에 `<script src="../_common/wms-common.js"></script>` 포함
+- [ ] `$ARGUMENTS-wireframe.html` 에 `<link rel="stylesheet" href="../_common/common.css">` 포함
+- [ ] `$ARGUMENTS-wireframe.html` 에 `<script src="../_common/common.js"></script>` 포함
 - [ ] 공통 스타일 CSS를 화면 `<style>` 에서 재정의하지 않음
 - [ ] `<title>` 및 헤더에 `{메뉴명} [{메뉴코드}]` 정확히 표시
 - [ ] 검색 영역 컬럼/컴포넌트가 요건과 일치

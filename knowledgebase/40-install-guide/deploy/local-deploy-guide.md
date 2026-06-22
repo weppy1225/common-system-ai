@@ -3,7 +3,6 @@ title: common-system-be 로컬 빌드·배포 가이드
 description: common-system-be 로컬 환경 빌드·기동·배포 준비 절차. 로컬에서 BE를 띄우거나 배포 준비 시 참조.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 domain: system
@@ -13,16 +12,16 @@ domain: system
 
 ## 환경 정보
 
-| 항목 | 경로 / 값 |
-|---|---|
-| BE 소스 | `C:\zinide\workspace\common-system-be` |
-| Tomcat | `C:\zinide\apache-tomcat-9.0.91` |
-| JAVA_HOME | `C:\zinide\java\jdk11.0.17` |
-| 포트 | 8080 |
-| 빌드 도구 | Gradle (`./gradlew bootWar`) |
-| WAR 결과물 | `build/libs/wms-be.war` |
-| 배포 경로 | `C:\zinide\apache-tomcat-9.0.91\webapps\wms-be.war` |
-| 활성 프로파일 | 기동 옵션 `-Dspring.profiles.active`(또는 환경변수 `SPRING_PROFILES_ACTIVE`)로 지정. **미지정 시 기동 실패** (`WmsApplication.configure()`) |
+| 항목        | 경로 / 값                                                                                                                 |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| BE 소스     | `C:\zinide\workspace-common-system\common-system-be`                                                                                 |
+| Tomcat    | `C:\zinide\apache-tomcat-9.0.91`                                                                                       |
+| JAVA_HOME | `C:\zinide\java\jdk11.0.17`                                                                                            |
+| 포트        | 8080                                                                                                                   |
+| 빌드 도구     | Gradle (`./gradlew bootWar`)                                                                                           |
+| WAR 결과물   | `build/libs/wms-be.war`                                                                                                |
+| 배포 경로     | `C:\zinide\apache-tomcat-9.0.91\webapps\wms-be.war`                                                                    |
+| 활성 프로파일   | 기동 옵션 `-Dspring.profiles.active`(또는 환경변수 `SPRING_PROFILES_ACTIVE`)로 지정. **미지정 시 기동 실패** (`WmsApplication.configure()`) |
 
 > **셸 환경**: 아래 명령어는 모두 **Git Bash** 기준이다. PowerShell에서는 `gradlew.bat` 실행 시 문제가 있으므로 Git Bash를 사용한다.
 
@@ -33,7 +32,7 @@ domain: system
 ### 1. Gradle 빌드
 
 ```bash
-cd /c/zinide/workspace/common-system-be
+cd /c/zinide/workspace-common-system/common-system-be
 export JAVA_HOME=/c/zinide/java/jdk11.0.17
 export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew bootWar --no-daemon
@@ -56,7 +55,7 @@ sleep 5
 ### 3. WAR 복사
 
 ```bash
-cp /c/zinide/workspace/common-system-be/build/libs/wms-be.war \
+cp /c/zinide/workspace-common-system/common-system-be/build/libs/wms-be.war \
    /c/zinide/apache-tomcat-9.0.91/webapps/wms-be.war
 ```
 

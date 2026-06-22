@@ -3,7 +3,6 @@ title: AI 개발 절차 (BE / FE)
 description: AI 에이전트(Claude Code)가 BE·FE 개발을 수행할 때 따르는 단계별 절차. 코드 생성 → 단위테스트 → 기동 → 통합테스트 순서를 정의한다.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: instruction
 domain: common
@@ -132,7 +131,7 @@ common-system-be/
 
 ```powershell
 # Windows (PowerShell) — common-system-be 디렉토리에서 실행
-cd C:\zinide\workspace\common-system-be
+cd C:\zinide\workspace-common-system\common-system-be
 
 # 특정 메뉴 테스트만 실행
 .\gradlew test --tests "*.{메뉴코드}*" --info
@@ -304,7 +303,7 @@ common-system-fe/
 
 ```powershell
 # common-system-fe 디렉토리에서 실행
-cd C:\zinide\workspace\common-system-fe
+cd C:\zinide\workspace-common-system\common-system-fe
 
 # 특정 메뉴 테스트만 실행
 npm run test:unit -- {메뉴코드}
@@ -415,7 +414,7 @@ common-system-fe/
 
 ```powershell
 # common-system-fe 디렉토리에서 실행
-cd C:\zinide\workspace\common-system-fe
+cd C:\zinide\workspace-common-system\common-system-fe
 
 # 특정 메뉴 E2E 테스트 실행
 npx playwright test "src/test/e2e/{메뉴그룹}/{메뉴코드}.spec.ts"

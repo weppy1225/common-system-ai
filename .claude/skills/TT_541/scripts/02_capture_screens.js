@@ -240,7 +240,7 @@ const SEL = {
 
 // ── 팝업 좌표 픽셀 분석 (v-show / display:none 토글 fallback) ──
 const POPUP_HEADER_RGB = [48, 74, 110]; // #304a6e (common-system-ai 프라이머리)
-const ALT_HEADER_RGB = [75, 104, 145];   // #4b6891 (wms-bnk-fe 팝업 헤더)
+const ALT_HEADER_RGB = [75, 104, 145];   // #4b6891 ({프로젝트}-fe 팝업 헤더)
 const COLOR_TOL = 16;
 
 function findPopupBboxByPixel(pngPath) {
@@ -280,7 +280,7 @@ function safeBtnFileFragment(s) {
     return String(s).replace(/[\\/:*?"<>|\s]+/g, '_').slice(0, 16) || 'btn';
 }
 
-// wms-bnk-fe 컴포넌트 클래스명 → 표준 이름 매핑 (title/aria-label/textContent 없을 때)
+// {프로젝트}-fe 컴포넌트 클래스명 → 표준 이름 매핑 (title/aria-label/textContent 없을 때)
 const BTN_CLASS_NAME_MAP = [
     ['layerPop-close', '닫기'],
     ['ZBtnRowAddImg', '행추가'],
@@ -378,12 +378,12 @@ async function captureButtonsByLocator(page, locators, dir, prefix, existingMap 
 
 async function captureToolbarButtons(page, dir, existingMap) {
     return captureButtonsByLocator(page, [
-        // wms-bnk-fe: <div class="content-header">...<div class="addImg|modifyImg|...|ZBtnRowAddImg" title="...">
+        // {프로젝트}-fe: <div class="content-header">...<div class="addImg|modifyImg|...|ZBtnRowAddImg" title="...">
         '.content-header [class*="Img"][title]',
         '.content-header-fncL [class*="Img"]',
         '.content-header-fncR button',
         '.content-header-fncR [class*="Img"][title]',
-        // wms-bnk-fe content-warpper 우측 추가 보강
+        // {프로젝트}-fe content-warpper 우측 추가 보강
         '.content-warpper .content-header button',
         // common-system-ai wireframe fallback
         '.toolbar button[title]',

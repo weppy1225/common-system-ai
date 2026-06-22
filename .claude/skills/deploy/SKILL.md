@@ -22,8 +22,8 @@ allowed-tools: Bash, Read, AskUserQuestion
 ├── index.html
 ├── common/            # 공통 자산 (좌측메뉴·CSS·JS·검색 팝업)
 │   ├── left-menu.html
-│   ├── wms-ui.css
-│   ├── wms-common.js
+│   ├── common.css
+│   ├── common.js
 │   ├── CPCT01_popup.html
 │   ├── CPPD01_popup.html
 │   └── icon-preview.html
@@ -46,13 +46,13 @@ allowed-tools: Bash, Read, AskUserQuestion
 | --- | --- | --- |
 | `prototype/{프로젝트}/index.html` | `dist/index.html` | `loadContent('{c}/{c}-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
 | `prototype/{프로젝트}/_common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../{c}/{c}-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
-| `prototype/{프로젝트}/_common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
+| `prototype/{프로젝트}/_common/{common.css, common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
 | `prototype/{프로젝트}/{c}/{c}-wireframe.html` | `dist/{c}/wireframe.html` | `../_common/` → `../common/`, `./{c}-mock-data.js` → `./mock-data.js` |
 | `prototype/{프로젝트}/{c}/{c}-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
 | `spec/{프로젝트}/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 (없으면 생략) |
 
 > `{c}` = 메뉴코드, `{프로젝트}` = `$PROJECT`. `index.html` 과 `left-menu.html` 은 메뉴 링크가 추가되므로 항상 함께 배포한다.
-> `wms-ui.css` / `wms-common.js` 는 모든 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
+> `common.css` / `common.js` 는 모든 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
 
 ---
 
@@ -111,7 +111,7 @@ sed -E "s#\.\./([a-z0-9]+)/\1-wireframe\.html#../\1/wireframe.html#g" \
     prototype/$PROJECT/_common/left-menu.html > "$STAGE/common/left-menu.html"
 
 # common/ 그 외 공통 자산 — 변환 없이 복사
-for f in wms-ui.css wms-common.js CPCT01_popup.html CPPD01_popup.html icon-preview.html; do
+for f in common.css common.js CPCT01_popup.html CPPD01_popup.html icon-preview.html; do
   cp "prototype/$PROJECT/_common/$f" "$STAGE/common/$f"
 done
 
@@ -138,7 +138,7 @@ BASE="ftp://168.126.28.62/WEB_BASE/CLOUD_WMS_DOC/dist"
 AUTH="zinDev01:Z1nPass01!Q2w3e4r"
 
 find "$STAGE" -type f | while read -r f; do
-  rel="${f#$STAGE/}"          # 예: index.html, common/wms-ui.css, mdpr01/wireframe.html
+  rel="${f#$STAGE/}"          # 예: index.html, common/common.css, mdpr01/wireframe.html
   curl -T "$f" --user "$AUTH" "$BASE/$rel" --ftp-create-dirs -s -w "$rel: %{size_upload}bytes\n"
 done
 ```

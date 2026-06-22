@@ -29,8 +29,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
 ## 실행 변수
-- FE 프로젝트 경로 → `C:\zinide\workspace\wms-{프로젝트코드}-fe` (Win) 또는 `/mnt/c/...` (WSL)
-- BE 프로젝트 경로 → `C:\zinide\workspace\wms-{프로젝트코드}-be`
+- FE 프로젝트 경로 → `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` (Win) 또는 `/mnt/c/...` (WSL)
+- BE 프로젝트 경로 → `C:\zinide\workspace-{프로젝트}\{프로젝트}-be`
 - ex) BASE_URL → `localhost:5173`
 - 로그인 정보 → `admin / 1111` (반드시 관리자 권한 계정)
 - 예시메뉴 / 시작-종료메뉴 : `smus01`
@@ -65,8 +65,8 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 | 입력 | 설명 | 예시 |
 |---|---|---|
-| **FE 프로젝트 경로** | router 자동 스캔. 관리자 메뉴 탐지 | `C:\zinide\workspace\wms-cloud-fe` 또는 `/mnt/c/...` |
-| **BE 프로젝트 경로** | Controller / @RequestMapping 탐지 | `C:\zinide\workspace\wms-cloud-be` |
+| **FE 프로젝트 경로** | router 자동 스캔. 관리자 메뉴 탐지 | `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` 또는 `/mnt/c/...` |
+| **BE 프로젝트 경로** | Controller / @RequestMapping 탐지 | `C:\zinide\workspace-{프로젝트}\{프로젝트}-be` |
 | **BASE_URL** | 이미 켜져 있는 dev/스테이징 서버 | `http://localhost:5173` |
 | **고객사명** | 산출물 파일명. OS 금지문자 자동 `_` 교체 | `진아이드물류` |
 | **로그인 필요 여부** | Y면 로그인 정보 직접 입력. **관리자매뉴얼이므로 관리자 권한 계정 필수** | Y/N |
@@ -266,8 +266,8 @@ rm -rf "$DOC_ROOT/deliverables/30-output/05 이행(TT)/tmp_543"
 
 ```json
 {
-  "fePath": "C:\\zinide\\workspace\\wms-cloud-fe",
-  "bePath": "C:\\zinide\\workspace\\wms-cloud-be",
+  "fePath": "C:\\zinide\\workspace-{프로젝트}\\{프로젝트}-fe",
+  "bePath": "C:\\zinide\\workspace-{프로젝트}\\{프로젝트}-be",
   "framework": "vue3-vite",
   "devPort": 5173,
   "guessedBaseUrl": "http://localhost:5173",

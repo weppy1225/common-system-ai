@@ -3,7 +3,6 @@ title: SD_312 HTML 변환 작업목록
 description: SD_312 범위의 HTML 변환 대상 메뉴, 이미지 수, 처리여부를 추적할 때 참조하는 작업 목록 문서.
 status: active
 version: 1.0.0
-wms_meta: true
 repo_role: ai-hub
 agent_usage: reference
 ---
