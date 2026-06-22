@@ -8,7 +8,7 @@ agent_usage: reference
 domain: common
 applies_to:
   - "**"
-last_verified: 2026-06-18
+last_verified: 2026-06-22
 ---
 
 # common-system-ai 레포 전체 디렉토리 구조
@@ -117,7 +117,7 @@ patterns/
 |---|---|---|---|
 | 🛠️ 개발 자동화 | 15 | 설계·코드·테스트 (SD_310_UI·SD_db·SD_api·PI_be_*·PI_fe_*·PI_test_*) | `spec/`, BE/FE 레포 |
 | 📦 산출물 자동화 | 16 | 프로토타입·고객 제출 문서 (SD_311·312·SD_33x·RA_222·PI_4xx·TT_5xx) | `prototype/`, `deliverables/30-output` |
-| 🔧 유틸 | 6 | 배포·레드마인·KB·메타 (deploy·PI_issue_mod·PI_time_reg·KB_100·KB_200·skill_list) | — |
+| 🔧 유틸 | 8 | 배포·레드마인·KB·메타 (deploy·daily_brief·md_index·PI_issue_mod·PI_time_reg·KB_100·KB_200·skill_list) | — |
 
 ## .claude/rules/ (성격별 4그룹)
 

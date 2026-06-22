@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 
 업체명: **$ARGUMENTS**
 
-`deliverables/20-sources/RA.212/` 폴더의 회의록 Excel 파일들을 3-에이전트 파이프라인으로 분석하여
+`deliverables/20-sources/RA_212/` 폴더의 회의록 Excel 파일들을 3-에이전트 파이프라인으로 분석하여
 `deliverables/30-output/02 분석(RA)/RA.222-요구사항정의서_{업체명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
 ---
@@ -33,7 +33,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Agent
 
 ### 업체명 확정
 
-`$ARGUMENTS`가 비어 있으면 `deliverables/20-sources/RA.212/` 파일명에서 자동 추출한다.
+`$ARGUMENTS`가 비어 있으면 `deliverables/20-sources/RA_212/` 파일명에서 자동 추출한다.
 파일명 패턴: `{코드}-{문서명}_{업체명}_{날짜}.xlsx` → 두 번째 `_` 구분자 사이 값.
 
 ### 출력 경로
@@ -112,7 +112,7 @@ python3 .claude/skills/RA_222/scripts/03_generate_excel.py
 
 ### 에이전트 1 — 회의록 읽기
 
-**목적**: `deliverables/20-sources/RA.212/` 의 모든 xlsx 파일을 읽어 원문 내용을 JSON으로 추출한다.
+**목적**: `deliverables/20-sources/RA_212/` 의 모든 xlsx 파일을 읽어 원문 내용을 JSON으로 추출한다.
 
 **에이전트 프롬프트**:
 
@@ -222,7 +222,7 @@ FUR-{코드}-{순번3자리} (예: FUR-CO-001, FUR-IW-003)
 
 ## 완료 체크리스트 (공통)
 
-- [ ] `input/RA.212/` 파일 전체 읽기 완료 (회의록 전 시트, 메뉴현황 전 시트)
+- [ ] `input/RA_212/` 파일 전체 읽기 완료 (회의록 전 시트, 메뉴현황 전 시트)
 - [ ] 업체명 확정 ($ARGUMENTS 또는 파일명 자동 추출)
 - [ ] 요구사항 ID 체계 `FUR-{코드}-{순번3자리}` 정확히 부여
 - [ ] 회의록에 없는 내용을 임의로 작성하지 않음
