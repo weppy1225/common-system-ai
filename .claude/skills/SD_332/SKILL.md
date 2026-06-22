@@ -161,7 +161,7 @@ rm -rf "$DOC_ROOT/deliverables/30-output/04 구현(PI)/tmp"
 **프로파일 우선순위**: `local` > `dev` > `default(application.*)` > 그 외(`prod`, `test`).
 스크립트는 발견된 후보 전체를 JSON 배열에 담고 추천 후보 1개를 `recommended` 키로 표시한다.
 
-**JDBC URL 파싱**: `db.url=jdbc:log4jdbc:postgresql://localhost:5433/wms_local` 같은 URL에서 driver/host/port/database/schema/options를 분해한다. `log4jdbc:` 프록시 prefix는 제거한다.
+**JDBC URL 파싱**: `db.url=jdbc:log4jdbc:postgresql://localhost:5433/{프로젝트}-dev` 같은 URL에서 driver/host/port/database/schema/options를 분해한다. `log4jdbc:` 프록시 prefix는 제거한다.
 
 **driver 정규화**: `postgresql`/`postgres` → `postgresql`, `mysql`/`mariadb` → `mysql`, `sqlserver`/`mssql` → `mssql`.
 
@@ -182,11 +182,11 @@ rm -rf "$DOC_ROOT/deliverables/30-output/04 구현(PI)/tmp"
   "driver": "postgresql",
   "host": "localhost",
   "port": 5432,
-  "database": "wms_local",
-  "user": "wms_local_sa",
+  "database": "{프로젝트}-dev",
+  "user": "{프로젝트}_dev_sa",
   "password": "...",
   "schema": "public",
-  "profile": "local"
+  "profile": "dev"
 }
 ```
 

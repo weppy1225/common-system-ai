@@ -214,8 +214,8 @@ rm -rf "$DOC_ROOT/deliverables/30-output/03 설계(SD)/tmp"
   "driver": "postgresql",
   "host": "localhost",
   "port": 5432,
-  "database": "wms_db",
-  "user": "wms",
+  "database": "{프로젝트}-dev",
+  "user": "{프로젝트}_dev_sa",
   "password": "...",
   "schema": "public"
 }

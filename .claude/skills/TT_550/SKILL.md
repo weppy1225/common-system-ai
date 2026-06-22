@@ -436,7 +436,7 @@ WHERE contype = 'f'
 -- 고객사:     {고객사명}
 -- 생성일시:   2026-05-12 14:33:21
 -- 실행 모드:  PYTHON (psycopg2 3.1.18)
--- 원본 DB:   192.168.10.20:5432/wms-cloud-test (schema=public, PG 15.4)
+-- 원본 DB:   192.168.10.20:5432/{프로젝트}-test (schema=public, PG 15.4)
 -- 대상 테이블: sm_comm_h, sm_comm_d
 -- 적용 방법: psql -h <host> -U <user> -d <db> -f 01_common_code.sql
 -- =============================================================
@@ -480,7 +480,7 @@ SELECT 'sm_comm_d', COUNT(*) FROM "public"."sm_comm_d";
   "tool_versions": { "python": "3.11.5", "psycopg2": "3.1.18", "pg_dump": null },
   "customer": "가나다물류",
   "source_db": {
-    "host": "192.168.10.20", "port": 5432, "database": "wms-cloud-test",
+    "host": "192.168.10.20", "port": 5432, "database": "{프로젝트}-test",
     "schema": "public", "pg_version": "15.4"
   },
   "groups": [
@@ -555,7 +555,7 @@ SELECT 'sm_comm_d', COUNT(*) FROM "public"."sm_comm_d";
 실행 모드:    PYTHON (psycopg2 3.1.18)
 백엔드 경로:  {백엔드 경로}
 고객사:       {고객사명}
-인하우스 DB:  postgresql 192.168.10.20:5432/wms-cloud-test (schema=public, PG 15.4)
+인하우스 DB:  postgresql 192.168.10.20:5432/{프로젝트}-test (schema=public, PG 15.4)
 
 Dump 결과 (3 groups, 5 tables, 244 rows):
   [01_common_code] 공통코드   sm_comm_h(12) + sm_comm_d(87)       → 01_common_code.sql (8.2 KB)

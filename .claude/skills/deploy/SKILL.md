@@ -18,7 +18,7 @@ allowed-tools: Bash, Read, AskUserQuestion
 ## 서버 dist/ 구조 (배포 결과)
 
 ```
-/WEB_BASE/CLOUD_WMS_DOC/dist/
+/WEB_BASE/{프로젝트}_AI/dist/
 ├── index.html
 ├── common/            # 공통 자산 (좌측메뉴·CSS·JS·검색 팝업)
 │   ├── left-menu.html
@@ -64,7 +64,7 @@ allowed-tools: Bash, Read, AskUserQuestion
 | 포트 | 21 |
 | 계정 | zinDev01 |
 | 비밀번호 | Z1nPass01!Q2w3e4r |
-| 원격 기본 경로 | `/WEB_BASE/CLOUD_WMS_DOC/dist/` |
+| 원격 기본 경로 | `/WEB_BASE/{프로젝트}_AI/dist/` |
 
 ---
 
@@ -134,7 +134,7 @@ echo "=== staging 빌드 결과 ==="; find "$STAGE" -type f | sed "s#$STAGE/#dis
 
 #### curl 방식 (기본)
 ```bash
-BASE="ftp://168.126.28.62/WEB_BASE/CLOUD_WMS_DOC/dist"
+BASE="ftp://168.126.28.62/WEB_BASE/{프로젝트}_AI/dist"
 AUTH="zinDev01:Z1nPass01!Q2w3e4r"
 
 find "$STAGE" -type f | while read -r f; do
@@ -152,7 +152,7 @@ find . -type f | sed 's#^\./##' | while read -r rel; do
 user zinDev01 Z1nPass01!Q2w3e4r
 binary
 passive
-cd /WEB_BASE/CLOUD_WMS_DOC/dist
+cd /WEB_BASE/{프로젝트}_AI/dist
 $([ "$dir" != "." ] && echo "mkdir $dir")
 $([ "$dir" != "." ] && echo "cd $dir")
 put $rel $base

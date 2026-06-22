@@ -1,5 +1,5 @@
 ---
-title: WMS BE 공통 예외 처리
+title: BE 공통 예외 처리
 description: 모든 메뉴에 공통으로 적용되는 F/W 수준의 예외 처리 목록. 06-be-flow 작성 시 참조하여 중복 기재하지 않는다.
 status: active
 version: 1.0.0
@@ -8,7 +8,7 @@ agent_usage: reference
 domain: common
 ---
 
-# WMS BE 공통 예외 처리
+# BE 공통 예외 처리
 
 F/W 인터셉터 또는 Comp 공통 로직에서 처리되는 예외다.
 메뉴별 `06-be-flow.md`에는 이 목록을 반복하지 않는다.

@@ -1,6 +1,6 @@
 ---
 title: WEB 화면 설계 패턴
-description: WMS PC 웹 화면 설계 패턴. 검색영역·그리드·툴바·팝업의 레이아웃·CSS·동작 규칙 인덱스.
+description: PC 웹 화면 설계 패턴. 검색영역·그리드·툴바·팝업의 레이아웃·CSS·동작 규칙 인덱스.
 status: active
 version: 1.1.0
 repo_role: ai-hub

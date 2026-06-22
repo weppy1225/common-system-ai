@@ -1,6 +1,6 @@
 ---
 title: 화면 설계 패턴 인덱스
-description: WMS WEB/PDA 화면 설계 및 프로토타입 작성 패턴 문서 인덱스. SD_310_UI·SD_311·SD_312 스킬 실행 시 참조.
+description: WEB/PDA 화면 설계 및 프로토타입 작성 패턴 문서 인덱스. SD_310_UI·SD_311·SD_312 스킬 실행 시 참조.
 status: active
 version: 1.1.0
 repo_role: ai-hub
@@ -14,7 +14,7 @@ tags:
 
 # 화면 설계 패턴 인덱스
 
-WMS WEB / PDA 화면 설계·프로토타입 작성 패턴을 관리한다.
+WEB / PDA 화면 설계·프로토타입 작성 패턴을 관리한다.
 
 ## 디렉토리 구성
 

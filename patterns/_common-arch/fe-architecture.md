@@ -1,5 +1,5 @@
 ---
-title: WMS FE 공통 아키텍처 (Vue 구조·함수 네이밍·공통 패턴)
+title: FE 공통 아키텍처 (Vue 구조·함수 네이밍·공통 패턴)
 description: 모든 메뉴에 공통으로 적용되는 FE Vue 파일 구조, 함수 네이밍 규칙, 공통 컴포넌트 패턴. 07-fe-flow 작성 시 참조.
 status: active
 version: 1.0.0
@@ -8,7 +8,7 @@ agent_usage: reference
 domain: common
 ---
 
-# WMS FE 공통 아키텍처
+# FE 공통 아키텍처
 
 모든 메뉴에 동일하게 적용되는 F/W 기반 FE 패턴이다.
 메뉴별 `07-fe-flow.md`에는 이 패턴을 반복하지 않고 API별 시퀀스와 메뉴 고유 구현 포인트만 기술한다.

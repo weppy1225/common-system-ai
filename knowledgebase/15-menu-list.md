@@ -1,6 +1,6 @@
 ---
-title: WMS 메뉴코드 목록
-description: 전체 WMS 메뉴코드·메뉴명·상위그룹 레지스트리. 메뉴 단위 스킬(KB_100/KB_200 등)이 메뉴 정보를 조회할 때 사용.
+title: 메뉴코드 목록
+description: 전체 메뉴코드·메뉴명·상위그룹 레지스트리. 메뉴 단위 스킬(KB_100/KB_200 등)이 메뉴 정보를 조회할 때 사용.
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -8,7 +8,7 @@ agent_usage: reference
 domain: common
 ---
 
-# WMS 메뉴코드 목록
+# 메뉴코드 목록
 
 > 정렬: 기준정보 → 시스템 → 운영 → 입고 → 반품 → 재고 → 출고 (+ IF·소통·시스템현황) / PC 우선, 모바일 후
 > 기준: 실제 소스 컨트롤러(`src/main/java/be`, `src/main/java/bm`)

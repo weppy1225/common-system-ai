@@ -1,5 +1,5 @@
 ---
-title: WMS BE 공통 아키텍처 (레이어 구조)
+title: BE 공통 아키텍처 (레이어 구조)
 description: 모든 메뉴에 공통으로 적용되는 BE 레이어 구조 및 클래스 역할. 06-be-flow 작성 시 참조.
 status: active
 version: 1.0.0
@@ -8,7 +8,7 @@ agent_usage: reference
 domain: common
 ---
 
-# WMS BE 공통 아키텍처
+# BE 공통 아키텍처
 
 모든 메뉴에 동일하게 적용되는 F/W 기반 레이어 구조다.
 메뉴별 `06-be-flow.md`에는 이 구조를 반복하지 않고 업무별 시퀀스만 기술한다.

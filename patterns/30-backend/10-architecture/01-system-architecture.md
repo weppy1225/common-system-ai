@@ -148,7 +148,6 @@ DB는 PostgreSQL을 사용하고 ERP와 연동되는 구조이다.
 
 ### 4.1 1 WMS Service
 
-* 도메인: `wms.zin.co.kr`
 * 기능:
 
 * 입고
@@ -157,7 +156,6 @@ DB는 PostgreSQL을 사용하고 ERP와 연동되는 구조이다.
 
 ### 4.2 2 WMS Portal
 
-* 도메인: `portal.wms.zin.co.kr`
 * 기능:
 
 * 서비스 소개
@@ -178,7 +176,6 @@ DB는 PostgreSQL을 사용하고 ERP와 연동되는 구조이다.
 
 ## 6. WMS APP
 
-* 패키지명: `com.zin.cloud.wms`
 * 기능:
 
 * 입고 처리

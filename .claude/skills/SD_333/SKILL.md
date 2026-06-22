@@ -192,8 +192,8 @@ JDBC URL 파싱:
   "driver": "postgresql",
   "host": "localhost",
   "port": 5432,
-  "database": "wms",
-  "user": "wms",
+  "database": "{프로젝트}-dev",
+  "user": "{프로젝트}_dev_sa",
   "password": "...",
   "schema": "public"
 }
