@@ -1,0 +1,120 @@
+<title>SD_310_UI 스킬 개념 카드</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171e2e; --panel2:#1d2638; --line:#2a3650;
+    --ink:#e8edf6; --muted:#9aa7bd; --accent:#5b8cff; --accent2:#37d39b;
+    --code:#0b0f18;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;line-height:1.6;font-size:15px}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 22px 70px}
+  header.hero{background:linear-gradient(135deg,#1a2440 0%,#10182a 100%);
+    border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:26px}
+  .hero .eyebrow{margin:0 0 6px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .hero h1{margin:0;font-size:30px;letter-spacing:-.5px;font-family:"SF Mono",Consolas,monospace}
+  .hero p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:0;margin:14px 0;overflow:hidden}
+  .card .label{display:flex;align-items:center;gap:10px;background:var(--panel2);
+    padding:10px 18px;border-bottom:1px solid var(--line)}
+  .card .label .n{background:var(--accent);color:#06122e;border-radius:7px;font-size:13px;font-weight:700;
+    width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .card .label h2{margin:0;font-size:15px;color:#cdd8ee;border:0;padding:0}
+  .card .body{padding:16px 20px}
+  .card .body p{margin:0}
+  .card .body p+p{margin-top:8px}
+  .muted{color:var(--muted)}
+  code{font-family:"SF Mono",Consolas,"D2Coding",monospace;background:var(--code);
+    padding:2px 7px;border-radius:5px;font-size:13px;color:#8fd3ff}
+  .cmd{color:var(--accent2)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#202a40;color:#cdd8ee;font-weight:600;width:80px;white-space:nowrap}
+  .io{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 9px;margin-right:8px}
+  .io.in{background:rgba(91,140,255,.18);color:#9bc0ff}
+  .io.out{background:rgba(55,211,155,.18);color:#6fe3bd}
+  ul.tight{margin:0;padding-left:20px}
+  ul.tight li{margin:4px 0}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">스킬 개념 카드</p>
+  <h1>/SD_310_UI</h1>
+  <p>화면설계 자동화 · 1단계 — 화면요건 대화형 작성</p>
+</header>
+
+<div class="card">
+  <div class="label"><span class="n">1</span><h2>스킬명</h2></div>
+  <div class="body">
+    <p><b>SD_310_UI</b> (화면요건 문서 대화형 작성)</p>
+    <p class="muted">실행: <code class="cmd">/SD_310_UI {메뉴코드}</code></p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">2</span><h2>주요 작업 내용</h2></div>
+  <div class="body">
+    <p>사용자와 <b>6단계 인터뷰</b>를 진행하여 화면요건 문서(<code>ui.md</code>)를 작성한다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">3</span><h2>스킬 개요</h2></div>
+  <div class="body">
+    <p>화면 요건을 사람과의 대화로 받아 <b>표준 화면요건 문서(ui.md)</b>로 정리하는 스킬이다.
+    한 번에 묻지 않고 단계별로 진행하며, 6단계 완료 후 전체 요약을 확인받고 파일을 생성한다.</p>
+    <p>이 산출물 <code>ui.md</code> 는 화면설계의 출발점이자, 이후 화면 생성(SD_311)·DB·API 설계의
+    기준이 되는 <b>단일 진실원천(SoT)</b> 이다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">4</span><h2>육하원칙</h2></div>
+  <div class="body">
+    <table>
+      <tr><th>누가</th><td>화면설계 담당자가 Claude와 함께 (AI가 인터뷰를 진행·정리)</td></tr>
+      <tr><th>언제</th><td>새 메뉴 화면 설계에 착수할 때 (요건이 아직 글로 정리되기 전)</td></tr>
+      <tr><th>어디서</th><td>AI 허브(common-system-ai) CWD 에서 <code class="cmd">/SD_310_UI {메뉴코드}</code></td></tr>
+      <tr><th>무엇을</th><td>6단계 인터뷰 답변(기본정보·화면구조·검색·그리드·팝업·업무규칙)을</td></tr>
+      <tr><th>어떻게</th><td><code>ui-template.md</code> 규칙으로 표준 표기로 변환해</td></tr>
+      <tr><th>왜</th><td>이후 화면·DB·API 설계의 기준이 되는 SoT 문서를 만들기 위해</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">5</span><h2>INPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io in">INPUT</span>사용자와의 <b>6단계 인터뷰 답변</b></p>
+    <ul class="tight muted" style="margin-top:8px">
+      <li>1/6 기본정보 — 메뉴코드·메뉴명·메뉴그룹명/코드·화면 목적</li>
+      <li>2/6 화면 구조 — UI 유형(A~D)·그리드명</li>
+      <li>3/6 검색 영역 · 4/6 그리드 상세 · 5/6 등록/수정 팝업 · 6/6 업무규칙</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">6</span><h2>참조 문서</h2></div>
+  <div class="body">
+    <p><code>common-system-ai/deliverables/20-sources/UI/ui-template.md</code></p>
+    <p class="muted">출력형식 · 저장경로 · 컴포넌트 표기 기준 · 정렬 기준 등 작성 규칙의 근거.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">7</span><h2>OUTPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io out">OUTPUT</span><code>common-system-ai/spec/{메뉴코드}/{메뉴코드}-02-ui.md</code></p>
+    <p class="muted">화면요건정리 문서 = 단일 진실원천(SoT). 다음 단계 <b>SD_311</b> 의 핵심 입력이 된다.</p>
+  </div>
+</div>
+
+<footer>
+스킬 개념 카드 · common-system-ai · 출처: <code>.claude/skills/SD_310_UI/SKILL.md</code>
+</footer>
+
+</div>
