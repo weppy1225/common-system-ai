@@ -112,11 +112,13 @@ Quartz 2.3.2 프레임워크 내부 테이블 — Job/Trigger 정의, 실행 상
 
 ## 5. 상세 문서 목록
 
+> 실 테이블 카탈로그·공통코드는 **프로젝트 확정 데이터**라 프로젝트 네임스페이스에 있다: `spec/{프로젝트}/_knowledge/db-schema/`.
+
 ### 5.1 테이블 구조
-- [WMS 테이블 목록 및 설명](./40-schema/00-tables-overview.md) - 전체 테이블 목록과 설명
+- [테이블 목록 및 설명](../../spec/{프로젝트}/_knowledge/db-schema/00-tables-overview.md) - 전체 테이블 목록과 설명
 
 ### 5.2 코드 정보
-- [공통코드 목록](./40-schema/90-common-code.md) - 코드 헤더 및 상세 정보
+- [공통코드 목록](../../spec/{프로젝트}/_knowledge/db-schema/90-common-code.md) - 코드 헤더 및 상세 정보
 
 ### 5.3 데이터베이스 함수
 - [PostgreSQL 함수 목록](./11-postgresql-functions.md) - 주요 함수 설명

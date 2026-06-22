@@ -7,7 +7,7 @@ repo_role: ai-hub
 agent_usage: instruction
 domain: interface
 related:
-  - patterns/50-interface/10-convention/01-erp-to-wms-convention.md
+  - knowledgebase/domains/wms/interface-convention/01-erp-to-wms.md
   - patterns/30-backend/40-guide/08-txcomp-writing-rules.md
 tags:
   - sif
@@ -19,7 +19,7 @@ tags:
 # WMS→ERP 송신 (W2E) 코딩 컨벤션
 
 > 이 문서는 W2E(WMS→ERP 송신) 코드 작성 패턴(진입점 템플릿·Retrofit2·클래스 위치·체크리스트)을 기술한다.
-> 수신(E2W) 컨벤션은 [01-erp-to-wms-convention.md](./01-erp-to-wms-convention.md) 참조.
+> 수신(E2W) 컨벤션은 [01-erp-to-wms.md](./01-erp-to-wms.md) 참조.
 
 ---
 

@@ -34,7 +34,7 @@ tags:
 #### 2.1.1 품목 연동
 | 인터페이스 코드 | URL | 설명 |
 |----------------|-----|------|
-| [`E2W_PROD_REG`](./20-detail/e2w-prod-reg.md) | `/{bizSeq}/sif/e2w/E2W_PROD_REG` | 품목 등록 수신 |
+| [`E2W_PROD_REG`](./detail/e2w-prod-reg.md) | `/{bizSeq}/sif/e2w/E2W_PROD_REG` | 품목 등록 수신 |
 | [`E2W_PROD_MOD`](E2W_PROD_MOD.md) | `/{bizSeq}/sif/e2w/E2W_PROD_MOD` | 품목 변경 수신 |
 | [`E2W_PROD_DEL`](E2W_PROD_DEL.md) | `/{bizSeq}/sif/e2w/E2W_PROD_DEL` | 품목 삭제 수신 |
 

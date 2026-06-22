@@ -56,7 +56,7 @@ common-system-ai\
 knowledgebase/
 ├── 00-overview.md       개요
 ├── 10-domain/           메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람 작성)
-├── 15-menu-list.md      메뉴 레지스트리 (메뉴 색인 — 문서·소스 색인의 1차 키)
+├── domains/             도메인 표준 — 같은 도메인 프로젝트끼리 공유 (예: domains/wms/)
 ├── 20-md-index.md       MD 문서 색인 (문서 위치)
 ├── 20-md-index.html     ↑의 HTML 뷰 — scripts/gen-md-map.py 생성물 (직접 편집 금지)
 ├── 30-src-index/        소스코드 색인 (코드 위치 — 실제 코드는 BE/FE 레포)
@@ -104,7 +104,6 @@ patterns/
 ├── 20-database/         DB 패턴 (도메인·타입·변경이력)
 ├── 30-backend/          BE 패턴 (10-architecture · 20-rule)
 ├── 40-frontend/         FE 패턴 (10-architecture · 20-convention)
-├── 50-interface/        연동 패턴 (10-api · 10-convention)
 └── _common-arch/        공통 아키텍처 (be/fe-architecture·exceptions)
 ```
 
