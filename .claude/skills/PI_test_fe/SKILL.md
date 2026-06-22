@@ -24,7 +24,7 @@ model: claude-sonnet-4-6
 
 ## STEP 0. 레포 경로 결정 (BLOCKING)
 
-스킬은 AI 허브(`wms-{code}-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$FE_DIR`(FE 레포)를 결정한 뒤 **`cd "$FE_DIR"` 후 진행**한다. 이 스킬 본문의 `package.json`·`vitest/`·`node_modules` 등은 `$FE_DIR`(= 형제 `../wms-{code}-fe`) 기준이다.
+스킬은 AI 허브(`common-system-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$FE_DIR`(FE 레포)를 결정한 뒤 **`cd "$FE_DIR"` 후 진행**한다. 이 스킬 본문의 `package.json`·`vitest/`·`node_modules` 등은 `$FE_DIR`(= 형제 `../{프로젝트}-fe`) 기준이다.
 
 ## STEP 1. FE 프로젝트 경로 및 환경 확인
 

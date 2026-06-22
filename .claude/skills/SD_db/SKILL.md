@@ -29,10 +29,10 @@ model: claude-opus-4-7
 
 ## 레포 경로 도출 (자동)
 
-스킬은 AI 허브(`wms-{code}-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(화면설계 보유 허브 = CWD)와 `$BE_DIR`(db.md·DEV_DOC 대상 BE 레포 = 형제 `../wms-{code}-be`)을 결정한다.
+스킬은 AI 허브(`common-system-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(화면설계 보유 허브 = CWD)와 `$BE_DIR`(db.md·DEV_DOC 대상 BE 레포 = 형제 `../{프로젝트}-be`)을 결정한다.
 
 ```bash
-# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD) / BE_DIR(형제 ../wms-{code}-be)
+# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD) / BE_DIR(형제 ../{프로젝트}-be)
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 # BE_DIR 은 repo-paths.md 규칙으로 결정
 
