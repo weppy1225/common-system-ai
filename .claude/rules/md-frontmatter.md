@@ -1,6 +1,6 @@
 ---
 title: Markdown Frontmatter Rule
-description: WMS 계열 모든 프로젝트에서 AI 에이전트가 사용할 Markdown 문서에 YAML frontmatter를 작성하는 규칙
+description: 모든 프로젝트에서 AI 에이전트가 사용할 Markdown 문서에 YAML frontmatter를 작성하는 규칙
 version: 1.0.0
 status: active
 paths:
@@ -15,7 +15,7 @@ tags:
 
 # Markdown Frontmatter 작성 규칙
 
-WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}-fe`, `common-system-*`)에서 AI 에이전트가 사용할 가능성이 높은 Markdown 파일을 새로 작성하거나 의미 있게 수정할 때는 YAML frontmatter를 문서 맨 앞에 둔다.
+모든 프로젝트(`{프로젝트}-ai`, `{프로젝트}-be`, `{프로젝트}-fe`)에서 AI 에이전트가 사용할 가능성이 높은 Markdown 파일을 새로 작성하거나 의미 있게 수정할 때는 YAML frontmatter를 문서 맨 앞에 둔다.
 
 기존 문서에 frontmatter가 없더라도 단순 오탈자 수정, 링크 보정, 포맷 정리만 하는 경우에는 억지로 추가하지 않는다. 문서의 목적, 범위, 사용 시점, 에이전트 동작, 산출물 계약이 바뀌는 수정이면 추가한다.
 

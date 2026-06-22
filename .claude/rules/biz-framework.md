@@ -4,7 +4,7 @@ paths:
   - "**/*TxComp.java"
 ---
 
-# WMS 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
+# 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
 
 ---
 

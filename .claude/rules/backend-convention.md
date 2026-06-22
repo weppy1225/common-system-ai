@@ -1,5 +1,5 @@
 ---
-description: WMS 백엔드 레이어(Controller·Comp·TxComp·Dao·CompUtil) 및 VO·DTO·Bean 코드 작성·수정 시 적용. 패키지구조·어노테이션·네이밍·예외처리·ResponseData·@Transactional 배치·금지패턴을 정의한다.
+description: 백엔드 레이어(Controller·Comp·TxComp·Dao·CompUtil) 및 VO·DTO·Bean 코드 작성·수정 시 적용. 패키지구조·어노테이션·네이밍·예외처리·ResponseData·@Transactional 배치·금지패턴을 정의한다.
 paths:
   - "**/*Controller.java"
   - "**/*Comp.java"
@@ -8,7 +8,7 @@ paths:
   - "**/*CompUtil.java"
 ---
 
-# WMS 백엔드 코딩 컨벤션
+# 백엔드 코딩 컨벤션
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: AI 개발 절차 (BE / FE)
-description: AI 에이전트(Claude Code)가 WMS BE·FE 개발을 수행할 때 따르는 단계별 절차. 코드 생성 → 단위테스트 → 기동 → 통합테스트 순서를 정의한다.
+description: AI 에이전트(Claude Code)가 BE·FE 개발을 수행할 때 따르는 단계별 절차. 코드 생성 → 단위테스트 → 기동 → 통합테스트 순서를 정의한다.
 status: active
 version: 1.0.0
 wms_meta: true

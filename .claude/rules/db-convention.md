@@ -5,7 +5,7 @@ paths:
   - "**/*Mapper.java"
 ---
 
-# WMS MyBatis XML 쿼리 작성 컨벤션
+# MyBatis XML 쿼리 작성 컨벤션
 
 ---
 
