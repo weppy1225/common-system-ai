@@ -1,4 +1,4 @@
-# cloud-wms-ai
+# common-system-ai
 
 WMS AI 프레임워크 허브 레포. 화면설계·지식베이스·소스패턴·산출물·BE/FE 개발 자동화 스킬의 단일 허브.
 

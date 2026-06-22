@@ -12,7 +12,7 @@
  *   1) package.json / vite.config / next.config 등에서 dev 포트 추출
  *   2) router 파일 또는 views/pages 디렉터리에서 라우터(사용자 메뉴) 추출
  *   3) menu-index.md / menus.json 파일이 있으면 메뉴명 매핑
- *   4) cloud-wms-ai 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md 가 있으면 메뉴명 우선 매핑
+ *   4) common-system-ai 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md 가 있으면 메뉴명 우선 매핑
  *   5) PDA 메뉴(코드 끝 m 또는 경로 /bm/, /pda/, /mobile/)는 자동 제외
  *   6) JSON 으로 저장
  * 이 스크립트는 Windows 드라이브 경로(C:\...) 와 WSL 경로(/mnt/c/...)를 모두 받는다.
@@ -52,7 +52,7 @@ if (!fs.existsSync(fePath)) {
 fs.mkdirSync(TMP_DIR, { recursive: true });
 
 // PDA 메뉴 판별
-// cloud-wms-fe 기준 PDA 라우터 패턴:
+// common-system-fe 기준 PDA 라우터 패턴:
 //   - 경로: /bm/{그룹코드m}/{메뉴코드m}  (예: /bm/iv3000m/ivad01m)
 //   - 그룹 segment: 영문 + 숫자 + 'm' (예: iv3000m, md8000m)
 //   - 메뉴 코드: 끝이 'm' (예: ivad01m, ivmvrq01m, sksp01m)
@@ -234,7 +234,7 @@ function extractRoutesFromFiles(rootPath) {
 function buildMenuNameMap(rootPath) {
     const map = {};
 
-    // a) cloud-wms-ai 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md
+    // a) common-system-ai 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md
     const distDir = path.join(REPO_ROOT, 'spec');
     if (fs.existsSync(distDir)) {
         try {

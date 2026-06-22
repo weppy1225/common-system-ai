@@ -18,7 +18,7 @@ agent_usage: reference
 ## 출력 파일명 및 저장경로
 
 ```
-C:\zinide\workspace\cloud-wms-ai\spec\30-wms-business\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
+C:\zinide\workspace\common-system-ai\spec\30-wms-business\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
 ```
 
 예) 메뉴코드 MDPR01 → `spec/mdpr01/mdpr01-02-ui.md`

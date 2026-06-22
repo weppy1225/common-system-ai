@@ -1,6 +1,6 @@
 ---
 title: knowledgebase/40-install-guide 시스템 운영·인프라 가이드
-description: cloud-wms 시스템의 빌드·배포·설치·운영에 관한 가이드 문서 모음
+description: common-system 시스템의 빌드·배포·설치·운영에 관한 가이드 문서 모음
 status: active
 version: 1.0.0
 wms_meta: true
@@ -10,7 +10,7 @@ agent_usage: reference
 
 # knowledgebase/40-install-guide
 
-cloud-wms 시스템의 빌드·배포·설치·운영 가이드를 관리한다.
+common-system 시스템의 빌드·배포·설치·운영 가이드를 관리한다.
 
 ## 디렉토리 구조
 

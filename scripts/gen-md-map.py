@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-cloud-wms-ai 파일·폴더 지도(knowledgebase/20-md-index.html) 생성기.
+common-system-ai 파일·폴더 지도(knowledgebase/20-md-index.html) 생성기.
 
 실행: python scripts/gen-md-map.py   (CWD 무관 — 레포 루트 기준으로 동작)
 출력: 레포 루트의 knowledgebase/20-md-index.html  (※ gitignore 대상, 생성물)
@@ -226,9 +226,9 @@ function fa(el,n){document.querySelectorAll('.chip').forEach(function(c){c.class
  document.querySelectorAll('details.area').forEach(function(a){a.classList.toggle('hide',n&&a.dataset.area!==n);});}
 function setAll(o){document.querySelectorAll('details').forEach(function(d){d.open=o;});}
 """
-doc = ('<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>cloud-wms-ai 파일 지도</title>'
+doc = ('<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>common-system-ai 파일 지도</title>'
  + '<style>' + CSS + '</style></head><body>'
- + '<h1>cloud-wms-ai · 파일·폴더 지도</h1>'
+ + '<h1>common-system-ai · 파일·폴더 지도</h1>'
  + '<div class="sub">MD <b>' + str(mdtotal) + '</b>개 + 전체 폴더 구조 (비MD는 개수만, node_modules·이미지 제외) · 생성 ' + str(datetime.date.today()) + '</div>'
  + '<div class="tools"><input id="q" placeholder="파일명·경로·역할 검색…" oninput="se(this.value)">'
  + '<button class="x" onclick="setAll(true)">모두 펼치기</button><button class="x" onclick="setAll(false)">모두 접기</button></div>'

@@ -18,12 +18,12 @@ tags:
 
 ```
 workspace/
-├── {프로젝트}-ai/    # AI 허브 (예: cloud-wms-ai). 스킬·규칙·spec·prototype 보유. 스킬 실행 위치(CWD)
+├── {프로젝트}-ai/    # AI 허브 (예: common-system-ai). 스킬·규칙·spec·prototype 보유. 스킬 실행 위치(CWD)
 ├── {프로젝트}-be/    # 백엔드. src/main/java, DEV_DOC, gradle
 └── {프로젝트}-fe/    # 프론트엔드. src/views, package.json
 ```
 
-스킬은 **항상 AI 허브에서 실행**된다. 형제 BE/FE 레포는 **허브 폴더명에서 역할 접미사만 떼어** 도출한다(아래). 따라서 `cloud-wms-*` → `bnk-wms-*` 처럼 **이름이 바뀌어도 규칙은 그대로** 동작한다. (역할 접미사 `-be`/`-fe`만 유지하면 됨)
+스킬은 **항상 AI 허브에서 실행**된다. 형제 BE/FE 레포는 **허브 폴더명에서 역할 접미사만 떼어** 도출한다(아래). 따라서 `common-system-*` → `bnk-wms-*` 처럼 **이름이 바뀌어도 규칙은 그대로** 동작한다. (역할 접미사 `-be`/`-fe`만 유지하면 됨)
 
 ---
 
@@ -36,8 +36,8 @@ WS=$(dirname "$AI_DIR")
 
 # 프로젝트 접두어 = 허브 폴더명에서 끝의 역할 토큰(-ai/-be/-fe)만 떼어낸 부분.
 #   "{프로젝트}-{역할}" 형식에서 "-역할"을 제거 → "{프로젝트}".
-AI_NAME=$(basename "$AI_DIR")      # 허브 레포 폴더명 (예: cloud-wms-ai)
-PREFIX=${AI_NAME%-*}               # 역할 토큰 제거 → 예: cloud-wms
+AI_NAME=$(basename "$AI_DIR")      # 허브 레포 폴더명 (예: common-system-ai)
+PREFIX=${AI_NAME%-*}               # 역할 토큰 제거 → 예: common-system
 
 # 형제 = 같은 접두어 + -be / -fe (없으면 *-be / *-fe 탐색 폴백)
 BE_DIR="$WS/${PREFIX}-be"
@@ -49,8 +49,8 @@ FE_DIR="$WS/${PREFIX}-fe"
 # 레포 이름(NAME) — 산문·로그·메시지에서 "프로젝트명 단어"가 필요할 때.
 # DIR 의 basename 으로 뽑는다(${PREFIX}-be 가 아니라) → find 폴백으로 실폴더명이
 # 접두어와 달라도 실제 폴더명을 그대로 따른다.
-BE_NAME=$(basename "$BE_DIR")      # cloud-wms-be
-FE_NAME=$(basename "$FE_DIR")      # cloud-wms-fe
+BE_NAME=$(basename "$BE_DIR")      # common-system-be
+FE_NAME=$(basename "$FE_DIR")      # common-system-fe
 
 echo "AI_DIR=$AI_DIR  AI_NAME=$AI_NAME  PREFIX=$PREFIX"
 echo "BE_DIR=$BE_DIR  BE_NAME=$BE_NAME"

@@ -21,7 +21,7 @@ tags:
 
 > 이 프레임워크는 레포 이름을 코드에 박지 않는다. 경로·이름은 **지금 열려 있는 폴더 이름에서 런타임에 도출**한다. 그래서 다른 프로젝트(`bnk-wms`, `acme-erp` …)에 붙일 때 **실행 코드는 한 줄도 안 고친다.** 손대는 것은 폴더명과, 산문에 남은 리터럴뿐이다.
 >
-> 아래 예시의 `cloud-wms-*` 는 현재 프로젝트명일 뿐이며, 메커니즘을 설명하기 위한 illustration 이다.
+> 아래 예시의 `common-system-*` 는 현재 프로젝트명일 뿐이며, 메커니즘을 설명하기 위한 illustration 이다.
 
 정본 규칙: [`.claude/rules/repo-paths.md`](./.claude/rules/repo-paths.md) (경로·변수 도출) · [`.claude/rules/md-frontmatter.md`](./.claude/rules/md-frontmatter.md) (frontmatter `repo_role`).
 
@@ -46,17 +46,17 @@ tags:
 
 | 역할 | 경로 (DIR) | 이름 (NAME) | 현재 값(예) |
 |---|---|---|---|
-| AI 허브 (CWD) | `$AI_DIR` | `$AI_NAME` | `cloud-wms-ai` |
-| 백엔드 | `$BE_DIR` | `$BE_NAME` | `cloud-wms-be` |
-| 프론트엔드 | `$FE_DIR` | `$FE_NAME` | `cloud-wms-fe` |
+| AI 허브 (CWD) | `$AI_DIR` | `$AI_NAME` | `common-system-ai` |
+| 백엔드 | `$BE_DIR` | `$BE_NAME` | `common-system-be` |
+| 프론트엔드 | `$FE_DIR` | `$FE_NAME` | `common-system-fe` |
 
 도출 코드(STEP 0)는 `repo-paths.md` 정본을 따른다. 핵심 식:
 
 ```bash
-AI_NAME=$(basename "$AI_DIR")   # cloud-wms-ai
-PREFIX=${AI_NAME%-*}            # cloud-wms
-BE_DIR="$WS/${PREFIX}-be"       # …/cloud-wms-be   (없으면 *-be 폴백)
-BE_NAME=$(basename "$BE_DIR")   # cloud-wms-be
+AI_NAME=$(basename "$AI_DIR")   # common-system-ai
+PREFIX=${AI_NAME%-*}            # common-system
+BE_DIR="$WS/${PREFIX}-be"       # …/common-system-be   (없으면 *-be 폴백)
+BE_NAME=$(basename "$BE_DIR")   # common-system-be
 ```
 
 ---
@@ -67,11 +67,11 @@ BE_NAME=$(basename "$BE_DIR")   # cloud-wms-be
 
 | 분류                   | 예                               | 처리                                         | 리브랜딩  |
 | -------------------- | ------------------------------- | ------------------------------------------ | ----- |
-| **실행 코드** (스킬 셸)     | `$Workspace\cloud-wms-be\src\…` | 도출 변수 `$BE_DIR`/`$BE_NAME` 로 교체            | 자동    |
-| **A. frontmatter**   | `description: cloud-wms-be에서…`  | `repo_role: be` 로, 본문 description 엔 브랜드 제거 | 자동    |
-| **B. 식별자 산문**        | "대응 백엔드: `cloud-wms-be`"        | 역할어로 환원 → "BE 레포"/"백엔드"                    | 영구 면역 |
-| **C1. AI가 읽는 경로·출처** | `> 출처: ../cloud-wms-be/src/…`   | 브랜드 접두부만 `$BE_DIR/…` 로 추상화                 | 자동    |
-| **C2. 사람이 복붙하는 명령**  | `cd C:\…\cloud-wms-be`          | 실예시 유지 (+`$BE_DIR` 병기)                     | 수동 1회 |
+| **실행 코드** (스킬 셸)     | `$Workspace\common-system-be\src\…` | 도출 변수 `$BE_DIR`/`$BE_NAME` 로 교체            | 자동    |
+| **A. frontmatter**   | `description: common-system-be에서…`  | `repo_role: be` 로, 본문 description 엔 브랜드 제거 | 자동    |
+| **B. 식별자 산문**        | "대응 백엔드: `common-system-be`"        | 역할어로 환원 → "BE 레포"/"백엔드"                    | 영구 면역 |
+| **C1. AI가 읽는 경로·출처** | `> 출처: ../common-system-be/src/…`   | 브랜드 접두부만 `$BE_DIR/…` 로 추상화                 | 자동    |
+| **C2. 사람이 복붙하는 명령**  | `cd C:\…\common-system-be`          | 실예시 유지 (+`$BE_DIR` 병기)                     | 수동 1회 |
 | **유지**               | 규칙 자체의 설명 예시 · README/제목        | 그대로 둠 (메커니즘 설명용)                           | 해당 없음 |
 
 **핵심:** "이름이 정보를 안 주는 자리"(B)는 역할어로 → 엔진 없이도 영구 면역. "정보가치 있는 실제 경로"(C1)는 브랜드 접두부만 변수화. 진짜 못 피하는 건 사람이 터미널에 그대로 붙여넣는 **C2뿐**.
@@ -80,15 +80,15 @@ BE_NAME=$(basename "$BE_DIR")   # cloud-wms-be
 
 ## 04 — 리브랜딩 시 손대는 곳 (md 파일 인벤토리)
 
-> 아래는 **작성 시점 스냅샷** 기준(`.md` 내 `cloud-wms-` 약 25개 파일·76건)이다. 실제 sweep 전에 `git grep -n 'cloud-wms-'` 로 한 번 더 대조한다.
+> 아래는 **작성 시점 스냅샷** 기준(`.md` 내 `common-system-` 약 25개 파일·76건)이다. 실제 sweep 전에 `git grep -n 'common-system-'` 로 한 번 더 대조한다.
 
 ### 자동 — 실행 코드 (변수로 교체 대상)
-- `.claude/skills/KB_100/SKILL.md` :64–65 — `$Workspace\cloud-wms-be|fe\…` → **수정 완료** (PREFIX 도출 + `*-be`/`*-fe` 폴백)
+- `.claude/skills/KB_100/SKILL.md` :64–65 — `$Workspace\common-system-be|fe\…` → **수정 완료** (PREFIX 도출 + `*-be`/`*-fe` 폴백)
 - `.claude/skills/KB_200/SKILL.md` :52–53 — 동일 패턴 → **수정 완료**
 
 → 워크스페이스만 동적으로 구하고 형제 이름을 박아두던 하드코딩을 `repo-paths.md` 방식(`PREFIX` 도출)으로 교체.
 
-> 참고: `.claude/skills/SD_334/SKILL.md` :40 의 `cloud-wms-be` 는 실행 코드가 아니라 "사용자에게 BE 경로를 묻는다" 흐름의 **예시**(바로 아래 `wms-bnk-be` 예시 병기)다 — 교체 대상 아님.
+> 참고: `.claude/skills/SD_334/SKILL.md` :40 의 `common-system-be` 는 실행 코드가 아니라 "사용자에게 BE 경로를 묻는다" 흐름의 **예시**(바로 아래 `wms-bnk-be` 예시 병기)다 — 교체 대상 아님.
 
 ### 자동 — A. frontmatter (`repo_role` 로)
 - `knowledgebase/40-install-guide/deploy/local-deploy-guide.md` :2–3 (title/description)
@@ -128,19 +128,19 @@ BE_NAME=$(basename "$BE_DIR")   # cloud-wms-be
 
 ---
 
-## 05 — 리브랜딩 절차 (예: `cloud-wms` → `bnk-wms`)
+## 05 — 리브랜딩 절차 (예: `common-system` → `bnk-wms`)
 
 ```bash
 # 1. 세 레포 폴더 이름만 바꾼다 (역할 접미사 -ai/-be/-fe 는 유지)
-#    cloud-wms-ai → bnk-wms-ai · cloud-wms-be → bnk-wms-be · cloud-wms-fe → bnk-wms-fe
+#    common-system-ai → bnk-wms-ai · common-system-be → bnk-wms-be · common-system-fe → bnk-wms-fe
 
 # 2. 실행 코드·frontmatter·도출 → 손댈 것 없음 (런타임 도출 / repo_role)
 
 # 3. 산문·경로 예시의 리터럴만 전 레포 일괄 치환
-git grep -l 'cloud-wms-' | xargs sed -i 's/cloud-wms-/bnk-wms-/g'
+git grep -l 'common-system-' | xargs sed -i 's/common-system-/bnk-wms-/g'
 
 # 4. 확인
-git grep -n 'cloud-wms-'   # → 0건이면 완료
+git grep -n 'common-system-'   # → 0건이면 완료
 ```
 
 B(역할어)·A(`repo_role`)를 미리 적용해 두면 3단계 치환 대상이 C1/C2 경로 예시로만 줄어든다. 흩어진 지뢰가 **정해진 한 줄 작업**이 된다.

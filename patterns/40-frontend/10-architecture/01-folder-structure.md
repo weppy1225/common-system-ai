@@ -19,7 +19,7 @@ tags:
 ## 1. 최상위
 
 ```
-cloud-wms-fe/
+common-system-fe/
 ├─ src/                  소스 코드
 ├─ public/               정적 파일
 ├─ e2e/                  Playwright E2E

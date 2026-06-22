@@ -3,7 +3,7 @@
 요구사항정의서 xlsx 파일을 생성한다.
 
 사용법: python scripts/03_generate_excel.py
-작업 디렉토리: /mnt/c/zinide/workspace/cloud-wms-ai
+작업 디렉토리: /mnt/c/zinide/workspace/common-system-ai
 """
 import openpyxl, json, shutil, os, math, subprocess
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side

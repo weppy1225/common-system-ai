@@ -15,7 +15,7 @@ tags:
 
 # Markdown Frontmatter 작성 규칙
 
-WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}-fe`, `cloud-wms-*`)에서 AI 에이전트가 사용할 가능성이 높은 Markdown 파일을 새로 작성하거나 의미 있게 수정할 때는 YAML frontmatter를 문서 맨 앞에 둔다.
+WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}-fe`, `common-system-*`)에서 AI 에이전트가 사용할 가능성이 높은 Markdown 파일을 새로 작성하거나 의미 있게 수정할 때는 YAML frontmatter를 문서 맨 앞에 둔다.
 
 기존 문서에 frontmatter가 없더라도 단순 오탈자 수정, 링크 보정, 포맷 정리만 하는 경우에는 억지로 추가하지 않는다. 문서의 목적, 범위, 사용 시점, 에이전트 동작, 산출물 계약이 바뀌는 수정이면 추가한다.
 
@@ -26,7 +26,7 @@ WMS 계열 모든 프로젝트(`wms-{pcode}-doc`, `wms-{pcode}-be`, `wms-{pcode}
 - 값은 추정하지 않는다. 실제 파일, 명령 문서, 코드, DB 문서에서 확인한 값만 적는다.
 - key는 영문 snake_case를 사용한다.
 - 배열 값은 YAML list를 사용한다.
-- `repo_role`은 문서가 속한 레포의 **역할**만 적는다(`ai-hub` / `be` / `fe`). 브랜드·도메인이 들어간 실제 레포명(`cloud-wms-ai` 등)을 넣지 않는다 — 리브랜딩(예: cloud→bandai) 시 문서 일괄 수정이 발생하기 때문이다. 실제 레포 정체성은 git·폴더명에서 런타임 도출한다(→ `repo-paths.md`).
+- `repo_role`은 문서가 속한 레포의 **역할**만 적는다(`ai-hub` / `be` / `fe`). 브랜드·도메인이 들어간 실제 레포명(`common-system-ai` 등)을 넣지 않는다 — 리브랜딩(예: cloud→bandai) 시 문서 일괄 수정이 발생하기 때문이다. 실제 레포 정체성은 git·폴더명에서 런타임 도출한다(→ `repo-paths.md`).
 - 경로는 저장소 루트 기준 상대 경로를 사용한다.
 - 민감정보, DB 접속정보, 토큰, 고객 데이터는 넣지 않는다.
 - Claude Code와 Codex가 공식적으로 해석하는 frontmatter와 WMS 내부 메타데이터를 섞어 설명하지 않는다.

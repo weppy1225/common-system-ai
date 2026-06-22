@@ -37,7 +37,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 ### 인자 확정
 
 1. **BE 경로** — 사용자에게 백엔드 프로젝트 루트를 묻는다.
-   - Windows 예: `C:\zinide\workspace_cloud\cloud-wms-be`
+   - Windows 예: `C:\zinide\workspace_cloud\common-system-be`
    - WSL/Linux 예: `/mnt/c/zinide/workspace/wms-bnk-be`
    - 경로가 존재하지 않거나 그 아래에 `src/main/resource/prop/application-test.properties` 파일이 없으면 다시 묻는다.
 2. **업체명** — 출력 파일명(`SD.211-ERD_{업체명}_{YYMMDD}.html`)에 들어가는 식별자. OS 예약 문자(`\ / : * ? " < > |`)는 자동으로 `_` 로 치환한다.

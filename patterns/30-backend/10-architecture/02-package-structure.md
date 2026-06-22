@@ -26,7 +26,7 @@ tags:
 ## 1. 프로젝트 루트 구조
 
 ```
-cloud-wms-be/
+common-system-be/
 ├── src/
 │ ├── main/
 │ │ ├── java/ # Java 소스 (be, bm, fw, sif, test, vm)

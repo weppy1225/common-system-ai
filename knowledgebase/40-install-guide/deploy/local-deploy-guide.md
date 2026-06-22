@@ -1,6 +1,6 @@
 ---
-title: cloud-wms-be 로컬 빌드·배포 가이드
-description: cloud-wms-be 로컬 환경 빌드·기동·배포 준비 절차. 로컬에서 BE를 띄우거나 배포 준비 시 참조.
+title: common-system-be 로컬 빌드·배포 가이드
+description: common-system-be 로컬 환경 빌드·기동·배포 준비 절차. 로컬에서 BE를 띄우거나 배포 준비 시 참조.
 status: active
 version: 1.0.0
 wms_meta: true
@@ -9,13 +9,13 @@ agent_usage: reference
 domain: system
 ---
 
-# cloud-wms-be 로컬 빌드·배포 가이드
+# common-system-be 로컬 빌드·배포 가이드
 
 ## 환경 정보
 
 | 항목 | 경로 / 값 |
 |---|---|
-| BE 소스 | `C:\zinide\workspace\cloud-wms-be` |
+| BE 소스 | `C:\zinide\workspace\common-system-be` |
 | Tomcat | `C:\zinide\apache-tomcat-9.0.91` |
 | JAVA_HOME | `C:\zinide\java\jdk11.0.17` |
 | 포트 | 8080 |
@@ -33,7 +33,7 @@ domain: system
 ### 1. Gradle 빌드
 
 ```bash
-cd /c/zinide/workspace/cloud-wms-be
+cd /c/zinide/workspace/common-system-be
 export JAVA_HOME=/c/zinide/java/jdk11.0.17
 export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew bootWar --no-daemon
@@ -56,7 +56,7 @@ sleep 5
 ### 3. WAR 복사
 
 ```bash
-cp /c/zinide/workspace/cloud-wms-be/build/libs/wms-be.war \
+cp /c/zinide/workspace/common-system-be/build/libs/wms-be.war \
    /c/zinide/apache-tomcat-9.0.91/webapps/wms-be.war
 ```
 
