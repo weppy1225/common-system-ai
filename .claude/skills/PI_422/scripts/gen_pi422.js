@@ -21,8 +21,10 @@ const fs   = require('fs');
 
 // ── 경로 ─────────────────────────────────────────────────────────────────────
 const BASE_DIR        = path.resolve(__dirname, '..', '..', '..', '..');
-const DIST_DIR        = path.join(BASE_DIR, 'spec');
-const DIST_MOBILE_DIR = path.join(BASE_DIR, 'prototype', 'mobile');
+// 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출 (→ .claude/rules/repo-paths.md)
+const PROJECT         = path.basename(path.dirname(BASE_DIR)).replace(/^workspace-/, '');
+const DIST_DIR        = path.join(BASE_DIR, 'spec', PROJECT);
+const DIST_MOBILE_DIR = path.join(BASE_DIR, 'prototype', PROJECT, '_common-m');
 const TEMPLATE        = path.join(BASE_DIR, 'deliverables', '10-templates', '04 구현(PI)', 'PI_214-통합테스트보고서.xlsx');
 const OUTPUT_DIR      = path.join(BASE_DIR, 'deliverables', '30-output', '04 구현(PI)');
 const LIB_DIR         = path.join(OUTPUT_DIR, 'node_modules', 'xlsx-populate');

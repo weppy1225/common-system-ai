@@ -23,21 +23,24 @@ model: claude-opus-4-7
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 # BE_DIR 은 repo-paths.md 규칙으로 결정
 
-# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 spec/ 에 위치
-UI_MD="$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-ui.md"
+# 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명에서 도출 (→ repo-paths.md)
+PROJECT=$(basename "$(dirname "$AI_DIR")"); PROJECT=${PROJECT#workspace-}
 
-# wireframe: PC / PDA 모바일 자동 분기 (PC=prototype/{메뉴코드}/, PDA=prototype/{메뉴코드}m/)
-if [ -f "$AI_DIR/prototype/{메뉴코드}/{메뉴코드}-wireframe.html" ]; then
+# ui.md·wireframe 등 화면설계는 허브($AI_DIR)의 spec/$PROJECT/ 에 위치
+UI_MD="$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md"
+
+# wireframe: PC / PDA 모바일 자동 분기 (PC=prototype/$PROJECT/{메뉴코드}/, PDA=prototype/$PROJECT/{메뉴코드}m/)
+if [ -f "$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html" ]; then
   # PC 화면
-  WIREFRAME="$AI_DIR/prototype/{메뉴코드}/{메뉴코드}-wireframe.html"
+  WIREFRAME="$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html"
 else
   # PDA 모바일 화면
-  WIREFRAME="$AI_DIR/prototype/{메뉴코드}m/{메뉴코드}m-wireframe.html"
+  WIREFRAME="$AI_DIR/prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-wireframe.html"
 fi
 ```
 
 > 이 스킬에서 `api.md`, `db.md`, `DEV_DOC/...`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`).
-> `$BE_DIR` 또는 허브의 `spec/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> `$BE_DIR` 또는 허브의 `spec/$PROJECT/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ### Step 1 — 기능 정보 파악
 
@@ -67,8 +70,8 @@ fi
 
 1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` — 메뉴코드·네이밍 규칙
 2. 기능 폴더의 `db.md` — DB 설계 결과 (존재하는 경우 **우선 참조**)
-3. `$UI_MD` (`spec/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
-4. `$WIREFRAME` — 화면 프로토타입 (PC: `prototype/{메뉴코드}/{메뉴코드}-wireframe.html` / PDA: `prototype/{메뉴코드}m/{메뉴코드}m-wireframe.html`)
+3. `$UI_MD` (`spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세 (Step 0에서 추출한 변수 사용)
+4. `$WIREFRAME` — 화면 프로토타입 (PC: `prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html` / PDA: `prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-wireframe.html`)
 5. `$BE_DIR/DEV_DOC/ai-docs/10-database/00-database-overview.md` — 관련 테이블 분석
 6. 해당 도메인 테이블 컬럼 명세 (`$BE_DIR/DEV_DOC/ai-docs/10-database/90-schema/20-tables/`)
 7. `$BE_DIR/DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` — 코딩 컨벤션

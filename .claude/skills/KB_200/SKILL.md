@@ -1,6 +1,6 @@
 ---
 name: KB_200
-description: 【설계 검증】 메뉴코드를 입력받아 spec/{메뉴코드}/ 설계 문서와 실제 BE/FE 소스를 비교 분석하여 일치율·누락·과잉(드리프트) 항목을 리포트한다. 역공학 품질 검증 및 개발 완료 후 설계-소스 동기화 확인에 사용한다. /KB_200 {메뉴코드} 형식으로 실행. 사용자가 "설계 검증", "KB 검증", "문서 일치율 확인", "드리프트 확인", "KB_200 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 【설계 검증】 메뉴코드를 입력받아 spec/{프로젝트}/{메뉴코드}/ 설계 문서와 실제 BE/FE 소스를 비교 분석하여 일치율·누락·과잉(드리프트) 항목을 리포트한다. 역공학 품질 검증 및 개발 완료 후 설계-소스 동기화 확인에 사용한다. /KB_200 {메뉴코드} 형식으로 실행. 사용자가 "설계 검증", "KB 검증", "문서 일치율 확인", "드리프트 확인", "KB_200 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Write, Agent
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: PowerShell, Read, Write, Agent
 
 메뉴코드: **$ARGUMENTS**
 
-> **용도**: `spec/{메뉴코드}/` 설계 문서(의도)와 라이브 BE/FE 소스(현실)의 **드리프트**를 비교 리포트한다. 비교 대상은 소스 자체이며, 별도 스냅샷을 두지 않는다. `00-domain.md`(업무지식)는 소스로 검증할 수 없어 비교 대상에서 제외한다.
+> **용도**: `spec/{프로젝트}/{메뉴코드}/` 설계 문서(의도)와 라이브 BE/FE 소스(현실)의 **드리프트**를 비교 리포트한다. 비교 대상은 소스 자체이며, 별도 스냅샷을 두지 않는다. `00-domain.md`(업무지식)는 소스로 검증할 수 없어 비교 대상에서 제외한다.
 
 ---
 
@@ -49,15 +49,15 @@ KB 문서 폴더(`spec/{MENU_CODE}/`)가 없거나 `.md` 파일이 0개이면:
 ```powershell
 $DocRoot   = git rev-parse --show-toplevel
 $Workspace = Split-Path $DocRoot -Parent
-# 형제 레포는 허브 폴더명에서 역할 접미사만 떼어 도출 (→ .claude/rules/repo-paths.md)
-$Prefix    = (Split-Path $DocRoot -Leaf) -replace '-[^-]+$',''   # 허브 폴더명에서 끝의 역할 토큰(-ai 등) 제거 → 프로젝트 접두어
+# 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출 — 허브는 공통(common-system-ai)이라 허브명으로 도출하지 않는다 (→ .claude/rules/repo-paths.md)
+$Prefix    = (Split-Path $Workspace -Leaf) -replace '^workspace-',''   # 워크스페이스 폴더명에서 workspace- 접두어 제거 → 프로젝트명
 $BeDir     = Join-Path $Workspace "$Prefix-be"
 if (-not (Test-Path $BeDir)) { $BeDir = (Get-ChildItem $Workspace -Directory -Filter '*-be' | Select-Object -First 1).FullName }
 $FeDir     = Join-Path $Workspace "$Prefix-fe"
 if (-not (Test-Path $FeDir)) { $FeDir = (Get-ChildItem $Workspace -Directory -Filter '*-fe' | Select-Object -First 1).FullName }
 $BePath    = "$BeDir\src\main\java\be\$GROUP_CODE\$MENU_CODE"
 $FePath    = "$FeDir\src\views\be\$GROUP_CODE\$MENU_CODE"
-$KbPath    = "spec\$MENU_CODE"
+$KbPath    = "spec\$Prefix\$MENU_CODE"   # 허브 spec 은 프로젝트 층($Prefix) 아래
 $MenuUpper = $MENU_CODE.ToUpper()
 $Today     = Get-Date -Format "yyyy-MM-dd"
 $ReportFile = "$KbPath\${MENU_CODE}-KB-verify-$(Get-Date -Format 'yyyyMMdd').md"

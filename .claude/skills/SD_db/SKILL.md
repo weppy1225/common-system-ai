@@ -36,23 +36,26 @@ model: claude-opus-4-7
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 # BE_DIR 은 repo-paths.md 규칙으로 결정
 
-# ui.md는 허브($AI_DIR)의 spec/, wireframe·mock은 prototype/ 에 위치
-UI_MD="$AI_DIR/spec/{메뉴코드}/{메뉴코드}-02-ui.md"
+# 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명에서 도출 (→ repo-paths.md)
+PROJECT=$(basename "$(dirname "$AI_DIR")"); PROJECT=${PROJECT#workspace-}
 
-# wireframe: PC / PDA 모바일 자동 분기 (PC=prototype/{메뉴코드}/, PDA=prototype/{메뉴코드}m/)
-if [ -f "$AI_DIR/prototype/{메뉴코드}/{메뉴코드}-wireframe.html" ]; then
+# ui.md는 허브($AI_DIR)의 spec/$PROJECT/, wireframe·mock은 prototype/$PROJECT/ 에 위치
+UI_MD="$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md"
+
+# wireframe: PC / PDA 모바일 자동 분기 (PC=prototype/$PROJECT/{메뉴코드}/, PDA=prototype/$PROJECT/{메뉴코드}m/)
+if [ -f "$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html" ]; then
   # PC 화면
-  WIREFRAME="$AI_DIR/prototype/{메뉴코드}/{메뉴코드}-wireframe.html"
-  MOCK_DATA="$AI_DIR/prototype/{메뉴코드}/{메뉴코드}-mock-data.js"
+  WIREFRAME="$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html"
+  MOCK_DATA="$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-mock-data.js"
 else
-  # PDA 모바일 화면 — prototype/{메뉴코드}m/
-  WIREFRAME="$AI_DIR/prototype/{메뉴코드}m/{메뉴코드}m-wireframe.html"
-  MOCK_DATA="$AI_DIR/prototype/{메뉴코드}m/{메뉴코드}m-mock-data.js"
+  # PDA 모바일 화면 — prototype/$PROJECT/{메뉴코드}m/
+  WIREFRAME="$AI_DIR/prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-wireframe.html"
+  MOCK_DATA="$AI_DIR/prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-mock-data.js"
 fi
 ```
 
 > 이 스킬에서 `DEV_DOC/...`, `db.md`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`, `$BE_DIR/.../db.md`).
-> `$BE_DIR` 또는 허브의 `spec/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> `$BE_DIR` 또는 허브의 `spec/$PROJECT/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ---
 
@@ -62,8 +65,8 @@ fi
 
 아래 경로에서 파일을 찾아 모두 읽는다 (위 "프로젝트 경로 도출"에서 구한 변수 사용):
 
-- `$UI_MD` (`spec/{메뉴코드}/{메뉴코드}-02-ui.md`) — UI 설계서 (화면 구성, 필드 목록, 업무 흐름)
-- `$WIREFRAME` — 화면 프로토타입 (PC: `prototype/{메뉴코드}/{메뉴코드}-wireframe.html` / PDA: `prototype/{메뉴코드}m/{메뉴코드}m-wireframe.html`)
+- `$UI_MD` (`spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md`) — UI 설계서 (화면 구성, 필드 목록, 업무 흐름)
+- `$WIREFRAME` — 화면 프로토타입 (PC: `prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html` / PDA: `prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-wireframe.html`)
 - `$MOCK_DATA` — 목업 데이터 (있는 경우)
 
 추가로 BE 스펙 폴더도 확인:

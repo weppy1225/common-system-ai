@@ -1,6 +1,6 @@
 ---
 name: KB_100
-description: 【지식베이스 자동 생성】 메뉴코드를 입력받아 common-system-be(Java) + common-system-fe(Vue) 소스를 분석하고 spec/{메뉴코드}/ 에 01~07 + 99 총 8개 문서를 자동 생성한다. /KB_100 {메뉴코드} 형식으로 실행. 기존 문서가 있으면 bakup{YYMMDD}{순번} 폴더로 백업 후 새로 생성한다. 사용자가 "지식베이스 만들어줘", "KB 문서 생성", "소스 분석 문서 뽑아줘", "KB_100 실행해줘" 라고 말해도 이 스킬을 사용한다.
+description: 【지식베이스 자동 생성】 메뉴코드를 입력받아 common-system-be(Java) + common-system-fe(Vue) 소스를 분석하고 spec/{프로젝트}/{메뉴코드}/ 에 01~07 + 99 총 8개 문서를 자동 생성한다. /KB_100 {메뉴코드} 형식으로 실행. 기존 문서가 있으면 bakup{YYMMDD}{순번} 폴더로 백업 후 새로 생성한다. 사용자가 "지식베이스 만들어줘", "KB 문서 생성", "소스 분석 문서 뽑아줘", "KB_100 실행해줘" 라고 말해도 이 스킬을 사용한다.
 allowed-tools: PowerShell, Read, Agent
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: PowerShell, Read, Agent
 
 메뉴코드: **$ARGUMENTS**
 
-> **용도·정책**: 설계 문서가 없는 **레거시 메뉴**의 BE/FE 소스를 역공학하여 `spec/{메뉴코드}/` 에 **초안(status: draft)** 을 생성한다. 사람이 검토 후 status를 올린다(SD 명령으로 재작성하면 그게 정본). **`{메뉴코드}-00-domain.md`(업무지식)는 사람 전용 — 생성하지도 덮어쓰지도 않는다.** 기존 문서가 있으면 백업 후 재생성하되 `00-domain`은 백업에서 제외(보존)한다.
+> **용도·정책**: 설계 문서가 없는 **레거시 메뉴**의 BE/FE 소스를 역공학하여 `spec/{프로젝트}/{메뉴코드}/` 에 **초안(status: draft)** 을 생성한다. 사람이 검토 후 status를 올린다(SD 명령으로 재작성하면 그게 정본). **`{메뉴코드}-00-domain.md`(업무지식)는 사람 전용 — 생성하지도 덮어쓰지도 않는다.** 기존 문서가 있으면 백업 후 재생성하되 `00-domain`은 백업에서 제외(보존)한다.
 
 ---
 
@@ -61,15 +61,15 @@ PowerShell로 워크스페이스 루트를 계산한다.
 ```powershell
 $DocRoot    = git rev-parse --show-toplevel
 $Workspace  = Split-Path $DocRoot -Parent
-# 형제 레포는 허브 폴더명에서 역할 접미사만 떼어 도출 (→ .claude/rules/repo-paths.md)
-$Prefix     = (Split-Path $DocRoot -Leaf) -replace '-[^-]+$',''   # 허브 폴더명에서 끝의 역할 토큰(-ai 등) 제거 → 프로젝트 접두어
+# 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출 — 허브는 공통(common-system-ai)이라 허브명으로 도출하지 않는다 (→ .claude/rules/repo-paths.md)
+$Prefix     = (Split-Path $Workspace -Leaf) -replace '^workspace-',''   # 워크스페이스 폴더명에서 workspace- 접두어 제거 → 프로젝트명
 $BeDir      = Join-Path $Workspace "$Prefix-be"
 if (-not (Test-Path $BeDir)) { $BeDir = (Get-ChildItem $Workspace -Directory -Filter '*-be' | Select-Object -First 1).FullName }
 $FeDir      = Join-Path $Workspace "$Prefix-fe"
 if (-not (Test-Path $FeDir)) { $FeDir = (Get-ChildItem $Workspace -Directory -Filter '*-fe' | Select-Object -First 1).FullName }
 $BePath     = "$BeDir\src\main\java\be\$GROUP_CODE\$MENU_CODE"
 $FePath     = "$FeDir\src\views\be\$GROUP_CODE\$MENU_CODE"
-$OutPath    = "spec\$MENU_CODE"
+$OutPath    = "spec\$Prefix\$MENU_CODE"   # 허브 spec 은 프로젝트 층($Prefix) 아래
 $MenuUpper  = $MENU_CODE.ToUpper()   # 예: MDBZ01
 $Today      = Get-Date -Format "yyyy-MM-dd"
 ```
@@ -104,7 +104,7 @@ New-Item -ItemType Directory -Path $OutPath -Force | Out-Null
 ## 4단계 — 서브에이전트 실행 [Agent 도구 호출]
 
 아래 형식으로 Agent 도구를 호출한다.
-`{MENU_CODE}`, `{MENU_NM}`, `{GROUP_CODE}`, `{GROUP_NM}`, `{DOMAIN}`, `{BePath}`, `{FePath}`, `{OutPath}`, `{MenuUpper}`, `{Today}` 는 1~3단계에서 계산한 실제 값으로 치환한다.
+`{MENU_CODE}`, `{MENU_NM}`, `{GROUP_CODE}`, `{GROUP_NM}`, `{DOMAIN}`, `{BePath}`, `{FePath}`, `{OutPath}`, `{MenuUpper}`, `{Today}`, `{PROJECT}`(= `$Prefix`, 프로젝트명) 는 1~3단계에서 계산한 실제 값으로 치환한다.
 
 ```
 Agent(
@@ -203,12 +203,12 @@ menu_code: {MENU_CODE}
 domain: {DOMAIN}
 last_updated: "{Today}"
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-99-issues.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-99-issues.md"
 tags: [basic-design, business, {DOMAIN}]
 ---
 
@@ -274,10 +274,10 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "spec/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
 tags: [detail-design, screen, ui, {DOMAIN}]
 ---
 
@@ -307,11 +307,11 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "spec/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
   - "patterns/_common-arch/tech-stack.md"
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, data-model, {DOMAIN}]
 ---
 
@@ -343,10 +343,10 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, backend, sql, {DOMAIN}]
 ---
 
@@ -377,11 +377,11 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-07-fe-flow.md"
 tags: [detail-design, api, {DOMAIN}]
 ---
 
@@ -457,8 +457,8 @@ domain: {DOMAIN}
 depends_on:
   - "patterns/_common-arch/be-architecture.md"
   - "patterns/_common-arch/be-exceptions.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
 tags: [detail-design, backend, sequence, {DOMAIN}]
 ---
 
@@ -513,8 +513,8 @@ menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
   - "patterns/_common-arch/fe-architecture.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-02-ui.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
 tags: [detail-design, frontend, vue, {DOMAIN}]
 ---
 
@@ -559,9 +559,9 @@ agent_usage: task
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 related:
-  - "spec/{MENU_CODE}/{MENU_CODE}-05-api.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
-  - "spec/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
+  - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-06-be-flow.md"
 tags: [open-issues, verification, {DOMAIN}]
 ---
 
@@ -595,7 +595,7 @@ $menuListPath = "knowledgebase\15-menu-list.md"
 
 ```
 ✅ KB_100 완료: {MenuUpper} ({MENU_NM})
-  📁 spec/{MENU_CODE}/
+  📁 {OutPath}/   (= spec/{프로젝트}/{MENU_CODE}/)
      ├── {MENU_CODE}-01-basic-design.md
      ├── {MENU_CODE}-02-ui.md
      ├── {MENU_CODE}-03-data-model.md

@@ -37,16 +37,21 @@ allowed-tools: Bash, Read, AskUserQuestion
 
 ## 변환 규칙 (로컬 → dist) — MUST 적용
 
+> **STEP 0 — 프로젝트 층 도출** (→ `.claude/rules/repo-paths.md`): 허브 `spec/`·`prototype/` 는 프로젝트별 네임스페이스 아래에 있다. 아래 모든 셸에서 이 `$PROJECT` 를 쓴다. (서버 `dist/` 는 평탄 구조라 프로젝트 층이 없다.)
+> ```bash
+> PROJECT=$(basename "$(dirname "$(git rev-parse --show-toplevel)")"); PROJECT=${PROJECT#workspace-}
+> ```
+
 | 로컬 원본 | dist 대상 | 내부 경로 변환 |
 | --- | --- | --- |
-| `prototype/index.html` | `dist/index.html` | `loadContent('{c}/{c}-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
-| `prototype/_common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../{c}/{c}-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
-| `prototype/_common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
-| `prototype/{c}/{c}-wireframe.html` | `dist/{c}/wireframe.html` | `../_common/` → `../common/`, `./{c}-mock-data.js` → `./mock-data.js` |
-| `prototype/{c}/{c}-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
-| `spec/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 (없으면 생략) |
+| `prototype/{프로젝트}/index.html` | `dist/index.html` | `loadContent('{c}/{c}-wireframe.html'` → `loadContent('{c}/wireframe.html'` |
+| `prototype/{프로젝트}/_common/left-menu.html` | `dist/common/left-menu.html` | `loadContent('../{c}/{c}-wireframe.html'` → `loadContent('../{c}/wireframe.html'` |
+| `prototype/{프로젝트}/_common/{wms-ui.css, wms-common.js, CPCT01_popup.html, CPPD01_popup.html, icon-preview.html}` | `dist/common/<동일파일명>` | 변환 없음 (동일 디렉토리 참조) |
+| `prototype/{프로젝트}/{c}/{c}-wireframe.html` | `dist/{c}/wireframe.html` | `../_common/` → `../common/`, `./{c}-mock-data.js` → `./mock-data.js` |
+| `prototype/{프로젝트}/{c}/{c}-mock-data.js` | `dist/{c}/mock-data.js` | 리네임만 |
+| `spec/{프로젝트}/{c}/{c}-02-ui.md` | `dist/{c}/ui.md` | 리네임만 (없으면 생략) |
 
-> `{c}` = 메뉴코드. `index.html` 과 `left-menu.html` 은 메뉴 링크가 추가되므로 항상 함께 배포한다.
+> `{c}` = 메뉴코드, `{프로젝트}` = `$PROJECT`. `index.html` 과 `left-menu.html` 은 메뉴 링크가 추가되므로 항상 함께 배포한다.
 > `wms-ui.css` / `wms-common.js` 는 모든 화면이 참조하는 공통 자산이므로 항상 함께 배포한다.
 
 ---
@@ -71,11 +76,11 @@ allowed-tools: Bash, Read, AskUserQuestion
 ### 메뉴코드 없이 (`/deploy`)
 1. 최근 변경 메뉴코드를 감지한다.
 ```bash
-git diff --name-only HEAD | grep -oP '(prototype|spec)/\K[^/]+(?=/)' | grep -vE '^_common|m$' | sort -u
+git diff --name-only HEAD | grep -oP '(prototype|spec)/[^/]+/\K[^/]+(?=/)' | grep -vE '^_common|m$' | sort -u
 ```
 2. 1개면 해당 코드로 지정 배포한다.
 3. 여러 개면 사용자에게 배포 대상을 선택받는다.
-4. 0개면 전체(`prototype/` 모든 PC 메뉴 + `index.html` + `common/`) 배포 여부를 사용자에게 확인받는다.
+4. 0개면 전체(`prototype/{프로젝트}/` 모든 PC 메뉴 + `index.html` + `common/`) 배포 여부를 사용자에게 확인받는다.
 
 ---
 
@@ -88,35 +93,38 @@ which curl >/dev/null 2>&1 && echo "USE_CURL" || echo "USE_FTP"
 
 ### 2단계. staging 빌드 (변환 적용)
 
-`/deploy {메뉴코드}` 의 경우 `CODES="$ARGUMENTS"`, `/deploy` 전체의 경우 `CODES=$(ls -d prototype/*/ | xargs -n1 basename | grep -vE '^_common|m$')` (PC 메뉴만; `_common*`·모바일 `{c}m` 제외).
+`/deploy {메뉴코드}` 의 경우 `CODES="$ARGUMENTS"`, `/deploy` 전체의 경우 `CODES=$(ls -d prototype/$PROJECT/*/ | xargs -n1 basename | grep -vE '^_common|m$')` (PC 메뉴만; `_common*`·모바일 `{c}m` 제외).
 
 ```bash
+# 허브 spec/prototype 의 프로젝트 층 (→ repo-paths.md). 위 STEP 0 와 동일.
+PROJECT=$(basename "$(dirname "$(git rev-parse --show-toplevel)")"); PROJECT=${PROJECT#workspace-}
+
 STAGE=$(mktemp -d)
 mkdir -p "$STAGE/common"
 
 # index.html — 메뉴 경로 평탄화
 sed -E "s#([a-z0-9]+)/\1-wireframe\.html#\1/wireframe.html#g" \
-    prototype/index.html > "$STAGE/index.html"
+    prototype/$PROJECT/index.html > "$STAGE/index.html"
 
 # common/left-menu.html — 메뉴 경로 평탄화 (common 기준 상대경로)
 sed -E "s#\.\./([a-z0-9]+)/\1-wireframe\.html#../\1/wireframe.html#g" \
-    prototype/_common/left-menu.html > "$STAGE/common/left-menu.html"
+    prototype/$PROJECT/_common/left-menu.html > "$STAGE/common/left-menu.html"
 
 # common/ 그 외 공통 자산 — 변환 없이 복사
 for f in wms-ui.css wms-common.js CPCT01_popup.html CPPD01_popup.html icon-preview.html; do
-  cp "prototype/_common/$f" "$STAGE/common/$f"
+  cp "prototype/$PROJECT/_common/$f" "$STAGE/common/$f"
 done
 
 # 메뉴별 산출물 — 리네임 + 내부 경로 변환
 for CODE in $CODES; do
-  SRC="prototype/$CODE"
+  SRC="prototype/$PROJECT/$CODE"
   [ -f "$SRC/$CODE-wireframe.html" ] || { echo "skip: $SRC/$CODE-wireframe.html 없음"; continue; }
   mkdir -p "$STAGE/$CODE"
   sed -E -e "s#\.\./_common/#../common/#g" \
          -e "s#\./$CODE-mock-data\.js#./mock-data.js#g" \
       "$SRC/$CODE-wireframe.html" > "$STAGE/$CODE/wireframe.html"
   [ -f "$SRC/$CODE-mock-data.js" ] && cp "$SRC/$CODE-mock-data.js" "$STAGE/$CODE/mock-data.js"
-  [ -f "spec/$CODE/$CODE-02-ui.md" ] && cp "spec/$CODE/$CODE-02-ui.md" "$STAGE/$CODE/ui.md"
+  [ -f "spec/$PROJECT/$CODE/$CODE-02-ui.md" ] && cp "spec/$PROJECT/$CODE/$CODE-02-ui.md" "$STAGE/$CODE/ui.md"
 done
 
 echo "=== staging 빌드 결과 ==="; find "$STAGE" -type f | sed "s#$STAGE/#dist/#"

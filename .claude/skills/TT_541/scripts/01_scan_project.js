@@ -27,6 +27,8 @@ const path = require('path');
 // repo root = parents[3]. node 실행 위치와 무관하게 __dirname 기준으로 계산한다.
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
+// 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출 (→ .claude/rules/repo-paths.md)
+const HUB_PROJECT = path.basename(path.dirname(REPO_ROOT)).replace(/^workspace-/, '');
 const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_541');
 const OUT_FILE = path.join(TMP_DIR, 'menu_candidates.json');
 
@@ -234,8 +236,8 @@ function extractRoutesFromFiles(rootPath) {
 function buildMenuNameMap(rootPath) {
     const map = {};
 
-    // a) common-system-ai 의 spec/{메뉴코드}/{메뉴코드}-02-ui.md
-    const distDir = path.join(REPO_ROOT, 'spec');
+    // a) 허브의 spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md
+    const distDir = path.join(REPO_ROOT, 'spec', HUB_PROJECT);
     if (fs.existsSync(distDir)) {
         try {
             for (const ent of fs.readdirSync(distDir, { withFileTypes: true })) {

@@ -10,7 +10,13 @@ allowed-tools: Bash, Read, Write, Edit
 
 메뉴코드: **$ARGUMENTS**
 
-`spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **공통 CSS·JS + 정해진 템플릿 파일**을 의거해 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
+`spec/$PROJECT/$ARGUMENTS/$ARGUMENTS-02-ui.md` 를 읽어, **공통 CSS·JS + 정해진 템플릿 파일**을 의거해 프로토타입 HTML과 목업 데이터 JS 파일을 생성한다.
+
+> **STEP 0 — 프로젝트 층 도출** (→ `.claude/rules/repo-paths.md`): 허브 `spec/`·`prototype/` 는 프로젝트별 네임스페이스 아래에 있다. CWD(허브)에서 워크스페이스 폴더명으로 프로젝트명을 구한다.
+> ```bash
+> PROJECT=$(basename "$(dirname "$(git rev-parse --show-toplevel)")"); PROJECT=${PROJECT#workspace-}
+> ```
+> 이후 모든 `spec/$PROJECT/...`·`prototype/$PROJECT/...` 경로에 이 값을 쓴다. (생성되는 HTML 내부의 `../_common/` 상대경로는 트리 구조가 보존되므로 그대로 둔다.)
 
 ---
 
@@ -20,14 +26,14 @@ allowed-tools: Bash, Read, Write, Edit
 
 | 파일 | 역할 |
 |---|---|
-| `prototype/_common/wms-ui.css`      | 모든 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
-| `prototype/_common/wms-common.js`   | 공통 팝업(openCpPopup/openPdPopup), 페이징 유틸, 수평 스크롤 initHScroll/syncHScroll, esc, fmt |
-| `prototype/_common/_template/base.html`        | 전체 레이아웃 기본 뼈대 |
-| `prototype/_common/_template/grid1.html`       | UI유형: 그리드 1개 |
-| `prototype/_common/_template/grid2-tb.html`    | UI유형: 그리드 2개 (상하) |
-| `prototype/_common/_template/grid2-lr.html`    | UI유형: 그리드 2개 (좌우) |
-| `prototype/_common/_template/grid3-lrt.html`   | UI유형: 그리드 3개 (좌측 + 우측 상하) |
-| `prototype/_common/_template/grid3-tlb.html`   | UI유형: 그리드 3개 (상단 + 하단 좌우) |
+| `prototype/$PROJECT/_common/wms-ui.css`      | 모든 화면에 공통 적용되는 레이아웃·컴포넌트 CSS |
+| `prototype/$PROJECT/_common/wms-common.js`   | 공통 팝업(openCpPopup/openPdPopup), 페이징 유틸, 수평 스크롤 initHScroll/syncHScroll, esc, fmt |
+| `prototype/$PROJECT/_common/_template/base.html`        | 전체 레이아웃 기본 뼈대 |
+| `prototype/$PROJECT/_common/_template/grid1.html`       | UI유형: 그리드 1개 |
+| `prototype/$PROJECT/_common/_template/grid2-tb.html`    | UI유형: 그리드 2개 (상하) |
+| `prototype/$PROJECT/_common/_template/grid2-lr.html`    | UI유형: 그리드 2개 (좌우) |
+| `prototype/$PROJECT/_common/_template/grid3-lrt.html`   | UI유형: 그리드 3개 (좌측 + 우측 상하) |
+| `prototype/$PROJECT/_common/_template/grid3-tlb.html`   | UI유형: 그리드 3개 (상단 + 하단 좌우) |
 
 생성하는 HTML에는 반드시 아래 2줄이 포함되어야 한다.
 
@@ -44,9 +50,9 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 1단계 — 전체 파일 읽기
 
-1. `spec/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
-2. `prototype/_common/icon-preview.html` 에서 사용 가능한 아이콘 목록 확인 (**이 파일에 없는 아이콘은 절대 사용 금지**)
-3. `prototype/_common/_template/base.html` 에서 레이아웃 기본 뼈대 파악
+1. `spec/$PROJECT/$ARGUMENTS/$ARGUMENTS-02-ui.md` 화면요건정리 (핵심 입력)
+2. `prototype/$PROJECT/_common/icon-preview.html` 에서 사용 가능한 아이콘 목록 확인 (**이 파일에 없는 아이콘은 절대 사용 금지**)
+3. `prototype/$PROJECT/_common/_template/base.html` 에서 레이아웃 기본 뼈대 파악
 4. 요건 문서의 **UI유형**에 해당하는 `_template/gridX-*.html` 1개를 메인 영역 템플릿으로 읽기
 
 ### 2단계 — 요건 파악
@@ -61,7 +67,7 @@ allowed-tools: Bash, Read, Write, Edit
 
 ### 3단계 — 목업 데이터 JS 생성
 
-파일: `prototype/$ARGUMENTS/$ARGUMENTS-mock-data.js`
+파일: `prototype/$PROJECT/$ARGUMENTS/$ARGUMENTS-mock-data.js`
 
 - 첫 줄 주석: `/* $ARGUMENTS 목업 데이터 */`
 - 변수명: 메뉴코드 대문자 + `_DATA` (예: `MDFG01_DATA`)
@@ -79,7 +85,7 @@ const MDFG01_DATA = {
 
 ### 4단계 — HTML 생성
 
-생성 위치: `prototype/$ARGUMENTS/$ARGUMENTS-wireframe.html`
+생성 위치: `prototype/$PROJECT/$ARGUMENTS/$ARGUMENTS-wireframe.html`
 
 1. `base.html` 을 복사한다.
 2. UI유형에 맞는 `gridX-*.html` 내용을 `{{MAIN_AREA}}` 위치에 삽입한다.
@@ -137,11 +143,11 @@ const MDFG01_DATA = {
 
 ### 5단계 — 메뉴 등록
 
-1. `prototype/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
+1. `prototype/$PROJECT/index.html` 에서 해당 메뉴그룹 `<ul class="submenu-list collapsed">` 블록을 찾아 항목 추가:
    ```html
    <li class="submenu-item" onclick="loadContent('$ARGUMENTS/$ARGUMENTS-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
-2. `prototype/_common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
+2. `prototype/$PROJECT/_common/left-menu.html` 에도 동일하게 추가 (경로 prefix `../`):
    ```html
    <li class="submenu-item" onclick="loadContent('../$ARGUMENTS/$ARGUMENTS-wireframe.html', '{메뉴명}')">{메뉴명}</li>
    ```
