@@ -74,6 +74,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 | **FE 프로젝트 경로** | dev 서버를 켤 프로젝트 루트 디렉토리 | `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` 또는 `/mnt/c/...` |
 | **BASE_URL** | 이미 켜져 있는 dev/스테이징 서버. 없으면 사용자에게 `npm run dev` 실행 요청 | `http://localhost:5173` |
 | **고객사명** | 산출물 파일명 `TT_541_사용자매뉴얼_PC_{고객사명}.pptx`. OS 금지문자(`\ / : * ? " < > |`) 자동 `_` 교체 | `진아이드물류` |
+| **시스템명** | 표지 부제 `{고객사명} {시스템명}` 에 사용 (필수 입력) | `WMS`, `MES` |
 | **로그인 필요 여부** | Y면 `로그인 URL 직접 input`, `ID`, `PW`, `Origin/API URL(선택)` | Y/N |
 | **메뉴 목록 선택** | 1단계 자동 스캔으로 발견한 PC 메뉴 전체 목록에서 포함할 메뉴 선택 | `mdpr01, mdct01, stdc01` |
 | **뷰포트** | 데스크탑 고정 (1440×900) | `1440x900` |
@@ -263,7 +264,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 2. **dev 서버 구동 여부** → 이미 켜져있으면 그대로 사용. 아니면 사용자에게 `npm run dev` 실행 요청.
 3. **메뉴 선택** → 원하는 메뉴 선택.
 4. **로그인 정보** → 필요 여부.
-5. **고객사명** 확정.
+5. **고객사명** · **시스템명** 확정.
 6. **뷰포트** → 데스크탑 고정 (1440×900).
 
 확정된 값을 `deliverables/30-output/05 이행(TT)/tmp_541/capture_config.json` 으로 저장
@@ -272,6 +273,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 {
   "baseUrl": "http://168.126.28.62:8085",
   "customer": "진아이드물류",
+  "system": "WMS",
   "login": { "needed": true, "url": "/", "originField": "http://168.126.28.62:8085/api", "id": "jhlee", "pw": "1111" },
   "viewport": { "width": 1440, "height": 900, "hideSidebar": true },
   "menus": [
@@ -331,7 +333,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 #### 슬라이드 구성
 
-1. **표지 슬라이드** → 제목 "사용자매뉴얼(PC)", 부제 "{고객사명} WMS", 작성일자
+1. **표지 슬라이드** → 제목 "사용자매뉴얼(PC)", 부제 "{고객사명} {시스템명}", 작성일자
 2. **목차 슬라이드** → 메뉴 목록에서 자동 생성
 3. **메뉴 그룹 구분 표지** → 메뉴마다 1장(메뉴명 [메뉴코드])
 4. **메뉴 화면 슬라이드** → 메뉴마다 캡처 시나리오 수만큼 (보통 3~5장)
@@ -373,6 +375,7 @@ python3 .claude/skills/TT_541/scripts/03_make_pptx.py
 
 실행 환경 : Windows PowerShell  또는  Bash on Linux/Mac/WSL
 고객사명   : {고객사명}
+시스템명   : {시스템명}
 FE 경로   : {FE 프로젝트 경로}
 BASE_URL  : {BASE_URL}
 뷰포트    : 1440x900 (데스크탑)

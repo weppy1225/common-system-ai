@@ -69,6 +69,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 | **FE 프로젝트 경로** | dev 서버를 켤 프로젝트 루트 디렉토리 | `C:\zinide\workspace-{프로젝트}\{프로젝트}-fe` 또는 `/mnt/c/...` |
 | **BASE_URL** | 이미 켜져 있는 dev/스테이징 서버 | `http://localhost:5173` |
 | **고객사명** | 산출물 파일명. OS 금지문자 자동 `_` 교체 | `진아이드물류` |
+| **시스템명** | 표지 부제 `{고객사명} {시스템명}` 에 사용 (필수 입력) | `WMS`, `MES` |
 | **로그인 필요 여부** | Y면 로그인 정보 직접 입력으로 진행 | Y/N |
 | **메뉴 목록 선택** | 1단계 자동 스캔으로 발견한 PDA 메뉴 선택 | `ivad01m, ivmv01m, iwpc01m` |
 | **뷰포트** | 모바일 고정 (390×844, `isMobile: true`) | `390x844` |
@@ -208,7 +209,7 @@ python3 .claude/skills/TT_542/scripts/03_make_pptx.py
 | 경로 segment 가 소문자+숫자 (끝에 'm' 없음) | `iv3000`, `md8000` |
 | 메뉴 코드 끝이 'm' 이 아닌 것 | `ivad01`, `mdpr01` |
 
-> **참고: wms-{프로젝트코드}-fe 라우터 구조**
+> **참고: {프로젝트}-fe 라우터 구조**
 > - PC: `src/router/modules/be/{그룹}.js` 에서 `path: '{그룹}'`
 > - PDA: `src/router/modules/bm/{그룹m}.js` 에서 `path: '{그룹m}'`
 > - PDA views: `src/views/bm/{그룹m}/{메뉴m}/{메뉴m}.vue`
@@ -248,7 +249,7 @@ python3 .claude/skills/TT_542/scripts/03_make_pptx.py
 
 ### 2단계 → 사용자 입력으로 캡처 설정 확정
 
-AskUserQuestion으로 BASE_URL / dev 서버 / 메뉴 / 로그인 정보 / 고객사명 확정.
+AskUserQuestion으로 BASE_URL / dev 서버 / 메뉴 / 로그인 정보 / 고객사명 / 시스템명 확정.
 
 `deliverables/30-output/05 이행(TT)/tmp_542/capture_config.json` 저장
 
@@ -256,6 +257,7 @@ AskUserQuestion으로 BASE_URL / dev 서버 / 메뉴 / 로그인 정보 / 고객
 {
   "baseUrl": "http://168.126.28.62:8085",
   "customer": "진아이드물류",
+  "system": "WMS",
   "login": { "needed": true, "url": "/login", "id": "jhlee", "pw": "1111" },
   "viewport": { "width": 390, "height": 844, "isMobile": true, "hideSidebar": false },
   "menus": [
@@ -311,7 +313,7 @@ const ctx = await browser.newContext({
 
 #### 슬라이드 구성
 
-1. **표지 슬라이드** → 제목 "사용자매뉴얼(PDA)", 부제 "{고객사명} WMS", 작성일자
+1. **표지 슬라이드** → 제목 "사용자매뉴얼(PDA)", 부제 "{고객사명} {시스템명}", 작성일자
 2. **목차 슬라이드** → PDA 메뉴 목록 (그룹별로 묶어 표시)
 3. **메뉴 그룹 구분 표지** → 메뉴마다 1장
 4. **메뉴 화면 슬라이드** → 메뉴마다 캡처 시나리오 수만큼
@@ -352,6 +354,7 @@ const ctx = await browser.newContext({
 
 실행 환경 : Windows PowerShell  또는  Bash on Linux/Mac/WSL
 고객사명   : {고객사명}
+시스템명   : {시스템명}
 FE 경로   : {FE 프로젝트 경로}
 BASE_URL  : {BASE_URL}
 뷰포트    : 390x844 (모바일, isMobile=true)
