@@ -1,7 +1,7 @@
 ﻿# ============================================================
 # migrate_V0_create_db.ps1
 # TO DB 신규 데이터베이스 생성
-# 대상: wms-cloud-dev (localhost:15432)
+# 대상: {프로젝트}-dev ($TO_DB, localhost:15432)
 # 실행: .\migrate_V0_create_db.ps1
 # ※ 기존 DB가 있으면 DROP 후 재생성하므로 주의
 # ============================================================
@@ -20,7 +20,7 @@ Write-Host "  ⚠ 기존 '$TO_DB' 데이터베이스가 있으면 삭제 후 재
 
 $env:PGPASSWORD = $TO_PASS
 
-# postgres 기본 DB에 접속하여 생성 (wms-cloud-dev 가 없어도 연결 가능)
+# postgres 기본 DB에 접속하여 생성 ({프로젝트}-dev 가 없어도 연결 가능)
 $createSql = @"
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$TO_DB' AND pid <> pg_backend_pid();
 DROP DATABASE IF EXISTS "$TO_DB";
