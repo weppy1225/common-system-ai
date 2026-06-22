@@ -1,6 +1,6 @@
 ---
 title: API 네이밍 규칙
-description: WMS API URL 생성 규칙(HTTP 메서드·URL 패턴·메뉴코드 체계)을 코드 작성 또는 API 설계 시 참조
+description: API URL 생성 규칙(HTTP 메서드·URL 패턴·메뉴코드 체계)을 코드 작성 또는 API 설계 시 참조
 status: active
 version: 1.0.0
 repo_role: ai-hub

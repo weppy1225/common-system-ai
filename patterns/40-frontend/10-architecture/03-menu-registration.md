@@ -83,7 +83,7 @@ const routes = [
 
 ## [2] DB sm_menu 등록
 
-운영/개발 DB에 직접 INSERT하거나, WMS 관리 화면(SMMN01)에서 등록한다.
+운영/개발 DB에 직접 INSERT하거나, 메뉴 관리 화면(SMMN01)에서 등록한다.
 
 ### INSERT SQL
 

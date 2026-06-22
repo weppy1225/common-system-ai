@@ -1,6 +1,6 @@
 ---
 title: 백엔드 기술 스택
-description: WMS 백엔드에서 사용하는 프레임워크·라이브러리·인프라 기술 스택을 참조할 때 사용
+description: 백엔드에서 사용하는 프레임워크·라이브러리·인프라 기술 스택을 참조할 때 사용
 status: active
 version: 1.0.0
 repo_role: ai-hub

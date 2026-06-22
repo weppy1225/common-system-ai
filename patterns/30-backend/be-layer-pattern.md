@@ -1,6 +1,6 @@
 ---
 title: BE 레이어 공통 패턴
-description: WMS BE 전 메뉴에 공통 적용되는 Controller-Comp-TxComp-Dao 레이어 구조와 역할. 메뉴별 06-be-flow.md에서 참조.
+description: BE 전 메뉴에 공통 적용되는 Controller-Comp-TxComp-Dao 레이어 구조와 역할. 메뉴별 06-be-flow.md에서 참조.
 status: active
 version: 1.0.0
 repo_role: ai-hub
