@@ -8,8 +8,8 @@ repo_role: ai-hub
 agent_usage: reference
 domain: common
 related:
-  - "spec/mdbz01/mdbz01-06-be-flow.md"
-  - "spec/mdbz01/mdbz01-07-fe-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-06-be-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-07-fe-flow.md"
 tags:
   - detail-design
   - tech-stack

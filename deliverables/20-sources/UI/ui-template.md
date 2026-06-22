@@ -21,7 +21,7 @@ agent_usage: reference
 C:\zinide\workspace\common-system-ai\spec\30-wms-business\{메뉴코드 소문자}\{메뉴코드 소문자}-02-ui.md
 ```
 
-예) 메뉴코드 MDPR01 → `spec/mdpr01/mdpr01-02-ui.md`
+예) 메뉴코드 MDPR01 → `spec/common-system/mdpr01/mdpr01-02-ui.md`
 
 ---
 

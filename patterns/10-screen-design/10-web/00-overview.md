@@ -48,10 +48,10 @@ tags:
 
 ## 공통 CSS/JS 리소스
 
-| 파일 | 역할 |
-|---|---|
-| `prototype/_common/wms-ui.css` | 공통 스타일시트 |
-| `prototype/_common/wms-common.js` | 공통 스크립트 |
-| `prototype/_common/CPCT01_popup.html` | 거래처 검색 공통 팝업 |
-| `prototype/_common/CPPD01_popup.html` | 품목 검색 공통 팝업 |
-| `prototype/_common/icon-preview.html` | 사용 가능 SVG 아이콘 목록 |
+| 파일                                    | 역할               |
+| ------------------------------------- | ---------------- |
+| `prototype/{프로젝트}/_common/wms-ui.css`        | 공통 스타일시트         |
+| `prototype/{프로젝트}/_common/wms-common.js`     | 공통 스크립트          |
+| `prototype/{프로젝트}/_common/CPCT01_popup.html` | 거래처 검색 공통 팝업     |
+| `prototype/{프로젝트}/_common/CPPD01_popup.html` | 품목 검색 공통 팝업      |
+| `prototype/{프로젝트}/_common/icon-preview.html` | 사용 가능 SVG 아이콘 목록 |

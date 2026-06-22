@@ -44,7 +44,7 @@ common-system-ai\
 | `deliverables/` | 고객 제출 문서 | 고객 | 문서·엑셀·PPT |
 | `scripts/` | 레포 유틸 스크립트 (콘텐츠 아님) | 개발자 | 파이썬 |
 
-원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `knowledgebase/`·`spec/{메뉴}/` 안에서만 쓴다.
+원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `knowledgebase/`·`spec/{프로젝트}/{메뉴}/` 안에서만 쓴다.
 `scripts/`는 콘텐츠가 아니라 도구다.
 - `gen-md-map.py` — 레포 문서 지도 → `knowledgebase/20-md-index.html` 생성기
 - `check-doc-refs.py` — rules↔patterns 참조 무결성 가드. 깨진 참조(ERROR)·미참조 패턴 문서(WARN)를 검출. `python scripts/check-doc-refs.py`, ERROR 있으면 종료코드 1.
@@ -67,10 +67,10 @@ knowledgebase/
 
 ---
 
-## spec/{메뉴}/ (파일 순서 = 읽는 순서)
+## spec/{프로젝트}/{메뉴}/ (파일 순서 = 읽는 순서)
 
 ```
-spec/{메뉴}/
+spec/{프로젝트}/{메뉴}/
 ├── {메뉴}-00-domain.md         업무지식 WHY — 사람 전용, 자동화 스킬 생성·수정 금지
 ├── {메뉴}-01-basic-design.md   기본설계
 ├── {메뉴}-02-ui.md             화면요건            〔/SD_310_UI〕
@@ -134,7 +134,7 @@ patterns/
 
 ## 경계 규칙 (BLOCKING)
 
-1. 메뉴별 설계·업무지식·미결은 모두 `spec/{메뉴}/` (마크다운), 검증 화면은 `prototype/{메뉴}/` (실행 HTML).
+1. 메뉴별 설계·업무지식·미결은 모두 `spec/{프로젝트}/{메뉴}/` (마크다운), 검증 화면은 `prototype/{메뉴}/` (실행 HTML).
 2. `{메뉴}-00-domain.md`는 **사람 전용**. 자동화 스킬은 01~07만 생성/갱신한다.
 3. AS-IS 정본은 **소스 코드**. 역공학 요약 문서를 저장하지 않는다(위치는 `30-src-index`). `KB_100`=레거시 소스를 `spec/` 초안(draft)으로 역공학(00-domain 제외), `KB_200`=`spec/`↔라이브 소스 드리프트 검증.
 4. `knowledgebase/`는 메뉴 횡단 공통 지식만. 메뉴 고유 지식은 `spec/`.

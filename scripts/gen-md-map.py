@@ -58,7 +58,6 @@ FOLDER_ROLE = {
  'patterns/40-frontend':'FE 구현 패턴','patterns/40-frontend/20-convention':'FE 컨벤션','patterns/50-interface':'인터페이스(IF) 패턴',
  'patterns/_common-arch':'공통 기술 아키텍처',
  'deliverables/10-templates':'산출물 템플릿 (PS/RA/SD/PI/TT)','deliverables/20-sources':'산출물 원천 자료','deliverables/30-output':'생성 결과물 (gitignored)',
- 'prototype/_common':'PC 공통 셸','prototype/_common-m':'모바일 공통 셸',
  '.claude/skills/개발 자동화':'설계·코드·테스트 생성 (SD·PI)',
  '.claude/skills/산출물 자동화':'고객 제출물·프로토타입 생성 (SD·RA·PI·TT)',
  '.claude/skills/유틸':'배포·레드마인·KB·메타',
@@ -92,7 +91,12 @@ def folder_role(full):
     if full in FOLDER_ROLE: return FOLDER_ROLE[full]
     if os.path.exists(full + '/SKILL.md'):
         r = fm(full + '/SKILL.md'); return short(r.split('.')[0], 70) if r else '슬래시 커맨드'
-    if full.startswith('spec/') and full.count('/') == 1: return '메뉴 설계 문서 세트'
+    # 허브 spec/prototype 는 프로젝트 층 아래에 있다: spec/{프로젝트}/{메뉴}
+    if full.startswith('spec/') and full.count('/') == 1: return '프로젝트 설계 폴더'
+    if full.startswith('spec/') and full.count('/') == 2: return '메뉴 설계 문서 세트'
+    if full.startswith('prototype/') and full.count('/') == 1: return '프로젝트 프로토타입 폴더'
+    if full.endswith('/_common'): return 'PC 공통 셸'
+    if full.endswith('/_common-m'): return '모바일 공통 셸'
     return ''
 
 def sz(p):

@@ -12,7 +12,7 @@ paths:
 |---|---|
 | E2W(ERP→WMS 수신) 코드 컨벤션·클래스 명명·예외·테스트 | `patterns/50-interface/10-convention/01-erp-to-wms-convention.md` |
 | W2E(WMS→ERP 송신) 코드 템플릿·Retrofit2·SifWms* 클래스 위치 | `patterns/50-interface/10-convention/02-wms-to-erp-convention.md` |
-| 현재 IF 명세 | `spec/{메뉴코드}/{메뉴코드}-05-api.md` |
+| 현재 IF 명세 | `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-05-api.md` |
 | `sif_*` 테이블 스키마 | `patterns/20-database/00-overview.md` |
 | TxComp 기본 패턴 | `patterns/30-backend/40-guide/08-txcomp-writing-rules.md` |
 
