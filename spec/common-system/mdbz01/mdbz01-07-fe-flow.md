@@ -9,8 +9,8 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "spec/mdbz01/mdbz01-02-ui.md"
-  - "spec/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-02-ui.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
 tags:
   - detail-design
   - frontend

@@ -11,10 +11,10 @@ domain: master
 ui_type: 좌우 2분할 (사업장 정보 폼 + 물류센터 그리드)
 purpose: 사업장의 기본 프로필과 물류센터를 관리하고, 외부 물류 대행 업체와의 위탁 관계를 수립·관리한다
 depends_on:
-  - "spec/mdbz01/mdbz01-01-basic-design.md"
+  - "spec/common-system/mdbz01/mdbz01-01-basic-design.md"
 related:
-  - "spec/mdbz01/mdbz01-05-api.md"
-  - "spec/mdbz01/mdbz01-07-fe-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-07-fe-flow.md"
 tags:
   - detail-design
   - screen

@@ -10,12 +10,12 @@ menu_code: mdbz01
 domain: master
 last_verified: "2026-06-09"
 related:
-  - "spec/mdbz01/mdbz01-02-ui.md"
-  - "spec/mdbz01/mdbz01-03-data-model.md"
-  - "spec/mdbz01/mdbz01-05-api.md"
-  - "spec/mdbz01/mdbz01-06-be-flow.md"
-  - "spec/mdbz01/mdbz01-07-fe-flow.md"
-  - "spec/mdbz01/mdbz01-99-issues.md"
+  - "spec/common-system/mdbz01/mdbz01-02-ui.md"
+  - "spec/common-system/mdbz01/mdbz01-03-data-model.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-06-be-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-07-fe-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-99-issues.md"
 tags:
   - basic-design
   - business

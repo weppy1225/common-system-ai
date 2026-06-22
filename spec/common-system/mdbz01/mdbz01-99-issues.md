@@ -9,9 +9,9 @@ agent_usage: task
 menu_code: mdbz01
 domain: master
 related:
-  - "spec/mdbz01/mdbz01-05-api.md"
-  - "spec/mdbz01/mdbz01-04-be-mapper-sql.md"
-  - "spec/mdbz01/mdbz01-06-be-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-04-be-mapper-sql.md"
+  - "spec/common-system/mdbz01/mdbz01-06-be-flow.md"
 tags:
   - open-issues
   - verification

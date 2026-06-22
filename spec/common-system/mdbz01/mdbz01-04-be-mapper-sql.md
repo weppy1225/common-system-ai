@@ -9,10 +9,10 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "spec/mdbz01/mdbz01-03-data-model.md"
+  - "spec/common-system/mdbz01/mdbz01-03-data-model.md"
 related:
-  - "spec/mdbz01/mdbz01-06-be-flow.md"
-  - "spec/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-06-be-flow.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
 tags:
   - detail-design
   - backend

@@ -9,10 +9,10 @@ agent_usage: spec
 menu_code: mdbz01
 domain: master
 depends_on:
-  - "spec/mdbz01/mdbz01-01-basic-design.md"
+  - "spec/common-system/mdbz01/mdbz01-01-basic-design.md"
 related:
-  - "spec/mdbz01/mdbz01-04-be-mapper-sql.md"
-  - "spec/mdbz01/mdbz01-05-api.md"
+  - "spec/common-system/mdbz01/mdbz01-04-be-mapper-sql.md"
+  - "spec/common-system/mdbz01/mdbz01-05-api.md"
 source_of_truth: true
 tags:
   - detail-design
