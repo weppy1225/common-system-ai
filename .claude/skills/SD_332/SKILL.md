@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 대상 디렉토리: **$ARGUMENTS**
 
-`$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일(`application-local.properties`, `application-dev.properties`, `application*.yml` 등)을 자동 스캔하여 DB(PostgreSQL/MySQL/MariaDB/MSSQL)에 직접 접속한다.
+`$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일(`application-dev.properties`, `application-test.properties`, `application*.yml` 등)을 자동 스캔하여 DB(PostgreSQL/MySQL/MariaDB/MSSQL)에 직접 접속한다.
 `sm_comm_h`(공통코드 그룹)과 `sm_comm_d`(상세코드)를 조회하여
 `template/04 구현(PI)/PI_113-공통코드정의서.xlsx` 템플릿에 데이터를 채워 넣고
 `deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 파일을 생성한다.
@@ -158,7 +158,7 @@ rm -rf "$DOC_ROOT/deliverables/30-output/04 구현(PI)/tmp"
 | `application.properties` / `application.yml` | 위와 동일 |
 | `*.env`, `.env.*` | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL` |
 
-**프로파일 우선순위**: `local` > `dev` > `default(application.*)` > 그 외(`prod`, `test`).
+**프로파일 우선순위**: `dev` > `default(application.*)` > `test` > `prod`.
 스크립트는 발견된 후보 전체를 JSON 배열에 담고 추천 후보 1개를 `recommended` 키로 표시한다.
 
 **JDBC URL 파싱**: `db.url=jdbc:log4jdbc:postgresql://localhost:5433/{프로젝트}-dev` 같은 URL에서 driver/host/port/database/schema/options를 분해한다. `log4jdbc:` 프록시 prefix는 제거한다.

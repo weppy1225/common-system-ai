@@ -1,6 +1,6 @@
 ---
-title: common-system-be 로컬 빌드·배포 가이드
-description: common-system-be 로컬 환경 빌드·기동·배포 준비 절차. 로컬에서 BE를 띄우거나 배포 준비 시 참조.
+title: common-system-be 빌드·배포 가이드
+description: common-system-be 빌드·기동·배포 준비 절차. BE를 띄우거나 배포 준비 시 참조.
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -8,7 +8,7 @@ agent_usage: reference
 domain: system
 ---
 
-# common-system-be 로컬 빌드·배포 가이드
+# common-system-be 빌드·배포 가이드
 
 ## 환경 정보
 
