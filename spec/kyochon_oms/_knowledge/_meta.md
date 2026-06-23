@@ -49,6 +49,7 @@ tags:
 
 | 경로 | 내용 | 채우는 방법 |
 |---|---|---|
+| `auth-login.md` | 로그인 API·JWT 인증 구조·curl/JUnit 인증 방법 | 실 코드 검증 완료(2026-06-23) |
 | `db-schema/` | 실 테이블 카탈로그 + 공통코드 | `/SD_331`(테이블정의서)·`/SD_333`(DDL) 추출 후 정리, 또는 `/KB_100 {메뉴코드}` |
 | `glossary/dictionary.yaml` | 컬럼 용어 사전 (컬럼명 → 한글 의미) | 테이블정의서 컬럼 주석에서 도출 |
 | `interface/api-list.md` | ERP 연동 API 목록 | BE 인터페이스 컨트롤러 스캔 후 정리 |
