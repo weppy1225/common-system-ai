@@ -23,20 +23,20 @@ WEB / PDA 화면 설계·프로토타입 작성 패턴을 관리한다.
 | `10-web/` | PC 웹 화면 설계 패턴 |
 | `20-pda/` | PDA 모바일 화면 설계 패턴 |
 
-## 항상 적용되는 규칙 (Always-Loaded Rules)
+## 참조 방향 (rule → pattern)
 
-아래 파일들은 Claude Code에 **항상 자동 로드**되는 UI 규칙 파일이다.
-스킬 실행 시 별도 로드 없이 즉시 적용된다.
+화면설계 HTML 작업의 **상세 구현 SSoT는 patterns leaf 문서**(`10-web/01~07`)다.
+`.claude/rules/*`는 HTML 파일(`paths: **/*.html`) 작업 시 자동 로드되는 **얇은 트리거**로, 금지/필수 판단 기준만 두고 패턴 문서로 라우팅한다.
 
-| 파일 | 적용 영역 |
-|---|---|
-| `.claude/rules/common_ui.md` | 공통 UI (헤더·모달·그리드 공통) |
-| `.claude/rules/area_search.md` | 검색 필터 영역 |
-| `.claude/rules/area_btn.md` | 기능 버튼(Toolbar) 영역 |
-| `.claude/rules/area_result_grid.md` | 결과 그리드 영역 |
-| `.claude/rules/area_multi_input_grid.md` | 다중 입력 그리드 영역 |
-| `.claude/rules/popup_reg.md` | 등록/수정 팝업 |
-| `.claude/rules/popup_biz.md` | 업무규칙 팝업 |
+| 영역 | 패턴 문서 (SSoT) | 얇은 rule (트리거) |
+|---|---|---|
+| 공통 UI | `10-web/01-common-ui.md` | `.claude/rules/common_ui.md` |
+| 검색 필터 | `10-web/02-search-area.md` | `.claude/rules/area_search.md` |
+| 기능 버튼(Toolbar) | `10-web/03-toolbar-buttons.md` | `.claude/rules/area_btn.md` |
+| 결과 그리드 | `10-web/04-result-grid.md` | `.claude/rules/area_result_grid.md` |
+| 다중 입력 그리드 | `10-web/05-multi-input-grid.md` | `.claude/rules/area_multi_input_grid.md` |
+| 등록/수정 팝업 | `10-web/06-popup-register.md` | `.claude/rules/popup_reg.md` |
+| 업무규칙 팝업 | `10-web/07-popup-biz-rule.md` | `.claude/rules/popup_biz.md` |
 
 ## 상세 패턴 문서
 

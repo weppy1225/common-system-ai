@@ -72,12 +72,12 @@ tags:
 >
 > | 종류 | SoT |
 > |---|---|
-> | **공통·재사용 룩** (버튼·그리드·검색영역·팝업·전역 레이아웃·색·폰트) | 프로토타입: `.claude/rules/*`(`area_btn`·`area_result_grid`·`area_multi_input_grid`·`area_search`·`common_ui`·`popup_*`) / 운영 Vue: 공통 컴포넌트 `ZBtn`·`ZCell`·`ZSelect`·`ZText`·`ZAuiGrid`·`LayerPopup` |
+> | **공통·재사용 룩** (버튼·그리드·검색영역·팝업·전역 레이아웃·색·폰트) | 프로토타입: `patterns/10-screen-design/10-web/01~07`(상세 구현 SSoT) — `.claude/rules/*`(`area_btn`·`area_result_grid`·`area_multi_input_grid`·`area_search`·`common_ui`·`popup_*`)는 HTML 작업 시 자동 트리거되는 얇은 rule로 이 패턴 문서를 가리킨다 / 운영 Vue: 공통 컴포넌트 `ZBtn`·`ZCell`·`ZSelect`·`ZText`·`ZAuiGrid`·`LayerPopup` |
 > | **페이지 고유 CSS** (해당 `.vue`만의 일회성 스타일) | 그 `{메뉴}.vue`의 `<style>` |
 > | **i18n 메시지 키** (`$t('message.xxx')`) | locale 사전 `messages.*` |
 > | **AUIGrid 설정 객체 전체** (renderer·event·styleFunction 등) | 그 `{메뉴}.vue` |
 >
-> → 공통 룩은 **위 규칙/컴포넌트가 SoT**이므로 메뉴마다 layout/button/table 류 규칙 문서를 새로 만들지 않는다. 페이지 고유 CSS·i18n 키·그리드 설정 객체만 해당 소스를 직접 참조한다. (BE 컬럼 타입 SoT가 라이브 DB인 것과 동일 원칙 → §3)
+> → 공통 룩은 **위 패턴 문서/컴포넌트가 SoT**이므로 메뉴마다 layout/button/table 류 규칙 문서를 새로 만들지 않는다. 페이지 고유 CSS·i18n 키·그리드 설정 객체만 해당 소스를 직접 참조한다. (BE 컬럼 타입 SoT가 라이브 DB인 것과 동일 원칙 → §3)
 
 ## 3. 데이터 모델 — 컬럼 타입 Source of Truth (전 메뉴 공통)
 

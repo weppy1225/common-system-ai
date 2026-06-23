@@ -1,0 +1,74 @@
+---
+title: 기능 버튼(Toolbar) 영역 패턴 (WEB)
+description: 그리드 상단 툴바 영역의 버튼 종류·배치 순서·정렬·특수 기능 버튼·툴바 스타일 상세 구현 패턴. CRUD 아이콘 버튼(btn-icon)·텍스트 버튼·엑셀 버튼의 크기·색상을 정의한다. 얇은 rule(area_btn.md)이 이 문서를 SSoT로 참조한다.
+status: active
+version: 1.0.0
+author: ShinHyunKyu
+repo_role: ai-hub
+agent_usage: reference
+domain: frontend
+tags:
+  - web
+  - screen-design
+  - toolbar
+related:
+  - patterns/10-screen-design/10-web/00-overview.md
+  - .claude/rules/area_btn.md
+---
+
+# 기능 버튼 영역 (Toolbar) 패턴 (WEB)
+
+> 툴바 버튼의 **상세 구현 SSoT**다. 판단 기준(금지/필수)은 얇은 rule `.claude/rules/area_btn.md`에 있다.
+
+---
+
+## 1. 버튼 기본 규칙
+
+- CRUD 버튼(추가 / 수정 / 삭제 / 복사)은 SVG 아이콘만 표시하는 아이콘 버튼(`btn-icon`)으로 구성한다. 텍스트 없이 아이콘만 표시한다.
+- 버튼 명칭은 **추가 / 수정 / 삭제 / 복사 / 저장** 으로 고정한다. 버튼 텍스트가 길어지지 않도록 이 명칭을 그대로 사용한다.
+- 버튼 순서도 **추가 / 수정 / 삭제 / 복사 / 저장** 순으로 한다. 그리고 그리드 상단 왼쪽에 배치한다.
+- 저장 버튼만 오른쪽에 배치 하지 않는다. 추가 수정 옆에 위치한다.
+- 버튼 색상은 흰색 배경을 기본으로 사용하며, 별도 언급이 없는 한 색상을 넣지 않는다.
+- 엑셀등록 / 엑셀다운로드 버튼은 별도 언급이 없는 한 화면에 추가하지 않는다.
+
+---
+
+## 2. 정렬 규칙 (Alignment Split)
+
+- **좌측 정렬**: 데이터 변경(추가, 수정, 삭제, 복사) 및 입력(엑셀등록) 등 실행 액션 버튼을 배치한다.
+- **우측 정렬**: 데이터를 내보내는 출력 액션(엑셀다운로드) 버튼을 배치한다. 목적에 따라 시각적으로 분리한다.
+
+---
+
+## 3. 특수 기능 버튼 규칙
+
+- 엑셀 관련 버튼(엑셀등록 / 엑셀다운로드)은 **아이콘 + 텍스트** 조합으로 표시한다. CRUD 아이콘 버튼과 달리 텍스트가 함께 표시된다.
+- 엑셀 버튼 크기: `height: 26px`, `padding: 0 10px`, 아이콘-텍스트 간격 `gap: 4px`.
+
+---
+
+## 4. 기능적 배치 순서 (Functional Hierarchy)
+
+좌측 툴바 내 버튼은 영향 범위가 작은 것에서 큰 순서로 왼쪽에서 오른쪽으로 배치한다.
+
+- 개별 편집: 추가 / 수정 / 삭제 / 복사 (단건 제어, 아이콘 버튼)
+- 일괄 처리: 엑셀등록 (대량 데이터 제어)
+
+---
+
+## 5. 툴바 스타일 규칙
+
+- 툴바 배경색은 `#f9fafb`, 하단 구분선은 `border-bottom: 1px solid #e5e7eb`을 적용한다.
+- 툴바 최소 높이는 `32px`, 내부 패딩은 `4px 6px`으로 설정한다.
+- 툴바 좌측 버튼 그룹(`.toolbar-left`)의 버튼 간격은 `gap: 3px`으로 설정한다.
+- CRUD 아이콘 버튼(`btn-icon`)의 크기는 `height: 26px`, `padding: 0 8px`, `font-size: 12px`으로 설정한다.
+- 기본 버튼(`.btn`) 공통 스타일: `border: 1px solid #d1d5db; background: #ffffff; height: 30px; padding: 0 18px; font-size: 13px; font-weight: 500; border-radius: 4px; gap: 3px; color: #374151`.
+- 기본 버튼 호버: `border-color: #9ca3af; background: #f9fafb; color: #111827`.
+- 보조 버튼(`.btn-aux`) 스타일: `color: #6b7280; font-weight: 400`, 호버 시 `color: #374151; background: #f9fafb`.
+- 강조 버튼(`.btn-primary`) 스타일: `background: #304a6e; border-color: #304a6e; color: #fff`, 호버 시 `background: #263858; border-color: #263858`.
+
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스: → `patterns/10-screen-design/10-web/00-overview.md`

@@ -163,7 +163,7 @@ const MDFG01_DATA = {
 - [ ] `<title>` 및 헤더에 `{메뉴명} [{메뉴코드}]` 정확히 표시
 - [ ] 검색 영역 컬럼/컴포넌트가 요건과 일치
 - [ ] 그리드 No. 및 체크박스 순서 준수, 첫 번째 컬럼 No.
-- [ ] `<colgroup>` 각 `<col width>` 가 `area_result_grid.md` 최소 너비 이상 (헤더 잘림 없음)
+- [ ] `<colgroup>` 각 `<col width>` 가 `patterns/10-screen-design/10-web/04-result-grid.md` 컬럼 너비 기준표 최소 너비 이상 (헤더 잘림 없음)
 - [ ] CRUD 버튼 모두 실제 동작 (stub 없음)
 - [ ] 업무규칙 팝업 화면구성 4행 + `<ol>` 업무규칙 일치
 - [ ] 등록/수정 팝업 코드 채번 (`{메뉴코드}P01`, `P02` 등)
