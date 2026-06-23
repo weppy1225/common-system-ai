@@ -25,6 +25,10 @@ tags:
 - 값은 추정하지 않는다. 실제 파일, 명령 문서, 코드, DB 문서에서 확인한 값만 적는다.
 - key는 영문 snake_case를 사용한다.
 - 배열 값은 YAML list를 사용한다.
+- `author`는 **문서를 작성·수정하는 시점의 git 자격증명**에서 동적으로 도출한다. 값을 하드코딩하지 않는다. 이유: 작성자마다·머신마다 git 계정이 다르므로 고정값을 적으면 틀린다.
+  - 도출: `git config user.name` (필요 시 `git config user.email` 병기).
+  - 표기: `author: <user.name>` 또는 `author: <user.name> <user.email>`.
+  - 신규 작성 시 추가한다. 의미 있는 수정 시 기존 `author`는 유지하고 `last_modified_by`에 수정자 git 자격증명을 적는다(원작자 보존).
 - `repo_role`은 문서가 속한 레포의 **역할**만 적는다(`ai-hub` / `be` / `fe`). 브랜드·도메인이 들어간 실제 레포명(`common-system-ai` 등)을 넣지 않는다 — 리브랜딩(예: cloud→bandai) 시 문서 일괄 수정이 발생하기 때문이다. 실제 레포 정체성은 git·폴더명에서 런타임 도출한다(→ `repo-paths.md`).
 - 경로는 저장소 루트 기준 상대 경로를 사용한다.
 - 민감정보, DB 접속정보, 토큰, 고객 데이터는 넣지 않는다.
@@ -47,6 +51,7 @@ title: 문서 제목
 description: AI 에이전트가 이 문서를 언제 써야 하는지 한 문장으로 설명
 status: draft | active | deprecated | archived
 version: 1.0.0
+author: <git config user.name>        # 작성 시점 git 자격증명에서 도출, 하드코딩 금지
 repo_role: ai-hub | be | fe
 applies_to:
   - path/or/glob
@@ -74,6 +79,7 @@ validation:
   - 검증 방법 또는 실행 명령
 menu_code: md8000
 domain: inbound | outbound | inventory | master | system | interface | common | frontend | document
+last_modified_by: <git config user.name>   # 의미 있는 수정 시 수정자(원작자 author는 유지)
 last_verified: YYYY-MM-DD
 ```
 
@@ -88,6 +94,7 @@ last_verified: YYYY-MM-DD
 
 - `description`만 읽어도 AI가 문서 사용 시점을 판단할 수 있는가?
 - `agent_usage`가 문서의 역할을 정확히 나타내는가?
+- `author`를 `git config user.name`에서 도출했는가? (고정값 하드코딩 금지)
 - `SKILL.md`는 Claude Code/Codex 공식 필드(`name`, `description` 등)를 우선 사용했는가?
 - `repo_role`이 레포 역할(`ai-hub`/`be`/`fe`)로 적혔는가? (실제 레포명·브랜드명을 넣지 않았는가?)
 - `applies_to`, `inputs`, `outputs`, `related` 경로가 실제 근거와 맞는가?

@@ -13,3 +13,4 @@ agent_usage: reference
 |---|---|
 | [ai-dev-procedure.md](../knowledgebase/50-dev-workflow/ai-dev-procedure.md) | AI 개발 절차 (BE/FE 코드 개발 → 단위테스트 → 기동/목업 → 통합테스트) |
 | [30-backend/be-layer-pattern.md](./30-backend/be-layer-pattern.md) | BE 레이어 구조·호출 원칙·예외 클래스 |
+| [_common-arch/common-code.md](./_common-arch/common-code.md) | 공통코드 왜+어떻게 (시스템 횡단: 코드마스터→BE 상수→FE commCdStore) |

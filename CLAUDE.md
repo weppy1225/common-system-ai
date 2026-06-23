@@ -12,19 +12,47 @@
 
 ## 디렉토리 구조
 
+레포는 **역할별 최상위 폴더 × 시스템별(프로젝트) 네임스페이스** 2축으로 구성된다. 여러 업무 시스템(WMS·OMS·WCS …)을 한 허브에서 개발하며, 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다.
+
 ```
 common-system-ai\
 ├── .claude\
-│   ├── skills\        # 슬래시 커맨드 스킬 (개발 자동화 + 산출물 자동화)
-│   └── rules\         # 항상 적용되는 UI·문서·코딩 규칙
-├── knowledgebase\    # 메뉴 횡단 공통 배경지식 (00-overview·10-domain·20-md-index·30-src-index·40-install-guide·50-dev-workflow)
-├── spec\             # 메뉴별 설계 정본 (프로젝트별: {프로젝트}/{메뉴}/{메뉴}-00-domain ~ 07 + 99)
-├── prototype\        # 검증용 화면 (프로젝트별: {프로젝트}/ 아래 공용 셸 + 메뉴별 wireframe)
-├── patterns\         # 소스코드 패턴 (DB·BE·FE·IF)
-└── deliverables\     # 산출물 (템플릿·원천·결과)
+│   ├── skills\        # 슬래시 커맨드 스킬 (개발/산출물/유틸)
+│   └── rules\         # 조건부(paths)/항상 로딩 규칙 — UI·BE·DB·문서·경로 + 시스템별(oms-*) + 시스템공통(common-code)
+├── knowledgebase\    # ① 코어 + ② 도메인 표준 (메뉴 횡단 공통 배경)
+│   ├── 10-domain\         메뉴 횡단 공통 업무규칙 (WHY, 사람 작성)
+│   ├── domains\           ② 도메인(시스템) 표준 — 같은 도메인 프로젝트끼리 공유. domains\wms\ · domains\oms\(install-guide·patterns\be|db|fe)
+│   └── 40-install-guide\·50-dev-workflow\·20-md-index·30-src-index
+├── spec\             # ③ 프로젝트(시스템)별 지식베이스 — `{프로젝트}\`
+│   ├── common-system\    [WMS] {메뉴}\ 설계(00~07·99) + _knowledge\(실 스키마·메뉴·공통코드값)
+│   └── kyochon_oms\      [OMS] {메뉴}\ 설계 + _knowledge\(실데이터: 스키마·메뉴·용어·API)
+├── prototype\        # 검증용 화면 (시스템별 `{프로젝트}\`)
+├── patterns\         # ① 코어 소스코드 패턴 (시스템 무관: 10-screen-design·20-database·30-backend·40-frontend·_common-arch)
+├── deliverables\     # 고객 제출 산출물 (시스템 공통)
+└── scripts\          # 레포 유틸 스크립트 (콘텐츠 아님)
 ```
 
-> 전체 디렉토리 구조·영역별 역할·KB 문서 역할 분리(SoT) 규칙: → [STRUCTURE.md](./STRUCTURE.md)
+### 시스템(프로젝트)별 분할 — 3계층
+
+시스템 지식은 3계층으로 분리한다. 충돌 시 우선순위: **③ 프로젝트 확정 > ② 도메인 표준 > ① 코어** (③=실제값, ①=기본값).
+
+| 계층 | 위치 | 시스템 무관/별 | 예 |
+|---|---|---|---|
+| ① 코어 | `patterns/`, `.claude/rules/`(무접두), `knowledgebase/10·40·50` | 시스템 무관(공유) | be-layer-pattern, `_common-arch/common-code.md`, `common-code` rule |
+| ② 도메인(시스템) 표준 | `knowledgebase/domains/{도메인}/` (WMS=`wms/`, OMS=`oms/`) + `.claude/rules/{system}-*`(OMS=`oms-*`) | 도메인별 공유 | 인터페이스 컨벤션, OMS 레이어·SQL·FE 패턴 |
+| ③ 프로젝트(시스템) 지식베이스 | `spec/{프로젝트}/_knowledge/` + `spec/{프로젝트}/{메뉴}/` | 배포 단위별 | 실 테이블·메뉴·공통코드값·메뉴별 설계 |
+
+| 시스템 | 프로젝트 폴더 `{프로젝트}` | 도메인 | BE/FE 레포 |
+|---|---|---|---|
+| WMS | `common-system` | wms | (workspace 형제 `*-be`·`*-fe`) |
+| OMS | `kyochon_oms` | oms | `kyochon-oms-be` · `kyochon-oms-fe` |
+
+> 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다(WMS·OMS 대칭). 새 시스템(WCS 등) 추가 시 `knowledgebase/domains/{도메인}/`·`spec/{프로젝트}/`·`.claude/rules/{system}-*` 를 같은 방식으로 만든다.
+> `{프로젝트}` 도출·형제 BE/FE 레포 경로 규칙 → `.claude/rules/repo-paths.md`. 전체 구조·영역 역할·SoT 규칙 → [STRUCTURE.md](./STRUCTURE.md).
+
+### 개발 대상 시스템 자동 판별
+
+BE/FE 코드·메뉴 설계 작업 시작 시 **대상 시스템(WMS·OMS 등)을 함께 열린 `*-be`/`*-fe` 레포에서 자동 판별**한다. 판별 신호·절차·실패 처리·허브(ai-kb) 수정과의 구분은 → `.claude/rules/system-detect.md` (개발 파일 작업 시 lazy 로딩).
 
 ## 프로토타입 파일 구조
 

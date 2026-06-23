@@ -56,7 +56,7 @@ common-system-ai\
 knowledgebase/
 ├── 00-overview.md       개요
 ├── 10-domain/           메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람 작성)
-├── domains/             도메인 표준 — 같은 도메인 프로젝트끼리 공유 (예: domains/wms/)
+├── domains/             ② 도메인(시스템) 표준 — 같은 도메인 프로젝트끼리 공유. 시스템별: domains/wms/ · domains/oms/(install-guide·patterns/be|db|fe)
 ├── 20-md-index.md       MD 문서 색인 (문서 위치)
 ├── 20-md-index.html     ↑의 HTML 뷰 — scripts/gen-md-map.py 생성물 (직접 편집 금지)
 ├── 30-src-index/        소스코드 색인 (코드 위치 — 실제 코드는 BE/FE 레포)
@@ -67,6 +67,8 @@ knowledgebase/
 ---
 
 ## spec/{프로젝트}/{메뉴}/ (파일 순서 = 읽는 순서)
+
+`spec/`·`prototype/` 는 **시스템(프로젝트)별 네임스페이스** `{프로젝트}/` 아래에 둔다. 현재 프로젝트: `common-system`(WMS) · `kyochon_oms`(OMS). 각 프로젝트는 `_knowledge/`(③ 프로젝트 확정 데이터: 실 스키마·메뉴·공통코드값)와 `{메뉴}/`(메뉴별 설계)를 가진다. `{프로젝트}` 도출은 → `.claude/rules/repo-paths.md`.
 
 ```
 spec/{프로젝트}/{메뉴}/
@@ -119,14 +121,21 @@ patterns/
 | 📦 산출물 자동화 | 16 | 프로토타입·고객 제출 문서 (SD_311·312·SD_33x·RA_222·PI_4xx·TT_5xx) | `prototype/`, `deliverables/30-output` |
 | 🔧 유틸 | 8 | 배포·레드마인·KB·메타 (deploy·daily_brief·md_index·PI_issue_mod·PI_time_reg·KB_100·KB_200·skill_list) | — |
 
-## .claude/rules/ (성격별 4그룹)
+## .claude/rules/ (성격별 그룹)
 
-| 그룹 | 수 | 적용 대상 |
-|---|---|---|
-| UI·화면 | 7 | 와이어프레임 HTML (common_ui·area_*·popup_*) |
-| BE·DB·연동 | 4 | BE·Mapper·재고·SIF (backend/db/biz-framework/sif-convention) |
-| 문서·메타 | 2 | frontmatter 작성 (md-frontmatter·rule-skill-frontmatter) |
-| 경로·환경 | 1 | 워크스페이스 레포 경로 (repo-paths) |
+규칙은 `paths` 글로브로 **조건부 로딩**(매칭 파일 작업 시 첨부)되거나, `paths` 생략 시 **항상 로딩**된다. 시스템 무관(코어)·시스템 공통·시스템별(OMS) 3종이 공존한다.
+
+| 그룹 | 수 | 시스템 | 적용 대상 |
+|---|---|---|---|
+| UI·화면 | 7 | 무관(코어) | 와이어프레임 HTML (common_ui·area_*·popup_*) |
+| BE·DB·연동 | 4 | 무관(코어) | BE·Mapper·재고·SIF (backend/db/biz-framework/sif-convention) |
+| 공통코드 | 1 | 공통(전 시스템) | BE·FE 공통코드 사용 (common-code) |
+| 시스템별 컨벤션 | 4 | OMS 전용 | oms-backend/db/frontend-convention·oms-security |
+| 문서·메타 | 2 | 무관(코어) | frontmatter 작성 (md-frontmatter·rule-skill-frontmatter) |
+| 경로·환경·git | 3 | 무관(코어) | 워크스페이스 레포 경로(repo-paths, 항상)·git 워크플로우(git-workflow)·개발 대상 시스템 자동 판별(system-detect, lazy) |
+
+> 시스템별 컨벤션은 `{system}-` 접두어 + `paths` 글로브로 구분한다. 새 시스템(WCS 등) 추가 시 같은 방식으로 `{system}-*` 규칙을 둔다.
+> 개발 시작 시 대상 시스템 판별은 `system-detect`(lazy 로딩)이 담당한다. 허브(ai-kb) 자체 수정은 시스템 판별 대상이 아니다.
 
 ---
 
