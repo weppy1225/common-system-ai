@@ -11,7 +11,7 @@ paths:
 > 공통 골격은 [DB 컨벤션](./db-convention.md) 와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
 > 전제: 전통 Spring(Boot 아님) · MyBatis · OMS=PostgreSQL + ERP=SQL Server 멀티DB.
 > 상세 작성 패턴은 → `knowledgebase/domains/oms/patterns/db/oms-01-sql-query-style.md`(서식), `oms-02-mybatis-convention.md`(구현), `oms-03-naming-rule.md`(명명).
-> 테이블·컬럼·코드값 확인은 → `oms-be/DEV_DOC/erd/oms.exerd`(ERD) + `oms-ai/04-도메인-코드값.md` + `fw/constant/OMSPool.java`.
+> 테이블·컬럼·코드값 확인은 → `oms-be/DEV_DOC/erd/oms.exerd`(ERD) + `spec/kyochon_oms/_knowledge/db-schema/90-common-code.md` + `fw/constant/OMSPool.java`.
 > MyBatis 설정 근거: `oms-be/src/main/resource/sqlmap-config.xml`.
 
 전제(숨은 전제 명시): OMS DB = PostgreSQL, ERP DB = SQL Server 멀티 DB. ERP DB 매퍼는 `@OutDbLink` 로 라우팅(상세 → `02-백엔드-패턴.md §6`).

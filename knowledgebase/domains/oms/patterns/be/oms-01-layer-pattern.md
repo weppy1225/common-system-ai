@@ -24,8 +24,8 @@ last_verified: 2026-06-22
 # OMS 백엔드 레이어 작성 패턴 — OMS 고유 차이
 
 > 공통 골격(레이어 책임 분리·`@Transactional` 위치·메서드 네이밍·파일 처리 매트릭스·공통 예외/응답)은 common 문서와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
-> 공통 레이어 구조 → [be-layer-pattern.md](../../30-backend/be-layer-pattern.md)
-> 공통 레이어별 코드 템플릿 → [06-comp-writing-rules.md](../../30-backend/40-guide/06-comp-writing-rules.md), [07-computil-writing-rules.md](../../30-backend/40-guide/07-computil-writing-rules.md), [08-txcomp-writing-rules.md](../../30-backend/40-guide/08-txcomp-writing-rules.md)
+> 공통 레이어 구조 → [be-layer-pattern.md](../../../../../patterns/30-backend/be-layer-pattern.md)
+> 공통 레이어별 코드 템플릿 → [06-comp-writing-rules.md](../../../../../patterns/30-backend/40-guide/06-comp-writing-rules.md), [07-computil-writing-rules.md](../../../../../patterns/30-backend/40-guide/07-computil-writing-rules.md), [08-txcomp-writing-rules.md](../../../../../patterns/30-backend/40-guide/08-txcomp-writing-rules.md)
 > 전제(숨은 전제): OMS 는 전통 Spring(Spring Boot 아님) · MyBatis · 멀티DB(OMS=PostgreSQL, ERP=SQL Server). WMS 계열과 동일한 `fw/*` 프레임워크를 공유한다.
 
 ---
@@ -40,7 +40,7 @@ last_verified: 2026-06-22
 | Controller `@RequestMapping` | — | **첫 경로 변수는 사업장 `{bizSeq}`** | `@RequestMapping("/{bizSeq}/odrg01/orders")` |
 | 채번 호출 위치 | TxComp 에서 호출 | OMS 는 `DocNoGenerator`/`SeqGenerator` 가 주로 **Dao 에 주입** → [oms-03-numbering-module.md](./oms-03-numbering-module.md) | `ODRG01Dao`, `ODED02Dao` |
 
-OMS 레이어 개요·예외 흐름 라우팅: `oms-ai/02-백엔드-패턴.md`, 판단/금지패턴: `oms-ai/.claude/rules/oms-backend-convention.md`.
+OMS 레이어 개요·예외 흐름 라우팅: `knowledgebase/domains/oms/patterns/be/`, 판단/금지패턴: `.claude/rules/oms-backend-convention.md`.
 
 ---
 

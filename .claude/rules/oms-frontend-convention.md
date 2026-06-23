@@ -9,9 +9,9 @@ paths:
 # OMS 프론트엔드 개발 규칙 — 판단 기준 & 금지 패턴
 
 > 출처: `wms-bnk-fe/.claude/rules/frontend-convention.md` 의 전이 가능 원칙만 OMS 기준으로 적응 이식.
-> 디렉토리 구조·라우팅·axios·Pinia·인증·쇼핑몰 모듈 등 상세 패턴은 → `oms-ai/03-프론트엔드-패턴.md` 참조.
-> 상세 작성 가이드: 라우터·메뉴 등록 → `knowledgebase/domains/oms/patterns/fe/oms-01-router-menu-register.md`, 공통코드 → `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md`, 커스텀 컴포넌트(ZCodeSelect/ZSelect/ZAuiGrid 등) → `knowledgebase/domains/oms/patterns/fe/oms-03-custom-component.md`.
-> 도메인 코드값은 → `oms-ai/04-도메인-코드값.md` 참조.
+> 디렉토리 구조·라우팅·axios·Pinia·인증·쇼핑몰 모듈 등 상세 패턴은 → `knowledgebase/domains/oms/patterns/fe/` 참조.
+> 상세 작성 가이드: 라우터·메뉴 등록 → `knowledgebase/domains/oms/patterns/fe/oms-01-router-menu-register.md`, 공통코드 → `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md`, 커스텀 컴포넌트(ZCodeSelect/ZSelect/ZAuiGrid 등)는 실제 소스 → `oms-fe/src/components/be/`.
+> 도메인 코드값은 → `spec/kyochon_oms/_knowledge/db-schema/90-common-code.md` 및 oms-fe 상수 파일(`zConstant.js`) 참조.
 
 전제(숨은 전제 명시): oms-fe 는 한 코드베이스로 **UI 패러다임이 다른 두 시스템**을 빌드한다 — **쇼핑몰(가맹점) 모드**(`VITE_OMS_YN=Y`, `/bc`, 실제 인터넷 쇼핑사이트 스타일, AUIGrid 미사용)와 **Admin 관리자 모드**(`VITE_OMS_YN=N`, `/be`, WMS식 AUIGrid 관리자 화면)다. 모바일(`/bm`)은 PDA 별도 모드. 두 시스템 구분·UI 스타일 차이 상세 → `knowledgebase/domains/oms/install-guide/oms-01-startup-guide.md` §3.0.
 
@@ -56,7 +56,7 @@ MUST: 공통코드 조회·변환은 `commCdStore` 또는 `ZCodeSelect`/`ZCodeMu
 MUST: 뷰 파일·라우터는 메뉴코드(영문 4자 + 숫자 2자, 예 `ODRG01C`)를 사용한다. 라우터 `path`/`name`=소문자, `meta.menuCd`/`meta.authMenuCd`=대문자, 뷰=`@/views/{prefix}/{모듈}/{메뉴}/{메뉴}.vue`.
 라우터 등록 3단계(모듈 작성 → index.js import → `/bc`·`/be` children 추가)는 → `knowledgebase/domains/oms/patterns/fe/oms-01-router-menu-register.md`.
 
-MUST: 신규 화면은 같은 모드(`bc`/`be`/`bm`) 기존 메뉴 화면을 먼저 읽고 동일 패턴을 따른다. 검색/그리드/팝업은 OMS 커스텀 컴포넌트(`ZCodeSelect`/`ZAuiGrid`/`Zxxx Popup` 등)를 사용 → `knowledgebase/domains/oms/patterns/fe/oms-03-custom-component.md`.
+MUST: 신규 화면은 같은 모드(`bc`/`be`/`bm`) 기존 메뉴 화면을 먼저 읽고 동일 패턴을 따른다. 검색/그리드/팝업은 OMS 커스텀 컴포넌트(`ZCodeSelect`/`ZAuiGrid`/`Zxxx Popup` 등)를 사용 → 실제 소스 `oms-fe/src/components/be/` 참조.
 
 MUST: 그리드는 `zAuiGrid_common.js` 프리셋(`zAuiGridReadonlyPros`/`zAuiGridEditablePros`)을 spread 후 override 한다.
 > 참고: WMS 의 `ZAuiGrid gridKey` 필수 규칙은 OMS 에 적용하지 않는다(`grep gridKey oms-fe/src/views` 0건 — OMS 미사용).

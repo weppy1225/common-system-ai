@@ -124,6 +124,6 @@ BE 스펙 원천 경로·네이밍·동기화 절차는 **`patterns/40-frontend/
 이 파일은 런타임 계약(HTTP 메서드·응답 네이밍·복합키)만 다루고, "어떤 BE 문서를 어떻게 읽는가" 는 03번을 따른다.
 
 FE 메뉴 작업 시 순서:
-1. `patterns/30-backend/90-api/` 에서 BE 산출물 확인.
+1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/` 에서 BE 산출물 확인.
 2. 최신 `{YYYYMMDD}_output.md`, 없으면 `output.md`, 없으면 `spec.md` 로 API 목록·Request·Response 확인.
-3. 부족하면 `patterns/30-backend/90-api/20-detail/{menu-lower}-*.md` 를 보조 참고.
+3. 부족하면 `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/20-detail/{menu-lower}-*.md` 를 보조 참고.

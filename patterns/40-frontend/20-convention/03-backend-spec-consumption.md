@@ -14,7 +14,7 @@ tags:
 source_of_truth: true
 related:
   - patterns/40-frontend/10-architecture/02-be-fe-contract.md
-  - patterns/30-backend/90-api/
+  - $BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/
 ---
 
 # BE 스펙 소비(Consume) 컨벤션
@@ -31,16 +31,16 @@ BE 저장소: `$BE_DIR/DEV_DOC/ai-docs/`
 | 메뉴 스펙 (초안/설계) | `20-backend/80-spec/{menu-lower}/spec.md` |
 | 메뉴 개발 산출물 (최종) | `20-backend/80-spec/{menu-lower}/{YYYYMMDD}_output.md` |
 | 날짜 없는 개발 산출물 | `20-backend/80-spec/{menu-lower}/output.md` |
-| FE 소비용 API 상세 | `patterns/30-backend/90-api/20-detail/{menu-lower}-{method}-{res}.md` |
-| 도메인별 API 요약 | `patterns/30-backend/90-api/10-domain/{domain}-api.md` |
-| 전체 API 목록 | `patterns/30-backend/90-api/00-backend-api-overview.md` |
+| FE 소비용 API 상세 | `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/20-detail/{menu-lower}-{method}-{res}.md` |
+| 도메인별 API 요약 | `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/10-domain/{domain}-api.md` |
+| 전체 API 목록 | `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/00-backend-api-overview.md` |
 | 테이블 명세 | `patterns/30-backend/` (DB 스키마) |
 
 우선순위 (같은 메뉴에서 여러 문서가 있을 때):
 1. `{YYYYMMDD}_output.md` — 개발 완료 산출물. **가장 최신/정확**.
 2. `output.md` — 날짜형 output 이 없을 때 사용.
 3. `spec.md` — 초안. output 이 없으면 사용.
-4. `patterns/30-backend/90-api/20-detail/*.md` — API 단위 상세. 80-spec 만으로 부족할 때 보조 참고.
+4. `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/20-detail/*.md` — API 단위 상세. 80-spec 만으로 부족할 때 보조 참고.
 
 ## 2. 네이밍 규칙
 
@@ -75,7 +75,7 @@ FE 에서 메뉴를 건드릴 때:
 
 1. `$BE_DIR/DEV_DOC/ai-docs/20-backend/80-spec/{menu-lower}/` 존재 여부 확인.
 2. 최신 `{YYYYMMDD}_output.md`, 없으면 `output.md`, 없으면 `spec.md` 를 읽는다.
-3. 필요하면 `patterns/30-backend/90-api/20-detail/{menu-lower}-*.md` 를 보조 참고한다.
+3. 필요하면 `$BE_DIR/DEV_DOC/ai-docs/20-backend/90-api/20-detail/{menu-lower}-*.md` 를 보조 참고한다.
 4. 작업 완료 후 `spec/{프로젝트}/{메뉴코드}/` 의 API 매핑표를 80-spec 기준으로 갱신한다.
 
 ## 6. 안 하는 것

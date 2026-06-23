@@ -4,7 +4,7 @@ description: oms-be Mapper.java/Mapper.xml MyBatis 구현 패턴 중 OMS 고유 
 
 # MyBatis 레이어 코딩 컨벤션 — OMS 고유 차이
 
-> 공통 MyBatis 골격(레이어 구조·메서드 네이밍 접두사·@Param 기준·Mapper.xml 기본구조·동적쿼리 태그·resultMap·자주하는 실수)은 [common 문서](../../20-database/30-convention/02-mybatis-convention.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
+> 공통 MyBatis 골격(레이어 구조·메서드 네이밍 접두사·@Param 기준·Mapper.xml 기본구조·동적쿼리 태그·resultMap·자주하는 실수)은 [common 문서](../../../../../patterns/20-database/30-convention/02-mybatis-convention.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
 
 근거(OMS 실제 적용 확인): `oms-be/src/main/java/bc/co1000c/mypg01c/MYPG01CMapper.xml`, `fw/tool/EmptyTool.java`, `fw/config/DBConfig.java`, `fw/constant/StringPool.java`.
 

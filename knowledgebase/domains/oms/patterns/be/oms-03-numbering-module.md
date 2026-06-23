@@ -22,9 +22,9 @@ last_verified: 2026-06-22
 # OMS 채번 공통모듈 — OMS 고유 차이
 
 > 공통 골격(`DocNoGenerator` 동작·`DocNoBean` 필드·단건/다건 호출·내부 재시도·`mdm_doc_no` 정책)은 common 문서와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
-> 공통 업무번호 규칙·DocNoGenerator → [03-numbering-rule.md](../../20-database/20-rule/03-numbering-rule.md)
-> 공통 시퀀스 생성 규칙 → [04-sequence-creation-rule.md](../../20-database/20-rule/04-sequence-creation-rule.md)
-> 전제(숨은 전제): OMS=PostgreSQL · MyBatis. "채번은 공통 모듈을 경유" 판단 규칙 → `oms-ai/.claude/rules/oms-backend-convention.md`.
+> 공통 업무번호 규칙·DocNoGenerator → [03-numbering-rule.md](../../../../../patterns/20-database/20-rule/03-numbering-rule.md)
+> 공통 시퀀스 생성 규칙 → [04-sequence-creation-rule.md](../../../../../patterns/20-database/20-rule/04-sequence-creation-rule.md)
+> 전제(숨은 전제): OMS=PostgreSQL · MyBatis. "채번은 공통 모듈을 경유" 판단 규칙 → `.claude/rules/oms-backend-convention.md`.
 
 ---
 

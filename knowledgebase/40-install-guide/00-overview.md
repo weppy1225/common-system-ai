@@ -1,6 +1,6 @@
 ---
 title: knowledgebase/40-install-guide 시스템 운영·인프라 가이드
-description: common-system 시스템의 빌드·배포·설치·운영에 관한 가이드 문서 모음
+description: 시스템 무관 빌드·배포·설치·운영 가이드 문서 모음. 스택별 차이는 도메인(knowledgebase/domains/{도메인}/install-guide/)에서 보완한다.
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -9,14 +9,14 @@ agent_usage: reference
 
 # knowledgebase/40-install-guide
 
-common-system 시스템의 빌드·배포·설치·운영 가이드를 관리한다.
+빌드·배포·설치·운영 가이드를 관리한다. 여기에는 **스택 공통 절차**(Gradle/Spring Boot 기준)를 두고, 스택이 다른 시스템(예: OMS=Ant/WAR)은 `knowledgebase/domains/{도메인}/install-guide/`에서 차이만 보완한다.
 
 ## 디렉토리 구조
 
 ```
 knowledgebase/40-install-guide/
 └── deploy/
-    └── deploy-guide.md   # Tomcat 빌드·배포·검증 절차
+    └── deploy-guide.md   # BE 빌드·배포·검증 절차 (Gradle/Spring Boot)
 ```
 
 ## 문서 목록

@@ -1,6 +1,6 @@
 ---
-title: common-system-be 빌드·배포 가이드
-description: common-system-be 빌드·기동·배포 준비 절차. BE를 띄우거나 배포 준비 시 참조.
+title: BE 빌드·배포 가이드 (Gradle / Spring Boot)
+description: Gradle/Spring Boot 기반 BE의 빌드·기동·배포 준비 절차. BE를 띄우거나 배포 준비 시 참조. (Ant/WAR 스택인 OMS는 knowledgebase/domains/oms/install-guide/ 참조)
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -8,13 +8,15 @@ agent_usage: reference
 domain: system
 ---
 
-# common-system-be 빌드·배포 가이드
+# BE 빌드·배포 가이드 (Gradle / Spring Boot)
+
+> 이 가이드는 **Gradle + Spring Boot(`bootWar`)** 스택 기준이다. 경로 변수(`$BE_DIR` = 워크스페이스 형제 BE 레포, `{프로젝트}` = 프로젝트명)는 `.claude/rules/repo-paths.md` 도출 규칙을 따른다. 아래 Tomcat/JDK 절대경로는 **예시 환경 값**이므로 실제 환경에 맞게 치환한다.
 
 ## 환경 정보
 
 | 항목        | 경로 / 값                                                                                                                 |
 | --------- | ---------------------------------------------------------------------------------------------------------------------- |
-| BE 소스     | `C:\zinide\workspace-common-system\common-system-be`                                                                   |
+| BE 소스     | `$BE_DIR` (워크스페이스 형제 `{프로젝트}-be`, → `.claude/rules/repo-paths.md`)                                                       |
 | Tomcat    | `C:\zinide\apache-tomcat-9.0.91`                                                                                       |
 | JAVA_HOME | `C:\zinide\java\jdk11.0.17`                                                                                            |
 | 포트        | 8080                                                                                                                   |
@@ -32,8 +34,8 @@ domain: system
 ### 1. Gradle 빌드
 
 ```bash
-cd /c/zinide/workspace-common-system/common-system-be
-export JAVA_HOME=/c/zinide/java/jdk11.0.17
+cd "$BE_DIR"   # 워크스페이스 형제 BE 레포 (→ .claude/rules/repo-paths.md)
+export JAVA_HOME=/c/zinide/java/jdk11.0.17   # 예시 — 실제 JDK 경로로 치환
 export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew bootWar --no-daemon
 ```
@@ -55,8 +57,8 @@ sleep 5
 ### 3. WAR 복사
 
 ```bash
-cp /c/zinide/workspace-common-system/common-system-be/build/libs/{프로젝트}-be.war \
-   /c/zinide/apache-tomcat-9.0.91/webapps/{프로젝트}-be.war
+cp "$BE_DIR/build/libs/{프로젝트}-be.war" \
+   /c/zinide/apache-tomcat-9.0.91/webapps/{프로젝트}-be.war   # Tomcat 경로는 예시
 ```
 
 ### 4. Tomcat 기동
@@ -163,4 +165,4 @@ org.flywaydb.core.api.FlywayException: Missing required JDBC URL. Unable to crea
 
 ## 참고: 기존 배포 앱
 
-Tomcat `webapps/`에 `wms-bnk-be`가 이미 배포되어 있다. 배포·중지 작업 시 건드리지 않는다.
+같은 Tomcat `webapps/`에 다른 프로젝트 앱이 이미 배포되어 있을 수 있다. 배포·중지 작업 시 대상 `{프로젝트}-be` 외의 앱은 건드리지 않는다.

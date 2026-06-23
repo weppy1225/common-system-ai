@@ -13,7 +13,7 @@ paths:
 
 > 공통 골격은 [백엔드 컨벤션](./backend-convention.md) 와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
 > 전제: 전통 Spring(Boot 아님) · MyBatis · OMS=PostgreSQL + ERP=SQL Server 멀티DB.
-> 상세 코드 패턴(클래스 템플릿·예외 흐름·DTO)은 → `oms-ai/02-백엔드-패턴.md`. 도메인 코드값·명명 접미어는 → `oms-ai/04-도메인-코드값.md`.
+> 상세 코드 패턴(클래스 템플릿·예외 흐름·DTO)은 → `knowledgebase/domains/oms/patterns/be/`. 도메인 코드값·명명 접미어는 → `spec/kyochon_oms/_knowledge/db-schema/90-common-code.md` 및 `oms-be/src/main/java/fw/constant/OMSPool.java`.
 
 전제(숨은 전제 명시): oms-be 는 **Spring Boot 가 아니다.** 전통 Spring + Tomcat WAR(Ant 빌드) + MyBatis + PostgreSQL(OMS) / SQL Server(ERP) 멀티 DB.
 

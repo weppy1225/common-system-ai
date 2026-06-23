@@ -15,7 +15,7 @@ tags:
 
 # OMS 기동·빌드·배포 방법 — OMS 고유 차이
 
-> 공통 골격(빌드→Tomcat 9 WAR 배포→기동 로그 확인 일반 절차)은 [common 문서](../40-install-guide/deploy/local-deploy-guide.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
+> 공통 골격(빌드→Tomcat 9 WAR 배포→기동 로그 확인 일반 절차)은 [common 문서](../../../40-install-guide/deploy/deploy-guide.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
 
 ## 1. OMS 고유 차이 (vs common) 요약
 
