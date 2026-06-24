@@ -2,6 +2,9 @@
 .claude/config/
 .claude/settings.local.json
 
+# 작업자 신원 값 (머신·작업자별로 다름 — 커밋 금지. 가이드는 SET_USER_USAGE.md)
+SET_USER.md
+
 # 산출물
 output/
 

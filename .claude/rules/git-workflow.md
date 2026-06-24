@@ -36,14 +36,11 @@ workspace 하위 3개 레포는 git 운영 방식이 다르다. 작업 전 **어
 
 ## 3. 신원 구조 (이 머신 기준)
 
-커밋 신원과 GitHub 작업 신원은 **별개**다.
+커밋 신원(`git config user.name`)과 GitHub 작업 신원(`gh` 인증 계정)은 **별개**다. 또한 Claude 로그인 사용자(실제 작업 지시자)와도 다를 수 있다.
 
-| 작업 | 사용 신원 | 이 머신 값 |
-|---|---|---|
-| `git commit` | git config (`user.name`) | `ShinHyunKyu` (hkshin@zin.co.kr) |
-| `gh ~` (PR 생성/머지 등) | gh 인증 토큰 | `weppy1225` (= **PR 관리자 계정**) |
-
-> ⚠️ 이 머신의 gh 인증이 **PR 관리자(`weppy1225`)** 계정이다. 규칙상 "PR 생성은 작업자"인데, 이 환경에서 `gh pr create` 를 돌리면 관리자 이름으로 PR이 열린다. 작업자 신원으로 PR을 열어야 하면 gh 재로그인이 필요하다. 다른 작업자 머신에선 각자의 config·gh 계정 값이 쓰인다.
+> 신원 3종(Claude 로그인·git commit·gh)의 의미·도출법·주의점(gh 계정이 PR 관리자면 머지 금지 등) → **`SET_USER_USAGE.md`**. 이 머신의 실제 값은 `SET_USER.md`(`.gitignore` 대상, 커밋 금지). 값은 머신·작업자마다 다르므로 여기 하드코딩하지 않는다.
+>
+> ⚠️ 이 머신의 gh 인증이 **PR 관리자 계정**일 수 있다. 그 경우 `gh pr create` 를 돌리면 관리자 이름으로 PR 이 열린다 — 규칙상 "PR 생성은 작업자"이므로, 작업자 신원으로 PR 을 열어야 하면 gh 재로그인이 필요하다. (현재 머신 값은 `SET_USER.md` 참조)
 
 ## 4. 공통 규칙
 
