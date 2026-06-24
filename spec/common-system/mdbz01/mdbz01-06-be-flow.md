@@ -23,7 +23,7 @@ tags:
 
 ## 1. 컴포넌트 구성
 
-> 공통 레이어 역할 정의 → [_common/be-layer-pattern.md](../_common/be-layer-pattern.md)
+> 공통 레이어 역할 정의 → [be-layer-pattern.md](../../../patterns/30-backend/be-layer-pattern.md)
 
 | 클래스명 | MDBZ01 특이사항 |
 |---|---|

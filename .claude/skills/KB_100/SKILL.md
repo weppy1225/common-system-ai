@@ -449,7 +449,7 @@ agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
-  - "patterns/_common-arch/be-architecture.md"
+  - "patterns/30-backend/be-layer-pattern.md"
   - "patterns/_common-arch/be-exceptions.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
