@@ -1,11 +1,11 @@
----
+﻿---
 description: oms-fe 신규 화면(메뉴)의 라우터 모듈 등록 방법과 메뉴코드 네이밍 — OMS 고유 차이만. 신규 메뉴/화면 추가 시 적용. 공통 3단계 골격은 common 문서 참조.
 ---
 
 # OMS 신규 메뉴·라우터 등록 방법 — OMS 고유 차이
 
 > 공통 골격은 [common 문서](../../../../../patterns/40-frontend/10-architecture/03-menu-registration.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
-> 전제: Vue3+Vite+Pinia, 한 코드베이스 → **두 UI 시스템** 쇼핑몰(가맹점 `/bc`, e-commerce 스타일·AUIGrid 미사용)·관리자(Admin `/be`, WMS식 AUIGrid)·모바일(`/bm`) 모드분기. 두 시스템 차이 → `knowledgebase/domains/oms/install-guide/oms-01-startup-guide.md` §3.0.
+> 전제: Vue3+Vite+Pinia, 한 코드베이스 → **두 UI 시스템** 쇼핑몰(가맹점 `/bc`, e-commerce 스타일·AUIGrid 미사용)·관리자(Admin `/be`, WMS식 AUIGrid)·모바일(`/bm`) 모드분기. 두 시스템 차이 → `knowledgebase/domains/oms/install-guide/01-startup-guide.md` §3.0.
 > 출처: OMS 실제 코드 직접 확인 — `oms-fe/src/router/index.js`, `oms-fe/src/router/modules/bc/od3000c.js`.
 
 ---

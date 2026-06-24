@@ -1,4 +1,4 @@
----
+﻿---
 title: common-system-ai 레포 전체 디렉토리 구조 및 영역 역할
 description: 레포 최상위 디렉토리 구조, 각 영역의 역할, 메뉴별 산출 위치와 경계 규칙. 프롬프트 개정·문서 생성/재생성의 기준 문서. (2026-06 재설계 적용)
 status: active
@@ -68,7 +68,7 @@ knowledgebase/
 
 ## spec/{프로젝트}/{메뉴}/ (파일 순서 = 읽는 순서)
 
-`spec/`·`prototype/` 는 **시스템(프로젝트)별 네임스페이스** `{프로젝트}/` 아래에 둔다. 현재 프로젝트: `common-system`(WMS) · `kyochon_oms`(OMS). 각 프로젝트는 `_knowledge/`(③ 프로젝트 확정 데이터: 실 스키마·메뉴·공통코드값)와 `{메뉴}/`(메뉴별 설계)를 가진다. `{프로젝트}` 도출은 → `.claude/rules/repo-paths.md`.
+`spec/`·`prototype/` 는 **시스템(프로젝트)별 네임스페이스** `{프로젝트}/` 아래에 둔다. 현재 프로젝트: `common-system`(WMS) · `kyochon-oms`(OMS). 각 프로젝트는 `_knowledge/`(③ 프로젝트 확정 데이터: 실 스키마·메뉴·공통코드값)와 `{메뉴}/`(메뉴별 설계)를 가진다. `{프로젝트}` 도출은 → `.claude/rules/repo-paths.md`.
 
 ```
 spec/{프로젝트}/{메뉴}/

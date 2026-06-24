@@ -1,11 +1,11 @@
----
-title: kyochon_oms 테이블 목록 및 설명
-description: kyochon_oms 전체 테이블 목록과 도메인별 그룹을 확인할 때 읽는다
+﻿---
+title: kyochon-oms 테이블 목록 및 설명
+description: kyochon-oms 전체 테이블 목록과 도메인별 그룹을 확인할 때 읽는다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: database
 tags:
   - database
@@ -15,9 +15,9 @@ tags:
 last_verified: 2026-06-23
 ---
 
-# kyochon_oms 테이블 목록 및 설명
+# kyochon-oms 테이블 목록 및 설명
 
-> 숨은 전제: OMS=PostgreSQL, ERP=SQL Server 멀티 DB (근거: `knowledgebase/domains/oms/install-guide/oms-01-startup-guide.md`).
+> 숨은 전제: OMS=PostgreSQL, ERP=SQL Server 멀티 DB (근거: `knowledgebase/domains/oms/install-guide/01-startup-guide.md`).
 > 출처: 실 OMS(PostgreSQL) dev DB `public` 스키마 `pg_class` 조회 (2026-06-23, 총 126개 테이블). 테이블 설명은 **DB comment 원본**이다. comment 미설정 테이블은 설명을 빈칸으로 둔다(추정 금지).
 > 그룹별 테이블 정의서는 `01-*.md` ~ `05-*.md` 로 분리한다. 공통코드 값은 `90-common-code.md` 참조. 컬럼 단위 상세는 실 스키마(`\d <테이블>`)를 우선 확인한다(본 문서는 테이블 목록·설명 수준).
 

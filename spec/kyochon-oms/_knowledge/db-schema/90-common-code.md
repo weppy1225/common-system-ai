@@ -1,11 +1,11 @@
----
-title: kyochon_oms 공통코드 목록
-description: kyochon_oms 공통코드(sm_comm_h/sm_comm_d) 헤더 목록과 각 코드 상세값을 확인할 때 읽는다
+﻿---
+title: kyochon-oms 공통코드 목록
+description: kyochon-oms 공통코드(sm_comm_h/sm_comm_d) 헤더 목록과 각 코드 상세값을 확인할 때 읽는다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: database
 tags:
   - database
@@ -16,7 +16,7 @@ tags:
 last_verified: 2026-06-23
 ---
 
-# kyochon_oms 공통코드 (Common Code)
+# kyochon-oms 공통코드 (Common Code)
 
 > 출처: 실 OMS(PostgreSQL) dev DB `sm_comm_h`(89건) / `sm_comm_d`(899건) 조회 (2026-06-23, biz_seq=1).
 > 코드 상세값은 `disp_no` 표시순서로 정렬. 값은 DB 원본이며 추정하지 않는다.

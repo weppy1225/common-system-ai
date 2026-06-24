@@ -1,4 +1,4 @@
-# common-system-ai
+﻿# common-system-ai
 
 업무 시스템 AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스코드 패턴·산출물·BE/FE 개발 자동화 스킬을 통합 관리하며, AI 에이전트(Claude Code·Codex)가 업무 시스템 개발 전 주기를 수행하기 위한 지식·규칙·명령의 단일 허브로 동작한다.
 
@@ -25,7 +25,7 @@ common-system-ai\
 │   └── 40-install-guide\·50-dev-workflow\·20-md-index·30-src-index
 ├── spec\             # ③ 프로젝트(시스템)별 지식베이스 — `{프로젝트}\`
 │   ├── common-system\    [WMS] {메뉴}\ 설계(00~07·99) + _knowledge\(실 스키마·메뉴·공통코드값)
-│   └── kyochon_oms\      [OMS] {메뉴}\ 설계 + _knowledge\(실데이터: 스키마·메뉴·용어·API)
+│   └── kyochon-oms\      [OMS] {메뉴}\ 설계 + _knowledge\(실데이터: 스키마·메뉴·용어·API)
 ├── prototype\        # 검증용 화면 (시스템별 `{프로젝트}\`)
 ├── patterns\         # ① 코어 소스코드 패턴 (시스템 무관: 10-screen-design·20-database·30-backend·40-frontend·_common-arch)
 ├── deliverables\     # 고객 제출 산출물 (시스템 공통)
@@ -45,7 +45,7 @@ common-system-ai\
 | 시스템 | 프로젝트 폴더 `{프로젝트}` | 도메인 | BE/FE 레포 |
 |---|---|---|---|
 | WMS | `common-system` | wms | (workspace 형제 `*-be`·`*-fe`) |
-| OMS | `kyochon_oms` | oms | `kyochon-oms-be` · `kyochon-oms-fe` |
+| OMS | `kyochon-oms` | oms | `kyochon-oms-be` · `kyochon-oms-fe` |
 
 > 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다(WMS·OMS 대칭). 새 시스템(WCS 등) 추가 시 `knowledgebase/domains/{도메인}/`·`spec/{프로젝트}/`·`.claude/rules/{system}-*` 를 같은 방식으로 만든다.
 > `{프로젝트}` 도출·형제 BE/FE 레포 경로 규칙 → `.claude/rules/repo-paths.md`. 전체 구조·영역 역할·SoT 규칙 → [STRUCTURE.md](./STRUCTURE.md).

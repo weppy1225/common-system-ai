@@ -1,4 +1,4 @@
----
+﻿---
 title: 공통코드(Common Code) — 왜 쓰나 + 어떻게 쓰나 (시스템 횡단)
 description: WMS·OMS·WCS 등 여러 시스템 개발 시 공통코드를 왜 사용하고 어떻게 사용하는지(코드마스터 DB → BE 상수 → FE commCdStore 캐시)를 시스템 무관 관점으로 파악할 때 읽는다. 시스템별 구현 차이는 각 도메인 문서로 라우팅한다.
 status: active
@@ -15,7 +15,7 @@ tags:
 related:
   - patterns/40-frontend/40-store/01-commCdStore.md
   - spec/common-system/_knowledge/db-schema/90-common-code.md
-  - knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md
+  - knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md
 ---
 
 # 공통코드(Common Code) — 왜 쓰나 + 어떻게 쓰나
@@ -56,7 +56,7 @@ MUST: 코드성 값(상태·구분·유형·여부)은 공통코드로 관리한
 - 헤더/디테일 2테이블에 commHCd·commDCd·commDNm·표시순서·use_yn 등을 저장한다.
 - 실제 테이블명·코드값은 **프로젝트별 스키마 문서가 정본**이다(추정 금지).
   - WMS 실 코드값 카탈로그: `spec/common-system/_knowledge/db-schema/90-common-code.md`
-  - OMS 실 코드값 카탈로그: `spec/kyochon_oms/_knowledge/db-schema/` (작성 시 `/SD_332` 산출물로 채움)
+  - OMS 실 코드값 카탈로그: `spec/kyochon-oms/_knowledge/db-schema/` (작성 시 `/SD_332` 산출물로 채움)
 
 ### 3.2 백엔드(BE) — 코드값 상수화
 
@@ -69,7 +69,7 @@ MUST: 조건 분기에 쓰는 코드값은 **리터럴 금지, 상수로 참조*
 ```
 
 - OMS BE 상수: `fw/constant/OMSPool.java` (근거: `.claude/rules/oms-db-convention.md`)
-- OMS FE 상수: `zConstant.js` (근거: `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md`)
+- OMS FE 상수: `zConstant.js` (근거: `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md`)
 
 ### 3.3 프론트엔드(FE) — commCdStore 경유 (배치 캐싱)
 
@@ -98,13 +98,13 @@ MUST: FE 공통코드는 **`commCdStore`(Pinia)를 통해서만** 사용한다. 
 
 골격(§3)은 공통이고, **차이는 주로 `bizSeq` 규약과 상수 출처**다. 각 시스템 작업 시 해당 문서를 연다.
 
-| 항목 | WMS (`common-system`) | OMS (`kyochon_oms`) |
+| 항목 | WMS (`common-system`) | OMS (`kyochon-oms`) |
 |---|---|---|
 | `bizSeq` 규약 | 사업장별 코드 세트. 미지정 시 `regBizSeq`(로그인 기본 사업장) **fallback** | **`bizSeq=1` 교촌 고정**(단일 사업장). fallback 안 함 |
 | BE 상수 출처 | 미확인: BE 상수 파일 별도 확인 필요 | `fw/constant/OMSPool.java` |
 | FE 상수 출처 | 미확인 | `zConstant.js` |
-| 실 코드값 카탈로그 | `spec/common-system/_knowledge/db-schema/90-common-code.md` | `spec/kyochon_oms/_knowledge/db-schema/`(`/SD_332`로 채움) |
-| FE 사용 상세 | `patterns/40-frontend/40-store/01-commCdStore.md` | `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md` |
+| 실 코드값 카탈로그 | `spec/common-system/_knowledge/db-schema/90-common-code.md` | `spec/kyochon-oms/_knowledge/db-schema/`(`/SD_332`로 채움) |
+| FE 사용 상세 | `patterns/40-frontend/40-store/01-commCdStore.md` | `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md` |
 
 > 새 시스템(예: WCS) 추가 시: §3 골격을 그대로 따르고, 위 표에 자기 행(특히 `bizSeq` 규약·상수 출처·코드값 카탈로그)을 추가한다.
 
@@ -114,6 +114,6 @@ MUST: FE 공통코드는 **`commCdStore`(Pinia)를 통해서만** 사용한다. 
 |---|---|
 | FE에서 공통코드 쓰는 법(코어) | `patterns/40-frontend/40-store/01-commCdStore.md` |
 | WMS 실제 코드값·코드명 확인 | `spec/common-system/_knowledge/db-schema/90-common-code.md` |
-| OMS 공통코드 고유 차이 | `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md` |
+| OMS 공통코드 고유 차이 | `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md` |
 | 공통코드정의서(엑셀) 산출 | `/SD_332` 스킬 |
 | OMS DB 코드값 컨벤션 | `.claude/rules/oms-db-convention.md` |

@@ -1,11 +1,11 @@
----
-title: kyochon_oms 인터페이스·가상계좌 테이블 정의서
-description: kyochon_oms 인터페이스(sif_*)·가상계좌(vacs_*)·외부연동(ideatec_*) 테이블 목록을 확인할 때 읽는다
+﻿---
+title: kyochon-oms 인터페이스·가상계좌 테이블 정의서
+description: kyochon-oms 인터페이스(sif_*)·가상계좌(vacs_*)·외부연동(ideatec_*) 테이블 목록을 확인할 때 읽는다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: database
 tags:
   - database
@@ -16,7 +16,7 @@ tags:
 last_verified: 2026-06-23
 ---
 
-# kyochon_oms 인터페이스·가상계좌 테이블 정의서
+# kyochon-oms 인터페이스·가상계좌 테이블 정의서
 
 > - DB: PostgreSQL / Schema: public
 > - 테이블 prefix: `sif_`(인터페이스 배치) · `vacs_`(가상계좌) · `ideatec_`(외부 연동)

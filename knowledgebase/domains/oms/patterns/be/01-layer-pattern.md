@@ -1,4 +1,4 @@
----
+﻿---
 title: OMS 백엔드 레이어 작성 패턴 — OMS 고유 차이
 description: oms-be 레이어(CompUtil·TxComp·Comp·Controller) 작성 시 common 공통 패턴과 다른 OMS 고유 차이분만 확인하는 참조 문서
 status: active
@@ -38,7 +38,7 @@ last_verified: 2026-06-22
 | FileComp 파일 처리 매트릭스 | TxComp 작성규칙에 매트릭스 명시 | **OMS 적용 여부 미확인** — 파일 처리 시 해당 모듈 기존 코드 확인 | 미확인 |
 | TX 메서드 접미사 | `TX`로 통일 | **모듈별 혼용** — `MYPG01C`=`updateMyPageTx`, `ODRG01`=`...TX`. 같은 모듈 기존 표기를 따른다 | `MYPG01CTxComp.updateMyPageTx`, `bc/od3000c/odrg01/` |
 | Controller `@RequestMapping` | — | **첫 경로 변수는 사업장 `{bizSeq}`** | `@RequestMapping("/{bizSeq}/odrg01/orders")` |
-| 채번 호출 위치 | TxComp 에서 호출 | OMS 는 `DocNoGenerator`/`SeqGenerator` 가 주로 **Dao 에 주입** → [oms-03-numbering-module.md](./oms-03-numbering-module.md) | `ODRG01Dao`, `ODED02Dao` |
+| 채번 호출 위치 | TxComp 에서 호출 | OMS 는 `DocNoGenerator`/`SeqGenerator` 가 주로 **Dao 에 주입** → [03-numbering-module.md](./03-numbering-module.md) | `ODRG01Dao`, `ODED02Dao` |
 
 OMS 레이어 개요·예외 흐름 라우팅: `knowledgebase/domains/oms/patterns/be/`, 판단/금지패턴: `.claude/rules/oms-backend-convention.md`.
 

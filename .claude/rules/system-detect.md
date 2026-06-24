@@ -1,4 +1,4 @@
----
+﻿---
 description: 개발(BE/FE 코드 작성·수정, 메뉴 설계) 시작 시 대상 시스템(WMS·OMS 등)을 자동 판별하는 규칙. 허브(ai-kb=common-system-ai) 프레임워크 수정과 구분한다. *.java/*.vue/*Mapper.xml 또는 spec 설계 문서를 다룰 때 로딩한다.
 paths:
   - "**/*.java"
@@ -32,7 +32,7 @@ paths:
 
 1. 위 신호에서 `*-be`/`*-fe` 레포명을 찾는다. (예: `kyochon-oms-be`, `kyochon-oms-fe`)
 2. 접미어 `-be`/`-fe` 를 떼어 **시스템 베이스명**을 만든다. (예: `kyochon-oms`)
-3. 베이스명을 `spec/*/_knowledge/_meta.md` 의 `project`(하이픈↔언더스코어 정규화)와 대조해 **프로젝트·도메인**을 확정한다. (예: `kyochon-oms` → `spec/kyochon_oms/`, `project=kyochon_oms`, `domain=oms`)
+3. 베이스명을 `spec/*/_knowledge/_meta.md` 의 `project`(하이픈↔언더스코어 정규화)와 대조해 **프로젝트·도메인**을 확정한다. (예: `kyochon-oms` → `spec/kyochon-oms/`, `project=kyochon-oms`, `domain=oms`)
 
 ## 3. 확정 후 컨텍스트 고정
 

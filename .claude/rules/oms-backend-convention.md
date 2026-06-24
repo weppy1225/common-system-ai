@@ -1,5 +1,5 @@
----
-description: oms-be(전통 Spring + MyBatis) 백엔드 코드 작성·수정 시 common 백엔드 컨벤션 대비 OMS 고유 판단 기준·금지만 적용. Controller/Comp/CompUtil/TxComp/Dao/Mapper 파일을 다룰 때 로딩한다.
+﻿---
+description: OMS 도메인 백엔드 코드 작성·수정 시 common 백엔드 컨벤션 대비 OMS 고유 판단 기준·금지만 적용. 고객사가 달라도 OMS 도메인이면 동일 규칙 적용. Controller/Comp/CompUtil/TxComp/Dao/Mapper 파일을 다룰 때 로딩한다.
 paths:
   - "**/*Controller.java"
   - "**/*Comp.java"
@@ -13,16 +13,17 @@ paths:
 
 > 공통 골격은 [백엔드 컨벤션](./backend-convention.md) 과 동일하다. 이 문서는 **OMS 고유 판단 기준·금지만** 담는다. 상세 구현·코드 예시는 아래 patterns·소스를 본다.
 > 전제: 전통 Spring(Boot 아님) · MyBatis · OMS=PostgreSQL + ERP=SQL Server 멀티DB.
+> 고객사별 프로젝트 경로(`$PROJECT`, `$BE_DIR`) 도출 → `.claude/rules/repo-paths.md`.
 
 ## 상세는 어디에 (라우팅)
 
 | 필요한 것 | 위치 |
 |---|---|
-| 레이어 코드 패턴(CompUtil/TxComp/Comp/Controller 예시·예외 흐름) | `knowledgebase/domains/oms/patterns/be/oms-01-layer-pattern.md` |
-| 채번(DocNoGenerator/SeqGenerator) 상세 | `knowledgebase/domains/oms/patterns/be/oms-03-numbering-module.md` |
-| 예외 클래스 실제 목록 | `oms-be` 소스 `fw/exception/`·`fw/exception/warn/` |
-| 상수풀 정의값 | `oms-be` 소스 `fw/constant/{OMSPool,FwPool,StringPool}.java` |
-| 도메인 코드값 의미 | `spec/kyochon_oms/_knowledge/db-schema/90-common-code.md` |
+| 레이어 코드 패턴(CompUtil/TxComp/Comp/Controller 예시·예외 흐름) | `knowledgebase/domains/oms/patterns/be/01-layer-pattern.md` |
+| 채번(DocNoGenerator/SeqGenerator) 상세 | `knowledgebase/domains/oms/patterns/be/03-numbering-module.md` |
+| 예외 클래스 실제 목록 | `{$BE_DIR}/src/.../fw/exception/`·`fw/exception/warn/` |
+| 상수풀 정의값 | `{$BE_DIR}/src/.../fw/constant/{OMSPool,FwPool,StringPool}.java` |
+| 도메인 코드값 의미 | `spec/{$PROJECT}/_knowledge/db-schema/90-common-code.md` |
 
 ## OMS 고유 판단 기준 (MUST / NEVER)
 

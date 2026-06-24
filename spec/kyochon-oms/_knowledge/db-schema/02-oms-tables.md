@@ -1,11 +1,11 @@
----
-title: kyochon_oms OMS 업무 테이블 정의서
-description: kyochon_oms 업무(oms_*) 테이블 목록과 도메인별 그룹·공통 컬럼을 확인할 때 읽는다
+﻿---
+title: kyochon-oms OMS 업무 테이블 정의서
+description: kyochon-oms 업무(oms_*) 테이블 목록과 도메인별 그룹·공통 컬럼을 확인할 때 읽는다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: database
 tags:
   - database
@@ -17,7 +17,7 @@ tags:
 last_verified: 2026-06-23
 ---
 
-# kyochon_oms OMS 업무 테이블 정의서
+# kyochon-oms OMS 업무 테이블 정의서
 
 > - DB: PostgreSQL / Schema: public
 > - 테이블 prefix: `oms_`

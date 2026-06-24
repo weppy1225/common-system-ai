@@ -1,11 +1,11 @@
----
-title: kyochon_oms 시스템·스케줄러 테이블 정의서
-description: kyochon_oms 시스템 관리(sm_*) 및 스케줄러(qrtz_*) 테이블 목록과 공통 컬럼을 확인할 때 읽는다
+﻿---
+title: kyochon-oms 시스템·스케줄러 테이블 정의서
+description: kyochon-oms 시스템 관리(sm_*) 및 스케줄러(qrtz_*) 테이블 목록과 공통 컬럼을 확인할 때 읽는다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: database
 tags:
   - database
@@ -17,7 +17,7 @@ tags:
 last_verified: 2026-06-23
 ---
 
-# kyochon_oms 시스템·스케줄러 테이블 정의서
+# kyochon-oms 시스템·스케줄러 테이블 정의서
 
 > - DB: PostgreSQL / Schema: public
 > - 테이블 prefix: `sm_`(시스템 관리) · `qrtz_`(Quartz 스케줄러 엔진 표준)

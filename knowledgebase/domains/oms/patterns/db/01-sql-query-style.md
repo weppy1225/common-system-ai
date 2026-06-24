@@ -1,4 +1,4 @@
----
+﻿---
 description: oms-be MyBatis Mapper.xml SQL 텍스트 서식 중 OMS 고유 차이분(DB_PREFIX 동적주입·OMS 실제 테이블/별칭·쿼리주석 [검색]/[수정] 표기). SQL 작성·리뷰 시 공통 서식과 함께 적용한다.
 ---
 
@@ -65,4 +65,4 @@ UPDATE MDM_USER
  WHERE user_id  = #{userId}
 ```
 
-> `<insert>`/`<update>` MyBatis 태그·시퀀스·DB_PREFIX 함수 **구현 예시는 → [oms-02-mybatis-convention.md](./oms-02-mybatis-convention.md) §4**(SSoT). 소프트삭제 컬럼(`use_yn`/`del_yn`) 판단은 → `.claude/rules/oms-db-convention.md §4`.
+> `<insert>`/`<update>` MyBatis 태그·시퀀스·DB_PREFIX 함수 **구현 예시는 → [02-mybatis-convention.md](./02-mybatis-convention.md) §4**(SSoT). 소프트삭제 컬럼(`use_yn`/`del_yn`) 판단은 → `.claude/rules/oms-db-convention.md §4`.

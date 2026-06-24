@@ -1,4 +1,4 @@
----
+﻿---
 description: BE·FE에서 공통코드(상태·구분·유형·여부 코드값)를 다룰 때 적용하는 시스템 무관(WMS·OMS·WCS) 규칙. 코드값 상수화·FE commCdStore 경유·명칭변환·하드코딩 금지. .vue/스토어js/상수파일/Comp/TxComp/Mapper.xml 을 다룰 때 로딩한다.
 paths:
   - "**/*.vue"
@@ -42,7 +42,7 @@ paths:
 
 | 시스템 | FE 상세 | BE/DB 상세 |
 |---|---|---|
-| OMS (`kyochon_oms`) | `.claude/rules/oms-frontend-convention.md` §2 · `knowledgebase/domains/oms/patterns/fe/oms-02-common-code-commCdStore.md` | `.claude/rules/oms-db-convention.md` |
+| OMS (`kyochon-oms`) | `.claude/rules/oms-frontend-convention.md` §2 · `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md` | `.claude/rules/oms-db-convention.md` |
 | WMS (`common-system`) | `patterns/40-frontend/40-store/01-commCdStore.md` | `spec/common-system/_knowledge/db-schema/90-common-code.md` |
 
 > 우선순위: 시스템별 규칙 > 이 공통 규칙 > `patterns/_common-arch/common-code.md`(개념). 시스템별 규칙은 "실제값", 이 규칙은 "기본값"이다.

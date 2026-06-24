@@ -1,11 +1,11 @@
----
+﻿---
 title: shod01 쇼핑몰 구매 API 명세서
 description: shod01 쇼핑몰 구매 주문 등록·조회·취소 API 명세. PI_be_all 코드 생성 전 참조.
 status: draft
 version: 0.1.0
 repo_role: ai-hub
 agent_usage: spec
-project: kyochon_oms
+project: kyochon-oms
 domain: shop
 tags:
   - shod01
@@ -295,5 +295,5 @@ implements Serializable
 
 - 주문 현황(관리자): `be.sh7000.shst01` — `SHST01Mapper.xml`
 - 상품 관리: `be.sh7000.shpd01` — INSERT 패턴 참조
-- 공통코드: `spec/kyochon_oms/_knowledge/db-schema/90-common-code.md`
-- 쇼핑몰 테이블: `spec/kyochon_oms/_knowledge/db-schema/03-shop-tables.md`
+- 공통코드: `spec/kyochon-oms/_knowledge/db-schema/90-common-code.md`
+- 쇼핑몰 테이블: `spec/kyochon-oms/_knowledge/db-schema/03-shop-tables.md`

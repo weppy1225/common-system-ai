@@ -1,11 +1,11 @@
----
-title: kyochon_oms 프로젝트 지식 메타
+﻿---
+title: kyochon-oms 프로젝트 지식 메타
 description: 이 프로젝트가 속한 도메인과 전역 지식(_knowledge)의 구성을 선언한다
 status: active
 version: 1.0.0
 repo_role: ai-hub
 agent_usage: instruction
-project: kyochon_oms
+project: kyochon-oms
 domain: oms
 tags:
   - project-meta
@@ -13,11 +13,11 @@ tags:
   - oms
 ---
 
-# kyochon_oms 프로젝트 지식 메타
+# kyochon-oms 프로젝트 지식 메타
 
 ## 도메인 선언
 
-- **project**: `kyochon_oms`
+- **project**: `kyochon-oms`
 - **domain**: `oms`
 - **형제 레포**: `kyochon-oms-be`(BE) · `kyochon-oms-fe`(FE)
 
@@ -26,7 +26,7 @@ tags:
 | 층 | 위치 | 내용 |
 |---|---|---|
 | ② 도메인 표준 (OMS 공통) | `knowledgebase/domains/oms/install-guide/` · `knowledgebase/domains/oms/patterns/` · `.claude/rules/oms-*` | 기동·빌드·배포 차이, BE/FE/DB 코딩 컨벤션, SQL/MyBatis/네이밍 규칙, 보안 규칙 |
-| ③ 프로젝트 확정 (이 프로젝트 전용) | `spec/kyochon_oms/_knowledge/` | 실 테이블 스키마·메뉴·컬럼사전·실 API 목록/필드명세 |
+| ③ 프로젝트 확정 (이 프로젝트 전용) | `spec/kyochon-oms/_knowledge/` | 실 테이블 스키마·메뉴·컬럼사전·실 API 목록/필드명세 |
 
 > 충돌 시 우선순위: **③ 프로젝트 확정 > ② 도메인 표준.** 도메인 표준은 "기본값", 프로젝트 확정은 "실제값"이다.
 
@@ -36,7 +36,7 @@ tags:
 
 | 경로 | 내용 |
 |---|---|
-| `knowledgebase/domains/oms/install-guide/oms-01-startup-guide.md` | OMS 고유 기동·빌드·배포 차이 (Ant WAR, PostgreSQL+SQL Server 멀티 DB, Vite mode 분기) |
+| `knowledgebase/domains/oms/install-guide/01-startup-guide.md` | OMS 고유 기동·빌드·배포 차이 (Ant WAR, PostgreSQL+SQL Server 멀티 DB, Vite mode 분기) |
 | `knowledgebase/domains/oms/patterns/be/` | BE 레이어 작성 패턴, 채번 공통모듈 |
 | `knowledgebase/domains/oms/patterns/db/` | SQL 쿼리 스타일, MyBatis 컨벤션, 네이밍 규칙 |
 | `knowledgebase/domains/oms/patterns/fe/` | 라우터·메뉴 등록, 공통코드 commCdStore |
