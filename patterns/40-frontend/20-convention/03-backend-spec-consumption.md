@@ -60,14 +60,9 @@ FE 저장소에 BE 스펙 캐시 산출물을 만들지 않는다.
 - FE 문서와 BE 80-spec 이 충돌하면 **BE 80-spec 우선**.
 - BE 원본 문서 자체가 틀린 경우 FE 에서 추측 보정하지 말고 BE 저장소에서 산출물을 재생성한다.
 
-## 4. 응답 네이밍 (요약)
+## 4. 응답 네이밍
 
-`02-be-fe-contract.md` §3 과 동일. 중복 서술 금지, 여기서는 체크리스트만:
-
-- 리스트 조회 응답: `res.data.post{Resource}s` (예: `res.data.postConts`, `res.data.postStsets`).
-- 단건 조회 응답: `res.data.{resource}` — 소문자 리소스 키 (`res.data.cont`, `res.data.wh`).
-- 에러: `error.response.data.message` — `errorSwal(error)` 가 처리.
-- 성공 메시지: `res.data` (string) — `successSwal(res.data)`.
+응답 필드 네이밍(`res.data.post{Resource}s`·`res.data.{resource}`·성공 메시지)은 → [`02-be-fe-contract.md §3`](../10-architecture/02-be-fe-contract.md), 에러 처리(`error.response.data.message`·`errorSwal`)는 같은 문서 `§5`. 여기엔 중복 기재하지 않는다.
 
 ## 5. 메뉴 작업 시 확인 순서
 
