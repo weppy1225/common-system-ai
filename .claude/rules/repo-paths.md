@@ -62,6 +62,8 @@ echo "FE_DIR=$FE_DIR  FE_NAME=$FE_NAME"
 
 `BE_DIR` 또는 `FE_DIR` 이 비어 있으면(형제 레포를 못 찾으면) **사용자에게 경로를 직접 묻는다.**
 
+> 폴더명에서 **도출되지 않는** 환경 사실(서버 호스트·포트, DB·FTP, 컨텍스트 경로/WAR명, 레드마인 키, 외부연동 등)은 여기서 도출하지 않는다 → 허브 루트의 프로젝트별 파일 **`SET_ENV.${PROJECT}.md`** 가 SoT 다(사용법·키설명은 `SET_ENV_USAGE.md`, 비밀값 제외). 경로·이름·프로젝트명만 본 규칙으로 도출한다.
+
 Windows PowerShell 환경에서는 동일 규칙을 PowerShell로 수행한다. 프로젝트명은 워크스페이스 폴더명에서 뽑는다: `$WS = Split-Path $AI_DIR -Parent`, `$PROJECT = (Split-Path $WS -Leaf) -replace '^workspace-',''`. 형제는 `Join-Path $WS "$PROJECT-be"` (없으면 `Get-ChildItem $WS -Directory -Filter '*-be' | Select-Object -First 1`). 이름은 `$AI_NAME = Split-Path $AI_DIR -Leaf`, `$BE_NAME = Split-Path $BE_DIR -Leaf`, `$FE_NAME = Split-Path $FE_DIR -Leaf` 로 뽑는다.
 
 ---

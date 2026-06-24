@@ -150,11 +150,13 @@ git grep -n 'common-system-'   # → 0건이면 완료
 
 ---
 
-## 06 — 변수로 풀 것 vs `REPOSITORY.md` 로 풀 것
+## 06 — 변수로 풀 것 vs `SET_ENV.{프로젝트}.md` 로 풀 것
 
 | | 폴더명에서 도출 가능 | 폴더명에서 도출 불가 |
 |---|---|---|
 | 대상 | 경로·레포 이름·프로젝트명 | git remote URL, 서버 호스트·포트, DB 스키마·계정, 레드마인 프로젝트 ID, FTP 대상 등 |
-| 처리 | `repo-paths.md` 런타임 도출 유지. **정적 파일로 옮기지 않는다** — 옮기면 유지보수 1건 추가 + 폴더명과 어긋날 위험만 생긴다 | 흩어두면 진짜 지뢰. **이런 환경 사실의 SoT 로 `REPOSITORY.md` 를 만드는 건 권장** |
+| 처리 | `repo-paths.md` 런타임 도출 유지. **정적 파일로 옮기지 않는다** — 옮기면 유지보수 1건 추가 + 폴더명과 어긋날 위험만 생긴다 | 흩어두면 진짜 지뢰. **이런 환경 사실의 SoT = `SET_ENV.{프로젝트}.md`** (사용법·키사전 → [`SET_ENV_USAGE.md`](./SET_ENV_USAGE.md)) |
 
-가장 믿을 SoT 는 "폴더명 그 자체"다. `REPOSITORY.md` 를 만든다면 경로/이름은 거기에 "→ repo-paths.md 도출" 포인터만 두고, 실제 SoT 는 폴더명으로 둔다.
+가장 믿을 SoT 는 "폴더명 그 자체"다. `SET_ENV.{프로젝트}.md` 는 경로/이름은 "→ repo-paths.md 도출" 포인터만 두고(실제 SoT 는 폴더명), **도출 불가한 환경 사실(호스트·DB·FTP·레드마인·외부연동·배포 식별자)만** 담는다. 비밀값(DB 비번·JWT·토큰)은 넣지 않고 BE `application-{profile}.properties`(ENC) 포인터만 둔다(`oms-security.md`).
+
+> **허브는 공유 레포**라 파일이 모든 워크스페이스에서 동일하다. 따라서 `spec/{프로젝트}`·`prototype/{프로젝트}` 와 똑같이 **프로젝트별 파일로 네임스페이싱**한다: 값은 `SET_ENV.{프로젝트}.md`, 사용법·키사전은 [`SET_ENV_USAGE.md`](./SET_ENV_USAGE.md). AI 는 `repo-paths.md` STEP 0 의 `PROJECT` 로 `SET_ENV.${PROJECT}.md` 를 읽고, 새 고객사는 기존 `SET_ENV.{프로젝트}.md` 하나를 복사해 값만 바꾼다.
