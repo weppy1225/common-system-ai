@@ -22,6 +22,7 @@ last_verified: 2026-04-07
 > `iwrq01` 메뉴 소스 분석을 기반으로 작성된 코딩 컨벤션입니다.
 > **헤더(Header)+상세(Detail) 2단 구조**, **문서번호 채번**, **상태(Status) 관리**가 포함된 메뉴에 적용합니다.
 > 단순 마스터성 메뉴는 `01-coding-convention.md`를 참고하세요.
+> **이 문서는 [01-coding-convention.md](./01-coding-convention.md)의 일반 컨벤션을 전제로, 헤더+상세 구조의 차이·추가만 다룬다.** (§1~3은 01 참조, 헤더+상세 고유 패턴은 §4부터)
 
 | 메뉴코드 | 메뉴명 | 메뉴그룹 | 메뉴코드_인스턴스 | 메뉴그룹_인스턴스 | 헤더리소스 | 상세리소스 |
 |----------|----------|----------|-------------------|-------------------|------------|-------------|
@@ -31,125 +32,30 @@ last_verified: 2026-04-07
 
 ## 1. 패키지 및 디렉터리 구조
 
-```
-be.{메뉴그룹_인스턴스}.{메뉴코드_인스턴스}/ ← 예: be.iw1000.iwrq01
-├── {메뉴코드}Controller.java ← REST API 진입점
-├── {메뉴코드}Comp.java ← 비즈니스 로직 (트랜잭션 제외)
-├── {메뉴코드}TxComp.java ← @Transactional 전용
-├── {메뉴코드}Dao.java ← DB 접근 (Mapper 위임)
-├── {메뉴코드}Mapper.java ← MyBatis Mapper 인터페이스
-├── {메뉴코드}CompUtil.java ← 메뉴 전용 유틸
-├── bean/
-│ ├── {메뉴코드}Response.java ← 응답 DTO
-│ ├── {메뉴코드}Search.java ← 검색/조회 파라미터 DTO
-│ ├── {메뉴코드}{헤더리소스}.java ← 헤더 도메인 DTO
-│ ├── {메뉴코드}{상세리소스}.java ← 상세 도메인 DTO
-│ └── {메뉴코드}Save{상세리소스}.java ← 상세 일괄저장 DTO
-└── excel/
-    ├── {메뉴코드}ExcelController.java
-    ├── {메뉴코드}ExcelComp.java
-    ├── {메뉴코드}ExcelTxComp.java
-    ├── {메뉴코드}ExcelDao.java
-    ├── {메뉴코드}ExcelMapper.java
-    ├── {메뉴코드}ExcelCompUtil.java
-    └── bean/
-        └── {메뉴코드}Excel.java
-```
+일반 패키지·디렉터리 골격(`Controller`/`Comp`/`TxComp`/`Dao`/`Mapper`/`CompUtil`·`excel/`·테스트 `ZTEST_` 접두)은 → [01-coding-convention.md §1](./01-coding-convention.md). 헤더+상세 메뉴는 **`bean/` 구성만 다르다**:
 
-**테스트 클래스**: `test/` 하위, 파일명 `ZTEST_` 접두사
+```
+bean/
+├── {메뉴코드}Response.java         ← 응답 DTO
+├── {메뉴코드}Search.java           ← 검색/조회 파라미터 DTO
+├── {메뉴코드}{헤더리소스}.java      ← 헤더 도메인 DTO
+├── {메뉴코드}{상세리소스}.java      ← 상세 도메인 DTO
+└── {메뉴코드}Save{상세리소스}.java  ← 상세 일괄저장 DTO (insertList/updateList/deleteList)
+```
 
 ---
 
 ## 2. 레이어 구조 및 책임
 
-```
-Controller → Comp (비즈니스) → TxComp (트랜잭션) → Dao → Mapper
-```
-
-| 레이어 | 클래스 접미사 | 역할 |
-|---|---|---|
-| REST API | `Controller` | HTTP 요청/응답, 파라미터 바인딩 |
-| 비즈니스 | `Comp` | 상태 검증, 비즈니스 로직, 예외 처리 |
-| 트랜잭션 | `TxComp` | `@Transactional` 메서드만 위치 |
-| 데이터 접근 | `Dao` | Mapper 위임, 문서번호 채번 |
-| 쿼리 | `Mapper` | MyBatis Mapper 인터페이스 |
-| 유틸 | `CompUtil` | 데이터 가공, 알람 생성, 엑셀 변환 |
+→ [01-coding-convention.md §2](./01-coding-convention.md) 와 동일 (`Controller → Comp → TxComp → Dao → Mapper`, 레이어별 작성 가이드 링크 포함). 헤더+상세에서 `Dao`=문서번호 채번(§11), `CompUtil`=엑셀 변환·알람 생성을 담당.
 
 ---
 
 ## 3. 클래스 어노테이션
 
-### 3.1 Controller
-```java
-@Validated
-@RestController
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Slf4j
-@RequestMapping("/{bizSeq}/{메뉴코드_인스턴스}/{헤더리소스_소문자}s")
-public class {메뉴코드}Controller {
-    private final {메뉴코드}Comp {메뉴코드_인스턴스}Comp;
-}
-```
+클래스별 필수 어노테이션은 → [01-coding-convention.md §3](./01-coding-convention.md) 와 동일 (`@Validated`/`@RestController`/`@RequiredArgsConstructor(onConstructor=@__(@Autowired))`/`@Slf4j`, 생성자 주입만, DTO는 `@Getter @Setter`).
 
-### 3.2 Comp (Service)
-```java
-@Service
-@Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class {메뉴코드}Comp {
-    private final {메뉴코드}TxComp  {메뉴코드_인스턴스}TxComp;
-    private final {메뉴코드}Dao     {메뉴코드_인스턴스}Dao;
-    private final {메뉴코드}CompUtil {메뉴코드_인스턴스}CompUtil;
-}
-```
-
-### 3.3 TxComp
-```java
-@Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Slf4j
-public class {메뉴코드}TxComp {
-    private final {메뉴코드}Dao {메뉴코드_인스턴스}Dao;
-}
-```
-
-### 3.4 Dao
-```java
-@Repository
-@Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class {메뉴코드}Dao {
-    private final {메뉴코드}Mapper    {메뉴코드_인스턴스}Mapper;
-    private final DocNoGenerator      docNoGenerator;   // 문서번호 채번
-}
-```
-
-### 3.5 Mapper
-```java
-@Repository
-public interface {메뉴코드}Mapper { }
-```
-
-### 3.6 CompUtil
-```java
-@Service
-public class {메뉴코드}CompUtil { }
-```
-
-### 3.7 DTO (Bean)
-```java
-@Getter @Setter
-public class {메뉴코드}Response extends ResponseData { }
-
-@Getter @Setter
-public class {메뉴코드}Search extends BaseParam { }
-
-@Getter @Setter
-public class {메뉴코드}{헤더리소스} extends BaseParam { }
-
-@Getter @Setter
-public class {메뉴코드}{상세리소스} extends BaseParam implements Serializable { }
-```
+> 헤더+상세 고유: `Comp` 는 `TxComp`+`Dao`+`CompUtil` 을 주입, `Dao` 는 `DocNoGenerator`(문서번호 채번)를 추가 주입한다(→ §11). Controller `@RequestMapping` 은 헤더리소스 복수형(`.../{헤더리소스_소문자}s`).
 
 ---
 
