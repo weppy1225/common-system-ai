@@ -60,17 +60,9 @@ Mapper.xml        — SQL 정의 (MyBatis)
 
 ## 3. 공통 예외 클래스
 
-| 예외 | 의미 |
-|---|---|
-| `ZinBadRequestException` | 잘못된 요청 데이터 |
-| `ZinRequestParamValidException` | 요청 파라미터 검증 실패 |
-| `ZinExistDataException` | 중복 데이터 존재 |
-| `ZinNotFoundException` | 조회 결과 없음 / 처리 대상 없음 |
-| `AlreadyProcessException` | 상태 불일치, 이미 처리됨 |
-| `NotMeetConditionsException` | 업무 조건 미충족 |
-| `ResponseErrorException` | 시스템 오류 |
+공통 예외 클래스 카탈로그(정본)는 → [`30-convention/01-coding-convention.md §9.1`](./30-convention/01-coding-convention.md). 여기엔 중복 기재하지 않는다.
 
-> 출처: `$BE_DIR/src/main/java/fw/exception/warn/*.java`, `$BE_DIR/src/main/java/fw/exception/ResponseErrorException.java`
+> 전체 정본은 BE 소스 `$BE_DIR/src/main/java/fw/exception/`·`fw/exception/warn/`. F/W 런타임 공통 예외(조건→결과)는 → [`_common-arch/be-exceptions.md`](../_common-arch/be-exceptions.md).
 
 ## 4. 공통 응답 패턴
 

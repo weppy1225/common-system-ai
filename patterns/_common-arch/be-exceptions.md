@@ -10,8 +10,10 @@ domain: common
 
 # BE 공통 예외 처리
 
-F/W 인터셉터 또는 Comp 공통 로직에서 처리되는 예외다.
+F/W 인터셉터 또는 Comp 공통 로직에서 처리되는 예외의 **런타임 동작(조건→결과)** 이다.
 메뉴별 `06-be-flow.md`에는 이 목록을 반복하지 않는다.
+
+> 이 문서는 런타임 동작이고, **예외 클래스 카탈로그(정본)** 는 → [`patterns/30-backend/30-convention/01-coding-convention.md §9.1`](../30-backend/30-convention/01-coding-convention.md).
 
 ## 공통 예외 목록
 

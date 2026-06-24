@@ -179,10 +179,22 @@ API URL·HTTP 메서드·인터페이스 ID 패턴의 **정의처(SoT)는 → [2
 
 ## 9. 예외 처리 규칙
 
-### 9.1 사용 가능한 커스텀 예외
+### 9.1 사용 가능한 커스텀 예외 (SoT)
 
-> 실제 BE 소스 기준 공통 예외: `ZinRequestParamValidException`, `ZinExistDataException`, `ZinNotFoundException`, `NotMeetConditionsException`, `AlreadyProcessException`, `ResponseErrorException`.
-> 업무 검증 실패는 `CompWarnException`, 시스템 오류는 `ResponseErrorException`을 사용한다.
+> **공통 예외 클래스 카탈로그 정본.** 다른 문서(`be-layer-pattern.md` 등)는 여기를 참조하고 목록을 중복 기재하지 않는다.
+
+| 예외 클래스 | 의미 |
+|---|---|
+| `ZinBadRequestException` | 잘못된 요청 데이터 |
+| `ZinRequestParamValidException` | 요청 파라미터 검증 실패 |
+| `ZinExistDataException` | 중복 데이터 존재 |
+| `ZinNotFoundException` | 조회 결과 없음 / 처리 대상 없음 |
+| `AlreadyProcessException` | 이미 처리됨 / 상태 불일치 |
+| `NotMeetConditionsException` | 업무 조건 미충족 |
+| `CompWarnException` | 업무 검증 실패(경고) → `ResponseWarnException` 으로 변환 |
+| `ResponseErrorException` | 시스템 오류 |
+
+> 위는 **범용 공통 예외**만이다. 재고·계정·SKU 등 도메인 예외(50+)를 포함한 **전체 정본은 BE 소스** `$BE_DIR/src/main/java/fw/exception/`·`fw/exception/warn/`. F/W 런타임 공통 예외(401/403/락 등 조건→결과)는 → [`_common-arch/be-exceptions.md`](../../_common-arch/be-exceptions.md).
 
 ### 9.2 예외 처리 원칙
 
