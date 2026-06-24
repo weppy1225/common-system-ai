@@ -305,7 +305,7 @@ menu_code: {MENU_CODE}
 domain: {DOMAIN}
 depends_on:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
-  - "patterns/_common-arch/tech-stack.md"
+  - "patterns/00-architecture-tech-stack.md"
 related:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
