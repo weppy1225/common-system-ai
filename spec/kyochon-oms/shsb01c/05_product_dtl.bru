@@ -1,0 +1,37 @@
+meta {
+  name: 05 부자재 상품상세 조회
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/{{biz_seq}}/shsb01/products/{{shop_prod_seq}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+  test("product 존재", function() {
+    expect(res.body.product).to.exist;
+  });
+  test("shopProdNm 존재", function() {
+    expect(res.body.product.shopProdNm).to.be.a("string");
+  });
+  test("salePrice 존재", function() {
+    expect(res.body.product.salePrice).to.exist;
+  });
+}

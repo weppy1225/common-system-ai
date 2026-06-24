@@ -1,0 +1,34 @@
+meta {
+  name: 09 장바구니 상품 삭제 (단건)
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/cart/delete
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "shopCartSeqs": [{{shop_cart_seq}}]
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+}

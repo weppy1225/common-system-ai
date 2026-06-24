@@ -1,0 +1,36 @@
+meta {
+  name: 01 로그인 (토큰 발급)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: Mozilla/5.0
+}
+
+body:json {
+  {
+    "userId": "fran01",
+    "password": "1111"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("token", res.headers["authorization"]);
+}
+
+tests {
+  test("로그인 성공 - 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Authorization 헤더 존재", function() {
+    expect(res.headers["authorization"]).to.be.a("string");
+  });
+}

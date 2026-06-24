@@ -1,0 +1,36 @@
+meta {
+  name: 07 장바구니 상품 추가
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/cart
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "shopProdSeq": {{shop_prod_seq}},
+    "shopOrderQty": 2,
+    "stickerCfmNo": ""
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+}

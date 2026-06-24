@@ -1,0 +1,28 @@
+meta {
+  name: 03 주문취소 (STS_01 상태만)
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/cancel/{{shop_order_seq}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+}
