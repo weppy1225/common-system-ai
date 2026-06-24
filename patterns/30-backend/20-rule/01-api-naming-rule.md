@@ -36,6 +36,7 @@ API생성시 {bizSeq}를 변경하지 말고 그대로 사용합니다.
 | {메뉴코드}_POST_UPDATE | POST | /{bizSeq}/{메뉴코드_소문자}/{리소스_소문자}/update | 단건 수정 (수정정보 Body) |
 | {메뉴코드}_DELETE_{리소스}S | DELETE | /{bizSeq}/{메뉴코드_소문자}/{리소스_소문자}s | 삭제 (삭제정보 Body, seq 목록) |
 | {메뉴코드}_PUT_{리소스}_EXCEL | PUT | /{bizSeq}/{메뉴코드_소문자}/{리소스_소문자}/excel | 엑셀 일괄 등록 |
+| {메뉴코드}_POST_{리소스}_EXCEL_VALID | POST | /{bizSeq}/{메뉴코드_소문자}/{리소스_소문자}/excel/valid | 엑셀 업로드 유효성 검사 |
 | {메뉴코드}_POST_{리소스}_SAVE | POST | /{bizSeq}/{메뉴코드_소문자}/{리소스_소문자}/save | 일괄 저장 (등록·수정·삭제 한 번에 처리, Body에 변경 목록 포함) |
 
 ### Save API 사용 시 주의사항

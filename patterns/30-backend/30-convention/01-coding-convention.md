@@ -78,15 +78,16 @@ be.{메뉴그룹_인스턴스}.{메뉴코드_인스턴스}/ ← 예: be.md8000.m
 Controller → Comp (비즈니스) → TxComp (트랜잭션) → Dao → Mapper
 ```
 
-| 레이어 | 클래스 접미사 | 역할 | 작성 가이드 |
-|---|---|---|---|
-| REST API | `Controller` | HTTP 요청/응답, 파라미터 바인딩 | [02-controller-writing-rules.md](../40-guide/02-controller-writing-rules.md) |
-| 비즈니스 | `Comp` | 유효성 검사, 비즈니스 로직, 예외 처리 | [06-comp-writing-rules.md](../40-guide/06-comp-writing-rules.md) |
-| 트랜잭션 | `TxComp` | `@Transactional` 메서드만 위치 | [08-txcomp-writing-rules.md](../40-guide/08-txcomp-writing-rules.md) |
-| 데이터 접근 | `Dao` | Mapper 위임, 로깅 | [03-dao-writing-rules.md](../40-guide/03-dao-writing-rules.md) |
-| 쿼리 | `Mapper` | MyBatis Mapper 인터페이스 | [04-mapper-writing-rules.md](../40-guide/04-mapper-writing-rules.md) |
-| Mapper XML | `Mapper.xml` | SQL 매핑 (별도 파일) | [05-mapper-xml-writing-rules.md](../40-guide/05-mapper-xml-writing-rules.md) |
-| 유틸 | `CompUtil` | 메뉴 전용 헬퍼 메서드 | [07-computil-writing-rules.md](../40-guide/07-computil-writing-rules.md) |
+| 레이어        | 클래스 접미사      | 역할                       | 작성 가이드                                                                       |
+| ---------- | ------------ | ------------------------ | ---------------------------------------------------------------------------- |
+| REST API   | `Controller` | HTTP 요청/응답, 파라미터 바인딩     | [02-controller-writing-rules.md](../40-guide/02-controller-writing-rules.md) |
+| 비즈니스       | `Comp`       | 유효성 검사, 비즈니스 로직, 예외 처리   | [06-comp-writing-rules.md](../40-guide/06-comp-writing-rules.md)             |
+| 트랜잭션       | `TxComp`     | `@Transactional` 메서드만 위치 | [08-txcomp-writing-rules.md](../40-guide/08-txcomp-writing-rules.md)         |
+| 데이터 접근     | `Dao`        | Mapper 위임, 로깅            | [03-dao-writing-rules.md](../40-guide/03-dao-writing-rules.md)               |
+| 쿼리         | `Mapper`     | MyBatis Mapper 인터페이스     | [04-mapper-writing-rules.md](../40-guide/04-mapper-writing-rules.md)         |
+| Mapper XML | `Mapper.xml` | SQL 매핑 (별도 파일)           | [05-mapper-xml-writing-rules.md](../40-guide/05-mapper-xml-writing-rules.md) |
+| 유틸         | `CompUtil`   | 메뉴 전용 헬퍼 메서드             | [07-computil-writing-rules.md](../40-guide/07-computil-writing-rules.md)     |
+|            |              |                          |                                                                              |
 
 > 기존 코드에 `Comp` 직접 `@Transactional`, Controller `@Validated` 누락, JavaDoc `@author`/`@version` 잔존이 있더라도 규칙 예외가 아니다. 모두 미준수 레거시로 보고 신규/수정 코드에 동일 규칙을 적용한다.
 
@@ -111,16 +112,7 @@ Controller → Comp (비즈니스) → TxComp (트랜잭션) → Dao → Mapper
 
 ## 4. Controller URL 설계 규칙
 
-```
-GET    /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}        ← 단건 조회 (팝업 등)
-GET    /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}/{seq}  ← 단건 상세 조회
-POST   /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}        ← 목록 조회 (검색조건 body)
-POST   /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}/insert ← 단건 등록
-POST   /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}/update ← 단건 수정
-DELETE /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}        ← 단건/다건 삭제
-PUT    /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}/excel  ← 엑셀 일괄 등록
-POST   /{bizSeq}/{메뉴코드_인스턴스}/{리소스_소문자}/excel/valid ← 엑셀 유효성 검사
-```
+API URL·HTTP 메서드·인터페이스 ID 패턴의 **정의처(SoT)는 → [20-rule/01-api-naming-rule.md §2](../20-rule/01-api-naming-rule.md)** 다 (목록/등록/수정/삭제/엑셀 일괄·유효성검사/일괄저장 전체 패턴 포함). 이 문서에 따로 적지 않는다(중복 금지 — 30-backend/00-overview.md 참조).
 
 > Controller 메서드 시그니처·`@RequestBody`/`@PathVariable`/`@RequestPart` 등 어노테이션 사용 패턴은
 > [40-guide/02-controller-writing-rules.md](../40-guide/02-controller-writing-rules.md) 참조.
