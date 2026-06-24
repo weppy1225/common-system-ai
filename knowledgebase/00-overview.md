@@ -2,11 +2,12 @@
 title: knowledgebase 라이브러리 개요
 description: AI가 개발 전에 읽는 메뉴 횡단 공통 배경지식 라이브러리. 번호=읽는 순서. 메뉴별 설계는 spec/, 검증 화면은 prototype/ 에 있다.
 status: active
-version: 2.0.0
+version: 2.1.0
 repo_role: ai-hub
 agent_usage: reference
 domain: common
-last_verified: 2026-06-17
+last_modified_by: ShinHyunKyu
+last_verified: 2026-06-24
 ---
 
 # knowledgebase — AI 배경지식 라이브러리
@@ -14,18 +15,14 @@ last_verified: 2026-06-17
 이 시스템이 **어떻게 돌아가는지** 알려주는 메뉴 횡단 공통 지식이다. 번호는 읽는 순서다.
 메뉴별 설계는 `spec/{프로젝트}/{메뉴}/`, 검증용 화면(HTML)은 `prototype/`에 있다 — 여기엔 없다.
 
-## 구조 (번호 = 읽는 순서)
+## 읽는 순서 (번호 = 읽는 순서)
 
-```
-knowledgebase/
-├── 00-overview.md       (이 파일) 개요 — 여기부터
-├── 10-domain/           메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람이 작성)
-├── domains/             도메인 표준 — 같은 도메인 프로젝트끼리 공유 (예: domains/wms/)
-├── 20-md-index.md       MD 문서 색인 — 문서가 어디 있나
-├── 30-src-index/        소스코드 색인 — 코드가 어디 있나 (실제 코드는 BE/FE 레포)
-├── 40-install-guide/    설치·셋업
-└── 50-dev-workflow/     개발 워크플로우
-```
+1. `10-domain/` — 메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람이 작성)
+2. `domains/` — 도메인 표준 (같은 도메인 프로젝트끼리 공유, 예: `domains/wms/`)
+3. `20-md-index.md` / `30-src-index/` — 문서·소스 위치 색인
+4. `40-install-guide/` → `50-dev-workflow/` — 설치·셋업 후 개발 워크플로우
+
+> 디렉토리 트리(정본)는 → [`STRUCTURE.md` §knowledgebase/](../STRUCTURE.md). 여기엔 중복하지 않는다.
 
 ## 경계 규칙
 
