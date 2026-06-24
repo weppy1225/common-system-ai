@@ -16,7 +16,8 @@ agent_usage: reference
 ```
 knowledgebase/40-install-guide/
 └── deploy/
-    └── deploy-guide.md   # BE 빌드·배포·검증 절차 (Gradle/Spring Boot)
+    ├── deploy-guide.md            # BE 빌드·배포·검증 절차 (Gradle/Spring Boot)
+    └── context-name-rename-map.md # 배포 컨텍스트·앱 이름 리네임 시 변경 위치 맵 (BE/FE/외부)
 ```
 
 ## 문서 목록
@@ -24,3 +25,4 @@ knowledgebase/40-install-guide/
 | 문서 | 경로 | 설명 |
 |---|---|---|
 | 빌드·배포 가이드 | `deploy/deploy-guide.md` | Gradle 빌드 → Tomcat 배포 → 동작 검증 절차. 알려진 이슈(Flyway) 포함 |
+| 컨텍스트·이름 리네임 맵 | `deploy/context-name-rename-map.md` | 앱 이름·배포 컨텍스트(WAR명·context-path·FTP·로그) 변경 시 BE/FE/외부 변경 위치 체크리스트 |
