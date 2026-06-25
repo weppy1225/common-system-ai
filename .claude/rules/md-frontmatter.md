@@ -53,6 +53,7 @@ status: draft | active | deprecated | archived
 version: 1.0.0
 author: <git config user.name>        # 작성 시점 git 자격증명에서 도출, 하드코딩 금지
 repo_role: ai-hub | be | fe
+priority: critical | high | medium | low   # 다른 rule과 겹칠 때만 추가. 겹치는 rule이 없으면 생략.
 applies_to:
   - path/or/glob
 agent_usage: instruction | memory | rule | workflow | command | skill | agent | spec | plan | task | output | reference
@@ -60,6 +61,17 @@ tags:
   - keyword
 ---
 ```
+
+**priority 허용값 기준** (rule/skill 문서에서 다른 rule과 겹칠 때만 사용)
+
+| 값 | 적용 기준 |
+|---|---|
+| `critical` | 항상로딩 + 위반 시 보안·데이터 손실 등 심각한 결과 |
+| `high` | 항상로딩이거나 개발 작업 STEP 0 에서 반드시 적용 |
+| `medium` | 파일 유형·작업 종류 동적로딩 구현 패턴 |
+| `low` | 특정 시스템 전용 — 현재 작업 시스템에서 적용 안 되는 경우 존재 |
+
+MUST: `priority` 는 **겹치는 rule 이 생겼을 때 두 파일 모두에** 추가한다. 단독 rule 이면 생략한다.
 
 ## 선택 필드
 

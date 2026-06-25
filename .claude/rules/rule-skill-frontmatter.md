@@ -51,6 +51,16 @@ paths:
 |---|---|---|
 | `description` | ✅ | 규칙을 **언제** 써야 하는지 한 문장. 화면 영역명·작업 종류·키워드를 포함한다. |
 | `paths` | 조건부 | **path 기반 동적 로딩**의 기준. 적용할 경로 글로브 패턴 배열. 생략하면 모든 세션에서 항상 로딩된다. |
+| `priority` | 선택 | **다른 rule 과 겹칠 때만** 추가한다. 충돌 시 상위 priority 가 우선한다. 허용값: `critical \| high \| medium \| low`. 겹치는 rule 이 없으면 생략한다. |
+
+**priority 값 기준** (겹치는 rule 이 생길 때 두 파일 모두에 명시)
+
+| 값 | 적용 기준 |
+|---|---|
+| `critical` | 항상로딩 + 위반 시 보안·데이터 손실 등 심각한 결과 |
+| `high` | 항상로딩이거나 개발 작업 STEP 0 에서 반드시 적용 |
+| `medium` | 파일 유형·작업 종류 동적로딩 구현 패턴 |
+| `low` | 특정 시스템 전용 — 현재 작업 시스템에서 적용 안 되는 경우 존재 |
 
 > **path 는 `paths` 키로만 표기한다.** rule frontmatter 에 `globs`·`path`·`applies_to` 같은 다른 키는 Claude Code 가 인식하지 못한다.
 
@@ -169,6 +179,7 @@ arguments: [component, from, to]
 
 - [ ] rule 에 `paths` 를 지정했는가? (생략은 "항상 로딩"이 정당한 경우에만)
 - [ ] `paths` 키 이름을 정확히 사용했는가? (`globs`·`applies_to` 등 다른 이름 금지)
+- [ ] 다른 rule 과 내용이 겹치는가? → 겹치면 두 파일 모두에 `priority` 를 `critical | high | medium | low` 중 하나로 지정했는가?
 - [ ] `alwaysApply` 같은 Cursor 전용 필드를 쓰지 않았는가?
 - [ ] skill `description` 이 동작 요약 + 호출 형식 위주로 짧은가? (트리거 문구는 `when_to_use` 로 분리)
 - [ ] 부작용 있는 사용자 트리거형 skill 에 `disable-model-invocation: true` 를 붙였는가?
