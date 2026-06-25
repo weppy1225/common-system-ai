@@ -16,10 +16,10 @@ paths:
 
 | 필요한 것 | 위치 |
 |---|---|
-| SQL 서식 | `knowledgebase/domains/oms/patterns/db/01-sql-query-style.md` |
-| MyBatis 구현 | `knowledgebase/domains/oms/patterns/db/02-mybatis-convention.md` |
-| 명명 규칙 | `knowledgebase/domains/oms/patterns/db/03-naming-rule.md` |
-| 채번(시퀀스·문서번호) | `knowledgebase/domains/oms/patterns/be/03-numbering-module.md` |
+| SQL 서식 | `spec/{$PROJECT}/_knowledge/patterns/db/01-sql-query-style.md` |
+| MyBatis 구현 | `spec/{$PROJECT}/_knowledge/patterns/db/02-mybatis-convention.md` |
+| 명명 규칙 | `spec/{$PROJECT}/_knowledge/patterns/db/03-naming-rule.md` |
+| 채번(시퀀스·문서번호) | `spec/{$PROJECT}/_knowledge/patterns/be/03-numbering-module.md` |
 | 테이블·컬럼·코드값 | `{$BE_DIR}/DEV_DOC/erd/oms.exerd` · `spec/{$PROJECT}/_knowledge/db-schema/90-common-code.md` · `fw/constant/OMSPool.java` |
 | MyBatis 설정 | `{$BE_DIR}/src/main/resource/sqlmap-config.xml` |
 

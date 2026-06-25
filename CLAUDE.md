@@ -150,78 +150,9 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 | `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입. `prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨 |
 | `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
 
-### 팝업 통신 방식
-
-메뉴 화면(iframe) → 부모(`index.html`) → 팝업 iframe 순서로 `postMessage`로 통신한다.
-
-```
-{메뉴코드}-02-wireframe.html  →  window.parent.postMessage({ type: 'OPEN_CP_LAYER' })
-index.html                    →  CPCT01_popup.html 오픈
-CPCT01_popup                  →  postMessage({ type: 'CP_SELECTED', data: {...} })
-index.html                    →  {메뉴코드}-02-wireframe.html 로 결과 전달
-```
-
 ## Slash Commands
 
 대부분 `/명령어 {메뉴코드}` 형식으로 실행한다. 전체 현황은 `/skill_list` 로 확인.
-
-> **DB/API 설계 정본 체계**: 메뉴별 정본은 `/SD_db`·`/SD_api` (→ `spec/{프로젝트}/{메뉴코드}/-03-data-model.md`·`-05-api.md`). `/SD_db_apply`는 그 DDL을 test/dev DB에 반영. `/SD_331`~`/SD_334`는 실DB 추출 산출물이며 정본을 대체하지 않는다.
-
-### 🛠️ 개발 자동화 — 설계·코드·테스트 생성 (15)
-
-| 명령어 | 설명 |
-|---|---|
-| `/SD_310_UI {메뉴코드}` | 대화형 인터뷰로 화면요건 `-02-ui.md` 작성 |
-| `/SD_db {메뉴코드}` | 화면설계 기반 DB 설계 → `-03-data-model.md`(DDL) |
-| `/SD_db_apply {메뉴코드}` | `/SD_db` DDL을 psql로 test/dev DB에 반영 |
-| `/SD_api {메뉴코드}` | 화면설계·DB 기반 API 명세 `-05-api.md` |
-| `/PI_be_all {메뉴코드}` | BE 전체 레이어 (Mapper→Dao→TxComp→Comp→Controller) |
-| `/PI_be_mapper {메뉴코드}` | BE Mapper (Mapper.java + Mapper.xml) |
-| `/PI_be_dao {메뉴코드}` | BE DAO 레이어 |
-| `/PI_be_comp {메뉴코드}` | BE Comp 레이어 |
-| `/PI_be_excel {메뉴코드}` | BE 엑셀 업로드 |
-| `/PI_be_inven {메뉴코드}` | BE 재고 확정 처리 |
-| `/PI_fe_all {메뉴코드}` | FE 목록 화면 + 팝업 전체 |
-| `/PI_fe_list {메뉴코드}` | FE 검색·목록 화면 |
-| `/PI_fe_edit {메뉴코드}` | FE 등록/수정 팝업 |
-| `/PI_test_be {메뉴코드}` | BE JUnit + API 테스트 실행 |
-| `/PI_test_fe {메뉴코드}` | FE 단위 테스트 실행 |
-
-> BE 명령은 BE 레포, FE 명령은 FE 레포에서 실행. FE E2E(`/playwright-spec`·`/e2e-menu-test`)는 **FE 레포** `.claude/`에 정의됨(이 레포 아님).
-
-### 📦 산출물 자동화 — 고객 제출 문서 생성 (16)
-
-| 명령어 | 설명 |
-|---|---|
-| `/RA_222` | 회의록 분석 → 요구사항정의서 엑셀 |
-| `/SD_311 {메뉴코드}` | ui.md → PC 프로토타입 HTML+mock, 메뉴 자동 등록 |
-| `/SD_312 {메뉴코드}` | ui.md → PDA 모바일 프로토타입 HTML |
-| `/SD_331 [경로]` | 실DB → 테이블정의서 엑셀 |
-| `/SD_332 [경로]` | 실DB → 공통코드정의서 엑셀 |
-| `/SD_333 [경로]` | 실DB → DDL SQL 파일 |
-| `/SD_334 [경로]` | 실DB → ERD 뷰어 HTML |
-| `/PI_411 {메뉴코드}` | 프로그램 소스 ZIP |
-| `/PI_412` | 프로그램 목록 엑셀 (BE·FE 스캔) |
-| `/PI_421` | 단위테스트보고서 엑셀 |
-| `/PI_422` | 통합테스트보고서 엑셀 |
-| `/TT_541` | PC 사용자매뉴얼 PPTX |
-| `/TT_542` | PDA 사용자매뉴얼 PPTX |
-| `/TT_543` | 관리자매뉴얼 PPTX |
-| `/TT_550` | DB 이관용 INSERT SQL 생성 |
-| `/TT_551 [V번호\|all]` | DB 마이그레이션 스크립트 실행 |
-
-### 🔧 유틸 — 배포·관리·메타 (8)
-
-| 명령어 | 설명 |
-|---|---|
-| `/daily_brief` | 저장소 fetch·pull 후 새 커밋을 목록(누가·언제·왜)+상세로 리포팅 |
-| `/md_index` | 파일·폴더 지도 `20-md-index.html` 재생성 (gen-md-map.py) |
-| `/deploy [{메뉴코드}]` | 프로토타입 FTP 배포 (메뉴 지정 또는 변경 감지) |
-| `/PI_issue_mod` | 레드마인 이슈 진행율·작업이력 수정 |
-| `/PI_time_reg` | 레드마인 이슈 작업시간 등록 |
-| `/KB_100 {메뉴코드}` | 소스 역공학 → spec 초안 생성 (재설계 대상·동결) |
-| `/KB_200 {메뉴코드}` | 설계 ↔ 소스 드리프트 검증 (동결) |
-| `/skill_list` | 커스텀 스킬 현황표 출력 |
 
 ## UI 규칙
 

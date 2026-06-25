@@ -42,7 +42,7 @@ paths:
 
 | 시스템 | FE 상세 | BE/DB 상세 |
 |---|---|---|
-| OMS (`kyochon-oms`) | `.claude/rules/oms-frontend-convention.md` §2 · `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md` | `.claude/rules/oms-db-convention.md` |
+| OMS (`kyochon-oms`) | `.claude/rules/oms-frontend-convention.md` §2 · `spec/{$PROJECT}/_knowledge/patterns/fe/02-common-code-commCdStore.md` | `.claude/rules/oms-db-convention.md` |
 | WMS (`common-system`) | `patterns/40-frontend/40-store/01-commCdStore.md` | `spec/common-system/_knowledge/db-schema/90-common-code.md` |
 
 > 우선순위: 시스템별 규칙 > 이 공통 규칙 > `patterns/_common-arch/common-code.md`(개념). 시스템별 규칙은 "실제값", 이 규칙은 "기본값"이다.

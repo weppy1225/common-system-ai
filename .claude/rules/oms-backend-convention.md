@@ -19,8 +19,8 @@ paths:
 
 | 필요한 것 | 위치 |
 |---|---|
-| 레이어 코드 패턴(CompUtil/TxComp/Comp/Controller 예시·예외 흐름) | `knowledgebase/domains/oms/patterns/be/01-layer-pattern.md` |
-| 채번(DocNoGenerator/SeqGenerator) 상세 | `knowledgebase/domains/oms/patterns/be/03-numbering-module.md` |
+| 레이어 코드 패턴(CompUtil/TxComp/Comp/Controller 예시·예외 흐름) | `spec/{$PROJECT}/_knowledge/patterns/be/01-layer-pattern.md` |
+| 채번(DocNoGenerator/SeqGenerator) 상세 | `spec/{$PROJECT}/_knowledge/patterns/be/03-numbering-module.md` |
 | 예외 클래스 실제 목록 | `{$BE_DIR}/src/.../fw/exception/`·`fw/exception/warn/` |
 | 상수풀 정의값 | `{$BE_DIR}/src/.../fw/constant/{OMSPool,FwPool,StringPool}.java` |
 | 도메인 코드값 의미 | `spec/{$PROJECT}/_knowledge/db-schema/90-common-code.md` |

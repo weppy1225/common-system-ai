@@ -9,15 +9,15 @@ paths:
 # OMS 프론트엔드 개발 규칙 — OMS 고유 판단 기준
 
 > 이 문서는 **판단 기준·금지만** 담는다. 상세 작성 패턴은 아래 patterns·소스를 본다.
-> 전제: OMS FE 한 코드베이스가 **UI 패러다임이 다른 두 시스템**을 빌드한다 — 쇼핑몰(가맹점, `/bc`, `VITE_OMS_YN=Y`, AUIGrid 미사용)·관리자(`/be`, `N`, AUIGrid)·모바일(`/bm`). 구분 상세 → `knowledgebase/domains/oms/install-guide/01-startup-guide.md §3.0`.
+> 전제: OMS FE 한 코드베이스가 **UI 패러다임이 다른 두 시스템**을 빌드한다 — 쇼핑몰(가맹점, `/bc`, `VITE_OMS_YN=Y`, AUIGrid 미사용)·관리자(`/be`, `N`, AUIGrid)·모바일(`/bm`). 구분 상세 → `spec/{$PROJECT}/_knowledge/install-guide/01-startup-guide.md §3.0`.
 > 고객사별 프로젝트 경로(`$PROJECT`, `$FE_DIR`) 도출 → `.claude/rules/repo-paths.md`.
 
 ## 상세는 어디에 (라우팅)
 
 | 필요한 것 | 위치 |
 |---|---|
-| 라우터·메뉴 등록 3단계 | `knowledgebase/domains/oms/patterns/fe/01-router-menu-register.md` |
-| 공통코드(commCdStore) 사용 | `knowledgebase/domains/oms/patterns/fe/02-common-code-commCdStore.md` |
+| 라우터·메뉴 등록 3단계 | `spec/{$PROJECT}/_knowledge/patterns/fe/01-router-menu-register.md` |
+| 공통코드(commCdStore) 사용 | `spec/{$PROJECT}/_knowledge/patterns/fe/02-common-code-commCdStore.md` |
 | 커스텀 컴포넌트(ZCodeSelect/ZAuiGrid/Zxxx Popup 등) | `{$FE_DIR}/src/components/be/` |
 | 상수·도메인 코드값 | `{$FE_DIR}/src/assets/constant/zConstant.js` · `spec/{$PROJECT}/_knowledge/db-schema/90-common-code.md` |
 
