@@ -46,7 +46,7 @@ model: claude-opus-4-7
 
 #### 1-2. 산출물 및 가이드 읽기
 1. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` 읽기 (없으면 `-06-be-flow.md` 참조)
-2. `.claude/rules/biz-framework.md` — InvenManager/DocNoGenerator 사용 규칙 (있는 경우)
+2. `.claude/rules/wms-biz-framework.md` — InvenManager/DocNoGenerator 사용 규칙
 3. `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/00-tables-overview.md` — 관련 테이블 확인
 4. **레퍼런스 TxComp 소스**: `Glob("$BE_DIR/src/main/java/be/**/*TxComp.java")` 로 InvenManager를 사용하는 TxComp 파일을 탐색해 읽는다.
 5. `$BE_DIR/src/main/java/fw/inven/bean/InvenDTO.java` — InvenDTO 필드 구조

@@ -78,14 +78,14 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 | `WHERE 1=1` | `<where>` 태그 사용 |
 | `!= null` | `@fw.tool.EmptyTool@notEmpty(param)` |
 | `col LIKE '%' || #{v} || '%'` | `FN_CONCAT('%', #{v}, '%')` |
-| `wms_inven*` 직접 DML | InvenManager 경유 (biz-framework.md 참조) |
+| `wms_inven*` 직접 DML | InvenManager 경유 (wms-biz-framework.md 참조) |
 
 ---
 
 ## 재고·홀딩 테이블은 직접 쿼리 금지
 
 `wms_inven`, `wms_inven_holding`, `wms_inven_inout` 직접 INSERT/UPDATE/DELETE 금지.
-→ **InvenManager 경유**. 판단 기준·메서드는 `biz-framework.md` 참조.
+→ **InvenManager 경유**. 판단 기준·메서드는 `wms-biz-framework.md` 참조.
 
 ---
 

@@ -1,10 +1,10 @@
 ---
-description: 재고 증감(InvenManager iw/ow/im/ad/rt)·문서번호 채번(DocNoGenerator) 코드 작성 시 적용. 입고/출고/반품/이동/조정 확정, wms_inven* 처리, 출고예약·대기재고 로직을 TxComp 에서 구현할 때 참조한다.
+description: "[WMS 전용] 재고 증감(InvenManager iw/ow/im/ad/rt)·문서번호 채번(DocNoGenerator) 코드 작성 시 적용. 입고/출고/반품/이동/조정 확정, wms_inven* 처리, 출고예약·대기재고 로직을 TxComp 에서 구현할 때 참조한다. OMS 등 InvenManager가 없는 시스템에는 적용하지 않는다."
 paths:
   - "**/*TxComp.java"
 ---
 
-# 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
+# WMS 비즈니스 프레임워크 (InvenManager · DocNoGenerator)
 
 > **적용 도메인: WMS 전용.** InvenManager(재고 증감)·InvenPool 상수·`wms_inven*` 처리는 WMS 재고 프레임워크다. 다른 도메인(예: OMS)은 자체 비즈니스 프레임워크 규칙을 별도로 둔다. DocNoGenerator(문서번호 채번)는 도메인 무관 공통.
 

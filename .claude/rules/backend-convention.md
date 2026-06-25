@@ -62,7 +62,7 @@ paths:
 | `ZinBadRequestException` | 잘못된 요청 데이터 |
 | `ZinExistDataException` | 중복 데이터 존재 |
 
-**SIF 연동 코드에서 `CompWarnException` 사용 금지** → `sif-convention.md` 참조.
+**SIF 연동 코드에서 `CompWarnException` 사용 금지** → `wms-sif-convention.md` 참조.
 
 ## §6 자주 잊는 import 목록
 
