@@ -30,7 +30,7 @@ paths:
 | 동적로딩(path 기반) | `paths: [...]` 글로브 배열 지정 | Claude 가 `paths` 글로브에 매칭되는 파일을 **읽을 때만** 첨부 |
 
 - **rule 의 동적 트리거는 path 기반이다.** `paths` 에 적은 글로브에 매칭되는 파일을 다룰 때 자동 첨부된다.
-- **`paths` 필드를 생략하면 항상 로딩된다.** Cursor 의 `alwaysApply: true` 와 동일한 효과. 별도 `alwaysApply` 키는 사용하지 않는다.
+- **`paths` 필드를 생략하면 항상 로딩된다.** 별도 `alwaysApply` 키는 사용하지 않는다.
 - **필드명은 반드시 `paths` 다.** `globs`·`path`·`applies_to` 등 다른 이름은 Claude Code 가 인식하지 못한다.
 - skill 도 `paths` 를 **선택적으로** 지원한다(§4-2). 지정하면 매칭 파일 작업 시에만 자동 호출 후보가 된다.
 
@@ -180,7 +180,7 @@ arguments: [component, from, to]
 - [ ] rule 에 `paths` 를 지정했는가? (생략은 "항상 로딩"이 정당한 경우에만)
 - [ ] `paths` 키 이름을 정확히 사용했는가? (`globs`·`applies_to` 등 다른 이름 금지)
 - [ ] 다른 rule 과 내용이 겹치는가? → 겹치면 두 파일 모두에 `priority` 를 `critical | high | medium | low` 중 하나로 지정했는가?
-- [ ] `alwaysApply` 같은 Cursor 전용 필드를 쓰지 않았는가?
+- [ ] `alwaysApply` 같은 비공식 필드를 쓰지 않았는가?
 - [ ] skill `description` 이 동작 요약 + 호출 형식 위주로 짧은가? (트리거 문구는 `when_to_use` 로 분리)
 - [ ] 부작용 있는 사용자 트리거형 skill 에 `disable-model-invocation: true` 를 붙였는가?
 - [ ] 인자 받는 skill 에 `argument-hint` 를 붙였는가?

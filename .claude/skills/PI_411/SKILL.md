@@ -87,8 +87,8 @@ OUTFILE    = deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_{고
 
 | 카테고리 | 제외 대상 |
 |---|---|
-| AI/도구 디렉토리 | `.claude/`, `.agents/`, `.codex/`, `.cursor/` |
-| AI 가이드 문서 | `CLAUDE.md`, `AGENTS.md`, `COPILOT.md`, `GEMINI.md` |
+| AI/도구 디렉토리 | `.claude/` |
+| AI 가이드 문서 | `CLAUDE.md` |
 | IDE 설정 | `.vscode/`, `.idea/`, `.settings/`, `.eclipse/` |
 | 원시 IDE 파일 | `.project`, `.classpath` |
 | 개발 내부 문서 | `DEV_DOC/`, `doc/`, `docs/` |
@@ -439,7 +439,7 @@ ZIP 내부 prefix: {RepoName}-{Branch}/
 
 [handoff 모드일 때만]
 포함 경로:   src, build.xml, Jenkinsfile, ...
-제외 정책:   .claude/, .agents/, .settings/, lib-test/, DEV_DOC/, CLAUDE.md, AGENTS.md, .project, .classpath 등
+제외 정책:   .claude/, .settings/, lib-test/, DEV_DOC/, CLAUDE.md, .project, .classpath 등
 
 출력 파일:   deliverables/30-output/04 구현(PI)/PI_411_프로그램소스_{고객사명}.zip ({SizeHuman})
 포함 항목:   {Entries}개
