@@ -127,7 +127,7 @@ def node_for(area, within):
 
 mdtotal = 0
 for dp, dns, fns in os.walk('.'):
-    dns[:] = [d for d in dns if d not in ('node_modules', '.git')]
+    dns[:] = [d for d in dns if d not in ('node_modules', '.git', 'history')]
     reld = os.path.relpath(dp, '.').replace(BS, '/')
     if reld == '.': reld = ''
     if reld:
