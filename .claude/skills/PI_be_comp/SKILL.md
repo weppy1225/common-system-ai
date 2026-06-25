@@ -16,8 +16,9 @@ model: claude-sonnet-4-6
 
 ## STEP 0 — 레포 경로 결정 (BLOCKING)
 
-`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
-이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../{프로젝트}-be`) 기준이다.
+`.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(AI 허브)·`$BE_DIR`(BE 레포)를 결정한다.
+- **BE 코드 생성·테스트 실행**: `cd "$BE_DIR"` 후 진행 — `src/main/java/...`, `./gradlew`, `build/...` 는 `$BE_DIR` 기준
+- **가이드 문서·설계 문서 읽기**: `$AI_DIR/patterns/...`, `$AI_DIR/spec/$PROJECT/...` 절대경로 사용 (DEV_DOC/ai-docs 사용 금지)
 
 ## 전제 조건 확인 (BLOCKING)
 
@@ -55,14 +56,12 @@ public Response insertProd(Prod prod) {
 `@code-layer-explorer {메뉴코드}` 를 호출해 기존 레이어 파일 목록을 확인한다.
 
 #### 1-2. 산출물 및 가이드 읽기
-1. `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` 읽기
-2. `DEV_DOC/ai-docs/20-backend/40-guide/06-comp-writing-rules.md` 읽기
-4. `DEV_DOC/ai-docs/20-backend/40-guide/07-computil-writing-rules.md` 읽기
-5. `DEV_DOC/ai-docs/20-backend/40-guide/08-txcomp-writing-rules.md` 읽기
-6. `DEV_DOC/ai-docs/20-backend/40-guide/02-controller-writing-rules.md` 읽기
-7. **같은 도메인의 기존 Comp 소스 읽기** (일관성 확보):
-   - MDM: `src/main/java/be/md8000/mdpd01/MDPD01Comp.java`, `MDPD01CompUtil.java`, `MDPD01TxComp.java`
-   - IW: `src/main/java/be/iw1000/iwrq01/IWRQ01Comp.java`, `IWRQ01TxComp.java`
+1. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` 읽기 (없으면 `-06-be-flow.md` 참조)
+2. `$AI_DIR/patterns/30-backend/40-guide/06-comp-writing-rules.md` 읽기
+3. `$AI_DIR/patterns/30-backend/40-guide/07-computil-writing-rules.md` 읽기
+4. `$AI_DIR/patterns/30-backend/40-guide/08-txcomp-writing-rules.md` 읽기
+5. `$AI_DIR/patterns/30-backend/40-guide/02-controller-writing-rules.md` 읽기
+6. **같은 도메인의 기존 Comp 소스 읽기** (일관성 확보): `$BE_DIR/src/main/java/be/` 하위에서 같은 그룹 또는 유사 도메인의 `*Comp.java`, `*CompUtil.java`, `*TxComp.java` 탐색해 읽기
 
 ---
 
@@ -175,7 +174,7 @@ public class {메뉴코드}Controller {
 
 ### Step 8 — JUnit 테스트 작성 및 실행 (BLOCKING)
 
-1. 테스트 클래스 작성 (`DEV_DOC/ai-docs/20-backend/50-test/02-test-coding-convention.md` 참조)
+1. 테스트 클래스 작성 (`$AI_DIR/patterns/30-backend/50-test/02-test-coding-convention.md` 참조)
    - `ZTEST_{메뉴코드}CompUtil.java` (CompUtil 존재 시)
    - `ZTEST_{메뉴코드}Comp.java`
    - `ZTEST_{메뉴코드}Controller.java`

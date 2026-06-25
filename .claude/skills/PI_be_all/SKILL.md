@@ -20,8 +20,9 @@ model: claude-sonnet-4-6
 
 ## STEP 0 — 레포 경로 결정 (BLOCKING)
 
-`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
-이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../{프로젝트}-be`) 기준이다. 생성 코드는 `$BE_DIR/src/...` 에 떨어진다.
+`.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(AI 허브)·`$BE_DIR`(BE 레포)를 결정한다.
+- **BE 코드 생성·테스트 실행**: `cd "$BE_DIR"` 후 진행 — `src/main/java/...`, `./gradlew`, `build/...` 는 `$BE_DIR` 기준. 생성 코드는 `$BE_DIR/src/...` 에 떨어진다.
+- **가이드 문서·설계 문서 읽기**: `$AI_DIR/patterns/...`, `$AI_DIR/spec/$PROJECT/...` 절대경로 사용 (DEV_DOC/ai-docs 사용 금지)
 
 ---
 
@@ -36,21 +37,17 @@ model: claude-sonnet-4-6
 `@db-doc-reader {관련 테이블명}` 를 호출해 컬럼·PK/FK 정보를 확인한다.
 
 ### 0-3. 산출물 읽기
-1. `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` — 기능 명세
+1. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` — API·기능 명세 (없으면 `-06-be-flow.md` 참조)
 
 ---
 
 ## Phase 1 — 레퍼런스 소스 탐색
 
-도메인에 맞는 기존 소스를 읽어 패턴 파악:
+작업 대상과 같은 그룹 패키지(`$BE_DIR/src/main/java/be/{그룹}/`)에서 기존 소스를 탐색해 패턴 파악:
 
-| 도메인 | 레퍼런스 경로 |
-|---|---|
-| MDM | `src/main/java/be/md8000/mdpd01/` — Mapper, Dao, CompUtil, TxComp, Comp, Controller |
-| IW  | `src/main/java/be/iw1000/iwrq01/` — 동일 |
-| 기타 | 가장 유사한 도메인 선택 |
+1. `Glob("$BE_DIR/src/main/java/be/**/*Comp.java")` 로 같은 그룹 또는 유사 도메인의 Comp 파일 후보 목록 확인
+2. 가장 유사한 도메인의 패키지 1개를 선택해 **Mapper, Dao, CompUtil, TxComp, Comp, Controller** 모두 읽는다.
 
-해당 패키지의 **Comp, CompUtil, TxComp, Controller** 모두 읽는다.
 새 방식 임의 도입 금지 — 기존 패턴을 그대로 따른다.
 
 ---
@@ -99,7 +96,7 @@ model: claude-sonnet-4-6
 ### 3-3. JUnit 테스트 작성 및 실행 ✅ BLOCKING
 
 `src/main/java/be/{그룹}/{메뉴코드}/test/ZTEST_{메뉴코드}Mapper.java` 작성
-- `DEV_DOC/ai-docs/20-backend/50-test/02-test-coding-convention.md` 참조
+- `$AI_DIR/patterns/30-backend/50-test/02-test-coding-convention.md` 참조
 
 ```bash
 ./gradlew test --tests '*.ZTEST_{메뉴코드}Mapper'

@@ -75,7 +75,7 @@ fi
 3. `$WIREFRAME` — 화면 프로토타입
 4. `spec/$PROJECT/_knowledge/db-schema/` — 프로젝트 DB 스키마 (DB 설계 문서 없을 때)
 5. `$BE_DIR/src/main/java/` 해당 패키지 — BE 소스 (케이스 B)
-6. `$BE_DIR/DEV_DOC/ai-docs/20-backend/20-rule/02-api-naming-rule.md` — API 네이밍 규칙 (존재하는 경우)
+6. `$AI_DIR/patterns/30-backend/20-rule/01-api-naming-rule.md` — API 네이밍 규칙
 
 ### Step 4 — api.md 작성
 
@@ -202,7 +202,7 @@ implements Serializable
 
 - DB 설계: `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-03-data-model.md`
 - DB 스키마: `spec/{프로젝트}/_knowledge/db-schema/`
-- 코딩 컨벤션: `{$BE_DIR}/DEV_DOC/ai-docs/20-backend/30-convention/02-backend-coding-convention.md` (존재하는 경우)
+- 코딩 컨벤션: `$AI_DIR/patterns/30-backend/30-convention/01-coding-convention.md`
 ````
 
 ---

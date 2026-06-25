@@ -14,13 +14,14 @@ model: claude-sonnet-4-6
 
 ## STEP 0 — 레포 경로 결정 (BLOCKING)
 
-`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
-이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../{프로젝트}-be`) 기준이다.
+`.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(AI 허브)·`$BE_DIR`(BE 레포)를 결정한다.
+- **BE 코드 생성·테스트 실행**: `cd "$BE_DIR"` 후 진행 — `src/main/java/...`, `./gradlew`, `build/...` 는 `$BE_DIR` 기준
+- **가이드 문서·설계 문서 읽기**: `$AI_DIR/patterns/...`, `$AI_DIR/spec/$PROJECT/...` 절대경로 사용 (DEV_DOC/ai-docs 사용 금지)
 
 ## 전제 조건 확인 (BLOCKING)
 
 - 메인 레이어(Mapper/Dao/Comp) 완료 또는 별도 엑셀 기능 개발 확인
-- `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md`에 엑셀 업로드 API 포함 여부 확인
+- `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md`에 엑셀 업로드 API 포함 여부 확인
 
 ## 엑셀 패키지 구조
 
@@ -40,12 +41,9 @@ be/{그룹}/{메뉴코드}/excel/
 ## 실행 절차
 
 ### Step 1 — 문서 및 레퍼런스 확인
-1. `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` 읽기
-2. `DEV_DOC/ai-docs/10-database/90-schema/20-tables/{테이블명}.md` — 컬럼 명세
-3. **레퍼런스 소스** (실제 코드 패턴 파악):
-   - `src/main/java/be/iv3000/ivad01/excel/` — Excel 전체 패키지
-   - `src/main/java/be/iv3000/ivad01/excel/bean/IVAD01Excel.java` — Bean 패턴
-   - `src/main/java/be/iv3000/ivad01/excel/IVAD01ExcelComp.java` — Comp 패턴
+1. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` 읽기 (없으면 `-06-be-flow.md` 참조)
+2. 컬럼 명세: `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/` 에서 관련 테이블 확인. 없으면 `/DB_PSQL` 스킬로 실 DB를 직접 조회한다.
+3. **레퍼런스 소스** (실제 코드 패턴 파악): `Glob("$BE_DIR/src/main/java/be/**/excel/*ExcelComp.java")` 로 기존 ExcelComp 후보를 탐색해 1개 선택 후 해당 패키지 전체를 읽는다.
 
 ### Step 2 — {메뉴코드}Excel.java 작성 (Bean)
 

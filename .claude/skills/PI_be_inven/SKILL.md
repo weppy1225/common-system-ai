@@ -12,10 +12,14 @@ model: claude-opus-4-7
 
 다음 지시에 따라 **입출고 확정 TxComp (InvenManager 연동)**를 개발한다.
 
+> **WMS 전용 스킬.** InvenManager(`fw.inven.InvenManager`)가 없는 시스템(OMS 등)에서는 사용 불가.
+> 실행 전 `$BE_DIR/src/main/java/fw/inven/` 경로 존재 여부를 확인한다. 없으면 사용자에게 해당 시스템은 재고 모듈을 지원하지 않음을 안내하고 중단한다.
+
 ## STEP 0 — 레포 경로 결정 (BLOCKING)
 
-`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
-이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../{프로젝트}-be`) 기준이다.
+`.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(AI 허브)·`$BE_DIR`(BE 레포)를 결정한다.
+- **BE 코드 생성·테스트 실행**: `cd "$BE_DIR"` 후 진행 — `src/main/java/...`, `./gradlew`, `build/...` 는 `$BE_DIR` 기준
+- **가이드 문서·설계 문서 읽기**: `$AI_DIR/patterns/...`, `$AI_DIR/spec/$PROJECT/...` 절대경로 사용 (DEV_DOC/ai-docs 사용 금지)
 
 ## 적용 대상
 
@@ -41,16 +45,13 @@ model: claude-opus-4-7
 `@code-layer-explorer {메뉴코드}` 를 호출해 기존 레이어 파일 목록을 확인한다.
 
 #### 1-2. 산출물 및 가이드 읽기
-1. `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` 읽기
-2. `.claude/rules/biz-framework.md` — InvenManager/DocNoGenerator 사용 규칙
-3. `DEV_DOC/ai-docs/10-database/00-database-overview.md` — 관련 테이블 확인
-4. **레퍼런스 TxComp 소스**:
-   - IW: `src/main/java/be/iw1000/iwrq01/` 하위 TxComp 파일
-   - OW: `src/main/java/be/ow5000/` 하위 TxComp 파일
-   - IV: `src/main/java/be/iv3100/` 하위 TxComp 파일
-5. `src/main/java/fw/inven/bean/InvenDTO.java` — InvenDTO 필드 구조
-6. `src/main/java/fw/inven/bean/InvenInoutVO.java` — 입출고 VO 필드
-7. `src/main/java/fw/inven/bean/InvenVO.java` — 재고 VO 필드
+1. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` 읽기 (없으면 `-06-be-flow.md` 참조)
+2. `.claude/rules/biz-framework.md` — InvenManager/DocNoGenerator 사용 규칙 (있는 경우)
+3. `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/00-tables-overview.md` — 관련 테이블 확인
+4. **레퍼런스 TxComp 소스**: `Glob("$BE_DIR/src/main/java/be/**/*TxComp.java")` 로 InvenManager를 사용하는 TxComp 파일을 탐색해 읽는다.
+5. `$BE_DIR/src/main/java/fw/inven/bean/InvenDTO.java` — InvenDTO 필드 구조
+6. `$BE_DIR/src/main/java/fw/inven/bean/InvenInoutVO.java` — 입출고 VO 필드
+7. `$BE_DIR/src/main/java/fw/inven/bean/InvenVO.java` — 재고 VO 필드
 
 ### Step 2 — InvenDTO 구성 이해
 
@@ -157,7 +158,7 @@ public {메뉴코드}Response confirm{리소스}(Integer bizSeq, List<Integer> s
 ```
 ✅ InvenManager는 반드시 @Transactional TxComp 안에서만 호출
 ✅ DocNoGenerator.getDocNo()는 Comp에서 호출 후 TxComp에 전달
-✅ 상태코드 값은 DEV_DOC/ai-docs/10-database/90-schema/30-data/01-common-code.md에서 확인
+✅ 상태코드 값은 `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/90-common-code.md` 에서 확인
 ✅ InvenDTO 조립은 CompUtil 메서드로 분리
 ✅ 다건 처리는 단건 확정 로직을 루프로 반복 (트랜잭션은 전체를 하나로)
 ```

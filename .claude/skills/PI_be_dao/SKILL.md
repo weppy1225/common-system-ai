@@ -16,8 +16,9 @@ model: claude-sonnet-4-6
 
 ## STEP 0 — 레포 경로 결정 (BLOCKING)
 
-`.claude/rules/repo-paths.md` 규칙으로 `$BE_DIR`(BE 레포)를 결정한 뒤 **`cd "$BE_DIR"` 후 진행**한다.
-이 스킬 본문의 모든 상대경로(`src/main/java/...`, `DEV_DOC/...`, `./gradlew`, `build/...`)는 `$BE_DIR`(= 형제 `../{프로젝트}-be`) 기준이다.
+`.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(AI 허브)·`$BE_DIR`(BE 레포)를 결정한다.
+- **BE 코드 생성·테스트 실행**: `cd "$BE_DIR"` 후 진행 — `src/main/java/...`, `./gradlew`, `build/...` 는 `$BE_DIR` 기준
+- **가이드 문서·설계 문서 읽기**: `$AI_DIR/patterns/...`, `$AI_DIR/spec/$PROJECT/...` 절대경로 사용 (DEV_DOC/ai-docs 사용 금지)
 
 ## 전제 조건 확인 (BLOCKING)
 
@@ -38,11 +39,9 @@ Dao 개발 전 아래가 완료되어 있어야 한다:
 `@db-doc-reader {관련 테이블명}` 를 호출해 컬럼·PK/FK 정보를 확인한다.
 
 #### 1-3. 산출물 및 가이드 읽기
-1. `DEV_DOC/ai-docs/20-backend/40-guide/03-dao-writing-rules.md` 읽기
-2. `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/api.md` 읽기
-3. 레퍼런스 Dao 파일 읽기:
-   - MDM: `src/main/java/be/md8000/mdpd01/MDPD01Dao.java`
-   - IW: `src/main/java/be/iw1000/iwrq01/IWRQ01Dao.java`
+1. `$AI_DIR/patterns/30-backend/40-guide/03-dao-writing-rules.md` 읽기
+2. `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-05-api.md` 읽기 (없으면 `-06-be-flow.md` 참조)
+3. 레퍼런스 Dao 파일 읽기: `$BE_DIR/src/main/java/be/` 하위에서 같은 그룹 또는 유사 도메인의 `*Dao.java` 1개 탐색해 읽기
 
 ### Step 2 — 기존 Mapper 파일 확인
 `src/main/java/be/{그룹}/{메뉴코드}/{메뉴코드}Mapper.java`를 읽어 메서드 목록 파악
@@ -109,7 +108,7 @@ public class {메뉴코드}Dao {
 ### Step 4 — JUnit 테스트 작성
 
 `src/main/java/be/{그룹}/{메뉴코드}/test/ZTEST_{메뉴코드}Dao.java` 작성:
-- `DEV_DOC/ai-docs/20-backend/50-test/02-test-coding-convention.md` 참조
+- `$AI_DIR/patterns/30-backend/50-test/02-test-coding-convention.md` 참조
 
 ### Step 5 — JUnit 실행 (BLOCKING)
 

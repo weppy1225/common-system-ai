@@ -7,6 +7,7 @@
 모든 파일 생성/변경/삭제 작업마다 **작업한 레포**의 `history/` 폴더에 작업 히스토리 파일을 남긴다. BE 작업은 BE 레포, FE 작업은 FE 레포, 허브 문서 작업은 허브 레포에 남긴다(작업한 레포 = 기록 레포). 한 작업이 여러 레포에 걸치면 각 레포에 각각 남긴다.
 
 ### 경로·파일명 규칙
+
 - 형식: `history/{작업자}/{레포명}_YYYYMMDD-HHmmss.md`
   - 예: `history/ShinHyunKyu/common-system-ai_20260624-084337.md`
 - `{작업자}` 는 **git 자격증명에서 동적 도출**한다 (`git config user.name`) — 하드코딩 금지. 작업자별 하위폴더로 분리한다(작업자마다·머신마다 git 계정이 다르므로 고정값을 적으면 틀린다).
@@ -15,11 +16,13 @@
 - 반드시 그 레포의 `history/{작업자}/` 폴더 아래에만 생성 (다른 위치 생성 금지)
 
 ### 운영 규칙
+
 - 작업 단위가 작아도 예외 없이 작성
 - 커밋 전 history 파일이 존재하는지 **반드시 확인**. 없으면 커밋 금지
 - history 파일 없이 커밋하면 작업 추적이 불가능하므로 절대 생략하지 않는다
 
 ### 파일 본문 템플릿
+
 ```markdown
 ---
 date: YYYY-MM-DD HH:mm:ss
@@ -75,16 +78,16 @@ common-system-ai\
 
 시스템 지식은 3계층으로 분리한다. 충돌 시 우선순위: **③ 프로젝트 확정 > ② 도메인 표준 > ① 코어** (③=실제값, ①=기본값).
 
-| 계층 | 위치 | 시스템 무관/별 | 예 |
-|---|---|---|---|
-| ① 코어 | `patterns/`, `.claude/rules/`(무접두), `knowledgebase/10·40·50` | 시스템 무관(공유) | be-layer-pattern, `_common-arch/common-code.md`, `common-code` rule |
-| ② 도메인(시스템) 표준 | `knowledgebase/domains/{도메인}/` (WMS=`wms/`, OMS=`oms/`) + `.claude/rules/{system}-*`(OMS=`oms-*`) | 도메인별 공유 | 인터페이스 컨벤션, OMS 레이어·SQL·FE 패턴 |
-| ③ 프로젝트(시스템) 지식베이스 | `spec/{프로젝트}/_knowledge/` + `spec/{프로젝트}/{메뉴}/` | 배포 단위별 | 실 테이블·메뉴·공통코드값·메뉴별 설계 |
+| 계층                           | 위치                                                                                                           | 시스템 무관/별    | 예                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------- |
+| ① 코어                        | `patterns/`, `.claude/rules/`(무접두), `knowledgebase/10·40·50`                                        | 시스템 무관(공유) | be-layer-pattern,`_common-arch/common-code.md`, `common-code` rule |
+| ② 도메인(시스템) 표준         | `knowledgebase/domains/{도메인}/` (WMS=`wms/`, OMS=`oms/`) + `.claude/rules/{system}-*`(OMS=`oms-*`) | 도메인별 공유     | 인터페이스 컨벤션, OMS 레이어·SQL·FE 패턴                            |
+| ③ 프로젝트(시스템) 지식베이스 | `spec/{프로젝트}/_knowledge/` + `spec/{프로젝트}/{메뉴}/`                                                  | 배포 단위별       | 실 테이블·메뉴·공통코드값·메뉴별 설계                               |
 
-| 시스템 | 프로젝트 폴더 `{프로젝트}` | 도메인 | BE/FE 레포 |
-|---|---|---|---|
-| WMS | `common-system` | wms | (workspace 형제 `*-be`·`*-fe`) |
-| OMS | `kyochon-oms` | oms | `kyochon-oms-be` · `kyochon-oms-fe` |
+| 시스템 | 프로젝트 폴더`{프로젝트}` | 도메인 | BE/FE 레포                               |
+| ------ | --------------------------- | ------ | ---------------------------------------- |
+| WMS    | `common-system`           | wms    | (workspace 형제`*-be`·`*-fe`)       |
+| OMS    | `kyochon-oms`             | oms    | `kyochon-oms-be` · `kyochon-oms-fe` |
 
 > 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다(WMS·OMS 대칭). 새 시스템(WCS 등) 추가 시 `knowledgebase/domains/{도메인}/`·`spec/{프로젝트}/`·`.claude/rules/{system}-*` 를 같은 방식으로 만든다.
 > `{프로젝트}` 도출·형제 BE/FE 레포 경로 규칙 → `.claude/rules/repo-paths.md`. 전체 구조·영역 역할·SoT 규칙 → [STRUCTURE.md](./STRUCTURE.md).
@@ -138,17 +141,17 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 
 ### 파일 역할
 
-| 파일 | 역할 |
-|---|---|
-| `prototype/{프로젝트}/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('{메뉴코드}/{메뉴코드}-wireframe.html')` 호출 |
-| `prototype/{프로젝트}/_common/left-menu.html` | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용 |
-| `prototype/{프로젝트}/_common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
-| `prototype/{프로젝트}/_common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
-| `prototype/{프로젝트}/_common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
-| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-00-domain.md` | 업무지식·노하우(WHY). **사람 전용 — 자동화 스킬 생성·수정 금지** |
-| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md` | 화면요건정리 문서. `/SD_310_UI {메뉴코드}` 명령어의 입력 소스 |
-| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입. `prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨 |
-| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
+| 파일                                                          | 역할                                                                                                           |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `prototype/{프로젝트}/index.html`                           | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시`loadContent('{메뉴코드}/{메뉴코드}-wireframe.html')` 호출 |
+| `prototype/{프로젝트}/_common/left-menu.html`               | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용                                          |
+| `prototype/{프로젝트}/_common/CPCT01_popup.html`            | 거래처 검색 팝업.`postMessage` 방식으로 부모와 통신                                                          |
+| `prototype/{프로젝트}/_common/CPPD01_popup.html`            | 품목 검색 팝업.`postMessage` 방식으로 부모와 통신                                                            |
+| `prototype/{프로젝트}/_common/icon-preview.html`            | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록.**이 파일에 없는 아이콘은 사용 금지**                         |
+| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-00-domain.md`        | 업무지식·노하우(WHY).**사람 전용 — 자동화 스킬 생성·수정 금지**                                       |
+| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md`            | 화면요건정리 문서.`/SD_310_UI {메뉴코드}` 명령어의 입력 소스                                                 |
+| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입.`prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨                                   |
+| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js`   | 테스트 데이터.`const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드                 |
 
 ## Slash Commands
 
@@ -157,6 +160,17 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 ## UI 규칙
 
 프로토타입 HTML 작성 규칙은 `.claude/rules/`에 정의되어 있으며 자동으로 적용된다.
+
+### 시스템 특화 내용의 위치 (MUST)
+
+| 내용 유형                            | 올바른 위치                                                        | 잘못된 위치                       |
+| ------------------------------------ | ------------------------------------------------------------------ | --------------------------------- |
+| 전 시스템 공통 패턴·규칙            | `patterns/`, `.claude/rules/`(시스템 접두사 없음)              | `spec/` 내부                    |
+| 특정 도메인(OMS·WMS·WCS) 공통 패턴 | `knowledgebase/domains/{도메인}/` + `.claude/rules/{system}-*` | `patterns/`                     |
+| 프로젝트(배포 단위) 실데이터·설계   | `spec/{프로젝트}/_knowledge/`, `spec/{프로젝트}/{메뉴}/`       | `patterns/`, `knowledgebase/` |
+
+- **이유**: `patterns/`에 시스템 특화 내용이 섞이면 다른 시스템에서 해당 패턴을 참조할 때 오동작한다.
+- **판단 기준**: "이 규칙이 WMS·OMS·WCS 어디서도 같은 방식으로 동작하는가?" → YES이면 `patterns/`. NO이면 도메인·프로젝트 경로.
 
 ## 에이전트 동작 규칙
 
