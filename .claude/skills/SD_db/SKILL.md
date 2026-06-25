@@ -142,6 +142,13 @@ ORDER BY ordinal_position;
 
 `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/db.md` 파일을 아래 템플릿으로 작성한다.
 
+**frontmatter `author` 필드 (MUST — 추정 금지)**:
+파일 작성 전 반드시 아래를 실행하고 그 결과를 `author`에 기입한다. 추정·하드코딩 금지.
+
+```bash
+git config user.name   # 이 값을 author 필드에 사용
+```
+
 **작성 원칙:**
 - **변경/추가 사항 중심** — 기존 테이블을 그대로 사용하는 경우 컬럼 명세를 나열하지 않는다
 - **DDL이 핵심** — 검토자가 DDL SQL만 보고도 변경 범위를 파악할 수 있도록 한다

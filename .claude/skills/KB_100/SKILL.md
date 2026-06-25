@@ -72,6 +72,7 @@ $FePath     = "$FeDir\src\views\be\$GROUP_CODE\$MENU_CODE"
 $OutPath    = "spec\$Prefix\$MENU_CODE"   # 허브 spec 은 프로젝트 층($Prefix) 아래
 $MenuUpper  = $MENU_CODE.ToUpper()   # 예: MDBZ01
 $Today      = Get-Date -Format "yyyy-MM-dd"
+$Author     = git config user.name   # frontmatter author 필드에 사용 (추정 금지)
 ```
 
 BE 경로와 FE 경로 존재 여부를 확인한다.
@@ -104,7 +105,7 @@ New-Item -ItemType Directory -Path $OutPath -Force | Out-Null
 ## 4단계 — 서브에이전트 실행 [Agent 도구 호출]
 
 아래 형식으로 Agent 도구를 호출한다.
-`{MENU_CODE}`, `{MENU_NM}`, `{GROUP_CODE}`, `{GROUP_NM}`, `{DOMAIN}`, `{BePath}`, `{FePath}`, `{OutPath}`, `{MenuUpper}`, `{Today}`, `{PROJECT}`(= `$Prefix`, 프로젝트명) 는 1~3단계에서 계산한 실제 값으로 치환한다.
+`{MENU_CODE}`, `{MENU_NM}`, `{GROUP_CODE}`, `{GROUP_NM}`, `{DOMAIN}`, `{BePath}`, `{FePath}`, `{OutPath}`, `{MenuUpper}`, `{Today}`, `{Author}`, `{PROJECT}`(= `$Prefix`, 프로젝트명) 는 1~3단계에서 계산한 실제 값으로 치환한다.
 
 ```
 Agent(
@@ -125,6 +126,7 @@ GROUP_CODE : {GROUP_CODE}
 GROUP_NM   : {GROUP_NM}
 DOMAIN     : {DOMAIN}
 TODAY      : {Today}
+AUTHOR     : {Author}
 OUT_PATH   : {OutPath}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -200,6 +202,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 last_updated: "{Today}"
 related:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
@@ -271,6 +274,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
 related:
@@ -303,6 +307,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-01-basic-design.md"
   - "patterns/00-architecture-tech-stack.md"
@@ -338,6 +343,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
 related:
@@ -371,6 +377,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-03-data-model.md"
@@ -448,6 +455,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "patterns/30-backend/be-layer-pattern.md"
   - "patterns/_common-arch/be-exceptions.md"
@@ -504,6 +512,7 @@ repo_role: ai-hub
 agent_usage: spec
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 depends_on:
   - "patterns/_common-arch/fe-architecture.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-02-ui.md"
@@ -550,6 +559,7 @@ repo_role: ai-hub
 agent_usage: task
 menu_code: {MENU_CODE}
 domain: {DOMAIN}
+author: "{Author}"
 related:
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-05-api.md"
   - "spec/{PROJECT}/{MENU_CODE}/{MENU_CODE}-04-be-mapper-sql.md"
