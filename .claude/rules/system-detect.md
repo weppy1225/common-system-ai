@@ -39,7 +39,7 @@ paths:
 | 확정값 | 사용 경로/규칙 |
 |---|---|
 | 화면설계·검증 | `spec/{프로젝트}/`, `prototype/{프로젝트}/` |
-| ② 도메인 표준 | `knowledgebase/domains/{도메인}/` (WMS=`wms/`, OMS=`oms/`) |
+| ② 도메인 표준 | 진입점 `knowledgebase/domains/{도메인}/README.md` 확인 후 작업 (WMS=`knowledgebase/domains/wms/README.md`, OMS=`knowledgebase/domains/oms/README.md`) |
 | 시스템별 규칙 | 해당 시스템 `.claude/rules/{system}-*` (OMS=`oms-*`) |
 | BE/FE 코드 경로 | `repo-paths.md` 의 `$BE_DIR`/`$FE_DIR` (= 판별된 `*-be`/`*-fe`) |
 

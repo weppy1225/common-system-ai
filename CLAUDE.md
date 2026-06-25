@@ -61,12 +61,12 @@ common-system-ai\
 ├── knowledgebase\    # ① 코어 + ② 도메인 표준 (메뉴 횡단 공통 배경)
 │   ├── 10-domain\         메뉴 횡단 공통 업무규칙 (WHY, 사람 작성)
 │   ├── domains\           ② 도메인(시스템) 표준 — 같은 도메인 프로젝트끼리 공유. domains\wms\ · domains\oms\(install-guide·patterns\be|db|fe)
-│   └── 40-install-guide\·50-dev-workflow\·20-md-index·30-src-index
+│   └── 40-install-guide\·50-dev-workflow\·20-md-index·30-src-index (`30-src-index/README.md` — 색인 운영방침·아키텍처 결정 기록)
 ├── spec\             # ③ 프로젝트(시스템)별 지식베이스 — `{프로젝트}\`
 │   ├── common-system\    [WMS] {메뉴}\ 설계(00~07·99) + _knowledge\(실 스키마·메뉴·공통코드값)
 │   └── kyochon-oms\      [OMS] {메뉴}\ 설계 + _knowledge\(실데이터: 스키마·메뉴·용어·API)
 ├── prototype\        # 검증용 화면 (시스템별 `{프로젝트}\`)
-├── patterns\         # ① 코어 소스코드 패턴 (시스템 무관: 10-screen-design·20-database·30-backend·40-frontend·_common-arch)
+├── patterns\         # ① 코어 소스코드 패턴 (시스템 무관: 10-screen-design·20-database·30-backend·40-frontend·_common-arch) — 진입점: `patterns/00-overview.md`
 ├── deliverables\     # 고객 제출 산출물 (시스템 공통)
 └── scripts\          # 레포 유틸 스크립트 (콘텐츠 아님)
 ```
