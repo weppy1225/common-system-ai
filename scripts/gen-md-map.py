@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-common-system-ai 파일·폴더 지도(knowledgebase/20-md-index.html) 생성기.
+common-system-ai 파일·폴더 지도(edu/md-index.html) 생성기.
 
 실행: python scripts/gen-md-map.py   (CWD 무관 — 레포 루트 기준으로 동작)
-출력: 레포 루트의 knowledgebase/20-md-index.html  (※ gitignore 대상, 생성물)
+출력: 레포 루트의 edu/md-index.html  (교육자료, 생성물)
 
 - 전체 폴더 구조 + MD 파일을 영역별/계층별 트리로 렌더링 (접기·검색 지원)
 - 비-MD 파일은 폴더별 개수만 표시 (node_modules·이미지 노이즈 제외)
@@ -22,7 +22,6 @@ os.chdir(ROOT)
 BS = chr(92)
 META = [
  ('root','\U0001F3E0','루트 문서','진입점·구조·지침','전체','마크다운'),
- ('knowledgebase','\U0001F4D5','knowledgebase','메뉴 횡단 공통 배경지식 — AI 도서관','AI·개발자','마크다운'),
  ('spec','\U0001F4D0','spec','메뉴별 설계 정본 (00-domain~07+99)','AI·개발자','마크다운'),
  ('prototype','\U0001F5A5','prototype','검증용 화면 (대부분 HTML)','PL·PM·고객','HTML'),
  ('patterns','\U0001F527','patterns','소스코드 패턴 표준 — HOW','AI·개발자','마크다운'),
@@ -50,9 +49,7 @@ def classify_rule(stem):
 GROUP_ORDER = {'개발 자동화':0,'산출물 자동화':1,'유틸':2,
  'UI·화면':0,'BE·DB·연동':1,'문서·메타':2,'경로·환경':3,'기타':9}
 FOLDER_ROLE = {
- 'knowledgebase/10-domain':'메뉴 횡단 공통 업무규칙(WHY)','knowledgebase/30-src-index':'소스코드 위치 색인',
- 'knowledgebase/40-install-guide':'설치·셋업·배포 가이드','knowledgebase/40-install-guide/deploy':'배포 가이드',
- 'knowledgebase/50-dev-workflow':'개발 워크플로우',
+ 'spec/common-system/_knowledge/install-guide':'빌드·배포 가이드(WMS)',
  'patterns/10-screen-design':'화면 패턴(WEB/PDA)','patterns/10-screen-design/10-web':'WEB 화면 패턴','patterns/10-screen-design/20-pda':'PDA 화면 패턴',
  'patterns/20-database':'DB 설계·네이밍 패턴','patterns/20-database/20-rule':'DB 규칙','patterns/30-backend':'BE 구현 패턴',
  'patterns/40-frontend':'FE 구현 패턴','patterns/40-frontend/20-convention':'FE 컨벤션','patterns/50-interface':'인터페이스(IF) 패턴',
@@ -239,5 +236,6 @@ doc = ('<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>common
  + '<div class="chips"><span class="chip on" onclick="fa(this,\'\')">전체</span>' + chips + '</div>'
  + ''.join(cards)
  + '<script>' + JS + '</script></body></html>')
-open('knowledgebase/20-md-index.html', 'w', encoding='utf-8').write(doc)
-print('knowledgebase/20-md-index.html 생성 완료 (md ' + str(mdtotal) + '개)')
+os.makedirs('edu', exist_ok=True)
+open('edu/md-index.html', 'w', encoding='utf-8').write(doc)
+print('edu/md-index.html 생성 완료 (md ' + str(mdtotal) + '개)')

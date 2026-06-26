@@ -17,9 +17,9 @@ paths:
 | 작업 | 대상 파일(예) | 시스템 판별 |
 |---|---|---|
 | BE/FE 코드 개발·메뉴 설계 | `*-be`/`*-fe` 소스(`*.java`·`*.vue`·`*Mapper.xml`), `spec/{프로젝트}/{메뉴}/` | **필요** → §1~§3 수행 |
-| 허브(ai-kb) 자체 수정 | `patterns/`·`knowledgebase/`·`.claude/`·루트 문서(`CLAUDE.md`·`STRUCTURE.md`) | **불필요** — 시스템 무관 프레임워크 유지보수 |
+| 허브(ai-kb) 자체 수정 | `patterns/`·`.claude/`·루트 문서(`CLAUDE.md`·`STRUCTURE.md`) | **불필요** — 시스템 무관 프레임워크 유지보수 |
 
-> `spec/`·`prototype/` 는 허브 레포 안에 있지만 **시스템별 산출물**이므로 판별 대상이다. `patterns/`·`knowledgebase/`(도메인 제외)·`.claude/` 는 시스템 무관 프레임워크다.
+> `spec/`·`prototype/` 는 허브 레포 안에 있지만 **시스템별 산출물**이므로 판별 대상이다. `patterns/`·`.claude/`(도메인 룰 `{system}-*` 제외) 는 시스템 무관 프레임워크다.
 
 ## 1. 판별 신호 (우선순위)
 
@@ -39,7 +39,7 @@ paths:
 | 확정값 | 사용 경로/규칙 |
 |---|---|
 | 화면설계·검증 | `spec/{프로젝트}/`, `prototype/{프로젝트}/` |
-| ② 도메인 표준 | 진입점 `knowledgebase/domains/{도메인}/README.md` 확인 후 작업 (WMS=`knowledgebase/domains/wms/README.md`, OMS=`knowledgebase/domains/oms/README.md`) |
+| ② 도메인 표준 | 도메인 룰 `.claude/rules/{system}-*` 확인 후 작업 (OMS=`oms-*`, WMS=`wms-*`). 도메인 개념·실데이터는 기준 프로젝트의 ③(`spec/{프로젝트}/_knowledge/`) |
 | 시스템별 규칙 | 해당 시스템 `.claude/rules/{system}-*` (OMS=`oms-*`) |
 | BE/FE 코드 경로 | `repo-paths.md` 의 `$BE_DIR`/`$FE_DIR` (= 판별된 `*-be`/`*-fe`) |
 

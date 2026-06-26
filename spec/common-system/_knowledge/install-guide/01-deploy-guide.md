@@ -1,11 +1,14 @@
 ---
 title: BE 빌드·배포 가이드 (Gradle / Spring Boot)
-description: Gradle/Spring Boot 기반 BE의 빌드·기동·배포 준비 절차. BE를 띄우거나 배포 준비 시 참조. (Ant/WAR 스택인 OMS는 knowledgebase/domains/oms/install-guide/ 참조)
+description: common-system(WMS, Gradle/Spring Boot) BE의 빌드·기동·배포 준비 절차. BE를 띄우거나 배포 준비 시 참조. (Ant/WAR 스택인 OMS는 spec/kyochon-oms/_knowledge/install-guide/ 참조)
 status: active
-version: 1.0.0
+version: 1.1.0
 repo_role: ai-hub
 agent_usage: reference
-domain: system
+project: common-system
+domain: wms
+last_modified_by: ShinHyunKyu
+last_verified: 2026-06-26
 ---
 
 # BE 빌드·배포 가이드 (Gradle / Spring Boot)

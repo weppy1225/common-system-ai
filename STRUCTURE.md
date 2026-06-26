@@ -26,7 +26,6 @@ common-system-ai\
 ├── .claude\
 │   ├── skills\        # 슬래시 커맨드 (개발/산출물/유틸 3그룹)
 │   └── rules\         # 항상/조건부 적용 규칙 (UI·BE·문서·경로 4그룹)
-├── knowledgebase\    # 메뉴 횡단 공통 배경지식 (AI가 읽는 도서관)
 ├── spec\             # 메뉴별 설계 정본 (마크다운)
 ├── prototype\        # 검증용 화면 (공용 셸 + 메뉴별 wireframe)
 ├── patterns\         # 소스코드 패턴 (HOW)
@@ -36,35 +35,25 @@ common-system-ai\
 
 | 폴더 | 역할 | 읽는 사람 | 매체 |
 |---|---|---|---|
-| `knowledgebase/` | 이 프로젝트가 어떻게 돌아가나 (공통 배경) | AI·개발자 | 마크다운 |
 | `spec/` | 이 메뉴를 왜·무엇·어떻게 설계했나 | AI·개발자 | 마크다운 |
 | `prototype/` | 화면이 이렇게 생겼다 (검증용) | PL·PM·고객 | 실행 HTML/JS |
 | `patterns/` | 코드는 이 패턴으로 짜라 | AI·개발자 | 마크다운 |
 | `deliverables/` | 고객 제출 문서 | 고객 | 문서·엑셀·PPT |
 | `scripts/` | 레포 유틸 스크립트 (콘텐츠 아님) | 개발자 | 파이썬 |
 
-원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `knowledgebase/`·`spec/{프로젝트}/{메뉴}/` 안에서만 쓴다.
+원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `spec/{프로젝트}/{메뉴}/` 안에서만 쓴다.
 `scripts/`는 콘텐츠가 아니라 도구다.
-- `gen-md-map.py` — 레포 문서 지도 → `knowledgebase/20-md-index.html` 생성기
+- `gen-md-map.py` — 레포 문서 지도 → `edu/md-index.html` 생성기 (교육자료)
 - `check-doc-refs.py` — rules↔patterns 참조 무결성 가드. 깨진 참조(ERROR)·미참조 패턴 문서(WARN)를 검출. `python scripts/check-doc-refs.py`, ERROR 있으면 종료코드 1.
 
 ---
 
-## knowledgebase/ (번호 = 읽는 순서)
+## ①②③ 계층 라벨
 
-```
-knowledgebase/
-├── 00-overview.md       개요
-├── 10-domain/           메뉴 횡단 공통 업무규칙·용어·엔티티 관계 (WHY, 사람 작성)
-├── domains/             ② 도메인(시스템) 표준 — 같은 도메인 프로젝트끼리 공유. 시스템별: domains/wms/ · domains/oms/(install-guide·patterns/be|db|fe)
-├── 20-md-index.md       MD 문서 색인 (문서 위치)
-├── 20-md-index.html     ↑의 HTML 뷰 — scripts/gen-md-map.py 생성물 (직접 편집 금지)
-├── 30-src-index/        소스코드 색인 (코드 위치 — 실제 코드는 BE/FE 레포)
-├── 40-install-guide/    설치·셋업
-└── 50-dev-workflow/     개발 워크플로우
-```
+도메인 지식은 ① 코어(`patterns/`·무접두 `.claude/`) → ② 도메인 표준(`.claude/rules/{system}-*`) → ③ 프로젝트(`spec/{프로젝트}/_knowledge/`) 3계층으로 나뉜다. 라벨 정의·충돌 우선순위(③ 프로젝트 확정 > ② 도메인 표준 > ① 코어, ③=실제값·①=기본값)는 `CLAUDE.md` §"시스템(프로젝트)별 분할 — 3계층" 이 SoT 다.
 
-> 트리에 붙은 `②`(`domains/`)·`③`(`spec/{프로젝트}/_knowledge/`) 등 **①②③ 계층 라벨**의 정의·충돌 우선순위(③ 프로젝트 확정 > ② 도메인 표준 > ① 코어, ③=실제값·①=기본값)는 `CLAUDE.md` §"시스템(프로젝트)별 분할 — 3계층" 이 SoT 다. 여기서는 폴더↔계층 매핑을 위한 라벨로만 쓴다.
+> 빌드·배포(install-guide)는 시스템별 차이가 커서 ③ 프로젝트 층에 둔다 → `spec/{프로젝트}/_knowledge/install-guide/` (WMS=`spec/common-system/...`, OMS=`spec/kyochon-oms/...`).
+> AI 개발 절차(BE/FE 단계별) 해설은 교육자료 → `edu/ai-dev-procedure.html`. 실제 실행 절차는 각 `/PI_*` 스킬에 구현.
 
 ---
 
@@ -145,5 +134,5 @@ patterns/
 
 1. 메뉴별 설계·업무지식·미결은 모두 `spec/{프로젝트}/{메뉴}/` (마크다운), 검증 화면은 `prototype/{메뉴}/` (실행 HTML).
 2. `{메뉴}-00-domain.md`는 **사람 전용**. 자동화 스킬은 01~07만 생성/갱신한다.
-3. AS-IS 정본은 **소스 코드**. 역공학 요약 문서를 저장하지 않는다(위치는 `30-src-index`). `KB_100`=레거시 소스를 `spec/` 초안(draft)으로 역공학(00-domain 제외), `KB_200`=`spec/`↔라이브 소스 드리프트 검증.
-4. `knowledgebase/`는 메뉴 횡단 공통 지식만. 메뉴 고유 지식은 `spec/`.
+3. AS-IS 정본은 **소스 코드**. 역공학 요약 문서를 저장하지 않는다. 메뉴코드→소스경로는 도출 규칙(`patterns/40-frontend/`)으로 계산하거나 BE/FE 레포를 직접 스캔한다. `KB_100`=레거시 소스를 `spec/` 초안(draft)으로 역공학(00-domain 제외), `KB_200`=`spec/`↔라이브 소스 드리프트 검증.
+4. 도메인 공통 지식은 기준 프로젝트의 `spec/{프로젝트}/_knowledge/`(③)·도메인 룰(`.claude/rules/{system}-*`). 메뉴 고유 지식은 `spec/{프로젝트}/{메뉴}/`.

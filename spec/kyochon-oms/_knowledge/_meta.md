@@ -25,22 +25,27 @@ tags:
 
 | 층 | 위치 | 내용 |
 |---|---|---|
-| ② 도메인 표준 (OMS 공통) | `knowledgebase/domains/oms/`(README 개념) · `.claude/rules/oms-*` | OMS 업무흐름·용어·기술전제, BE/FE/DB 코딩 컨벤션, 보안 규칙 |
+| ② 도메인 표준 (OMS 공통) | `.claude/rules/oms-*` | OMS 기술 전제, BE/FE/DB 코딩 컨벤션, 보안 규칙 |
 | ③ 프로젝트 확정 (이 프로젝트 전용) | `spec/kyochon-oms/_knowledge/` | 기동·빌드·배포 차이, BE/FE/DB 구현 패턴, 실 테이블 스키마·메뉴·컬럼사전·실 API 목록/필드명세 |
 
 > 충돌 시 우선순위: **③ 프로젝트 확정 > ② 도메인 표준.** 도메인 표준은 "기본값", 프로젝트 확정은 "실제값"이다.
 
-## OMS 도메인 표준 문서 (② 층)
+## OMS 도메인 표준 (② 층)
 
-도메인 표준은 시스템(도메인)별로 `knowledgebase/domains/{도메인}/` 에 둔다(WMS=`knowledgebase/domains/wms/`, OMS=`knowledgebase/domains/oms/`). ② 층에는 **OMS 도메인 개념**(업무흐름·용어·기술전제)과 도메인 공통 코딩 규칙만 둔다. 기동·빌드·배포 차이와 BE/FE/DB 구현 패턴은 ③ 프로젝트 층(`spec/kyochon-oms/_knowledge/`)으로 이동했다(아래 ③ 표 참조).
+OMS 도메인 표준은 **`.claude/rules/oms-*` 규칙 문서**로만 둔다(별도 도메인 폴더 없음). ② 층에는 도메인 공통 코딩 규칙과 아래 **기술 전제**만 두고, 기동·빌드·배포 차이와 BE/FE/DB 구현 패턴·실데이터는 ③ 프로젝트 층(`spec/kyochon-oms/_knowledge/`)에 둔다(아래 ③ 표 참조).
 
 | 경로 | 내용 |
 |---|---|
-| `knowledgebase/domains/oms/README.md` | OMS 도메인 개념 진입점 (업무흐름·용어·기술전제) |
 | `.claude/rules/oms-backend-convention.md` | BE 코딩 컨벤션 |
 | `.claude/rules/oms-frontend-convention.md` | FE 코딩 컨벤션 |
 | `.claude/rules/oms-db-convention.md` | DB 컨벤션 |
 | `.claude/rules/oms-security.md` | 보안 규칙(민감정보 노출 방지) |
+
+### OMS 기술 전제 (도메인 공통)
+
+- **BE**: 전통 Spring(Spring Boot 아님) · Ant WAR 빌드
+- **DB**: 멀티 DB — OMS=PostgreSQL + ERP=SQL Server
+- **FE**: Vue3 + Vite + Pinia. **한 레포 두 UI 시스템** — 쇼핑몰(가맹점 `/bc`, e-commerce 스타일·AUIGrid 미사용)과 관리자(Admin `/be`, WMS식 AUIGrid)로 분기.
 
 ## `_knowledge/` 구성 (③ 프로젝트 확정 층)
 
@@ -58,4 +63,4 @@ tags:
 
 ## 새 프로젝트 추가 시
 
-같은 OMS 도메인의 새 프로젝트는 `spec/{프로젝트}/_knowledge/` 에 자신의 실데이터·구현 패턴·기동가이드를 생성하고, 이 `_meta.md` 를 복사해 `project` 값만 바꾼다. 도메인 표준(`knowledgebase/domains/oms/` 개념·`.claude/rules/oms-*`)은 공유하므로 복제하지 않는다. (기동가이드·구현 패턴은 ③ 프로젝트 층이므로 프로젝트마다 자체 보유한다.)
+같은 OMS 도메인의 새 프로젝트는 `spec/{프로젝트}/_knowledge/` 에 자신의 실데이터·구현 패턴·기동가이드를 생성하고, 이 `_meta.md` 를 복사해 `project` 값만 바꾼다. 도메인 표준(`.claude/rules/oms-*` 규칙·위 기술 전제)은 공유하므로 복제하지 않는다. (기동가이드·구현 패턴은 ③ 프로젝트 층이므로 프로젝트마다 자체 보유한다.)

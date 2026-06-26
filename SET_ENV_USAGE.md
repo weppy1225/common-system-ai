@@ -11,7 +11,7 @@ related:
   - SET_ENV.common-system.md
   - SET_ENV.kyochon-oms.md
   - .claude/rules/repo-paths.md
-  - knowledgebase/40-install-guide/deploy/context-name-rename-map.md
+  - spec/common-system/_knowledge/install-guide/02-context-name-rename-map.md
   - .claude/rules/oms-security.md
   - PORTING.md
 tags:
@@ -57,7 +57,7 @@ tags:
 | `ERP_*`·`WMS_INTEGRATION`·`BIZ_SEQ_RULE` 등 | 외부연동(ERP/SIF/WMS)·사업장 | BE 연동코드, `spec/{PROJECT}/_knowledge/` |
 | `CUSTOMER_NAME`·`SYSTEM_DISPLAY_NAME`·`LOGO_ASSET` | 산출물 표기·브랜드 | 매뉴얼·프로토타입 `_common/` |
 
-> 배포 식별자 ①~④ 의 **변경 파일 전체 맵** → `knowledgebase/40-install-guide/deploy/context-name-rename-map.md`.
+> 배포 식별자 ①~④ 의 **변경 파일 전체 맵** → `spec/common-system/_knowledge/install-guide/02-context-name-rename-map.md`.
 
 ## 부록 — 이식 시 빠른 점검 (grep)
 

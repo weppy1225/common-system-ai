@@ -11,7 +11,7 @@ agent_usage: reference
 related:
   - SET_ENV_USAGE.md
   - spec/kyochon-oms/_knowledge/_meta.md
-  - knowledgebase/40-install-guide/deploy/context-name-rename-map.md
+  - spec/common-system/_knowledge/install-guide/02-context-name-rename-map.md
 tags:
   - environment
   - porting

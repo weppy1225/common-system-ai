@@ -67,16 +67,16 @@ author: {작업자}
 
 | 계층                           | 위치                                                                                                           | 시스템 무관/별    | 예                                                                     |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------- |
-| ① 코어                        | `patterns/`, `.claude/rules/`(무접두), `knowledgebase/10·40·50`                                        | 시스템 무관(공유) | be-layer-pattern,`_common-arch/common-code.md`, `common-code` rule |
-| ② 도메인(시스템) 표준         | `knowledgebase/domains/{도메인}/` (WMS=`wms/`, OMS=`oms/`) + `.claude/rules/{system}-*`(OMS=`oms-*`) | 도메인별 공유     | 인터페이스 컨벤션, OMS 레이어·SQL·FE 패턴                            |
-| ③ 프로젝트(시스템) 지식베이스 | `spec/{프로젝트}/_knowledge/` + `spec/{프로젝트}/{메뉴}/`                                                  | 배포 단위별       | 실 테이블·메뉴·공통코드값·메뉴별 설계                               |
+| ① 코어                        | `patterns/`, `.claude/rules/`(무접두)                                        | 시스템 무관(공유) | be-layer-pattern,`_common-arch/common-code.md`, `common-code` rule |
+| ② 도메인(시스템) 표준         | `.claude/rules/{system}-*` (OMS=`oms-*`, WMS=`wms-*`)                | 도메인별 공유     | 시스템별 룰(코딩 컨벤션·보안·기술 전제). 도메인 개념·표준 약어·실데이터는 기준 프로젝트의 ③에 통합 |
+| ③ 프로젝트(시스템) 지식베이스 | `spec/{프로젝트}/_knowledge/` + `spec/{프로젝트}/{메뉴}/`                                                  | 배포 단위별       | 실 테이블·메뉴·공통코드값·메뉴별 설계, 빌드·배포 가이드(`_knowledge/install-guide/`) |
 
 | 시스템 | 프로젝트 폴더`{프로젝트}` | 도메인 | BE/FE 레포                               |
 | ------ | --------------------------- | ------ | ---------------------------------------- |
 | WMS    | `common-system`           | wms    | (workspace 형제`*-be`·`*-fe`)       |
 | OMS    | `kyochon-oms`             | oms    | `kyochon-oms-be` · `kyochon-oms-fe` |
 
-> 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다(WMS·OMS 대칭). 새 시스템(WCS 등) 추가 시 `knowledgebase/domains/{도메인}/`·`spec/{프로젝트}/`·`.claude/rules/{system}-*` 를 같은 방식으로 만든다.
+> 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다(WMS·OMS 대칭). 새 시스템(WCS 등) 추가 시 `spec/{프로젝트}/`·`.claude/rules/{system}-*` 를 같은 방식으로 만든다.
 > `{프로젝트}` 도출·형제 BE/FE 레포 경로 규칙 → `.claude/rules/repo-paths.md`. 전체 구조·영역 역할·SoT 규칙 → [STRUCTURE.md](./STRUCTURE.md).
 
 ### 개발 대상 시스템 자동 판별
@@ -143,8 +143,8 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 | 내용 유형                            | 올바른 위치                                                        | 잘못된 위치                       |
 | ------------------------------------ | ------------------------------------------------------------------ | --------------------------------- |
 | 전 시스템 공통 패턴·규칙            | `patterns/`, `.claude/rules/`(시스템 접두사 없음)              | `spec/` 내부                    |
-| 특정 도메인(OMS·WMS·WCS) 공통 패턴 | `knowledgebase/domains/{도메인}/` + `.claude/rules/{system}-*` | `patterns/`                     |
-| 프로젝트(배포 단위) 실데이터·설계   | `spec/{프로젝트}/_knowledge/`, `spec/{프로젝트}/{메뉴}/`       | `patterns/`, `knowledgebase/` |
+| 특정 도메인(OMS·WMS·WCS) 공통 패턴 | `.claude/rules/{system}-*` | `patterns/`                     |
+| 프로젝트(배포 단위) 실데이터·설계   | `spec/{프로젝트}/_knowledge/`, `spec/{프로젝트}/{메뉴}/`       | `patterns/`                    |
 
 - **이유**: `patterns/`에 시스템 특화 내용이 섞이면 다른 시스템에서 해당 패턴을 참조할 때 오동작한다.
 - **판단 기준**: "이 규칙이 WMS·OMS·WCS 어디서도 같은 방식으로 동작하는가?" → YES이면 `patterns/`. NO이면 도메인·프로젝트 경로.

@@ -7,7 +7,7 @@ check-doc-refs.py — rules <-> patterns 문서 참조 무결성 가드
   ERROR  깨진 참조 — 문서가 가리키는 patterns/*.md 경로가 실제로 없음
   WARN   미참조 패턴 — patterns/*.md(00-overview 제외)를 아무 문서도 참조하지 않음 (신규 문서 누락 후보)
 
-스캔 대상: .claude/rules/, patterns/, knowledgebase/, CLAUDE.md, STRUCTURE.md, README.md
+스캔 대상: .claude/rules/, patterns/, CLAUDE.md, STRUCTURE.md, README.md
 
 종료 코드: ERROR 있으면 1, 없으면 0 (CI/커밋 훅 게이트용)
 
@@ -21,13 +21,12 @@ import glob
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 참조를 스캔할 문서들
-SCAN_DIRS = [".claude/rules", "patterns", "knowledgebase"]
+SCAN_DIRS = [".claude/rules", "patterns"]
 SCAN_FILES = ["CLAUDE.md", "STRUCTURE.md", "README.md"]
 
 # patterns/...md 형태의 repo-상대 참조.
 # 앞에 경로구분자(/)·단어문자가 붙은 하위경로 내 'patterns/' 는 제외한다 —
-# 예: spec/{$PROJECT}/_knowledge/patterns/... (프로젝트 템플릿 경로),
-#     knowledgebase/domains/oms/patterns/... (도메인 상대경로).
+# 예: spec/{$PROJECT}/_knowledge/patterns/... (프로젝트 템플릿 경로).
 # 이들은 repo-root patterns/ 가 아니므로 무결성 검사 대상이 아니다(오탐 방지).
 RE_PATTERN_REF = re.compile(r"(?<![/\w])patterns/[A-Za-z0-9/_.\-]+\.md")
 # 마크다운 상대 링크 (./xxx.md, ../xxx.md)

@@ -6,14 +6,14 @@ paths:
 
 # WMS SIF 외부연동 컨벤션 (ERP/OMS/WES/DLV)
 
-> **적용 도메인: WMS 전용.** E2W/W2E 방향·`SifWms*` 클래스·`sif_*` 이력 테이블 패턴은 WMS SIF 기준이다. 컨벤션 골격(방향별 패키지·레이어·예외)은 `knowledgebase/domains/wms/interface-convention/` 의 도메인 표준을 참조한다. 다른 도메인은 자체 SIF 규칙을 둔다.
+> **적용 도메인: WMS 전용.** E2W/W2E 방향·`SifWms*` 클래스·`sif_*` 이력 테이블 패턴은 WMS SIF 기준이다. 컨벤션 골격(방향별 패키지·레이어·예외)은 `spec/common-system/_knowledge/interface/convention/` 을 SSoT로 참조한다(WMS 기준 프로젝트=common-system). 다른 도메인은 자체 SIF 규칙을 둔다.
 
 ## 참조 문서 (SSoT)
 
 | 주제 | 문서 |
 |---|---|
-| E2W(ERP→WMS 수신) 코드 컨벤션·클래스 명명·예외·테스트 | `knowledgebase/domains/wms/interface-convention/01-erp-to-wms.md` |
-| W2E(WMS→ERP 송신) 코드 템플릿·Retrofit2·SifWms* 클래스 위치 | `knowledgebase/domains/wms/interface-convention/02-wms-to-erp.md` |
+| E2W(ERP→WMS 수신) 코드 컨벤션·클래스 명명·예외·테스트 | `spec/common-system/_knowledge/interface/convention/01-erp-to-wms.md` |
+| W2E(WMS→ERP 송신) 코드 템플릿·Retrofit2·SifWms* 클래스 위치 | `spec/common-system/_knowledge/interface/convention/02-wms-to-erp.md` |
 | 현재 IF 명세 | `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-05-api.md` |
 | `sif_*` 테이블 스키마 | `patterns/20-database/00-overview.md` |
 | TxComp 기본 패턴 | `patterns/30-backend/40-guide/08-txcomp-writing-rules.md` |
@@ -70,7 +70,7 @@ SifWmsPool.PROC_TYPE_CANCEL  = "CANCEL"
 
 ## E2W/W2E 핵심 체크리스트
 
-**W2E 송신**: → `knowledgebase/domains/wms/interface-convention/02-wms-to-erp.md §4` 참조
+**W2E 송신**: → `spec/common-system/_knowledge/interface/convention/02-wms-to-erp.md §4` 참조
 
 **E2W 수신:**
 - [ ] 수신 데이터 `sif_*` 이력 INSERT
@@ -93,4 +93,4 @@ SifWmsPool.PROC_TYPE_CANCEL  = "CANCEL"
 
 ## 주요 클래스 위치
 
-→ `knowledgebase/domains/wms/interface-convention/02-wms-to-erp.md §3` 참조 (SifPool·SifWmsPool·SifWmsProcComp 등).
+→ `spec/common-system/_knowledge/interface/convention/02-wms-to-erp.md §3` 참조 (SifPool·SifWmsPool·SifWmsProcComp 등).

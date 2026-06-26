@@ -7,7 +7,7 @@ repo_role: ai-hub
 agent_usage: instruction
 domain: interface
 related:
-  - knowledgebase/domains/wms/interface-convention/01-erp-to-wms.md
+  - spec/common-system/_knowledge/interface/convention/01-erp-to-wms.md
   - patterns/30-backend/40-guide/08-txcomp-writing-rules.md
 tags:
   - sif

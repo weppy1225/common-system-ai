@@ -5,8 +5,6 @@ status: active
 version: 1.0.0
 project: oms-ai
 agent_usage: reference
-related:
-  - knowledgebase/40-install-guide/deploy/deploy-guide.md
 tags:
   - 기동
   - 빌드
@@ -15,7 +13,7 @@ tags:
 
 # OMS 기동·빌드·배포 방법 — OMS 고유 차이
 
-> 공통 골격(빌드→Tomcat 9 WAR 배포→기동 로그 확인 일반 절차)은 [common 문서](../../../../knowledgebase/40-install-guide/deploy/deploy-guide.md)와 동일하다. 이 문서는 **OMS 고유 차이분만** 담는다.
+> OMS는 **Ant → WAR → Tomcat 9** 스택이다(common-system 의 Gradle/Spring Boot 와 빌드 도구가 다름). 아래는 OMS 기동·빌드·배포의 **자기완결 절차**다. (참고: common-system(WMS) 측 Gradle/Spring Boot 배포 절차는 `spec/common-system/_knowledge/install-guide/01-deploy-guide.md`)
 
 ## 1. OMS 고유 차이 (vs common) 요약
 

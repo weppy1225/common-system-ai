@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 개발 절차 (BE / FE) — 교육자료</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171e2e; --panel2:#1d2638; --line:#2a3650;
+    --ink:#e8edf6; --muted:#9aa7bd; --accent:#5b8cff; --accent2:#37d39b;
+    --code:#0b0f18;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;line-height:1.6;font-size:15px}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 22px 70px}
+  header.hero{background:linear-gradient(135deg,#1a2440 0%,#10182a 100%);
+    border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:26px}
+  .hero .eyebrow{margin:0 0 6px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .hero h1{margin:0;font-size:30px;letter-spacing:-.5px;font-family:"SF Mono",Consolas,monospace}
+  .hero p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:0;margin:16px 0;overflow:hidden}
+  .card .label{display:flex;align-items:center;gap:10px;background:var(--panel2);
+    padding:10px 18px;border-bottom:1px solid var(--line)}
+  .card .label .n{background:var(--accent);color:#06122e;border-radius:7px;font-size:13px;font-weight:700;
+    width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .card .label h2{margin:0;font-size:15px;color:#cdd8ee;border:0;padding:0}
+  .card .body{padding:16px 20px}
+  .card .body>p:first-child{margin-top:0}
+  .card .body p+p{margin-top:8px}
+  h3{margin:22px 0 8px;font-size:14px;color:#bcd0ff;border-left:3px solid var(--accent);padding-left:10px}
+  h3:first-of-type{margin-top:4px}
+  h4{margin:14px 0 6px;font-size:12.5px;color:var(--muted);font-weight:700;letter-spacing:.02em}
+  .muted{color:var(--muted)}
+  code{font-family:"SF Mono",Consolas,"D2Coding",monospace;background:var(--code);
+    padding:2px 7px;border-radius:5px;font-size:13px;color:#8fd3ff}
+  .cmd{color:var(--accent2)}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin:8px 0;
+    overflow-x:auto;font-family:"SF Mono",Consolas,"D2Coding",monospace;font-size:12.5px;color:#cbd5e9;line-height:1.55}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:#202a40;color:#cdd8ee;font-weight:600;white-space:nowrap}
+  td code{font-size:12px}
+  ul.tight{margin:6px 0;padding-left:20px}
+  ul.tight li{margin:4px 0}
+  ul.check{list-style:none;margin:6px 0;padding-left:2px}
+  ul.check li{margin:5px 0;padding-left:24px;position:relative}
+  ul.check li::before{content:"\2610";position:absolute;left:0;top:-1px;color:var(--accent2);font-size:15px}
+  .note{background:rgba(91,140,255,.10);border:1px solid rgba(91,140,255,.30);border-radius:8px;
+    padding:10px 14px;margin:10px 0;font-size:13.5px;color:#c4d4f5}
+  .block{background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.32);border-radius:8px;
+    padding:10px 14px;margin:10px 0;font-size:13.5px;color:#ffc9c9}
+  .block b,.note b{color:#fff}
+  .flow{background:var(--code);border:1px dashed var(--line);border-radius:9px;padding:14px 16px;margin:10px 0;
+    font-family:"SF Mono",Consolas,monospace;font-size:12.5px;color:#9fe0c6;white-space:pre;overflow-x:auto}
+  .scope{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 9px;margin-right:8px;
+    background:rgba(55,211,155,.18);color:#6fe3bd}
+  .scope.be{background:rgba(91,140,255,.18);color:#9bc0ff}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  footer code{font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">교육자료 · 개발 워크플로우</p>
+  <h1>AI 개발 절차 (BE / FE)</h1>
+  <p>AI 에이전트(Claude Code)가 신규 메뉴를 개발할 때 따르는 단계별 절차 — 코드 개발 → 단위테스트 → 기동/목업 → 통합테스트</p>
+</header>
+
+<div class="card">
+  <div class="label"><span class="n">0</span><h2>개요</h2></div>
+  <div class="body">
+    <p>AI 에이전트가 신규 메뉴를 개발할 때 준수하는 단계별 절차다. <b>BE·FE 각각 4단계</b>로 구성된다.</p>
+    <p class="muted">BE: 코드 개발 → JUnit 단위테스트 → Boot Run 기동 → Bruno 통합테스트<br>
+    FE: 코드 개발 → Vitest 단위테스트 → Mockoon 테스트 → Playwright E2E</p>
+    <div class="note">이 문서는 절차를 사람이 읽기 좋게 해설한 <b>교육·온보딩용 개요</b>다. 실제 실행 단계는 각 <code class="cmd">/PI_*</code> 스킬에 구현돼 있다.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">1</span><h2>전제 조건 (개발 착수 전 완료 상태)</h2></div>
+  <div class="body">
+    <table>
+      <thead><tr><th>산출물</th><th>위치</th><th>생성 스킬</th></tr></thead>
+      <tbody>
+        <tr><td>화면요건 (<code>*-02-ui.md</code>)</td><td><code>spec/{프로젝트}/{메뉴코드}/</code></td><td><code class="cmd">/SD_310_UI</code></td></tr>
+        <tr><td>DB 설계 (<code>db.md</code>)</td><td><code>spec/{프로젝트}/{메뉴코드}/</code></td><td><code class="cmd">/SD_db</code></td></tr>
+        <tr><td>DB 반영 완료 (test/dev)</td><td>PostgreSQL</td><td><code class="cmd">/SD_db_apply</code></td></tr>
+        <tr><td>API 명세 (<code>api.md</code>)</td><td><code>spec/{프로젝트}/{메뉴코드}/</code></td><td><code class="cmd">/SD_api</code></td></tr>
+      </tbody>
+    </table>
+    <div class="note">위 4가지 산출물이 갖춰진 뒤 BE 개발을 시작한다. FE 개발은 <b>BE spec.md</b>가 추가로 필요하다.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">2</span><h2><span class="scope be">BE</span>BE 개발 절차</h2></div>
+  <div class="body">
+    <div class="flow">[1] 코드 개발        →  [2] JUnit 단위테스트  →  [3] Boot Run 기동  →  [4] Bruno 통합테스트
+Mapper → Dao           레이어별 순차 실행       애플리케이션 정상        REST API 전체
+→ TxComp → Comp         (실패 시 즉시 수정)      기동 여부 확인           시나리오 검증
+→ Controller</div>
+
+    <h3>[1] 코드 개발</h3>
+    <p>레이어 개발 순서는 <b>의존 방향과 반대</b> 방향(하위 → 상위)으로 진행한다.</p>
+    <table>
+      <thead><tr><th>순서</th><th>레이어</th><th>생성 파일</th><th>스킬</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Mapper</td><td><code>{메뉴코드}Mapper.java</code> + <code>{메뉴코드}Mapper.xml</code></td><td><code class="cmd">/PI_be_mapper</code></td></tr>
+        <tr><td>2</td><td>Dao</td><td><code>{메뉴코드}Dao.java</code></td><td><code class="cmd">/PI_be_dao</code></td></tr>
+        <tr><td>3</td><td>CompUtil <span class="muted">(선택)</span></td><td><code>{메뉴코드}CompUtil.java</code></td><td><code class="cmd">/PI_be_comp</code> 내 포함</td></tr>
+        <tr><td>4</td><td>TxComp <span class="muted">(선택)</span></td><td><code>{메뉴코드}TxComp.java</code></td><td><code class="cmd">/PI_be_comp</code> 내 포함</td></tr>
+        <tr><td>5</td><td>Comp</td><td><code>{메뉴코드}Comp.java</code></td><td><code class="cmd">/PI_be_comp</code></td></tr>
+        <tr><td>6</td><td>Controller</td><td><code>{메뉴코드}Controller.java</code></td><td><code class="cmd">/PI_be_comp</code> 내 포함</td></tr>
+      </tbody>
+    </table>
+    <div class="note">전체 레이어 일괄 개발 시 <code class="cmd">/PI_be_all {메뉴코드}</code> 사용.<br>
+    재고 처리(입출고 확정) 포함 시 <code class="cmd">/PI_be_inven {메뉴코드}</code> 추가 실행.</div>
+
+    <div class="block"><b>DB 스키마 직접 확인 (BLOCKING)</b><br>
+    컬럼명·자료형·제약조건·FK 관계는 문서(<code>spec/{프로젝트}/_knowledge/db-schema/</code> 등)만 보고 추정하지 않는다.
+    코드 작성 전 반드시 <b>psql로 실제 DB를 조회</b>하여 근거를 확보한 뒤 사용한다.</div>
+    <pre><code># DB 접속 (접속 정보는 application-dev.properties 참조)
+psql -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME}</code></pre>
+    <table>
+      <thead><tr><th>확인 목적</th><th>psql 명령</th></tr></thead>
+      <tbody>
+        <tr><td>테이블 컬럼 목록·자료형·NOT NULL</td><td><code>\d {테이블명}</code></td></tr>
+        <tr><td>컬럼 상세 (기본값·시퀀스 포함)</td><td><code>\d+ {테이블명}</code></td></tr>
+        <tr><td>FK(외래키) 관계 확인</td><td><code>\d+ {테이블명}</code> → Foreign-key constraints 섹션</td></tr>
+        <tr><td>인덱스 목록</td><td><code>\di {테이블명}*</code></td></tr>
+        <tr><td>유니크 제약 확인</td><td><code>SELECT * FROM information_schema.table_constraints WHERE table_name='{테이블명}';</code></td></tr>
+        <tr><td>실제 공통코드 값 확인</td><td><code>SELECT comm_cd, comm_nm FROM sm_comm_d WHERE comm_grp_cd='{그룹코드}' AND use_yn='Y';</code></td></tr>
+        <tr><td>시퀀스 현재값·증가값</td><td><code>SELECT * FROM pg_sequences WHERE sequencename='{시퀀스명}';</code></td></tr>
+      </tbody>
+    </table>
+    <h4>참조 테이블 전체 관계 조회</h4>
+    <pre><code>SELECT tc.table_name, kcu.column_name,
+       ccu.table_name AS foreign_table, ccu.column_name AS foreign_column
+FROM information_schema.table_constraints tc
+JOIN information_schema.key_column_usage kcu ON tc.constraint_name=kcu.constraint_name
+JOIN information_schema.referential_constraints rc ON tc.constraint_name=rc.constraint_name
+JOIN information_schema.constraint_column_usage ccu ON rc.unique_constraint_name=ccu.constraint_name
+WHERE tc.constraint_type='FOREIGN KEY' AND tc.table_name='{테이블명}';</code></pre>
+    <div class="block"><b>추정 금지 항목</b> — 아래는 반드시 psql로 확인 후 코드에 사용한다.
+      <ul class="tight" style="margin-top:6px">
+        <li>컬럼명 (스네이크케이스 철자, 축약어)</li>
+        <li><code>_cd</code> 컬럼의 허용 공통코드 값</li>
+        <li>NOT NULL / DEFAULT 값 여부</li>
+        <li>FK 참조 테이블·컬럼명</li>
+        <li>시퀀스명 (<code>{테이블명}_seq</code> 가정 금지)</li>
+      </ul>
+    </div>
+
+    <h4>컨벤션 참조</h4>
+    <ul class="tight muted">
+      <li>레이어 패턴: <code>patterns/30-backend/be-layer-pattern.md</code></li>
+      <li>코딩 컨벤션: <code>.claude/rules/backend-convention.md</code></li>
+      <li>MyBatis 쿼리: <code>.claude/rules/db-convention.md</code></li>
+      <li>재고 프레임워크: <code>.claude/rules/wms-biz-framework.md</code></li>
+    </ul>
+    <h4>코드 개발 완료 기준</h4>
+    <ul class="check">
+      <li>각 레이어 파일이 컴파일 오류 없이 빌드됨</li>
+      <li><code>be-layer-pattern.md</code> §완료 체크리스트 통과</li>
+      <li>Mapper XML의 모든 SQL이 <code>api.md</code> 기능명세와 1:1 대응</li>
+      <li>사용된 컬럼명·제약조건이 psql 조회 결과와 일치함</li>
+    </ul>
+
+    <h3>[2] JUnit 단위테스트</h3>
+    <p>레이어별 JUnit 테스트 클래스를 작성하고 <b>Gradle 테스트</b>로 검증한다.</p>
+    <h4>테스트 파일 위치</h4>
+    <pre><code>{프로젝트}-be/                # = $BE_DIR
+└── src/test/java/
+    └── {패키지}/
+        └── {메뉴그룹}/
+            └── {메뉴코드}/
+                ├── {메뉴코드}MapperTest.java
+                ├── {메뉴코드}DaoTest.java
+                ├── {메뉴코드}CompTest.java
+                └── {메뉴코드}ControllerTest.java</code></pre>
+    <h4>실행 명령 (Windows PowerShell)</h4>
+    <pre><code>cd "$BE_DIR"   # 형제 BE 레포 (→ .claude/rules/repo-paths.md)
+
+# 특정 메뉴 테스트만 실행
+.\gradlew test --tests "*.{메뉴코드}*" --info
+
+# 전체 테스트 실행
+.\gradlew test</code></pre>
+    <h4>스킬 사용</h4>
+    <pre><code>/PI_test_be {메뉴코드}</code></pre>
+    <h4>단위테스트 완료 기준</h4>
+    <ul class="check">
+      <li>모든 <code>@Test</code> 메서드 GREEN</li>
+      <li>실제 DB(test 서버)에 접속하여 실행됨 (Mock DB 사용 금지)</li>
+      <li>목록 조회, 단건 조회, 등록, 수정, 삭제 시나리오 각 1건 이상 커버</li>
+      <li>예외 케이스(필수값 누락, 중복 등) 테스트 포함</li>
+    </ul>
+
+    <h3>[3] Boot Run 기동</h3>
+    <p>단위테스트 통과 후 Spring Boot 애플리케이션을 기동하여 <b>실행 가능 상태</b>를 확인한다.</p>
+    <h4>기동 명령</h4>
+    <pre><code># {프로젝트}-be 디렉토리에서 실행
+.\gradlew bootRun
+
+# 또는 특정 프로파일 지정
+.\gradlew bootRun --args='--spring.profiles.active=dev'</code></pre>
+    <h4>기동 완료 확인</h4>
+    <ul class="tight">
+      <li>로그에서 <code>Started Application in X.XXX seconds</code> 확인</li>
+      <li><code>http://localhost:{port}/actuator/health</code> → <code>{"status":"UP"}</code> 응답</li>
+      <li>예외 스택 트레이스 없음</li>
+    </ul>
+    <h4>Boot Run 완료 기준</h4>
+    <ul class="check">
+      <li>애플리케이션 정상 기동 (포트 오류·Bean 주입 오류 없음)</li>
+      <li>새로 추가한 Controller URL 매핑이 로그에 노출됨</li>
+      <li>DB 커넥션 풀 정상 (HikariCP 초기화 로그 확인)</li>
+    </ul>
+
+    <h3>[4] Bruno 통합테스트</h3>
+    <p>Bruno CLI를 사용하여 REST API 전체 시나리오를 자동 검증한다.</p>
+    <h4>Bruno 컬렉션 위치</h4>
+    <pre><code>{프로젝트}-be/
+└── src/test/bruno/
+    └── {메뉴그룹}/
+        └── {메뉴코드}/
+            ├── 01-목록조회.bru
+            ├── 02-단건조회.bru
+            ├── 03-등록.bru
+            ├── 04-수정.bru
+            └── 05-삭제.bru</code></pre>
+    <h4>환경 파일</h4>
+    <pre><code>{프로젝트}-be/
+└── src/test/bruno/
+    └── environments/
+        ├── local.bru
+        └── dev.bru</code></pre>
+    <h4>실행 명령</h4>
+    <pre><code># 특정 메뉴 컬렉션 실행
+bru run "src/test/bruno/{메뉴그룹}/{메뉴코드}" --env local
+
+# 결과 리포트 파일 출력
+bru run "src/test/bruno/{메뉴그룹}/{메뉴코드}" --env local --reporter-json results.json</code></pre>
+    <h4>스킬 사용</h4>
+    <pre><code>/PI_test_be {메뉴코드}</code></pre>
+    <div class="note"><code class="cmd">/PI_test_be</code> 스킬은 JUnit([2]) + Bruno([4])를 순차 실행한다.</div>
+    <h4>Bruno 통합테스트 완료 기준</h4>
+    <ul class="check">
+      <li>전체 <code>.bru</code> 파일 PASS (실패 0건)</li>
+      <li>목록 조회 → 등록 → 단건 조회 → 수정 → 삭제 순서 시나리오 정상 동작</li>
+      <li>HTTP 응답코드 200, 응답 바디의 <code>succeed: true</code> 또는 <code>procCnt &gt; 0</code> 확인</li>
+      <li>등록 후 목록 재조회 시 신규 데이터 포함 확인</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">3</span><h2><span class="scope">FE</span>FE 개발 절차</h2></div>
+  <div class="body">
+    <div class="flow">[1] 코드 개발        →  [2] Vitest 단위테스트  →  [3] Mockoon 테스트  →  [4] Playwright E2E
+{메뉴코드}.vue             컴포넌트 로직·렌더링      BE 없이 Mock API로      실제 브라우저에서
+{메뉴코드}Edt.vue          독립 검증               FE 동작 완전성 검증      전체 시나리오 검증</div>
+
+    <h3>[1] 코드 개발</h3>
+    <h4>사전 필요 산출물</h4>
+    <table>
+      <thead><tr><th>산출물</th><th>위치</th></tr></thead>
+      <tbody>
+        <tr><td>BE spec.md (API 명세 + VO/DTO)</td><td><code>spec/{프로젝트}/{메뉴코드}/{메뉴코드}-05-api.md</code></td></tr>
+        <tr><td>화면요건 ui.md</td><td><code>spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md</code></td></tr>
+        <tr><td>프로토타입 wireframe.html</td><td><code>spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-wireframe.html</code></td></tr>
+      </tbody>
+    </table>
+    <h4>생성 파일 및 위치</h4>
+    <pre><code>{프로젝트}-fe/
+└── src/views/
+    └── {메뉴그룹}/
+        └── {메뉴코드}/
+            ├── {메뉴코드}.vue         # 목록 화면 (검색조건 + 결과그리드)
+            └── {메뉴코드}Edt.vue      # 등록/수정 팝업</code></pre>
+    <h4>스킬 사용</h4>
+    <table>
+      <thead><tr><th>상황</th><th>스킬</th></tr></thead>
+      <tbody>
+        <tr><td>목록 + 팝업 동시 개발</td><td><code class="cmd">/PI_fe_all {메뉴코드}</code></td></tr>
+        <tr><td>목록 화면만</td><td><code class="cmd">/PI_fe_list {메뉴코드}</code></td></tr>
+        <tr><td>등록/수정 팝업만</td><td><code class="cmd">/PI_fe_edit {메뉴코드}</code></td></tr>
+      </tbody>
+    </table>
+    <h4>코드 개발 완료 기준</h4>
+    <ul class="check">
+      <li>TypeScript/ESLint 오류 없음 (<code>npm run lint</code>)</li>
+      <li>spec.md의 모든 API 엔드포인트가 컴포넌트에 연결됨</li>
+      <li>ui.md의 검색조건·그리드·팝업 항목이 모두 구현됨</li>
+    </ul>
+
+    <h3>[2] Vitest 단위테스트</h3>
+    <p>Vue 컴포넌트의 <b>렌더링·이벤트·상태 변화</b>를 브라우저 없이 검증한다.</p>
+    <h4>테스트 파일 위치</h4>
+    <pre><code>{프로젝트}-fe/
+└── src/views/
+    └── {메뉴그룹}/
+        └── {메뉴코드}/
+            └── __tests__/
+                ├── {메뉴코드}.spec.ts
+                └── {메뉴코드}Edt.spec.ts</code></pre>
+    <h4>실행 명령</h4>
+    <pre><code>cd "$FE_DIR"   # 형제 FE 레포 (→ .claude/rules/repo-paths.md)
+
+# 특정 메뉴 테스트만 실행
+npm run test:unit -- {메뉴코드}
+
+# 전체 테스트 실행
+npm run test:unit
+
+# Watch 모드
+npm run test:unit -- --watch</code></pre>
+    <h4>스킬 사용</h4>
+    <pre><code>/PI_test_fe</code></pre>
+    <h4>Vitest 완료 기준</h4>
+    <ul class="check">
+      <li>전체 <code>*.spec.ts</code> PASS</li>
+      <li>컴포넌트 마운트 성공 (렌더링 오류 없음)</li>
+      <li>검색 버튼 클릭 → API 호출 함수 실행 확인</li>
+      <li>팝업 열기/닫기 동작 확인</li>
+      <li>폼 유효성 검증 로직 통과·실패 케이스 커버</li>
+    </ul>
+
+    <h3>[3] Mockoon 테스트</h3>
+    <p><b>BE 서버 없이</b> Mockoon으로 API를 목업하여 FE 화면의 동작 완전성을 검증한다. 실제 BE 연동 전에 FE 독립 개발 단계에서 수행한다.</p>
+    <h4>Mockoon 환경 파일 위치</h4>
+    <pre><code>{프로젝트}-fe/
+└── src/test/mockoon/
+    └── {메뉴그룹}/
+        └── {메뉴코드}-mock.json       # Mockoon 환경 설정 파일</code></pre>
+    <h4>Mockoon 서버 기동</h4>
+    <pre><code># Mockoon CLI 전역 설치 (최초 1회)
+npm install -g @mockoon/cli
+
+# 특정 메뉴 Mock 서버 기동 (포트는 환경 파일에 정의)
+mockoon-cli start --data "src/test/mockoon/{메뉴그룹}/{메뉴코드}-mock.json"</code></pre>
+    <h4>FE 환경 변수 전환</h4>
+    <pre><code># .env.mockoon (Mockoon 테스트용)
+VITE_API_BASE_URL=http://localhost:3001
+
+# .env.development (실제 BE 연동)
+VITE_API_BASE_URL=http://localhost:8080</code></pre>
+    <h4>Mockoon 테스트 실행</h4>
+    <pre><code># Mockoon 서버 기동 후 FE dev 서버 기동
+npm run dev -- --mode mockoon</code></pre>
+    <h4>Mockoon 테스트 완료 기준</h4>
+    <ul class="check">
+      <li>목록 조회 → Mock 데이터 정상 렌더링</li>
+      <li>등록 팝업 → 저장 → 성공 토스트 메시지 표시</li>
+      <li>수정 팝업 → 기존 데이터 로드 → 수정 저장 정상</li>
+      <li>삭제 → 확인 다이얼로그 → 삭제 후 목록 갱신</li>
+      <li>에러 케이스 (400/500 Mock 응답) 처리 확인</li>
+    </ul>
+
+    <h3>[4] Playwright E2E 테스트</h3>
+    <p>실제 브라우저에서 <b>전체 사용자 시나리오</b>를 자동 실행하여 최종 품질을 검증한다.</p>
+    <h4>테스트 스펙 파일 위치</h4>
+    <pre><code>{프로젝트}-fe/
+└── src/test/e2e/
+    └── {메뉴그룹}/
+        └── {메뉴코드}.spec.ts         # Playwright 스펙 파일</code></pre>
+    <h4>스펙 파일 생성 (없는 경우)</h4>
+    <pre><code>/playwright-spec {메뉴그룹} {메뉴코드}</code></pre>
+    <p class="muted">4가지 케이스를 자동 생성한다:</p>
+    <table>
+      <thead><tr><th>케이스</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>Happy Path</td><td>정상 흐름 (조회 → 등록 → 수정 → 삭제)</td></tr>
+        <tr><td>Edge Case</td><td>경계값, 빈 목록, 최대 입력값</td></tr>
+        <tr><td>Failure</td><td>필수값 누락, API 오류 응답 처리</td></tr>
+        <tr><td>Concurrency</td><td>동시 요청 / 연속 클릭 방어</td></tr>
+      </tbody>
+    </table>
+    <h4>실행 명령</h4>
+    <pre><code>cd "$FE_DIR"   # 형제 FE 레포 (→ .claude/rules/repo-paths.md)
+
+# 특정 메뉴 E2E 테스트 실행
+npx playwright test "src/test/e2e/{메뉴그룹}/{메뉴코드}.spec.ts"
+
+# UI 모드 (디버깅용)
+npx playwright test --ui
+
+# 특정 브라우저 지정
+npx playwright test --project=chromium</code></pre>
+    <h4>스킬 사용</h4>
+    <pre><code>/e2e-menu-test {메뉴그룹} {메뉴코드}</code></pre>
+    <div class="note"><code class="cmd">/e2e-menu-test</code> 스킬은 스펙 파일이 없으면 <code class="cmd">/playwright-spec</code>을 먼저 호출하여 자동 생성한다.</div>
+    <h4>Playwright 테스트 완료 기준</h4>
+    <ul class="check">
+      <li>Happy Path 시나리오 전체 PASS</li>
+      <li>화면 스크린샷 이상 없음 (레이아웃 깨짐·데이터 미표시 없음)</li>
+      <li>팝업 열기/닫기, 검색 팝업(거래처/품목) 연동 정상</li>
+      <li>페이지네이션, 그리드 행 선택, 다중 패널 연동 정상</li>
+      <li>Edge/Failure 케이스에서 사용자 알림(토스트/다이얼로그) 정상 표시</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">4</span><h2>전체 절차 요약</h2></div>
+  <div class="body">
+    <h4><span class="scope be">BE</span></h4>
+    <pre><code>/SD_db {메뉴코드}          # DB 설계
+/SD_db_apply {메뉴코드}    # DB 반영
+/SD_api {메뉴코드}         # API 명세
+         ↓
+/PI_be_all {메뉴코드}      # [1] 코드 개발 (전 레이어)
+         ↓
+/PI_test_be {메뉴코드}     # [2] JUnit 단위테스트
+         ↓
+.\gradlew bootRun          # [3] Boot Run 기동 확인
+         ↓
+/PI_test_be {메뉴코드}     # [4] Bruno 통합테스트 (스킬 내 포함)</code></pre>
+    <h4><span class="scope">FE</span></h4>
+    <pre><code>/PI_fe_all {메뉴코드}      # [1] 코드 개발 (목록 + 팝업)
+         ↓
+/PI_test_fe                # [2] Vitest 단위테스트
+         ↓
+mockoon-cli start ...      # [3] Mockoon 기동 후 수동 확인
+         ↓
+/e2e-menu-test {메뉴그룹} {메뉴코드}   # [4] Playwright E2E</code></pre>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">5</span><h2>단계 간 Gate 조건</h2></div>
+  <div class="body">
+    <table>
+      <thead><tr><th>진입 단계</th><th>이전 단계 완료 조건</th></tr></thead>
+      <tbody>
+        <tr><td>BE [2] JUnit</td><td>BE [1] 코드 빌드 성공</td></tr>
+        <tr><td>BE [3] Boot Run</td><td>BE [2] JUnit 전체 GREEN</td></tr>
+        <tr><td>BE [4] Bruno</td><td>BE [3] 애플리케이션 기동 확인</td></tr>
+        <tr><td>FE [2] Vitest</td><td>FE [1] lint 오류 없음</td></tr>
+        <tr><td>FE [3] Mockoon</td><td>FE [2] Vitest 전체 PASS</td></tr>
+        <tr><td>FE [4] Playwright</td><td>BE [4] Bruno 통과 + FE [3] Mockoon 정상</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Gate 조건 미충족 시 이전 단계로 되돌아가 원인을 수정한 뒤 재진행한다. AI 에이전트는 테스트 실패 시 <b>원인 분석 → 코드 수정 → 재테스트</b>를 자동으로 반복한다.</div>
+  </div>
+</div>
+
+<footer>
+교육자료 · common-system-ai · edu 통합본(2026-06-26) · 실제 실행 절차는 각 <code>/PI_*</code> 스킬에 구현
+</footer>
+
+</div>
+</body>
+</html>

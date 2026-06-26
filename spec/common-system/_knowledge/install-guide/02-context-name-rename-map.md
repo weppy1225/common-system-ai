@@ -7,7 +7,7 @@ author: ShinHyunKyu
 repo_role: ai-hub
 agent_usage: reference
 applies_to:
-  - knowledgebase/40-install-guide/deploy/
+  - spec/common-system/_knowledge/install-guide/
 tags:
   - deploy
   - context-path

@@ -94,7 +94,7 @@ paths:
 | 영역 전체 | 가장 가까운 `00-overview.md` | `patterns/10-screen-design/10-web/00-overview.md` |
 | DB 전반 | DB overview | `patterns/20-database/00-overview.md` |
 | 구현을 좌우하는 핵심 규칙 | leaf 직접 참조 | `patterns/30-backend/40-guide/05-mapper-xml-writing-rules.md` |
-| SIF 방향별 핵심 컨벤션 | leaf 직접 참조 | `knowledgebase/domains/wms/interface-convention/01-erp-to-wms.md` |
+| SIF 방향별 핵심 컨벤션 | leaf 직접 참조 | `spec/common-system/_knowledge/interface/convention/01-erp-to-wms.md` |
 
 ---
 

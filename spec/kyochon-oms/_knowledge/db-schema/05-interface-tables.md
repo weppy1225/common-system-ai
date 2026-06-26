@@ -39,5 +39,5 @@ last_verified: 2026-06-23
 
 ## 2. 비고
 
-> 인터페이스 컨벤션(연동 방식·배치 규칙)은 도메인 표준 문서를 참조한다 → `knowledgebase/domains/oms/`.
+> 인터페이스 컨벤션(연동 방식·배치 규칙)은 OMS 도메인 룰(`.claude/rules/oms-*`)·프로젝트 인터페이스 명세(`spec/kyochon-oms/_knowledge/interface/`)를 참조한다.
 > 컬럼 단위 상세는 실 스키마(`\d sif_*`, `\d vacs_*`)를 우선 확인한다.
