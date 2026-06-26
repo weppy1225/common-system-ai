@@ -13,7 +13,8 @@ tags:
   - sm_comm_h
   - sm_comm_d
   - oms
-last_verified: 2026-06-23
+last_verified: 2026-06-26
+last_modified_by: binaryarc
 ---
 
 # kyochon-oms 공통코드 (Common Code)
@@ -94,10 +95,10 @@ last_verified: 2026-06-23
 | [SALE_AREA_CD](#sale_area_cd) | 영업_권역_코드 | N | N | Y |  |
 | [SALES_GROUP_CD](#sales_group_cd) | 영업_그룹_코드 | N | N | Y |  |
 | [SETTLE_STS_CD](#settle_sts_cd) | 정산_상태_코드 | N | N | Y |  |
-| [SHOP_ITEM_TYPE](#shop_item_type) | 쇼핑몰 제품타입 | N | N | Y |  |
-| [SHOP_ORDER_STS](#shop_order_sts) | 쇼핑몰 주문상태 | N | N | Y |  |
-| [SHOP_PROD_CTGR](#shop_prod_ctgr) | 쇼핑몰 상품카테고리 | N | N | Y |  |
-| [SHOP_PROD_TYPE](#shop_prod_type) | 쇼핑몰 상품유형 | N | N | Y |  |
+| [SHOP_DISP_YN](#shop_disp_yn) | 상품_전시_여부 | N | N | Y |  |
+| [SHOP_OD_STS_CD](#shop_od_sts_cd) | 쇼핑몰 주문상태 | N | N | Y |  |
+| [SHOP_PROD_STS_CD](#shop_prod_sts_cd) | 쇼핑몰 상품 진행상태 | N | N | Y |  |
+| [SHOP_PROD_TYPE_CD](#shop_prod_type_cd) | 상품 카테고리 | N | N | Y |  |
 | [SMALL_CD](#small_cd) | 품목_소분류 | Y | N | Y |  |
 | [SURTAX_CD](#surtax_cd) | 부가세_코드 | N | N | Y |  |
 | [SYSTEM_DIV_CD](#system_div_cd) | 시스템_구분_코드 | N | N | Y |  |
@@ -1172,58 +1173,64 @@ last_verified: 2026-06-23
 | CONFIRMED | 확정 |  |  | 2 | Y |  |
 | CONFIRMEDCANCEL | 확정취소 |  |  | 3 | Y |  |
 
-### SHOP_ITEM_TYPE
-**쇼핑몰 제품타입**
+### SHOP_DISP_YN
+**상품_전시_여부**
+
+> 출처: 실 DB 조회 (2026-06-26). `shop_prod` 노출 여부 제어.
 
 | 코드 | 코드명 | 참조헤더 | 참조코드 | 표시순서 | 사용여부 | 비고 |
 |------|--------|----------|----------|----------|----------|------|
-| DRAFT | 시안류 |  |  | 1 | Y |  |
-| NAPKIN | 의탁자(냅킨) 및 기타 |  |  | 2 | Y |  |
-| BADGE | 명찰류 |  |  | 3 | Y |  |
-| FURN | 의탁자 및 기타 |  |  | 4 | Y |  |
+| Y | 전시 |  |  | 1 | Y |  |
+| N | 비전시 |  |  | 2 | Y |  |
 
-### SHOP_ORDER_STS
+### SHOP_OD_STS_CD
 **쇼핑몰 주문상태**
 
-| 코드 | 코드명 | 참조헤더 | 참조코드 | 표시순서 | 사용여부 | 비고 |
-|------|--------|----------|----------|----------|----------|------|
-| ORDER_COMPLETE | 주문완료 |  |  | 1 | Y |  |
-| DESIGN | 시안진행 |  |  | 2 | Y |  |
-| PRODUCTION | 제작진행 |  |  | 3 | Y |  |
-| SHIPPING | 배송진행 |  |  | 4 | Y |  |
-| DONE | 거래완료 |  |  | 5 | Y |  |
-| CANCEL | 주문취소 |  |  | 6 | Y |  |
-
-### SHOP_PROD_CTGR
-**쇼핑몰 상품카테고리**
+> 출처: 실 DB 조회 (2026-06-26). 이전 문서 기재명(`SHOP_ORDER_STS`, 코드값 ORDER_COMPLETE/DESIGN 등)은 실 DB와 불일치 — 정정.
+> `shop_order.shop_order_sts_cd` 참조.
 
 | 코드 | 코드명 | 참조헤더 | 참조코드 | 표시순서 | 사용여부 | 비고 |
 |------|--------|----------|----------|----------|----------|------|
-| FLYER | 전단지 |  |  | 1 | Y |  |
-| MAGNET | 자석스티커 |  |  | 2 | Y |  |
-| STICKER | 스티커 |  |  | 3 | Y |  |
-| NAMECARD | 명함 |  |  | 4 | Y |  |
-| OPENER | 오프너 |  |  | 5 | Y |  |
-| FRONTSHEET | 매장전면시트 |  |  | 6 | Y |  |
-| DELIVERY | 배달동선안내 |  |  | 7 | Y |  |
-| COUNTER | 카운터부착물 |  |  | 8 | Y |  |
-| CCTV | CCTV |  |  | 9 | Y |  |
-| SIGNBOARD | 입간판 |  |  | 10 | Y |  |
-| STANDEE | 등신대 |  |  | 11 | Y |  |
-| AUTOBOX | 오토박스 |  |  | 12 | Y |  |
-| SUBSUP | 부자재 |  |  | 13 | Y |  |
-| CHAIR | 체어 |  |  | 14 | Y |  |
-| TABLE | 테이블 |  |  | 15 | Y |  |
-| ETC | 기타 |  |  | 16 | Y |  |
+| 11 | 주문접수 |  |  | 1 | Y |  |
+| 22 | 주문확인 |  |  | 2 | Y |  |
+| 33 | 시안진행 |  |  | 3 | Y |  |
+| 44 | 시안결정 |  |  | 4 | Y |  |
+| 55 | 제작진행 |  |  | 5 | Y |  |
+| 66 | 배송진행 |  |  | 6 | Y |  |
+| 77 | 거래완료 |  |  | 7 | Y |  |
+| 99 | 주문취소 |  |  | 8 | Y |  |
 
-### SHOP_PROD_TYPE
-**쇼핑몰 상품유형**
+### SHOP_PROD_STS_CD
+**쇼핑몰 상품 진행상태**
+
+> 출처: 실 DB 조회 (2026-06-26). 이전 문서 미등재 — 신규 추가.
+> `shop_order_prod.prod_sts_cd` 참조.
+
+| 코드 | 코드명 | 참조헤더 | 참조코드 | 표시순서 | 사용여부 | 비고 |
+|------|--------|----------|----------|----------|----------|------|
+| STS_01 | 주문접수 |  |  | 1 | Y |  |
+| STS_02 | 주문확인 |  |  | 2 | Y |  |
+| STS_03 | 시안진행 |  |  | 3 | Y | 판촉물용 |
+| STS_04 | 시안결정 |  |  | 4 | Y | 판촉물용 |
+| STS_05 | 견적진행 |  |  | 5 | Y | 판촉물용 |
+| STS_06 | 제작진행 |  |  | 6 | Y |  |
+| STS_07 | 제작/배송 |  |  | 7 | Y |  |
+| STS_08 | 배송진행 |  |  | 8 | Y |  |
+| STS_09 | 거래완료 |  |  | 9 | Y | 정상 종료 |
+| STS_10 | 주문취소 |  |  | 10 | Y | 종료(취소) |
+| STS_11 | 주문거절 |  |  | 11 | Y | 종료(거절) |
+
+### SHOP_PROD_TYPE_CD
+**상품 카테고리**
+
+> 출처: 실 DB 조회 (2026-06-26). 이전 문서 기재명(`SHOP_PROD_TYPE`, 코드명 "의탁자" 등)은 실 DB와 불일치 — 정정.
+> `shop_prod.shop_prod_type_cd` 참조.
 
 | 코드 | 코드명 | 참조헤더 | 참조코드 | 표시순서 | 사용여부 | 비고 |
 |------|--------|----------|----------|----------|----------|------|
 | PROMO | 판촉물 |  |  | 1 | Y |  |
-| FURN | 의탁자 |  |  | 2 | Y |  |
-| SUB | 부자재쇼핑 |  |  | 3 | Y |  |
+| FURN | 인테리어 |  |  | 2 | Y | 의탁자 상품 |
+| SUB | 부자재 |  |  | 3 | Y |  |
 | MAKK | 막걸리 |  |  | 4 | Y |  |
 
 ### SMALL_CD

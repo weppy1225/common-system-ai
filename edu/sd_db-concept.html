@@ -1,0 +1,226 @@
+<title>SD_db 스킬 개념 카드</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171e2e; --panel2:#1d2638; --line:#2a3650;
+    --ink:#e8edf6; --muted:#9aa7bd; --accent:#5b8cff; --accent2:#37d39b;
+    --code:#0b0f18;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;line-height:1.6;font-size:15px}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 22px 70px}
+  header.hero{background:linear-gradient(135deg,#1a2440 0%,#10182a 100%);
+    border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:26px}
+  .hero .eyebrow{margin:0 0 6px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .hero h1{margin:0;font-size:30px;letter-spacing:-.5px;font-family:"SF Mono",Consolas,monospace}
+  .hero p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:0;margin:14px 0;overflow:hidden}
+  .card .label{display:flex;align-items:center;gap:10px;background:var(--panel2);
+    padding:10px 18px;border-bottom:1px solid var(--line)}
+  .card .label .n{background:var(--accent);color:#06122e;border-radius:7px;font-size:13px;font-weight:700;
+    width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .card .label h2{margin:0;font-size:15px;color:#cdd8ee;border:0;padding:0}
+  .card .body{padding:16px 20px}
+  .card .body p{margin:0}
+  .card .body p+p{margin-top:8px}
+  .muted{color:var(--muted)}
+  code{font-family:"SF Mono",Consolas,"D2Coding",monospace;background:var(--code);
+    padding:2px 7px;border-radius:5px;font-size:13px;color:#8fd3ff}
+  .cmd{color:var(--accent2)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#202a40;color:#cdd8ee;font-weight:600;width:80px;white-space:nowrap}
+  .io{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 9px;margin-right:8px}
+  .io.in{background:rgba(91,140,255,.18);color:#9bc0ff}
+  .io.out{background:rgba(55,211,155,.18);color:#6fe3bd}
+  ul.tight{margin:0;padding-left:20px}
+  ul.tight li{margin:4px 0}
+  .step-list{list-style:none;margin:0;padding:0}
+  .step-list li{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .step-list li:last-child{border-bottom:0}
+  .step-badge{flex-shrink:0;background:var(--panel2);border:1px solid var(--line);border-radius:6px;
+    font-family:"SF Mono",Consolas,monospace;font-size:12px;font-weight:700;color:var(--accent);
+    padding:2px 8px;white-space:nowrap}
+  .step-txt{font-size:14px;color:var(--ink)}
+  .step-txt .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;margin:2px 2px 0 0}
+  .tag.new{background:rgba(55,211,155,.18);color:#6fe3bd}
+  .tag.exist{background:rgba(91,140,255,.18);color:#9bc0ff}
+  .tag.add{background:rgba(255,180,60,.18);color:#ffc96b}
+  .tag.ask{background:rgba(255,100,100,.18);color:#ff9898}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">스킬 개념 카드</p>
+  <h1>/SD_db</h1>
+  <p>화면설계 자동화 · DB 설계 단계 — 데이터모델 문서 자동 작성</p>
+</header>
+
+<div class="card">
+  <div class="label"><span class="n">1</span><h2>스킬명</h2></div>
+  <div class="body">
+    <p><b>SD_db</b> (DB 설계 문서 자동 작성)</p>
+    <p class="muted">실행: <code class="cmd">/SD_db {메뉴코드}</code></p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">2</span><h2>주요 작업 내용</h2></div>
+  <div class="body">
+    <p>화면설계 파일을 읽어 <b>DB 변경사항(신규 테이블 / 컬럼 추가 / 공통코드 추가)</b>을 도출하고,
+    DDL SQL이 포함된 데이터모델 문서(<code>-03-data-model.md</code>)를 작성한다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">3</span><h2>스킬 개요</h2></div>
+  <div class="body">
+    <p>화면설계(ui.md · wireframe)로부터 필요한 테이블·컬럼을 도출한 뒤,
+    기존 DB 스키마와 대조하여 <b>변경 중심</b>으로 간결하게 작성하는 스킬이다.
+    변경이 없는 기존 테이블은 목록만 기재하고 상세는 생략한다.</p>
+    <p>산출물 <code>-03-data-model.md</code>의 <b>DDL SQL 섹션</b>을 검토자가 확인 후
+    <code>/SD_db_apply</code>로 실 DB에 반영한다. 이후 <code>/SD_api</code>로 API 명세를 이어서 작성한다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">4</span><h2>육하원칙</h2></div>
+  <div class="body">
+    <table>
+      <tr><th>누가</th><td>DB 설계 담당자가 Claude와 함께 (AI가 화면 분석·테이블 설계 수행)</td></tr>
+      <tr><th>언제</th><td>화면요건 문서(ui.md, SD_310_UI 산출물)와 wireframe이 준비된 뒤</td></tr>
+      <tr><th>어디서</th><td>AI 허브(common-system-ai) CWD에서 <code class="cmd">/SD_db {메뉴코드}</code></td></tr>
+      <tr><th>무엇을</th><td>화면의 필드·상태코드·업무규칙을 분석해 테이블 구조와 DDL SQL을</td></tr>
+      <tr><th>어떻게</th><td>기존 스키마와 대조 + 도메인 타입 규칙 적용 + 불확실 컬럼은 사용자 확인 후</td></tr>
+      <tr><th>왜</th><td>검토·승인·DB 반영까지 한 사이클로 처리하기 위해</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">5</span><h2>실행 순서 (7 Steps)</h2></div>
+  <div class="body">
+    <ul class="step-list">
+      <li>
+        <span class="step-badge">Step 1</span>
+        <div class="step-txt">
+          <b>화면설계 파일 로드</b>
+          <span class="sub">ui.md · wireframe.html · mock-data.js 읽기 → 필요 테이블·컬럼 후보 도출</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 2</span>
+        <div class="step-txt">
+          <b>DB 규칙 문서 로드</b>
+          <span class="sub">전체 테이블 목록(00-tables-overview.md) · 도메인 타입 규칙 · 공통코드 목록 읽기</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 3</span>
+        <div class="step-txt">
+          <b>테이블 신규/기존 판정</b>
+          <span class="sub">
+            <span class="tag new">신규</span>목록에 없음 →&nbsp;DDL 작성 대상
+            <span class="tag exist">기존</span>목록에 있음 →&nbsp;변경 없으면 생략
+            <span class="tag add">컬럼추가</span>기존 테이블이나 컬럼이 없음 →&nbsp;ALTER 대상
+          </span>
+          <span class="sub" style="margin-top:6px">
+            <span class="tag ask">BLOCKING</span>FE에는 있는데 DB·SQL에 없는 필드 → 의도 반드시 질문
+          </span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 4</span>
+        <div class="step-txt">
+          <b>공통코드 현황 파악</b>
+          <span class="sub">_cd 컬럼 식별 → 기존 코드그룹 확인 → 신규 코드그룹이면 INSERT SQL 작성</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 5</span>
+        <div class="step-txt">
+          <b>컬럼 도메인 타입 결정</b>
+          <span class="sub">H 테이블 seq = int4 · D 테이블 seq = bigint · 날짜 = varchar(8) YYYYMMDD · 일시 = timestamp</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 6</span>
+        <div class="step-txt">
+          <b>데이터모델 문서 작성</b>
+          <span class="sub">변경 요약 → 사용 테이블 → 신규 명세 → 컬럼 추가 → 공통코드 → UP/DOWN DDL SQL</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-badge">Step 7</span>
+        <div class="step-txt">
+          <b>확인 요청 → 다음 단계 안내</b>
+          <span class="sub">DDL SQL 검토 요청 → 확인 완료 시 <code>/SD_db_apply</code> → <code>/SD_api</code> 순서 안내</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">6</span><h2>INPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io in">INPUT</span>화면설계 산출물 (SD_310_UI · SD_311 산출물)</p>
+    <ul class="tight muted" style="margin-top:8px">
+      <li><code>spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md</code> — 화면요건정리 문서 <b>(핵심)</b></li>
+      <li><code>prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html</code> — 화면 프로토타입</li>
+      <li><code>prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js</code> — 목업 데이터</li>
+    </ul>
+    <p style="margin-top:12px"><span class="io in">INPUT</span>DB 규칙 참조 문서</p>
+    <ul class="tight muted" style="margin-top:8px">
+      <li><code>spec/{프로젝트}/_knowledge/db-schema/00-tables-overview.md</code></li>
+      <li><code>patterns/20-database/10-domain-and-types.md</code></li>
+      <li><code>patterns/20-database/20-rule/04-sequence-creation-rule.md</code></li>
+      <li><code>spec/{프로젝트}/_knowledge/db-schema/90-common-code.md</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">7</span><h2>OUTPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io out">OUTPUT</span><code>spec/{프로젝트}/{메뉴코드}/{메뉴코드}-03-data-model.md</code></p>
+    <ul class="tight muted" style="margin-top:8px">
+      <li>§1 변경 요약 — 신규/컬럼추가/공통코드/변경없음 한눈에 파악</li>
+      <li>§2 사용 테이블 — 기존/신규/기존+컬럼추가 판정 목록</li>
+      <li>§3 신규 테이블 명세 — 컬럼 타입·NULL·기본값 전체</li>
+      <li>§4 기존 테이블 컬럼 추가 — ALTER TABLE 대상</li>
+      <li>§5 공통코드 — 신규 sm_comm_h / sm_comm_d INSERT</li>
+      <li><b>§6 DDL SQL (UP / DOWN)</b> — 이 섹션이 DB 반영의 실행 단위</li>
+      <li>§7 체크리스트 — 검토자 확인·DOWN SQL·반영 완료 체크</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">8</span><h2>워크플로우 위치</h2></div>
+  <div class="body">
+    <table>
+      <tr>
+        <th>이전 단계</th>
+        <td><code>/SD_311</code> — 프로토타입 HTML 생성 완료 후</td>
+      </tr>
+      <tr>
+        <th>이 스킬</th>
+        <td><code>/SD_db {메뉴코드}</code> → <code>-03-data-model.md</code> 작성 → 검토자 확인</td>
+      </tr>
+      <tr>
+        <th>다음 단계</th>
+        <td><code>/SD_db_apply</code> — 실 DB 반영 → <code>/SD_api {메뉴코드}</code> — API 명세 작성</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<footer>
+스킬 개념 카드 · common-system-ai · 출처: <code>.claude/skills/SD_db/SKILL.md</code>
+</footer>
+
+</div>

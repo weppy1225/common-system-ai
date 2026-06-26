@@ -93,6 +93,8 @@ fi
    `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/0X-*-tables.md` (도메인 그룹) + 실 스키마 psql 확인
    (신규 테이블은 문서 없음 — 화면설계로부터 도출)
 
+> **실 DB 접속**: psql 직접 실행이 필요할 때는 `/DB_PSQL` 스킬 절차를 따른다 (접속 정보 → `$BE_DIR/src/main/resource/prop/application-{ENV}.properties` 파싱 → Bash `psql` 실행).
+
 ### Step 3 — 테이블 신규/기존 판정
 
 `00-tables-overview.md` 및 `0X-*-tables.md` 테이블 목록과 대조하여 각 테이블을 판정한다:
@@ -102,6 +104,34 @@ fi
 | **기존** | `00-tables-overview.md` 그룹표에 등재 |
 | **신규** | `00-tables-overview.md` 에 없음 |
 | **기존+컬럼추가** | 등재돼 있으나 필요 컬럼이 실 스키마(psql)에 없음 |
+
+### Step 3-A — 불확실 컬럼 의도 확인 (BLOCKING — AskUserQuestion 필수)
+
+**트리거 조건**: 아래 조건을 **모두** 만족하는 필드가 1개라도 있으면 Step 4로 넘어가기 전에 반드시 사용자에게 묻는다.
+
+| 조건 | 설명 |
+|---|---|
+| FE(Vue) 또는 BE Param bean에 해당 필드가 존재 | 화면에서 전송하거나 서버가 수신하는 필드 |
+| DB 테이블에 해당 컬럼이 없음 | psql 실 스키마 확인 결과 |
+| Mapper SQL(INSERT/UPDATE)에도 포함되지 않음 | Mapper.xml 에 해당 컬럼 없음 |
+
+이 조건에 해당하면 **"컬럼 추가가 필요하다"고 단방향 추론 금지**. 아래와 같이 묻는다.
+
+```
+AskUserQuestion(
+  질문: "{테이블명}.{컬럼후보} 컬럼이 없습니다. {필드명}(은)는 FE에서 전송되지만 현재 DB·SQL에 저장 로직이 없습니다. 의도를 확인해 주세요.",
+  옵션:
+    - "컬럼 추가 필요" → DDL 작성 대상에 포함
+    - "의도적 미저장 (다른 시점에 입력)" → DDL 없음, 문서에 이슈로만 기재
+    - "확인 후 결정 (지금은 보류)" → DDL 없음, ⚠️ 미확인으로 기재
+)
+```
+
+**확인 대상 예시:**
+- Vue에서 `extraRequest` 전송 → BE Param에 `reqNote` 존재 → `shop_cart` 테이블에 `req_note` 없음 → Mapper INSERT에도 없음 → **반드시 묻는다**
+- 반대로, 컬럼이 실제 DB에 존재하거나 SQL에 포함되어 있으면 이 단계를 건너뛴다
+
+---
 
 ### Step 4 — 공통코드 현황 파악
 
@@ -131,7 +161,7 @@ fi
 - 복합 조건 조회 → 복합 인덱스 (선택도 높은 컬럼을 앞에)
 - 특정 조건 행만 인덱싱 필요 → Partial 인덱스 (`WHERE` 절 포함)
 
-**PostgreSQL 컬럼 확인 SQL 예시**:
+**PostgreSQL 컬럼 확인 SQL 예시** (`/DB_PSQL` 스킬로 실행):
 ```sql
 SELECT column_name, data_type, character_maximum_length, is_nullable, column_default
 FROM information_schema.columns

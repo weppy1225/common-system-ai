@@ -63,8 +63,43 @@ fi
 | 케이스 | 조건 | 처리 방법 |
 |---|---|---|
 | **A. api.md 있음** | `{메뉴코드}-05-api.md` 존재 | 파일을 읽어 내용을 업데이트한다 |
-| **B. api.md 없음 + BE 소스 있음** | 파일 없음, `$BE_DIR/src/main/java/` 해당 패키지 존재 | BE 소스를 읽어 구현 상태를 분석한 뒤 **신규 작성**한다 |
+| **B. api.md 없음 + BE 소스 있음** | 파일 없음, `$BE_DIR/src/main/java/` 해당 패키지 존재 | 아래 Step 2-A~2-B 절차로 **분석 범위를 확정**한 뒤 신규 작성한다 |
 | **C. 신규 기능** | 파일·BE 소스 모두 없음 | 폴더를 생성하고 신규 작성한다 |
+
+### Step 2-A — BE 존재 시 분석 범위 확인 (케이스 B 전용 — AskUserQuestion)
+
+BE 소스가 있으면(케이스 B) **분석 기준을 먼저 확정**한다. 추정으로 범위를 좁히지 않는다.
+
+```
+AskUserQuestion(
+  질문: "BE 코드가 존재합니다. API 명세 작성 시 어떤 범위로 분석할까요?",
+  옵션:
+    - "BE Controller + 연관 Vue 전체 (완전한 명세)" → Step 2-B 수행
+    - "FE Vue만 (화면 호출 기준으로만 작성)" → 메뉴코드 폴더 Vue만 참조, BE 미참조
+    - "BE Controller 기준 (구현 완성도 우선)" → Controller 전체 엔드포인트 기준으로 작성
+)
+```
+
+### Step 2-B — Controller prefix grep으로 연관 Vue 탐색 (Step 2-A에서 "BE + 연관 Vue 전체" 선택 시)
+
+1. `$BE_DIR/src/main/java/` 에서 `{메뉴코드}Controller.java` (대소문자 무관)를 찾아 읽는다.
+2. `@RequestMapping` 의 **URL prefix** 를 추출한다. (예: `/{bizSeq}/shft01`)
+3. prefix 경로 부분(bizSeq 제외)을 FE 전체 소스에서 grep한다:
+
+```bash
+# prefix 에서 /{bizSeq}/ 뒤 경로만 추출 (예: shft01)
+API_PREFIX="shft01"   # @RequestMapping 에서 추출한 값
+
+grep -rl "/${API_PREFIX}/" "$FE_DIR/src" --include="*.vue" 2>/dev/null
+# 또는
+grep -rl "'/${API_PREFIX}/" "$FE_DIR/src" --include="*.vue" 2>/dev/null
+```
+
+4. 발견된 Vue 파일 목록을 사용자에게 보고한 뒤 **모두 읽는다**.
+
+> **이 단계가 필요한 이유**: Controller prefix(`/shft01`)와 메뉴코드(`shft01c`)가 다를 수 있고,
+> 같은 Controller를 다른 폴더의 Vue 파일(shppCart.vue, shppOrderForm.vue 등)이 공유할 수 있다.
+> 메뉴코드 폴더 Vue만 보면 일부 엔드포인트가 누락된다.
 
 ### Step 3 — 관련 문서 읽기 (BLOCKING)
 
@@ -74,7 +109,11 @@ fi
 2. `$UI_MD` (`spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md`) — 화면설계 UI 명세
 3. `$WIREFRAME` — 화면 프로토타입
 4. `spec/$PROJECT/_knowledge/db-schema/` — 프로젝트 DB 스키마 (DB 설계 문서 없을 때)
-5. `$BE_DIR/src/main/java/` 해당 패키지 — BE 소스 (케이스 B)
+5. **BE 소스 (케이스 B, Step 2-A에서 BE 포함 선택 시)**:
+   - `{메뉴코드}Controller.java` — 전체 엔드포인트 목록·HTTP 메서드·Path Variable
+   - `{메뉴코드}Comp.java` — 비즈니스 규칙 (서버 강제 설정값·검증 로직 포함)
+   - `bean/*.java` — 요청·응답 필드 전체
+   - Step 2-B에서 grep으로 발견된 연관 Vue 파일
 6. `$AI_DIR/patterns/30-backend/20-rule/01-api-naming-rule.md` — API 네이밍 규칙
 
 ### Step 4 — api.md 작성
