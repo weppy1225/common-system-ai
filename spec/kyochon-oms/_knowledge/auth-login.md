@@ -1,4 +1,4 @@
-﻿---
+---
 title: OMS BE 로그인·인증 가이드
 description: kyochon-oms-be의 로그인 API, JWT 토큰 구조, curl·JUnit 테스트 인증 방법을 다룬다. API 테스트·스크립트 작성 전 반드시 참조한다.
 status: active

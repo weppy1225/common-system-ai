@@ -1,4 +1,4 @@
-﻿---
+---
 description: OMS 도메인 백엔드 코드 작성·수정 시 common 백엔드 컨벤션 대비 OMS 고유 판단 기준·금지만 적용. 고객사가 달라도 OMS 도메인이면 동일 규칙 적용. Controller/Comp/CompUtil/TxComp/Dao/Mapper 파일을 다룰 때 로딩한다.
 paths:
   - "**/*Controller.java"

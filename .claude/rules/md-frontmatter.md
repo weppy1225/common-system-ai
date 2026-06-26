@@ -21,6 +21,7 @@ tags:
 ## 기본 원칙
 
 - frontmatter는 문서 첫 줄에서 `---`로 시작하고 `---`로 닫은 뒤 본문 제목을 둔다.
+- **UTF-8 BOM 금지.** 파일은 BOM 없는 UTF-8로 저장한다. BOM(`EF BB BF`)이 `---` 앞에 붙으면 첫 줄이 frontmatter로 인식되지 않아 rule 조건부 로딩이 깨질 수 있다. (방지: 루트 `.editorconfig`의 `charset = utf-8` / 검출: `python scripts/check-doc-refs.py` 가 BOM 발견 시 ERROR·종료코드 1)
 - AI가 문서를 고를 때 필요한 정보만 넣는다.
 - 값은 추정하지 않는다. 실제 파일, 명령 문서, 코드, DB 문서에서 확인한 값만 적는다.
 - key는 영문 snake_case를 사용한다.

@@ -38,6 +38,24 @@ def norm(p):
     return os.path.normpath(p).replace(os.sep, "/")
 
 
+def check_bom():
+    """전 .md 파일에서 UTF-8 BOM(EF BB BF) 검출. BOM 은 frontmatter 첫 줄(---)
+    파싱을 방해해 rule 조건부 로딩이 깨질 수 있으므로 ERROR 로 막는다.
+    재발 방지: .editorconfig(charset=utf-8) 가 에디터 단에서 1차 차단, 본 검사가 게이트."""
+    bom_files = []
+    for p in glob.glob(os.path.join(ROOT, "**", "*.md"), recursive=True):
+        rel = norm(os.path.relpath(p, ROOT))
+        if rel.startswith("node_modules/") or "/node_modules/" in rel:
+            continue
+        try:
+            with open(p, "rb") as fh:
+                if fh.read(3) == b"\xef\xbb\xbf":
+                    bom_files.append(rel)
+        except OSError:
+            continue
+    return sorted(bom_files)
+
+
 def collect_scan_files():
     files = []
     for d in SCAN_DIRS:
@@ -105,7 +123,17 @@ def main():
     else:
         print("[OK] 미참조 패턴 문서 없음")
 
-    return 1 if broken else 0
+    # --- BOM 검사 ---
+    bom_files = check_bom()
+    print("\n=== UTF-8 BOM 검사 (.md 전수) ===")
+    if bom_files:
+        print(f"[ERROR] BOM 포함 문서 {len(bom_files)}건 (frontmatter 파싱 방해 — 제거 필요):")
+        for b in bom_files:
+            print(f"  - {b}")
+    else:
+        print("[OK] BOM 포함 문서 없음")
+
+    return 1 if (broken or bom_files) else 0
 
 
 if __name__ == "__main__":

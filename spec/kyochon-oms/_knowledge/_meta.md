@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 프로젝트 지식 메타
 description: 이 프로젝트가 속한 도메인과 전역 지식(_knowledge)의 구성을 선언한다
 status: active

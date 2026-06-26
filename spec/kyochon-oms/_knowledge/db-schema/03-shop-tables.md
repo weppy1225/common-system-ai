@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 쇼핑몰 테이블 정의서
 description: kyochon-oms 쇼핑몰(shop_*) 테이블 목록과 공통 컬럼 규칙을 확인할 때 읽는다
 status: active

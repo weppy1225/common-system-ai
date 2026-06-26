@@ -1,4 +1,4 @@
-﻿---
+---
 title: 공통코드(Common Code) — 왜 쓰나 + 어떻게 쓰나 (시스템 횡단)
 description: WMS·OMS·WCS 등 여러 시스템 개발 시 공통코드를 왜 사용하고 어떻게 사용하는지(코드마스터 DB → BE 상수 → FE commCdStore 캐시)를 시스템 무관 관점으로 파악할 때 읽는다. 시스템별 구현 차이는 각 도메인 문서로 라우팅한다.
 status: active

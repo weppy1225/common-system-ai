@@ -1,4 +1,4 @@
-﻿---
+---
 description: OMS 도메인 MyBatis Mapper.xml·Dao 작성 시 common DB 컨벤션 대비 OMS 고유 판단 기준·금지만 적용. 고객사가 달라도 OMS 도메인이면 동일 규칙 적용. Mapper.xml 또는 Dao를 다룰 때 로딩한다.
 paths:
   - "**/*Mapper.xml"

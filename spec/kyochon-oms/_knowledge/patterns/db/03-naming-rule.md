@@ -1,4 +1,4 @@
-﻿---
+---
 description: oms-be DB 테이블·컬럼 네이밍 규칙 중 OMS 고유 차이분(MDM/SM/SIF prefix·주문/출하 도메인 prefix 미확인 경고·OMS ERD 경로·camelCase 매핑 접미어 링크). 테이블·컬럼명을 정하거나 매핑 별칭을 지을 때 공통 규칙과 함께 적용한다.
 ---
 

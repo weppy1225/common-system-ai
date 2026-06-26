@@ -1,4 +1,4 @@
-﻿---
+---
 title: OMS 백엔드 레이어 작성 패턴 — OMS 고유 차이
 description: oms-be 레이어(CompUtil·TxComp·Comp·Controller) 작성 시 common 공통 패턴과 다른 OMS 고유 차이분만 확인하는 참조 문서
 status: active

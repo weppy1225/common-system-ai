@@ -1,0 +1,19 @@
+# EditorConfig — 에디터 공통 설정 (BOM 재발 방지 포함)
+# https://editorconfig.org  · 대부분의 에디터/IDE가 자동 적용(VS Code는 EditorConfig 확장 필요)
+root = true
+
+[*]
+# charset = utf-8 는 "BOM 없는 UTF-8" 을 의미한다. (BOM 포함은 utf-8-bom)
+# → 에디터가 저장 시 파일 앞에 BOM(EF BB BF)을 붙이지 못하게 막는다.
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+# 마크다운은 줄 끝 공백 2칸이 줄바꿈 의미라 trim 예외
+trim_trailing_whitespace = false
+
+[*.{bat,ps1}]
+# 윈도우 스크립트는 CRLF 유지
+end_of_line = crlf

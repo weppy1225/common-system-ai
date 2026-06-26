@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms OMS 업무 테이블 정의서
 description: kyochon-oms 업무(oms_*) 테이블 목록과 도메인별 그룹·공통 컬럼을 확인할 때 읽는다
 status: active

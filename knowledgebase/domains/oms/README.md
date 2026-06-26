@@ -1,4 +1,4 @@
-﻿---
+---
 title: OMS 도메인 표준
 description: OMS 도메인 개념(업무 흐름·용어·기술 전제)의 진입점. 코딩 패턴·구현 규칙은 spec/{프로젝트}/_knowledge/patterns/ 에 있다.
 status: active

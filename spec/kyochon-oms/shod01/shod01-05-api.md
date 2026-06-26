@@ -1,4 +1,4 @@
-﻿---
+---
 title: shod01 쇼핑몰 구매 API 명세서
 description: shod01 쇼핑몰 구매 주문 등록·조회·취소 API 명세. PI_be_all 코드 생성 전 참조.
 status: draft

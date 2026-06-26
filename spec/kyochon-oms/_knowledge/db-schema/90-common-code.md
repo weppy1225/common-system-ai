@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 공통코드 목록
 description: kyochon-oms 공통코드(sm_comm_h/sm_comm_d) 헤더 목록과 각 코드 상세값을 확인할 때 읽는다
 status: active

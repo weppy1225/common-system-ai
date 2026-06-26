@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms FE axios 설정 및 URL 구조
 description: FE axios interceptor가 URL에 /{bizSeq}/ prefix를 자동 삽입하는 구조. FE URL → 실제 BE URL 매핑 규칙. API 설계 시 반드시 확인.
 status: active

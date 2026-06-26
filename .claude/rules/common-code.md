@@ -1,4 +1,4 @@
-﻿---
+---
 description: BE·FE에서 공통코드(상태·구분·유형·여부 코드값)를 다룰 때 적용하는 시스템 무관(WMS·OMS·WCS) 규칙. 코드값 상수화·FE commCdStore 경유·명칭변환·하드코딩 금지. .vue/스토어js/상수파일/Comp/TxComp/Mapper.xml 을 다룰 때 로딩한다.
 paths:
   - "**/*.vue"

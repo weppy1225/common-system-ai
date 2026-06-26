@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 시스템·스케줄러 테이블 정의서
 description: kyochon-oms 시스템 관리(sm_*) 및 스케줄러(qrtz_*) 테이블 목록과 공통 컬럼을 확인할 때 읽는다
 status: active

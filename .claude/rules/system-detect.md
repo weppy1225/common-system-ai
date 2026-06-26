@@ -1,4 +1,4 @@
-﻿---
+---
 description: 개발(BE/FE 코드 작성·수정, 메뉴 설계) 시작 시 대상 시스템(WMS·OMS 등)을 자동 판별하는 규칙. 허브(ai-kb=common-system-ai) 프레임워크 수정과 구분한다. *.java/*.vue/*Mapper.xml 또는 spec 설계 문서를 다룰 때 로딩한다.
 paths:
   - "**/*.java"

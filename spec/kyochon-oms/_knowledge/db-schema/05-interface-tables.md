@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 인터페이스·가상계좌 테이블 정의서
 description: kyochon-oms 인터페이스(sif_*)·가상계좌(vacs_*)·외부연동(ideatec_*) 테이블 목록을 확인할 때 읽는다
 status: active

@@ -1,4 +1,4 @@
-﻿---
+---
 title: kyochon-oms 테이블 목록 및 설명
 description: kyochon-oms 전체 테이블 목록과 도메인별 그룹을 확인할 때 읽는다
 status: active

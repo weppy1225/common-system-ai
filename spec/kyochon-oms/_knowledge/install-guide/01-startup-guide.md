@@ -1,4 +1,4 @@
-﻿---
+---
 title: OMS 기동·빌드·배포 방법 (OMS 고유 차이)
 description: oms-be(Ant→WAR→Tomcat 9)와 oms-fe(Vite) 로컬 기동·빌드·Jenkins 배포에서 common(Gradle/Spring Boot) 대비 OMS 고유 차이만 확인할 때 연다.
 status: active
