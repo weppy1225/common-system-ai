@@ -33,4 +33,4 @@ ls -l knowledgebase/20-md-index.html
 
 ## 3단계 — 커밋 (선택)
 
-변경이 생겼고 사용자가 요청하면 `.claude/rules/git-workflow.md` 의 doc 레포 규칙(main 직접 푸시)에 따라 커밋·푸시한다. 자동으로 커밋하지 않는다.
+변경이 생겼고 사용자가 요청하면 `.claude/rules/git-workflow.md` 의 AI 허브 규칙(main 직접 푸시)에 따라 커밋·푸시한다. 자동으로 커밋하지 않는다.
