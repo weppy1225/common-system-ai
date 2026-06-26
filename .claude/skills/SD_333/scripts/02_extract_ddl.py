@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-OUT_DIR = BASE_DIR / "output" / "03 설계(SD)"
+OUT_DIR = BASE_DIR / "deliverables" / "30-output" / "03 설계(SD)"
 TMP_DIR = OUT_DIR / "tmp"
 TARGET_FILE = TMP_DIR / "db_target.json"
 

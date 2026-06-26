@@ -208,7 +208,7 @@ python "$DocRoot\.claude\skills\TT_550\scripts\py\03_write_manifest.py"
 ### W-6) 임시 파일 정리 (manifest.json 은 보존)
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\05 이행(TT)\TT_550_DATA_{고객사명}_{YYMMDD}\tmp"
+Remove-Item -Recurse -Force "$DocRoot\deliverables\30-output\05 이행(TT)\TT_550_DATA_{고객사명}_{YYMMDD}\tmp"
 ```
 
 ---
@@ -595,7 +595,7 @@ Dump 결과 (3 groups, 5 tables, 244 rows):
 - **PowerShell 실행 정책**: `Restricted` 면 `-ExecutionPolicy Bypass` 사용.
 - **`python` vs `py`**: 0단계에서 자동 선택.
 - **한글 콘솔 깨짐**: UTF-8 모드 전환 (`chcp 65001` + `$env:PYTHONUTF8="1"`).
-- **경로 공백·한글**: `"output\05 이행(TT)"` 처럼 공백·한글 경로는 큰따옴표.
+- **경로 공백·한글**: `"deliverables\30-output\05 이행(TT)"` 처럼 공백·한글 경로는 큰따옴표.
 - **POWERSHELL 모드의 pg_dump 버전 충돌**: 클라이언트 ≥ 서버 필요. PG 버전 격차가 크면 `PYTHON` 모드 권장.
 
 ### Bash 특화

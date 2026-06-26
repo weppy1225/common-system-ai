@@ -106,7 +106,7 @@ python -u ".claude\skills\SD_333\scripts\02_extract_ddl.py" "{고객사명}"
 ### W-4) 임시 파일 정리 (필수)
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\03 설계(SD)\tmp"
+Remove-Item -Recurse -Force "$DocRoot\deliverables\30-output\03 설계(SD)\tmp"
 ```
 
 ---
@@ -284,7 +284,7 @@ DDL 현황:
 
 - **`python` vs `py`**: 우선 `python --version` 으로 확인. 실패 시 `py -3` 로 재시도.
 - **한글 콘솔 출력 깨짐**: `chcp 65001` + `$env:PYTHONUTF8 = "1"` + `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` 로 UTF-8 모드 전환.
-- **경로 공백·한글 처리**: `"output\03 설계(SD)"` 처럼 공백·한글 경로는 큰따옴표로 감싼다.
+- **경로 공백·한글 처리**: `"deliverables\30-output\03 설계(SD)"` 처럼 공백·한글 경로는 큰따옴표로 감싼다.
 
 ### Bash 특화
 

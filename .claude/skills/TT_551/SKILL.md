@@ -1,6 +1,6 @@
 ---
 name: TT_551
-description: input/TT.551/ 폴더의 PowerShell 마이그레이션 스크립트 실행 (V0~V10 또는 all). /TT_551 [V번호|all]
+description: deliverables/20-sources/TT_551/ 폴더의 PowerShell 마이그레이션 스크립트 실행 (V0~V10 또는 all). /TT_551 [V번호|all]
 when_to_use: "DB 이관 스크립트 실행해줘", "이관 실행 V3", "전체 이관 실행", "migrate all 실행" 요청 시 사용.
 argument-hint: "[V번호|all]"
 disable-model-invocation: true
@@ -9,7 +9,7 @@ allowed-tools: Bash, PowerShell
 
 # DB 이관 스크립트 실행 (Windows/WSL/Linux 통합) [TT_551]
 
-`input/TT.551/` 폴더에 있는 PowerShell 마이그레이션 스크립트를 인수에 따라 실행한다.
+`deliverables/20-sources/TT_551/` 폴더에 있는 PowerShell 마이그레이션 스크립트를 인수에 따라 실행한다.
 
 > **실행 환경:** Windows 네이티브 PowerShell 5.1+ 또는 WSL2 (Windows 호스트의 `powershell.exe` 가 PATH에서 접근 가능해야 함).
 > 순수 Linux/macOS 환경(`powershell.exe` 자체가 없는 경우) 에서는 PowerShell Core(`pwsh`)를 설치하거나 `.ps1` 스크립트를 Bash로 재구현해야 한다.
@@ -67,14 +67,14 @@ allowed-tools: Bash, PowerShell
 
 ```bash
 DOCROOT=$(powershell.exe -NoProfile -Command "(git rev-parse --show-toplevel) -replace '/', '\'")
-SCRIPT_DIR="${DOCROOT}\\input\\TT.551"
+SCRIPT_DIR="${DOCROOT}\\deliverables\\20-sources\\TT_551"
 ```
 
 또는 PowerShell 도구로:
 
 ```powershell
 $DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
-$ScriptDir = Join-Path $DocRoot "input\TT.551"
+$ScriptDir = Join-Path $DocRoot "deliverables\20-sources\TT_551"
 ```
 
 ### W-1) 전체 실행 (인수 없음 또는 all)
@@ -104,7 +104,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${SCRIPT_DIR}\\migrate_
 ```bash
 DOC_ROOT=$(git rev-parse --show-toplevel)
 WIN_DOC_ROOT=$(wslpath -w "$DOC_ROOT")
-SCRIPT_DIR="${WIN_DOC_ROOT}\\input\\TT.551"
+SCRIPT_DIR="${WIN_DOC_ROOT}\\deliverables\\20-sources\\TT_551"
 ```
 
 ### B-1) 전체 실행 (인수 없음 또는 all)

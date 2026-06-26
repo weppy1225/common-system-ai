@@ -13,7 +13,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 
 `$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일(`application-dev.properties`, `application-test.properties`, `application*.yml` 등)을 자동 스캔하여 DB(PostgreSQL/MySQL/MariaDB/MSSQL)에 직접 접속한다.
 `sm_comm_h`(공통코드 그룹)과 `sm_comm_d`(상세코드)를 조회하여
-`template/04 구현(PI)/PI_113-공통코드정의서.xlsx` 템플릿에 데이터를 채워 넣고
+`deliverables/10-templates/04 구현(PI)/PI_113-공통코드정의서.xlsx` 템플릿에 데이터를 채워 넣고
 `deliverables/30-output/04 구현(PI)/PI_113-공통코드정의서_{YYMMDD}.xlsx` 파일을 생성한다.
 
 > **클라이언트 도구 불필요**: psql/mysql/sqlcmd 같은 OS 클라이언트 없이 Python 라이브러리(psycopg2-binary / pymysql / pymssql)만으로 직접 접속한다. 라이브러리는 필요 시 `pip install --user`로 자동 설치한다.
@@ -44,7 +44,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-TEMPLATE   = template/04 구현(PI)/PI_113-공통코드정의서.xlsx
+TEMPLATE   = deliverables/10-templates/04 구현(PI)/PI_113-공통코드정의서.xlsx
 OUTPUT_DIR = deliverables/30-output/04 구현(PI)
 TMP_DIR    = deliverables/30-output/04 구현(PI)/tmp
 SCRIPTS    = .claude/skills/SD_332/scripts
@@ -94,7 +94,7 @@ python .claude/skills/SD_332/scripts/03_generate_excel.py
 ### W-5) 임시 파일 정리
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\04 구현(PI)\tmp"
+Remove-Item -Recurse -Force "$DocRoot\deliverables\30-output\04 구현(PI)\tmp"
 ```
 
 ---

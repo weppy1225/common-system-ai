@@ -23,7 +23,7 @@ from urllib.parse import urlparse, unquote
 
 # BASE_DIR 자동 추론: scripts/01_scan_config.py → SD_333_WIN → skills → .claude → <repo root>
 BASE_DIR = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE_DIR / "output" / "03 설계(SD)" / "tmp"
+TMP_DIR = BASE_DIR / "deliverables" / "30-output" / "03 설계(SD)" / "tmp"
 
 POSTGRES_TOKENS = {
     "postgres", "postgresql", "psql", "pg",

@@ -143,7 +143,7 @@ $DirtyCount  = (git status --porcelain | Measure-Object -Line).Lines
 ```powershell
 $DocRoot = (git rev-parse --show-toplevel) -replace '/', '\'
 Set-Location $DocRoot
-$OutDir = Join-Path $DocRoot "output\04 구현(PI)"
+$OutDir = Join-Path $DocRoot "deliverables\30-output\04 구현(PI)"
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 $Company    = "{고객사명}"
 $SafeBranch = $Branch -replace '/', '_'
@@ -465,6 +465,6 @@ ZIP 내부 prefix: {RepoName}-{Branch}/
 
 - **PowerShell 실행 정책:** `-ExecutionPolicy Bypass`로 명시 호출.
 - **PowerShell 버전:** 5.1 ↔ 7+ 차이 (`-Encoding Byte` ↔ `-AsByteStream`) 분기.
-- **경로 공백:** "output\04 구현(PI)" 등 한글·공백 경로는 큰따옴표 또는 `Join-Path` 사용.
+- **경로 공백:** "deliverables\30-output\04 구현(PI)" 등 한글·공백 경로는 큰따옴표 또는 `Join-Path` 사용.
 - **한글 콘솔 깨짐:** `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` 로 UTF-8 강제.
 - **git/gh 설치:** Windows에 기본 미설치 — `git --version` / `gh --version` 사전 점검.

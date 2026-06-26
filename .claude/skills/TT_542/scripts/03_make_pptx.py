@@ -9,7 +9,7 @@
   deliverables/30-output/05 이행(TT)/tmp_542/screens/{메뉴코드}/coords.json
 
 템플릿:
-  template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx
+  deliverables/10-templates/05 이행(TT)/TT.411-사용자매뉴얼(PDA).pptx
   - 13.33 × 7.5 인치 (16:9)
   - 제목바 #2D4B73 / 이미지영역 0~10in / 설명패널 10~13.33in / 페이지번호 우하단
   - 색상상수: 본 스크립트 상단의 COLOR_* 와 동일
@@ -46,8 +46,8 @@ from PIL import Image, ImageFont
 # parents[0]=scripts  parents[1]=TT_542  parents[2]=skills  parents[3]=.claude  parents[4]=repo root
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parents[4]
-TEMPLATE = REPO_ROOT / 'template' / '05 이행(TT)' / '사용자_매뉴얼_템플릿.pptx'
-OUTPUT_DIR = REPO_ROOT / 'output' / '05 이행(TT)'
+TEMPLATE = REPO_ROOT / 'deliverables' / '10-templates' / '05 이행(TT)' / 'TT.411-사용자매뉴얼(PDA).pptx'
+OUTPUT_DIR = REPO_ROOT / 'deliverables' / '30-output' / '05 이행(TT)'
 TMP_DIR = OUTPUT_DIR / 'tmp_542'
 SCREENS_ROOT = TMP_DIR / 'screens'
 CFG_FILE = TMP_DIR / 'capture_config.json'

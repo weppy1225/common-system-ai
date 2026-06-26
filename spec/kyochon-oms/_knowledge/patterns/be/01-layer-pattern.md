@@ -40,7 +40,7 @@ last_verified: 2026-06-22
 | Controller `@RequestMapping` | — | **첫 경로 변수는 사업장 `{bizSeq}`** | `@RequestMapping("/{bizSeq}/odrg01/orders")` |
 | 채번 호출 위치 | TxComp 에서 호출 | OMS 는 `DocNoGenerator`/`SeqGenerator` 가 주로 **Dao 에 주입** → [03-numbering-module.md](./03-numbering-module.md) | `ODRG01Dao`, `ODED02Dao` |
 
-OMS 레이어 개요·예외 흐름 라우팅: `knowledgebase/domains/oms/patterns/be/`, 판단/금지패턴: `.claude/rules/oms-backend-convention.md`.
+OMS 레이어 개요·예외 흐름 라우팅: `spec/kyochon-oms/_knowledge/patterns/be/`, 판단/금지패턴: `.claude/rules/oms-backend-convention.md`.
 
 ---
 

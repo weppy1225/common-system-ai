@@ -11,7 +11,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 입력 FE/BE 프로젝트: **$ARGUMENTS**
 
-`$ARGUMENTS` 경로(FE 프로젝트 + BE 소스경로)에서 **관리자가 시스템설정·권한·메뉴·공통코드·사업장·센터·창고 등을 설정하는 관리형 메뉴**를 자동 탐지하고, 실제 dev/스테이징 서버를 **Playwright 헤드리스(한국어 로캘 ko-KR)** 로 접속하여 화면을 캡처한 뒤, `template/05 이행(TT)/사용자매뉴얼_샘플.pptx` 를 base로 **python-pptx** 로 관리자매뉴얼 PPTX 를 `deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 파일로 생성한다.
+`$ARGUMENTS` 경로(FE 프로젝트 + BE 소스경로)에서 **관리자가 시스템설정·권한·메뉴·공통코드·사업장·센터·창고 등을 설정하는 관리형 메뉴**를 자동 탐지하고, 실제 dev/스테이징 서버를 **Playwright 헤드리스(한국어 로캘 ko-KR)** 로 접속하여 화면을 캡처한 뒤, `deliverables/10-templates/05 이행(TT)/TT.412. 운영자메뉴얼.pptx` 를 base로 **python-pptx** 로 관리자매뉴얼 PPTX 를 `deliverables/30-output/05 이행(TT)/TT_543_관리자매뉴얼_{고객사명}.pptx` 파일로 생성한다.
 
 ---
 
@@ -43,7 +43,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 4. `.claude/skills/TT_543/scripts/parse_vue_source.py` (Python) → 우측 설명 영역 작성을 위한 Vue 소스 파싱
 
 ## 템플릿
-- `template/05 이행(TT)/사용자매뉴얼_샘플.pptx`
+- `deliverables/10-templates/05 이행(TT)/TT.412. 운영자메뉴얼.pptx`
 
 ---
 
@@ -80,7 +80,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 ```
 BASE      = $DocRoot / $DOC_ROOT (자동 감지)
-TEMPLATE  = template/05 이행(TT)/사용자매뉴얼_샘플.pptx
+TEMPLATE  = deliverables/10-templates/05 이행(TT)/TT.412. 운영자메뉴얼.pptx
 OUT_DIR   = deliverables/30-output/05 이행(TT)
 TMP_DIR   = deliverables/30-output/05 이행(TT)/tmp_543
 SCRIPTS   = .claude/skills/TT_543/scripts
@@ -144,7 +144,7 @@ python ".claude\skills\TT_543\scripts\03_make_pptx.py"
 ### W-5) 임시 파일 정리
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\05 이행(TT)\tmp_543"
+Remove-Item -Recurse -Force "$DocRoot\deliverables\30-output\05 이행(TT)\tmp_543"
 ```
 
 ---

@@ -42,7 +42,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 3. `.claude/skills/TT_542/scripts/03_make_pptx.py` (Python + python-pptx + Pillow) → PPTX 생성
 
 ## 템플릿
-- `template/05 이행(TT)/사용자매뉴얼_샘플.pptx`
+- `deliverables/10-templates/05 이행(TT)/TT.411-사용자매뉴얼(PDA).pptx`
 
 ---
 
@@ -50,7 +50,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 > **관리자매뉴얼이 필요하면 이 스킬에서 처리하지 않는다.** 관리자 메뉴에 대한 매뉴얼은 `/TT_543` 스킬에서 처리한다.
 
 > **템플릿(BLOCKING)**
-> PPTX 생성에는 반드시 `template/05 이행(TT)/사용자매뉴얼_샘플.pptx` 를 열어 base 로 사용한다.
+> PPTX 생성에는 반드시 `deliverables/10-templates/05 이행(TT)/TT.411-사용자매뉴얼(PDA).pptx` 를 열어 base 로 사용한다.
 > 템플릿의 슬라이드 레이아웃 / 폰트 / 색상은 그대로 유지하고, 실제 슬라이드는 모두 제거한 뒤 새 슬라이드를 추가한다.
 
 > **PPT 직접 삽입 제약 (BLOCKING)**
@@ -80,7 +80,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 ```
 BASE      = $DocRoot / $DOC_ROOT (자동 감지)
-TEMPLATE  = template/05 이행(TT)/사용자매뉴얼_샘플.pptx
+TEMPLATE  = deliverables/10-templates/05 이행(TT)/TT.411-사용자매뉴얼(PDA).pptx
 OUT_DIR   = deliverables/30-output/05 이행(TT)
 TMP_DIR   = deliverables/30-output/05 이행(TT)/tmp_542
 SCRIPTS   = .claude/skills/TT_542/scripts

@@ -4,7 +4,7 @@ SD_331 3단계 - 추출된 schema를 SD.212-테이블정의서 템플릿에 채�
 
 입력:
     deliverables/30-output/03 설계(SD)/tmp/schema.json
-    template/03 설계(SD)/SD.212-테이블정의서.xlsx
+    deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx
 
 출력:
     deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx
@@ -36,7 +36,7 @@ from copy import copy
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-TEMPLATE_PATH = BASE_DIR / "template/03 설계(SD)/SD.212-테이블정의서.xlsx"
+TEMPLATE_PATH = BASE_DIR / "deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx"
 OUTPUT_DIR = BASE_DIR / "deliverables/30-output/03 설계(SD)"
 TMP_DIR = OUTPUT_DIR / "tmp"
 SCHEMA_FILE = TMP_DIR / "schema.json"

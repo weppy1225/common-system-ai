@@ -47,7 +47,7 @@ from typing import Any
 from urllib.parse import parse_qsl, urlparse
 
 BASE = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE / "output" / "04 구현(PI)" / "tmp"
+TMP_DIR = BASE / "deliverables" / "30-output" / "04 구현(PI)" / "tmp"
 OUT_FILE = TMP_DIR / "db_candidates.json"
 
 PROFILE_PRIORITY = {"local": 0, "dev": 1, "default": 2}  # 그 외는 9

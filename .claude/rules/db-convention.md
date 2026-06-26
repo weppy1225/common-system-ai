@@ -72,6 +72,8 @@ AND t.col_nm LIKE FN_CONCAT('%', #{keyword}, '%')
 
 ## §6 금지 패턴 (BLOCKING)
 
+> 아래는 빠른 NEVER 체크용 요약이다. 대체 패턴의 서식·예시 정본(SoT) → `patterns/20-database/30-convention/02-mybatis-convention.md`·`01-sql-query-style.md` (§ 상세 패턴 문서).
+
 | 금지 패턴 | 대체 |
 |---|---|
 | 삭제 플래그가 있는 테이블의 `DELETE FROM` | `UPDATE SET use_yn='N'` 또는 `UPDATE SET del_yn='Y'` |

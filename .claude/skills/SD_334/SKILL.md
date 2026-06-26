@@ -109,9 +109,9 @@ $BeRoot    = Join-Path $Workspace "$RepoPrefix-be"
 ```
 PROP_FILE  = {BE경로}\src\main\resource\prop\application-test.properties
 PSQL       = C:\Program Files\PostgreSQL\10\bin\psql.exe
-OUTPUT_DIR = $DocRoot\output\03 설계(SD)
-TEMPLATE   = $DocRoot\output\03 설계(SD)\SD.211-ERD_*.html (최신 LastWriteTime)
-OUT_FILE   = $DocRoot\output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
+OUTPUT_DIR = $DocRoot\deliverables\30-output\03 설계(SD)
+TEMPLATE   = $DocRoot\deliverables\30-output\03 설계(SD)\SD.211-ERD_*.html (최신 LastWriteTime)
+OUT_FILE   = $DocRoot\deliverables\30-output\03 설계(SD)\SD.211-ERD_{업체명}_{YYMMDD}.html
 ```
 
 ### W-1) DB 접속 정보 파싱
@@ -164,7 +164,7 @@ $fksJS = "const FKS=[" + ($fkRows -join ",") + "];"
 
 ```powershell
 $projectRoot = (git rev-parse --show-toplevel) -replace '/', '\'
-$outputDir   = "$projectRoot\output\03 설계(SD)"
+$outputDir   = "$projectRoot\deliverables\30-output\03 설계(SD)"
 $yymmdd      = (Get-Date).ToString("yyMMdd")
 $safeName    = $ARGUMENTS -replace '[\\/:*?"<>|]', '_'
 $outputFile  = "$outputDir\SD.211-ERD_${safeName}_${yymmdd}.html"
@@ -174,7 +174,7 @@ if (-not (Test-Path $outputDir)) { New-Item -ItemType Directory -Path $outputDir
 $templateFile = Get-ChildItem $outputDir -Filter "SD.211-ERD_*.html" |
     Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if (-not $templateFile) {
-    Write-Error "ERD 템플릿 파일 없음. output\03 설계(SD)\SD.211-ERD_*.html 파일이 최소 1개 필요합니다."; return
+    Write-Error "ERD 템플릿 파일 없음. deliverables\30-output\03 설계(SD)\SD.211-ERD_*.html 파일이 최소 1개 필요합니다."; return
 }
 $html = Get-Content $templateFile.FullName -Raw -Encoding UTF8
 ```

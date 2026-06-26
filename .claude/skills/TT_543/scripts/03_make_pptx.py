@@ -9,7 +9,7 @@
   deliverables/30-output/05 이행(TT)/tmp_543/screens/{메뉴코드}/coords.json
 
 템플릿:
-  template/05 이행(TT)/사용자_매뉴얼_템플릿.pptx   ← TT_541 과 동일 파일
+  deliverables/10-templates/05 이행(TT)/TT.412. 운영자메뉴얼.pptx
   - 13.33 × 7.5 인치 (16:9)
   - 제목바 #2D4B73 / 이미지영역 0~10in / 설명패널 10~13.33in / 페이지번호 우하단
 
@@ -55,8 +55,8 @@ from parse_vue_source import parse_menu as parse_vue_menu
 # parents[0]=scripts  parents[1]=TT_543  parents[2]=skills
 # parents[3]=.claude  parents[4]=<프로젝트 루트>
 REPO_ROOT = Path(__file__).resolve().parents[4]
-TEMPLATE = REPO_ROOT / 'template' / '05 이행(TT)' / '사용자_매뉴얼_템플릿.pptx'
-OUTPUT_DIR = REPO_ROOT / 'output' / '05 이행(TT)'
+TEMPLATE = REPO_ROOT / 'deliverables' / '10-templates' / '05 이행(TT)' / 'TT.412. 운영자메뉴얼.pptx'
+OUTPUT_DIR = REPO_ROOT / 'deliverables' / '30-output' / '05 이행(TT)'
 TMP_DIR = OUTPUT_DIR / 'tmp_543'
 SCREENS_ROOT = TMP_DIR / 'screens'
 CFG_FILE = TMP_DIR / 'capture_config.json'

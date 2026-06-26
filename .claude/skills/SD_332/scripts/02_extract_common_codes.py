@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 BASE = Path(__file__).resolve().parents[4]
-TMP_DIR = BASE / "output" / "04 구현(PI)" / "tmp"
+TMP_DIR = BASE / "deliverables" / "30-output" / "04 구현(PI)" / "tmp"
 IN_FILE = TMP_DIR / "db_target.json"
 OUT_FILE = TMP_DIR / "common_codes.json"
 

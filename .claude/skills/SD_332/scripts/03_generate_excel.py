@@ -2,7 +2,7 @@
 """
 [SD_332] 3단계 — Excel 산출물 생성
 
-템플릿: template/04 구현(PI)/PI_113-공통코드정의서.xlsx
+템플릿: deliverables/10-templates/04 구현(PI)/PI_113-공통코드정의서.xlsx
 - 시트:
     표지, 개정이력, 3.코드그룹, 4.상세코드, 그룹SQL, 상세SQL
 
@@ -33,9 +33,9 @@ from pathlib import Path
 from typing import Any
 
 BASE = Path(__file__).resolve().parents[4]
-TEMPLATE = BASE / "template" / "04 구현(PI)" / "PI_113-공통코드정의서.xlsx"
-TMP_DIR = BASE / "output" / "04 구현(PI)" / "tmp"
-OUT_DIR = BASE / "output" / "04 구현(PI)"
+TEMPLATE = BASE / "deliverables" / "10-templates" / "04 구현(PI)" / "PI_113-공통코드정의서.xlsx"
+TMP_DIR = BASE / "deliverables" / "30-output" / "04 구현(PI)" / "tmp"
+OUT_DIR = BASE / "deliverables" / "30-output" / "04 구현(PI)"
 IN_FILE = TMP_DIR / "common_codes.json"
 
 

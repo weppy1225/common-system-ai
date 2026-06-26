@@ -27,7 +27,7 @@ const path = require('path');
 // repo root = parents[3]. node 실행 위치와 무관하게 __dirname 기준으로 계산한다.
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_543');
+const TMP_DIR = path.join(REPO_ROOT, 'deliverables', '30-output', '05 이행(TT)', 'tmp_543');
 const OUT_FILE = path.join(TMP_DIR, 'admin_menu_candidates.json');
 
 function normalizePath(p) {

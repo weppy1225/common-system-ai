@@ -30,7 +30,7 @@ const path = require('path');
 // repo root = .claude/skills/TT_542/scripts/ 의 parents[3]
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_542');
+const TMP_DIR = path.join(REPO_ROOT, 'deliverables', '30-output', '05 이행(TT)', 'tmp_542');
 const CFG_FILE = path.join(TMP_DIR, 'capture_config.json');
 const SCREENS_ROOT = path.join(TMP_DIR, 'screens');
 

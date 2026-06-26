@@ -14,7 +14,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 > **목적**: 고객사 인계용 산출물. 실제 테스트 실행 결과를 기록하는 것이 아니라, 현재 작성되어 있는 JUnit 테스트 메서드를 모두 "통과"로 표기한 보고서를 만든다.
 
-> **템플릿**: `template/04 구현(PI)/PI_212-단위테스트보고서.xlsx`
+> **템플릿**: `deliverables/10-templates/04 구현(PI)/PI_212-단위테스트보고서.xlsx`
 > - 시트: `표지`, `개정이력`, `단위테스트 보고서`, `Sheet1`
 > - 데이터 시트(`단위테스트 보고서`) 컬럼: No. / 플랫폼 / 대메뉴 / 테스트ID / 메뉴 / 구분 / 내용 / 확인일자 / 담당자 / 결과(O,△,X) / 오류내용 / #레드마인 / 조치일자 / 조치확인결과
 > - 데이터는 3행부터 작성. `표지` / `개정이력` 시트는 손대지 않는다.
@@ -61,7 +61,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-TEMPLATE   = template/04 구현(PI)/PI_212-단위테스트보고서.xlsx
+TEMPLATE   = deliverables/10-templates/04 구현(PI)/PI_212-단위테스트보고서.xlsx
 OUTPUT_DIR = deliverables/30-output/04 구현(PI)
 TMP_DIR    = deliverables/30-output/04 구현(PI)/tmp
 OUTFILE    = deliverables/30-output/04 구현(PI)/PI_421_단위테스트보고서_{고객사명}_{YYMMDD}.xlsx
@@ -109,7 +109,7 @@ python -u ".claude\skills\PI_421\scripts\02_generate_excel.py" "{고객사명}" 
 ### W-4) 임시 파일 정리
 
 ```powershell
-Remove-Item -Recurse -Force (Join-Path $DocRoot "output\04 구현(PI)\tmp") -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force (Join-Path $DocRoot "deliverables\30-output\04 구현(PI)\tmp") -ErrorAction SilentlyContinue
 ```
 
 ---
@@ -208,7 +208,7 @@ rm -rf "deliverables/30-output/04 구현(PI)/tmp"
 
 - `class_name` 에서 도메인 코드(예: `MDBZ01`, `IVAD01M`) prefix 를 정규식으로 추출(`^(?:ZTEST_)?([A-Z]{2,5}[0-9]{2,3}M?)`).
 - 한글도메인명 조회 순서:
-  1. `template/04 구현(PI)/PI_412-프로그램목록.xlsx` 에서 학습한 사전
+  1. `deliverables/10-templates/04 구현(PI)/PI_412-프로그램목록.xlsx` 에서 학습한 사전
   2. 스크립트 내장 사전(`BUILTIN_NAME_DICT`)
   3. 클래스명에서 `ZTEST_` prefix 와 모듈 suffix 제거한 bare 이름
 
@@ -327,7 +327,7 @@ rm -rf "deliverables/30-output/04 구현(PI)/tmp"
   [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
   chcp 65001 | Out-Null
   ```
-- **경로 공백·한글 처리**: `"output\04 구현(PI)"` 처럼 공백·한글이 포함된 경로는 반드시 큰따옴표로 감싼다.
+- **경로 공백·한글 처리**: `"deliverables\30-output\04 구현(PI)"` 처럼 공백·한글이 포함된 경로는 반드시 큰따옴표로 감싼다.
 
 ### Bash 특화
 

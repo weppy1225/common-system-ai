@@ -10,7 +10,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, Glob, Grep, AskUserQuestion
 # 프로그램 목록 자동 생성 (Windows/WSL/Linux/Mac 통합) [PI_412]
 
 지정된 로컬 프로젝트 디렉토리(백엔드/프론트엔드/모노레포)를 자동 스캔하여 프로그램 목록을 추출하고
-`template/04 구현(PI)/PI_412-프로그램목록.xlsx` **템플릿을 복사하여 데이터를 채워**
+`deliverables/10-templates/04 구현(PI)/PI_412-프로그램목록.xlsx` **템플릿을 복사하여 데이터를 채워**
 `deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 로 저장한다.
 
 > **목적**: 고객사 인계용 산출물. PI_412 템플릿 형식(Lv1~Lv7 디렉토리 계층 + 모듈명/모듈설명/개발방식)을 그대로 사용하며, **파일 1개 = 1행** 단위로 집계한다.
@@ -107,7 +107,7 @@ python ".claude\skills\PI_412\scripts\03_generate_excel.py" "{고객사명}"
 ### W-5) 임시 파일 정리
 
 ```powershell
-Remove-Item -Recurse -Force (Join-Path $DocRoot "output\04 구현(PI)\tmp") -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force (Join-Path $DocRoot "deliverables\30-output\04 구현(PI)\tmp") -ErrorAction SilentlyContinue
 ```
 
 ---
@@ -234,7 +234,7 @@ rm -rf "deliverables/30-output/04 구현(PI)/tmp"
 
 `scripts/03_generate_excel.py` 가 수행하는 일.
 
-1. **`template/04 구현(PI)/PI_412-프로그램목록.xlsx` 를 그대로 복사**해 `deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성. 표지/개정이력/프로그램목록 헤더 서식이 모두 보존된다.
+1. **`deliverables/10-templates/04 구현(PI)/PI_412-프로그램목록.xlsx` 를 그대로 복사**해 `deliverables/30-output/04 구현(PI)/PI_412_프로그램목록_{고객사명}.xlsx` 생성. 표지/개정이력/프로그램목록 헤더 서식이 모두 보존된다.
 2. **`프로그램목록_BE` 시트**: 3행부터 기존 데이터 셀 값을 비우고(스타일 보존), 새 데이터를 채워 넣는다. auto_filter 범위를 `A2:N{last_row}`로 갱신.
 3. **`프로그램목록_FE` 시트**: 동일하게 3행부터 데이터 교체. FE 후보가 0건이면 헤더만 남기고 auto_filter도 헤더 한 줄로 축소.
 4. **표지** / **개정이력** 시트는 손대지 않는다.
@@ -285,7 +285,7 @@ rm -rf "deliverables/30-output/04 구현(PI)/tmp"
 - **테스트/리소스 제외**: `src/main/java/test/` 패키지, `ZTEST_*`, `*Test.java`, `*Tests.java`, 그리고 `src/main/resources/` 하위(logback/sqlmap-config 등 설정 파일)는 결과에 포함하지 않는다.
 - **거대한 저장소**: 후보 파일이 수천 개 이상이면 추출에 수십 초 ~ 수 분 걸릴 수 있다.
 - **고객사명 정규화**: 파일명에 사용 불가능한 문자(`<>:"|?*\\/`)는 자동으로 `_`로 치환한다.
-- **템플릿 파일 필수**: `template/04 구현(PI)/PI_412-프로그램목록.xlsx`이 없으면 3단계에서 종료.
+- **템플릿 파일 필수**: `deliverables/10-templates/04 구현(PI)/PI_412-프로그램목록.xlsx`이 없으면 3단계에서 종료.
 - **출력 파일 덮어쓰기**: 동일 파일명이 존재하면 덮어쓰기 전에 사용자에게 한 번 확인한다.
 
 ### Windows 특화

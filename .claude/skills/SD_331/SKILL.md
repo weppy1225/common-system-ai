@@ -12,7 +12,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 대상 디렉토리: **$ARGUMENTS**
 
 `$ARGUMENTS` 디렉토리에서 DB 접속 설정 파일을 자동 스캔하고, 검출된 DB(PostgreSQL/MySQL/MariaDB/MSSQL/Oracle)에 **직접 접속**하여 시스템 카탈로그(information_schema/pg_catalog/sys.*/user_*)에서 스키마(테이블·컬럼·인덱스·제약조건·FK)를 추출한 뒤,
-`template/03 설계(SD)/SD.212-테이블정의서.xlsx` 템플릿을 기반으로
+`deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx` 템플릿을 기반으로
 `deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
 > 같은 산출물을 만드는 다른 명령:
@@ -50,7 +50,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 상대경로는 git 저장소 루트(`$DocRoot` / `$DOC_ROOT`) 기준.
 
 ```
-TEMPLATE   = template/03 설계(SD)/SD.212-테이블정의서.xlsx
+TEMPLATE   = deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx
 OUTPUT_DIR = deliverables/30-output/03 설계(SD)
 TMP_DIR    = deliverables/30-output/03 설계(SD)/tmp
 SCRIPTS    = .claude/skills/SD_331/scripts
@@ -122,7 +122,7 @@ python .claude/skills/SD_331/scripts/03_generate_excel.py
 ### W-6) 임시 파일 정리 (필수)
 
 ```powershell
-Remove-Item -Recurse -Force "$DocRoot\output\03 설계(SD)\tmp"
+Remove-Item -Recurse -Force "$DocRoot\deliverables\30-output\03 설계(SD)\tmp"
 ```
 
 ---
@@ -139,7 +139,7 @@ REPO_PREFIX="${REPO_NAME%-*}"
 BE_ROOT="$WORKSPACE/${REPO_PREFIX}-be"
 FE_ROOT="$WORKSPACE/${REPO_PREFIX}-fe"
 
-TEMPLATE="$DOC_ROOT/template/03 설계(SD)/SD.212-테이블정의서.xlsx"
+TEMPLATE="$DOC_ROOT/deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx"
 OUTPUT_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)"
 TMP_DIR="$DOC_ROOT/deliverables/30-output/03 설계(SD)/tmp"
 SCRIPTS="$DOC_ROOT/.claude/skills/SD_331/scripts"

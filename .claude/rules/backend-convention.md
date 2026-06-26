@@ -37,31 +37,17 @@ paths:
 
 ## §3 Comp vs TxComp 분리 기준
 
-| 레이어 | 조건 |
-|---|---|
-| `TxComp` | `wms_inven*` 테이블 처리, InvenManager 호출, 복수 Mapper DML이 하나의 트랜잭션이어야 하는 경우 |
-| `Comp` | 단순 CRUD, 조회 전용, TxComp를 호출하는 오케스트레이터 |
+쓰기 트랜잭션(`@Transactional`)·`wms_inven*` 처리·복수 Mapper DML 묶음 → **TxComp**, 단순 CRUD·조회 전용·TxComp 오케스트레이션 → **Comp**.
+판단 기준 정본(SoT) → `patterns/30-backend/30-convention/01-coding-convention.md §5`.
 
 ## §4 Controller HTTP 메서드·응답코드 매핑
 
-| 작업 | HTTP 메서드 | 성공 응답코드 |
-|---|---|---|
-| 목록 조회 | `POST` | 200 |
-| 단건 조회 | `POST` 또는 `GET` | 200 |
-| 등록 | `POST` | 200 |
-| 수정 | `PUT` 또는 `PATCH` | 200 |
-| 삭제(소프트) | `DELETE` 또는 `PUT` | 200 |
+메서드 분기 기준(BLOCKING) 정본(SoT) → `patterns/30-backend/20-rule/01-api-naming-rule.md §2.1`.
+요약: 목록 조회=`POST`(검색조건 Body) · 단건 조회=`GET` · 단건 등록=`PUT`/수정=`PATCH`(JSON 단건) · 파일첨부(multipart)=`POST .../insert|update` · 삭제=`DELETE`. 성공 응답 200.
 
 ## §5 예외 클래스 선택 기준
 
-| 예외 클래스 | 사용 조건 |
-|---|---|
-| `CompWarnException` | 업무 검증 실패 (사용자에게 경고 표시) |
-| `ResponseErrorException` | 시스템 오류, 복구 불가 상황 |
-| `ZinNotFoundException` | 조회 결과 없음 / 처리 대상 없음 |
-| `ZinBadRequestException` | 잘못된 요청 데이터 |
-| `ZinExistDataException` | 중복 데이터 존재 |
-
+커스텀 예외 클래스 카탈로그 정본(SoT) → `patterns/30-backend/30-convention/01-coding-convention.md §9.1` (목록을 여기에 중복 기재하지 않는다).
 **SIF 연동 코드에서 `CompWarnException` 사용 금지** → `wms-sif-convention.md` 참조.
 
 ## §6 자주 잊는 import 목록

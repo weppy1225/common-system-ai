@@ -29,7 +29,7 @@ const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..', '..', '..');
 // 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명(workspace-{프로젝트})에서 도출 (→ .claude/rules/repo-paths.md)
 const HUB_PROJECT = path.basename(path.dirname(REPO_ROOT)).replace(/^workspace-/, '');
-const TMP_DIR = path.join(REPO_ROOT, 'output', '05 이행(TT)', 'tmp_541');
+const TMP_DIR = path.join(REPO_ROOT, 'deliverables', '30-output', '05 이행(TT)', 'tmp_541');
 const OUT_FILE = path.join(TMP_DIR, 'menu_candidates.json');
 
 function normalizePath(p) {
