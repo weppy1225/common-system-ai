@@ -20,6 +20,8 @@ related:
 
 공통코드 조회·캐싱·변환. **반드시** 이 스토어를 통해서만 공통코드를 사용한다. (`/code/commcds` 직접 호출 금지)
 
+> 이 문서는 **FE 스토어 구현(HOW) 전용**이다. 공통코드 **개념(commHCd/commDCd/commDNm)·왜 쓰나(WHY)·3계층(DB→BE→FE)·시스템별 차이**는 → [`patterns/_common-arch/common-code.md`](../../_common-arch/common-code.md) (개념 SoT) 참조.
+
 ## 1. import / 초기화
 
 ```js

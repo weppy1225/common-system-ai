@@ -1,4 +1,4 @@
-﻿# common-system-ai
+# common-system-ai
 
 업무 시스템 AI 프레임워크 레포지토리다. 화면설계·지식베이스·소스코드 패턴·산출물·BE/FE 개발 자동화 스킬을 통합 관리하며, AI 에이전트(Claude Code)가 업무 시스템 개발 전 주기를 수행하기 위한 지식·규칙·명령의 단일 허브로 동작한다.
 
@@ -56,23 +56,10 @@ author: {작업자}
 
 레포는 **역할별 최상위 폴더 × 시스템별(프로젝트) 네임스페이스** 2축으로 구성된다. 여러 업무 시스템(WMS·OMS·WCS …)을 한 허브에서 개발하며, 같은 종류의 지식은 시스템이 달라도 같은 계층·같은 상대경로에 둔다.
 
-```
-common-system-ai\
-├── .claude\
-│   ├── skills\        # 슬래시 커맨드 스킬 (개발/산출물/유틸)
-│   └── rules\         # 조건부(paths)/항상 로딩 규칙 — UI·BE·DB·문서·경로 + 시스템별(oms-*) + 시스템공통(common-code)
-├── knowledgebase\    # ① 코어 + ② 도메인 표준 (메뉴 횡단 공통 배경)
-│   ├── 10-domain\         메뉴 횡단 공통 업무규칙 (WHY, 사람 작성)
-│   ├── domains\           ② 도메인(시스템) 표준 — 같은 도메인 프로젝트끼리 공유. domains\wms\ · domains\oms\(install-guide·patterns\be|db|fe)
-│   └── 40-install-guide\·50-dev-workflow\·20-md-index·30-src-index (`30-src-index/README.md` — 색인 운영방침·아키텍처 결정 기록)
-├── spec\             # ③ 프로젝트(시스템)별 지식베이스 — `{프로젝트}\`
-│   ├── common-system\    [WMS] {메뉴}\ 설계(00~07·99) + _knowledge\(실 스키마·메뉴·공통코드값)
-│   └── kyochon-oms\      [OMS] {메뉴}\ 설계 + _knowledge\(실데이터: 스키마·메뉴·용어·API)
-├── prototype\        # 검증용 화면 (시스템별 `{프로젝트}\`)
-├── patterns\         # ① 코어 소스코드 패턴 (시스템 무관: 10-screen-design·20-database·30-backend·40-frontend·_common-arch) — 진입점: `patterns/00-overview.md`
-├── deliverables\     # 고객 제출 산출물 (시스템 공통)
-└── scripts\          # 레포 유틸 스크립트 (콘텐츠 아님)
-```
+> **전체 디렉토리 트리·각 폴더 역할·경계 규칙의 SoT 는 [STRUCTURE.md](./STRUCTURE.md) 다.** 여기서는 이 문서를 읽는 데 필요한 만큼만 요약한다. 폴더 추가·이름 변경은 STRUCTURE.md 를 고친다(트리를 여기에 다시 그리지 않는다).
+
+- `.claude/` — 스킬(`skills/`)·규칙(`rules/`). `spec/`·`prototype/` 은 **시스템별 네임스페이스** `{프로젝트}/` 아래에 둔다(허브는 전 프로젝트 공통이므로). `patterns/`·`deliverables/` 는 프로젝트 무관.
+- 시스템 지식은 아래 3계층(① 코어 / ② 도메인 표준 / ③ 프로젝트)으로 나뉜다. 각 계층이 어느 폴더에 사는지는 다음 표 참조.
 
 ### 시스템(프로젝트)별 분할 — 3계층
 
@@ -119,16 +106,7 @@ prototype/{프로젝트}/
     ├── assets/
     └── common/_template/                   # SD_312 생성 템플릿
 
-spec/{프로젝트}/{메뉴코드}/       # 메뉴별 설계 정본 (마크다운)
-├── {메뉴코드}-00-domain.md                 # 업무지식 WHY (사람 전용, 스킬 금지)
-├── {메뉴코드}-01-basic-design.md
-├── {메뉴코드}-02-ui.md                     # SD_310_UI 생성
-├── {메뉴코드}-03-data-model.md
-├── {메뉴코드}-04-be-mapper-sql.md
-├── {메뉴코드}-05-api.md
-├── {메뉴코드}-06-be-flow.md
-├── {메뉴코드}-07-fe-flow.md
-└── {메뉴코드}-99-issues.md
+# spec/{프로젝트}/{메뉴코드}/ 메뉴별 설계 정본(00~07·99) 파일 구조·역할 → STRUCTURE.md §spec 참조 (SoT)
 
 prototype/{프로젝트}/{메뉴코드}/  # PC 검증용 실행물 (SD_311 생성)
 ├── {메뉴코드}-wireframe.html
@@ -148,7 +126,6 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 | `prototype/{프로젝트}/_common/CPCT01_popup.html`            | 거래처 검색 팝업.`postMessage` 방식으로 부모와 통신                                                          |
 | `prototype/{프로젝트}/_common/CPPD01_popup.html`            | 품목 검색 팝업.`postMessage` 방식으로 부모와 통신                                                            |
 | `prototype/{프로젝트}/_common/icon-preview.html`            | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록.**이 파일에 없는 아이콘은 사용 금지**                         |
-| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-00-domain.md`        | 업무지식·노하우(WHY).**사람 전용 — 자동화 스킬 생성·수정 금지**                                       |
 | `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md`            | 화면요건정리 문서.`/SD_310_UI {메뉴코드}` 명령어의 입력 소스                                                 |
 | `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입.`prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨                                   |
 | `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js`   | 테스트 데이터.`const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드                 |
@@ -177,4 +154,4 @@ prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (S
 - 코드·제안 전 반드시 실제 파일을 확인하고 근거 기반으로 작성한다.
 - 변수명·필드명·컬럼명·API 경로·파일 경로는 이름만 보고 추정하지 않는다. 파일에서 확인 후 사용한다.
 - 커밋 메시지는 한글로 작성한다.
-- `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-00-domain.md`(업무지식)는 사람 전용 — 자동화 스킬이 생성·수정하지 않는다.
+- `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-00-domain.md`(업무지식)는 사람 전용 — 자동화 스킬이 생성·수정하지 않는다. (BLOCKING 규칙 정본·근거 → `STRUCTURE.md` §경계규칙)

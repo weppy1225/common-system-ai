@@ -74,20 +74,17 @@ be.{메뉴그룹_인스턴스}.{메뉴코드_인스턴스}/ ← 예: be.md8000.m
 
 ## 2. 레이어 구조 및 책임
 
-```
-Controller → Comp (비즈니스) → TxComp (트랜잭션) → Dao → Mapper
-```
+레이어 구성(호출 흐름·클래스 접미사·역할)의 **정의처(SoT)는 → [`be-layer-pattern.md §1`](../be-layer-pattern.md)** 다. 여기엔 흐름도·역할을 중복 기재하지 않고, 레이어별 **작성 가이드 라우팅**만 둔다.
 
-| 레이어        | 클래스 접미사      | 역할                       | 작성 가이드                                                                       |
-| ---------- | ------------ | ------------------------ | ---------------------------------------------------------------------------- |
-| REST API   | `Controller` | HTTP 요청/응답, 파라미터 바인딩     | [02-controller-writing-rules.md](../40-guide/02-controller-writing-rules.md) |
-| 비즈니스       | `Comp`       | 유효성 검사, 비즈니스 로직, 예외 처리   | [06-comp-writing-rules.md](../40-guide/06-comp-writing-rules.md)             |
-| 트랜잭션       | `TxComp`     | `@Transactional` 메서드만 위치 | [08-txcomp-writing-rules.md](../40-guide/08-txcomp-writing-rules.md)         |
-| 데이터 접근     | `Dao`        | Mapper 위임, 로깅            | [03-dao-writing-rules.md](../40-guide/03-dao-writing-rules.md)               |
-| 쿼리         | `Mapper`     | MyBatis Mapper 인터페이스     | [04-mapper-writing-rules.md](../40-guide/04-mapper-writing-rules.md)         |
-| Mapper XML | `Mapper.xml` | SQL 매핑 (별도 파일)           | [05-mapper-xml-writing-rules.md](../40-guide/05-mapper-xml-writing-rules.md) |
-| 유틸         | `CompUtil`   | 메뉴 전용 헬퍼 메서드             | [07-computil-writing-rules.md](../40-guide/07-computil-writing-rules.md)     |
-|            |              |                          |                                                                              |
+| 레이어(접미사) | 작성 가이드 |
+| --- | --- |
+| `Controller` | [02-controller-writing-rules.md](../40-guide/02-controller-writing-rules.md) |
+| `Comp` | [06-comp-writing-rules.md](../40-guide/06-comp-writing-rules.md) |
+| `TxComp` | [08-txcomp-writing-rules.md](../40-guide/08-txcomp-writing-rules.md) |
+| `Dao` | [03-dao-writing-rules.md](../40-guide/03-dao-writing-rules.md) |
+| `Mapper` | [04-mapper-writing-rules.md](../40-guide/04-mapper-writing-rules.md) |
+| `Mapper.xml` | [05-mapper-xml-writing-rules.md](../40-guide/05-mapper-xml-writing-rules.md) |
+| `CompUtil` | [07-computil-writing-rules.md](../40-guide/07-computil-writing-rules.md) |
 
 > 기존 코드에 `Comp` 직접 `@Transactional`, Controller `@Validated` 누락, JavaDoc `@author`/`@version` 잔존이 있더라도 규칙 예외가 아니다. 모두 미준수 레거시로 보고 신규/수정 코드에 동일 규칙을 적용한다.
 

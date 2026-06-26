@@ -42,11 +42,12 @@ tags:
 
 ## 3. 메뉴 코드
 
-- **형식**: 메뉴코드는 **영문소문자 4자 + 숫자 2자** 고정 — 정규식: `^[a-z]{4}\d{2}$`
-- **예**: `md8000` 업무군 > `mdct01` 거래처 메뉴
-- **폴더**: `views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue`
+> 메뉴코드 **형식(업무영역 4자 + 타입 2자)·업무 약어표·타입번호 정의의 SoT 는 → [`30-backend/20-rule/02-menu-code-rule.md §1`](../../30-backend/20-rule/02-menu-code-rule.md)** 다. 여기엔 형식 정의를 중복하지 않고, FE 고유 규칙(케이스·파일·라우트)만 둔다.
+
+- **케이스**: 메뉴코드 식별자(정본)는 대문자 `MDCT01`. **FE 파일·라우트 경로는 소문자**(`mdct01`), **`route.meta.menuCd` 는 대문자**(`'MDCT01'`).
+- **FE 검증 정규식**(소문자 경로 기준): `^[a-z]{4}\d{2}$`
+- **폴더**: `views/be/{업무군}/{메뉴코드}/{메뉴코드}.vue` — 예: `md8000` 업무군 > `mdct01`
 - **팝업 파일명**: `{메뉴코드}Edt.vue`, `{메뉴코드}Lbs.vue`, `{메뉴코드}Dtl.vue` (Edit/Label/Detail)
-- **라우트 meta**: `route.meta.menuCd = 'MDCT01'` (대문자)
 
 ## 4. 변수 관례
 
@@ -66,7 +67,7 @@ tags:
 - `commHCd` (헤더코드, 대문자 스네이크) — 예: `CONT_DIV_CD`, `REP_CONT_CD`, `USE_YN`
 - `commDCd` (데이터코드, 응답 필드명) — 예: `contDivCd`
 - `commDNm` (변환 후 명칭 필드명) — 예: `contDivNm`
-- **규칙**: DB는 snake_case (`cont_div_cd`), FE 는 camelCase (`contDivCd`).
+- **케이스 규칙**: DB `snake_case` ↔ FE/앱 `camelCase` (예: `cont_div_cd` ↔ `contDivCd`). 정의·변환 지점 SoT → [`20-database/20-rule/01-naming-rule.md §2.2.1`](../../20-database/20-rule/01-naming-rule.md).
 
 ## 6. API 경로
 

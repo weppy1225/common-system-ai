@@ -36,9 +36,7 @@ related:
 | PATCH  | `/mdct01/conts` | 수정 |
 | DELETE | `/mdct01/conts` (body 또는 쿼리) | 다건 삭제 |
 
-> ⚠ 실제 코드 기준. `mdct01Edt.vue` / `mdwh01Edt.vue` 참조. FE 표준은 **등록=PUT, 수정=PATCH** 이며 `POST=리스트 조회` 로 사용한다 (일반 REST 관례와 다름).
-
-> 📌 BE 인터페이스 ID·전체 메서드 분기(단건 `PUT`/`PATCH` · 파일첨부 `POST .../insert` · 복수건 일괄 `Save*` Bean · 엑셀)의 **정의처(SoT)** → [patterns/30-backend/20-rule/01-api-naming-rule.md §2](../../30-backend/20-rule/01-api-naming-rule.md). 위 FE 표(등록=`PUT`·수정=`PATCH`)는 SoT 와 일치한다.
+> 📌 위 표는 **FE 적용 관점 요약**이다(실제 코드 기준 — `mdct01Edt.vue`/`mdwh01Edt.vue` 참조). 메서드 분기·인터페이스 ID·전체 규약(단건 JSON `PUT`/`PATCH` · 파일첨부 `POST .../insert` · 복수건 일괄 `Save*` Bean · 엑셀)의 **정의처(SoT) → [patterns/30-backend/20-rule/01-api-naming-rule.md §2](../../30-backend/20-rule/01-api-naming-rule.md).** FE 표준은 일반 REST 와 달리 **등록=`PUT` · 수정=`PATCH` · `POST`=리스트 조회**이며 SoT 와 일치한다.
 
 ### regBizSeq 자동 prepend
 
@@ -63,10 +61,11 @@ related:
 
 ## 3. 요청/응답 필드 규약
 
+> 케이스 규칙(DB `snake_case` ↔ Java/FE `camelCase`)의 정의·변환 지점 SoT → [`20-database/20-rule/01-naming-rule.md §2.2.1`](../../20-database/20-rule/01-naming-rule.md). 아래는 **BE↔FE 계약 관점의 적용**만 정리한다.
+
 | 관례 | 설명 |
 | --- | --- |
-| DB 컬럼: `snake_case` | 예: `cont_div_cd` |
-| Java/FE 필드: `camelCase` | 예: `contDivCd` |
+| FE 는 `camelCase` 필드를 수신 | 예: 응답에서 `contDivCd` |
 | MyBatis `<resultMap>` 이 변환 | Mapper XML 에 AS alias 추가 필요 없음 (대부분) |
 | 단, alias 가 필요한 동적 컬럼은 XML 에 `AS camelCase` 명시 | |
 

@@ -112,6 +112,18 @@ prodSeq -- 카멜케이스 사용 금지
 PROD_SEQ -- 대문자 사용 금지
 ```
 
+##### 레이어별 케이스 규칙 (SoT)
+
+> **DB↔앱 네이밍 케이스 규칙의 정본.** 다른 문서(`sql-query-style.md`, `be-fe-contract.md`, `40-frontend/.../01-naming.md` 등)는 여기를 참조하고 정의를 중복 기재하지 않는다.
+
+| 레이어 | 케이스 | 예 |
+|---|---|---|
+| DB 테이블·컬럼 | `snake_case` (소문자) | `cont_div_cd` |
+| 앱 레이어 (Java 필드·MyBatis 파라미터·FE 필드) | `camelCase` | `contDivCd` |
+
+- **변환 지점**: DB→앱 변환은 **MyBatis 매핑 경계**에서 일어난다 — `<resultMap>` 또는 SQL `AS camelCase` 별칭. (resultType+AS / resultMap 선택 → [`30-convention/02-mybatis-convention.md`](../30-convention/02-mybatis-convention.md))
+- 서브쿼리/인라인뷰 내부 별칭은 외부에서 참조하므로 `snake_case` 유지.
+
 #### 2.2.2 약어 사용 원칙
 
 | 원어 | 약어 | 예시 |

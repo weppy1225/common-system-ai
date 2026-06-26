@@ -39,6 +39,8 @@ related:
 | MyBatis 파라미터 | **camelCase** | `#{bizSeq}`, `#{outwhProdSeq}` |
 | 문자열 리터럴 | **그대로** | `'Y'`, `'N'`, `'UNIT_CD'` |
 
+> 위는 SQL 작성 시 토큰별 표기다. DB↔앱 케이스 규칙(컬럼 `snake_case` ↔ Java/FE `camelCase`)의 정의 SoT 는 → [`../20-rule/01-naming-rule.md §2.2.1`](../20-rule/01-naming-rule.md). 여기 `컬럼명 소문자`·`AS 별칭 camelCase` 는 그 규칙의 SQL 적용이다.
+
 ---
 
 ## 2. 쿼리 상단 주석
