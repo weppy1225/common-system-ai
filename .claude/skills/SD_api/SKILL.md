@@ -5,7 +5,7 @@ when_to_use: "api.md 작성해줘", "API 설계서 만들어줘", "기능명세 
 argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 ---
 
 # API 명세서 설계 [SD_api]

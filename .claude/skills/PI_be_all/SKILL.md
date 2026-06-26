@@ -275,4 +275,4 @@ TOKEN=$(curl -s -D - -X POST http://localhost:18081/wms-be/login \
 
 모든 테스트 통과 후:
 1. 완료된 파일 목록과 각 파일 경로를 출력한다
-2. `/util-work-output` 스킬로 FE용 산출물 생성 안내
+2. 후속 FE 화면 개발이 필요하면 `/PI_fe_all {메뉴코드}` 를 안내한다

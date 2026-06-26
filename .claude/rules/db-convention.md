@@ -59,7 +59,7 @@ paths:
 
 ## §4 공통코드(`_cd`) 확인 절차
 
-컬럼명이 `_cd`로 끝나면 반드시 `01-common-code.md`에서 허용 값을 확인 후 쿼리에 사용.
+컬럼명이 `_cd`로 끝나면 반드시 `spec/{프로젝트}/_knowledge/db-schema/90-common-code.md`에서 허용 값을 확인 후 쿼리에 사용.
 
 ## §5 LIKE 검색 패턴
 

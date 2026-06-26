@@ -1,5 +1,5 @@
 ---
-description: 개발(BE/FE 코드 작성·수정, 메뉴 설계) 시작 시 대상 시스템(WMS·OMS 등)을 자동 판별하는 규칙. 허브(ai-kb=common-system-ai) 프레임워크 수정과 구분한다. *.java/*.vue/*Mapper.xml 또는 spec 설계 문서를 다룰 때 로딩한다.
+description: 개발(BE/FE 코드 작성·수정, 메뉴 설계) 시작 시 대상 시스템(WMS·OMS 등)을 자동 판별하는 규칙. 허브(common-system-ai) 프레임워크 수정과 구분한다. *.java/*.vue/*Mapper.xml 또는 spec 설계 문서를 다룰 때 로딩한다.
 paths:
   - "**/*.java"
   - "**/*.vue"
@@ -17,7 +17,7 @@ paths:
 | 작업 | 대상 파일(예) | 시스템 판별 |
 |---|---|---|
 | BE/FE 코드 개발·메뉴 설계 | `*-be`/`*-fe` 소스(`*.java`·`*.vue`·`*Mapper.xml`), `spec/{프로젝트}/{메뉴}/` | **필요** → §1~§3 수행 |
-| 허브(ai-kb) 자체 수정 | `patterns/`·`.claude/`·루트 문서(`CLAUDE.md`·`STRUCTURE.md`) | **불필요** — 시스템 무관 프레임워크 유지보수 |
+| 허브(common-system-ai) 자체 수정 | `patterns/`·`.claude/`·루트 문서(`CLAUDE.md`·`STRUCTURE.md`) | **불필요** — 시스템 무관 프레임워크 유지보수 |
 
 > `spec/`·`prototype/` 는 허브 레포 안에 있지만 **시스템별 산출물**이므로 판별 대상이다. `patterns/`·`.claude/`(도메인 룰 `{system}-*` 제외) 는 시스템 무관 프레임워크다.
 

@@ -81,54 +81,16 @@ author: {작업자}
 
 ### 개발 대상 시스템 자동 판별
 
-BE/FE 코드·메뉴 설계 작업 시작 시 **대상 시스템(WMS·OMS 등)을 함께 열린 `*-be`/`*-fe` 레포에서 자동 판별**한다. 판별 신호·절차·실패 처리·허브(ai-kb) 수정과의 구분은 → `.claude/rules/system-detect.md` (개발 파일 작업 시 lazy 로딩).
+BE/FE 코드·메뉴 설계 작업 시작 시 **대상 시스템(WMS·OMS 등)을 함께 열린 `*-be`/`*-fe` 레포에서 자동 판별**한다. 판별 신호·절차·실패 처리·허브(common-system-ai) 수정과의 구분은 → `.claude/rules/system-detect.md` (개발 파일 작업 시 lazy 로딩).
 
 ## 프로토타입 파일 구조
 
 > 허브(`common-system-ai`)는 모든 프로젝트 공통이므로, `spec/`·`prototype/` 는 **프로젝트 층 `{프로젝트}/` 아래**에 둔다. `{프로젝트}` 는 워크스페이스 폴더명(`workspace-{프로젝트}`)에서 도출한다(→ `.claude/rules/repo-paths.md`).
 
-```text
-prototype/{프로젝트}/
-├── index.html                              # 메인 프레임. 메뉴 클릭 시 {메뉴코드}/{메뉴코드}-wireframe.html 로드
-├── _common/                              # 공통 UI
-│   ├── left-menu.html
-│   ├── CPCT01_popup.html
-│   ├── CPPD01_popup.html
-│   ├── icon-preview.html
-│   ├── common.css
-│   ├── common.js
-│   └── _template/                          # SD_311 생성 템플릿
-└── _common-m/                              # PDA 모바일 공용 셸
-    ├── menu.html
-    ├── main.html
-    ├── mobile.css
-    ├── ui-standard.html
-    ├── assets/
-    └── common/_template/                   # SD_312 생성 템플릿
+- `prototype/{프로젝트}/_common/` — PC 공용 셸(`index.html`·팝업·`common.css/js`·SD_311 템플릿), `_common-m/` — PDA 공용 셸(SD_312 템플릿).
+- `prototype/{프로젝트}/{메뉴코드}/` — PC 검증물(`-wireframe.html` + `-mock-data.js`, SD_311), `{메뉴코드}m/` — 모바일 검증물(SD_312).
 
-# spec/{프로젝트}/{메뉴코드}/ 메뉴별 설계 정본(00~07·99) 파일 구조·역할 → STRUCTURE.md §spec 참조 (SoT)
-
-prototype/{프로젝트}/{메뉴코드}/  # PC 검증용 실행물 (SD_311 생성)
-├── {메뉴코드}-wireframe.html
-└── {메뉴코드}-mock-data.js
-
-prototype/{프로젝트}/{메뉴코드}m/ # PDA 모바일 검증용 실행물 (SD_312 생성)
-├── {메뉴코드}m-wireframe.html
-└── {메뉴코드}m-mock-data.js
-```
-
-### 파일 역할
-
-| 파일                                                          | 역할                                                                                                           |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `prototype/{프로젝트}/index.html`                           | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시`loadContent('{메뉴코드}/{메뉴코드}-wireframe.html')` 호출 |
-| `prototype/{프로젝트}/_common/left-menu.html`               | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용                                          |
-| `prototype/{프로젝트}/_common/CPCT01_popup.html`            | 거래처 검색 팝업.`postMessage` 방식으로 부모와 통신                                                          |
-| `prototype/{프로젝트}/_common/CPPD01_popup.html`            | 품목 검색 팝업.`postMessage` 방식으로 부모와 통신                                                            |
-| `prototype/{프로젝트}/_common/icon-preview.html`            | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록.**이 파일에 없는 아이콘은 사용 금지**                         |
-| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md`            | 화면요건정리 문서.`/SD_310_UI {메뉴코드}` 명령어의 입력 소스                                                 |
-| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입.`prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨                                   |
-| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js`   | 테스트 데이터.`const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드                 |
+> **전체 디렉토리 트리·파일 역할표의 SoT 는 [STRUCTURE.md](./STRUCTURE.md) §prototype 다.** 여기서 트리를 다시 그리지 않는다.
 
 ## Slash Commands
 

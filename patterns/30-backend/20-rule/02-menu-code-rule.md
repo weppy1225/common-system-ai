@@ -1,6 +1,6 @@
 ---
 title: 메뉴코드 체계 및 개발 가이드
-description: 신규 메뉴 개발 시 메뉴코드 채번·패키지 경로·API URL 규칙을 참조 (전체 메뉴 목록은 spec/{프로젝트}/_knowledge/menu-list.md)
+description: 신규 메뉴 개발 시 메뉴코드 채번·Java 패키지 경로 규칙을 참조 (API URL 규칙은 01-api-naming-rule.md, 전체 메뉴 목록은 spec/{프로젝트}/_knowledge/menu-list.md)
 status: active
 version: 1.0.0
 repo_role: ai-hub
@@ -9,7 +9,6 @@ domain: backend
 tags:
   - menu-code
   - package-path
-  - api-url
   - quick-start
 ---
 
@@ -88,7 +87,7 @@ tags:
 
 ---
 
-## 2. Java 패키지 & API URL 매핑 규칙
+## 2. Java 패키지 도출 규칙
 
 ### 패키지 경로 도출 규칙
 
@@ -97,25 +96,16 @@ PC:     src/main/java/be/{상위코드소문자}/{하위코드소문자}/
 모바일: src/main/java/bm/{상위코드소문자}m/{하위코드소문자}m/
 ```
 
-### API URL 도출 규칙
+> **이 문서는 메뉴코드 → Java 패키지 경로 도출만 다룬다.** 메뉴코드가 정해진 뒤의 **API URL 베이스·HTTP 메서드·인터페이스 ID 명세는 → [`01-api-naming-rule.md`](./01-api-naming-rule.md) 가 SoT** 다. (URL 베이스는 `/{bizSeq}/{메뉴코드소문자}/{리소스복수}` 형태이며, 메서드 분기·multipart·일괄저장 규약은 01 참조.)
 
-```
-PC:     /{bizSeq}/{하위코드소문자}/{리소스명복수}
-모바일: /bm/{하위코드소문자}/{리소스명복수}
-```
+### 매핑 예시 (메뉴코드 → Java 패키지)
 
-> 리소스명은 해당 메뉴의 주요 엔티티를 소문자 복수형으로 표기.
-> 예: IWPC01 → 입고(inwh) → `/inwhs` / IVAD01 → 재고조정(ad) → `/ads`
-> **여기서는 메뉴코드 → 패키지·URL 베이스 경로 도출만 다룬다. HTTP 메서드별 API 인터페이스 ID·전체 URL 명세는 → [`01-api-naming-rule.md`](./01-api-naming-rule.md).**
-
-### 매핑 예시
-
-| 메뉴코드 | Java 패키지 | `@RequestMapping` URL |
-|----------|------------|----------------------|
-| IWRQ01 | `be/iw1000/iwrq01` | `/{bizSeq}/iwrq01/inbizs` |
-| IWPC01 | `be/iw1000/iwpc01` | `/{bizSeq}/iwpc01/inwhs` |
-| IVAD01 | `be/iv3000/ivad01` | `/{bizSeq}/ivad01/ads` |
-| IVAD01M | `bm/iv3000m/ivad01m` | `/bm/ivad01m/ads` |
+| 메뉴코드 | Java 패키지 |
+|----------|------------|
+| IWRQ01 | `be/iw1000/iwrq01` |
+| IWPC01 | `be/iw1000/iwpc01` |
+| IVAD01 | `be/iv3000/ivad01` |
+| IVAD01M | `bm/iv3000m/ivad01m` |
 
 ---
 

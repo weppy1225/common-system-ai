@@ -15,10 +15,7 @@ allowed-tools: Bash, PowerShell, Read, Write, Edit, AskUserQuestion
 `deliverables/10-templates/03 설계(SD)/SD.212-테이블정의서.xlsx` 템플릿을 기반으로
 `deliverables/30-output/03 설계(SD)/SD.212-테이블정의서_{DB명}_{YYMMDD}.xlsx` 파일을 생성한다.
 
-> 같은 산출물을 만드는 다른 명령:
-> - `/SD_212` — BE 프로젝트 내 테이블 MD 파일을 파싱해서 생성 (DB 접속 없음)
-> - `/SD_212_DDL` — DDL SQL 파일을 파싱해서 생성 (DB 접속 없음)
-> 이 스킬(`/SD_331`)은 살아있는 DB에 직접 붙어 카탈로그 조회로 추출한다.
+> 이 스킬(`/SD_331`)은 살아있는 DB에 직접 붙어 시스템 카탈로그 조회로 추출한다. (DDL SQL 파일 기반 추출이 필요하면 → `/SD_333`)
 
 > **클라이언트 도구 불필요**: psql/mysql/sqlcmd/sqlplus 같은 OS 클라이언트가 설치되지 않은 환경을 가정한다. Python 라이브러리(psycopg2-binary / pymysql / pymssql / oracledb)만으로 직접 접속한다. 라이브러리는 필요할 때 `pip install --user`로 자동 설치한다.
 

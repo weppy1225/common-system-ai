@@ -211,4 +211,4 @@ TOKEN=$(curl -s -D - -X POST http://localhost:18081/wms-be/login \
 > ❌ JUnit 통과만 보고하고 통합검증을 생략하면 작업 미완료 — 보고 무효
 
 ### Step 10 — 다음 단계 안내
-통합검증 + simplify 회귀 통과 후 `/util-work-output` 스킬로 산출물 생성 안내
+통합검증 + simplify 회귀 통과 후 완료된 파일 목록·경로를 출력하고, 후속 작업(잔여 레이어 또는 `/PI_fe_all {메뉴코드}`)을 안내한다

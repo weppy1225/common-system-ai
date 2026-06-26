@@ -5,7 +5,7 @@ when_to_use: "입고 확정 만들어줘", "출고 확정 개발해줘", "재고
 argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
-model: claude-opus-4-7
+model: claude-opus-4-8
 ---
 
 # BE 재고 모듈 개발 [PI_be_inven]
