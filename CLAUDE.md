@@ -10,7 +10,7 @@
 
 - 형식: `history/{작업자}/{레포명}_YYYYMMDD-HHmmss.md`
   - 예: `history/ShinHyunKyu/common-system-ai_20260624-084337.md`
-- `{작업자}` 는 **git 자격증명에서 동적 도출**한다 (`git config user.name`) — 하드코딩 금지. 작업자별 하위폴더로 분리한다(작업자마다·머신마다 git 계정이 다르므로 고정값을 적으면 틀린다).
+- `{작업자}` 는 **git 자격증명에서 동적 도출**한다 (`git config user.name`) — 하드코딩 금지. 작업자별 하위폴더로 분리한다(작업자마다·머신마다 git 계정이 다르므로 고정값을 적으면 틀린다). (신원 3종 — Claude 로그인·git commit·gh — 의미·도출법 SoT → `SET_USER_USAGE.md`)
 - `{레포명}` 은 작업 중인 레포 폴더명(`common-system-ai` / `common-system-be` / `common-system-fe`).
 - `HHmmss` 는 **실제 작업 시점의 현재 시각** — 임의값 금지 (시각은 셸 명령으로 확인: `date +"%Y%m%d-%H%M%S"`)
 - 반드시 그 레포의 `history/{작업자}/` 폴더 아래에만 생성 (다른 위치 생성 금지)

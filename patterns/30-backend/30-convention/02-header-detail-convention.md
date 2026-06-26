@@ -141,6 +141,8 @@ public ResponseEntity<{메뉴코드}Response> save{상세리소스}s(
 
 ## 5. Comp (비즈니스) 패턴
 
+> 기본 Comp 메서드 try-catch 골격(`CompWarnException`→`ResponseWarnException` / `Exception`→`ResponseErrorException`, `finally setProcCnt`)은 → [40-guide/06-comp-writing-rules.md §3](../40-guide/06-comp-writing-rules.md). 아래는 **헤더+상세 고유 로직**(문서번호 채번·상태 검증·일괄저장)을 그 골격에 적용한 예다.
+
 ### 5.1 헤더 등록 — 문서번호 채번 포함
 ```java
 public {메뉴코드}Response insert{헤더리소스}({메뉴코드}{헤더리소스} put{헤더리소스}) {
@@ -288,16 +290,12 @@ public int delete{헤더리소스}TX(Integer[] {헤더seq}s) {
 
 ## 7. Dao 패턴 — 문서번호 채번
 
+`DocNoBean` 빌더·단건/다건 채번 호출 패턴의 정본은 → **§11 문서번호 채번 패턴**. 여기서는 Dao 가 채번을 **insert 전에 감싸는 위치**만 보인다.
+
 ```java
-// 헤더 등록: DB insert 전 문서번호 채번
+// 헤더 등록: DB insert 전 문서번호 채번 (빌더 상세 → §11)
 public int insert{헤더리소스}({메뉴코드}{헤더리소스} put{헤더리소스}) {
-    // 문서번호 채번
-    DocNoBean bean = DocNoBean.docNoPubBuilder()
-            .bizSeq(put{헤더리소스}.getBizSeq())
-            .inoutTypeCd(InvenPool.IW)          // 수불 유형 코드
-            .baseYmd(put{헤더리소스}.getReqYmd())
-            .build();
-    docNoGenerator.getDocNo(bean);
+    docNoGenerator.getDocNo(/* DocNoBean — §11 참조 */);
     put{헤더리소스}.set{헤더리소스}No(bean.getDocNo());
 
     return {메뉴코드_인스턴스}Mapper.insert{헤더리소스}(put{헤더리소스});
