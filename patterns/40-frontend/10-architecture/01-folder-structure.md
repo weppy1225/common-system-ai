@@ -18,12 +18,12 @@ tags:
 ## 1. 최상위
 
 ```
-common-system-fe/
+{프로젝트}-fe/
 ├─ src/                  소스 코드
 ├─ public/               정적 파일
 ├─ e2e/                  Playwright E2E
 ├─ vitest/               단위 테스트 루트
-├─ DEV_DOC/              문서 (ai-docs 포함)
+├─ DEV_DOC/              문서
 ├─ vite.config.js
 └─ package.json
 ```

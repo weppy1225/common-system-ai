@@ -15,6 +15,8 @@ tags:
 
 # WMS 테이블 목록 및 설명
 
+> DB 변경·반영 이력은 [00-database-deploy-history.md](./00-database-deploy-history.md) 참조. 공통코드 값은 [90-common-code.md](./90-common-code.md).
+
 ## 1. 기준정보 테이블 (mdm_*)
 
 > 상세 테이블 정의서: [01-mdm-tables.md](./01-mdm-tables.md)

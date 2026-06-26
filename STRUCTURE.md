@@ -103,7 +103,7 @@ prototype/
 patterns/
 ├── 00-overview.md       패턴 개요
 ├── 10-screen-design/    화면설계 패턴 (10-web · 20-pda)
-├── 20-database/         DB 패턴 (도메인·타입·변경이력)
+├── 20-database/         DB 패턴 (도메인·타입·네이밍·시퀀스·SQL컨벤션)
 ├── 30-backend/          BE 패턴 (10-architecture · 20-rule)
 ├── 40-frontend/         FE 패턴 (10-architecture · 20-convention)
 └── _common-arch/        공통 아키텍처 (be/fe-architecture·exceptions)
@@ -128,7 +128,7 @@ patterns/
 | 그룹 | 수 | 시스템 | 적용 대상 |
 |---|---|---|---|
 | UI·화면 | 7 | 무관(코어) | 와이어프레임 HTML 작업 시 자동 트리거되는 **얇은 rule**(common_ui·area_*·popup_*) — 금지/필수 판단 기준만 두고 상세 구현은 `patterns/10-screen-design/10-web/01~07`(SSoT)로 라우팅 |
-| BE·DB·연동 | 4 | 무관(코어) | BE·Mapper·재고·SIF (backend/db/biz-framework/sif-convention) |
+| BE·DB·연동 | 4 | 무관(코어) | BE·Mapper·재고·SIF (backend/db/wms-biz-framework/wms-sif-convention) |
 | 공통코드 | 1 | 공통(전 시스템) | BE·FE 공통코드 사용 (common-code) |
 | 시스템별 컨벤션 | 4 | OMS 전용 | oms-backend/db/frontend-convention·oms-security |
 | 문서·메타 | 2 | 무관(코어) | frontmatter 작성 (md-frontmatter·rule-skill-frontmatter) |

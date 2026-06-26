@@ -17,9 +17,10 @@ last_verified: 2026-06-23
 
 # kyochon-oms 테이블 목록 및 설명
 
-> 숨은 전제: OMS=PostgreSQL, ERP=SQL Server 멀티 DB (근거: `knowledgebase/domains/oms/install-guide/01-startup-guide.md`).
+> 숨은 전제: OMS=PostgreSQL, ERP=SQL Server 멀티 DB (근거: `spec/kyochon-oms/_knowledge/install-guide/01-startup-guide.md`).
 > 출처: 실 OMS(PostgreSQL) dev DB `public` 스키마 `pg_class` 조회 (2026-06-23, 총 126개 테이블). 테이블 설명은 **DB comment 원본**이다. comment 미설정 테이블은 설명을 빈칸으로 둔다(추정 금지).
 > 그룹별 테이블 정의서는 `01-*.md` ~ `05-*.md` 로 분리한다. 공통코드 값은 `90-common-code.md` 참조. 컬럼 단위 상세는 실 스키마(`\d <테이블>`)를 우선 확인한다(본 문서는 테이블 목록·설명 수준).
+> DB 변경·반영 이력은 [00-database-deploy-history.md](./00-database-deploy-history.md) 참조.
 
 ## 1. 테이블 그룹 (도메인별)
 

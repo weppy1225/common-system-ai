@@ -69,7 +69,7 @@ Mapper → Dao           레이어별 순차 실행       애플리케이션 정
 
 **DB 스키마 직접 확인 (BLOCKING)**
 
-컬럼명·자료형·제약조건·FK 관계는 문서(db.md·ai-docs)만 보고 추정하지 않는다.  
+컬럼명·자료형·제약조건·FK 관계는 문서(`spec/{프로젝트}/_knowledge/db-schema/` 등)만 보고 추정하지 않는다.  
 코드 작성 전 반드시 **psql로 실제 DB를 조회**하여 근거를 확보한 뒤 사용한다.
 
 ```powershell
@@ -99,7 +99,7 @@ psql -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME}
 - 레이어 패턴: `patterns/30-backend/be-layer-pattern.md`
 - 코딩 컨벤션: `.claude/rules/backend-convention.md`
 - MyBatis 쿼리: `.claude/rules/db-convention.md`
-- 재고 프레임워크: `.claude/rules/biz-framework.md`
+- 재고 프레임워크: `.claude/rules/wms-biz-framework.md`
 
 **코드 개발 완료 기준**
 - 각 레이어 파일이 컴파일 오류 없이 빌드됨

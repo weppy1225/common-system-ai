@@ -25,7 +25,7 @@ tags:
 ## 1. 프로젝트 루트 구조
 
 ```
-common-system-be/
+{프로젝트}-be/
 ├── src/
 │ ├── main/
 │ │ ├── java/ # Java 소스 (be, bm, fw, sif, test, vm)

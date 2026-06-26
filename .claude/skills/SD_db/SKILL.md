@@ -1,7 +1,7 @@
 ---
 name: SD_db
-description: 화면설계 기반 DB 변경사항 도출 + db.md(DDL SQL 포함) 작성. /SD_db {메뉴코드}
-when_to_use: "DB 설계해줘", "db.md 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용.
+description: 화면설계 기반 DB 변경사항 도출 + {메뉴코드}-03-data-model.md(DDL SQL 포함) 작성. /SD_db {메뉴코드}
+when_to_use: "DB 설계해줘", "데이터모델 만들어줘", "테이블 설계해줘", "DB 변경사항 정리해줘" 요청 시 사용.
 argument-hint: "[메뉴코드]"
 user-invocable: true
 allowed-tools: Read, Write, Glob, Grep, Bash
@@ -10,7 +10,7 @@ model: claude-opus-4-7
 
 # DB 설계 [SD_db]
 
-다음 지시에 따라 **DB 설계 문서(db.md)**를 작성한다.
+다음 지시에 따라 **DB 설계 문서(`{메뉴코드}-03-data-model.md`)**를 작성한다.
 
 ## 목적
 
@@ -21,26 +21,28 @@ model: claude-opus-4-7
 
 ## 전제 조건
 
-- 기능 폴더(`DEV_DOC/ai-docs/20-backend/80-spec/{메뉴코드}/`)가 존재하고
-  화면설계 파일(`ui.md`, `wireframe.html` 등)이 준비된 상태
-- spec.md는 없어도 진행 가능 (db-design이 spec보다 먼저 작성됨)
+- 메뉴 설계 폴더(`$AI_DIR/spec/$PROJECT/{메뉴코드}/`)에
+  화면설계 파일(`{메뉴코드}-02-ui.md`, wireframe HTML 등)이 준비된 상태
+- API 명세(`-05-api.md`)는 없어도 진행 가능 (DB 설계가 먼저 작성됨)
 
 ---
 
 ## 레포 경로 도출 (자동)
 
-스킬은 AI 허브(`common-system-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(화면설계 보유 허브 = CWD)와 `$BE_DIR`(db.md·DEV_DOC 대상 BE 레포 = 형제 `../{프로젝트}-be`)을 결정한다.
+스킬은 AI 허브(`common-system-ai`)에서 실행된다. `.claude/rules/repo-paths.md` 규칙으로 `$AI_DIR`(허브 = CWD, 입력 화면설계·출력 데이터모델 보유)와 `$PROJECT` 를 결정한다. (DB 접속·반영은 `/SD_db_apply` 담당이라 이 스킬은 BE 레포를 건드리지 않는다.)
 
 ```bash
-# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD) / BE_DIR(형제 ../{프로젝트}-be)
+# .claude/rules/repo-paths.md 참조 — AI_DIR(허브, CWD)
 AI_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-# BE_DIR 은 repo-paths.md 규칙으로 결정
 
 # 허브 spec/prototype 는 프로젝트 층 아래 — 프로젝트명은 워크스페이스 폴더명에서 도출 (→ repo-paths.md)
 PROJECT=$(basename "$(dirname "$AI_DIR")"); PROJECT=${PROJECT#workspace-}
 
 # ui.md는 허브($AI_DIR)의 spec/$PROJECT/, wireframe·mock은 prototype/$PROJECT/ 에 위치
 UI_MD="$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-02-ui.md"
+
+# 산출물 DB 설계 문서 (허브 spec) — 이 스킬의 출력 대상
+DB_MD="$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-03-data-model.md"
 
 # wireframe: PC / PDA 모바일 자동 분기 (PC=prototype/$PROJECT/{메뉴코드}/, PDA=prototype/$PROJECT/{메뉴코드}m/)
 if [ -f "$AI_DIR/prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html" ]; then
@@ -54,8 +56,8 @@ else
 fi
 ```
 
-> 이 스킬에서 `DEV_DOC/...`, `db.md`, `{기능폴더}/...` 등 BE 산출물 표기는 모두 **`$BE_DIR` 기준**이다 (예: `$BE_DIR/DEV_DOC/ai-docs/...`, `$BE_DIR/.../db.md`).
-> `$BE_DIR` 또는 허브의 `spec/$PROJECT/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
+> 산출물 `{메뉴코드}-03-data-model.md` 는 **허브** `$AI_DIR/spec/$PROJECT/{메뉴코드}/` 에 쓴다(BE 레포 아님). DB 규칙 문서는 `$AI_DIR/patterns/20-database/`·`$AI_DIR/spec/$PROJECT/_knowledge/db-schema/` 에서 읽는다.
+> `spec/$PROJECT/{메뉴코드}/` 폴더가 없으면 사용자에게 경로를 직접 묻는다.
 
 ---
 
@@ -69,8 +71,8 @@ fi
 - `$WIREFRAME` — 화면 프로토타입 (PC: `prototype/$PROJECT/{메뉴코드}/{메뉴코드}-wireframe.html` / PDA: `prototype/$PROJECT/{메뉴코드}m/{메뉴코드}m-wireframe.html`)
 - `$MOCK_DATA` — 목업 데이터 (있는 경우)
 
-추가로 BE 스펙 폴더도 확인:
-- `DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/spec.md` — 기능 명세서 (이미 존재하는 경우)
+추가로 기존 설계 문서도 확인:
+- `$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-01-basic-design.md`·`-05-api.md` — 기본설계·API 명세 (이미 존재하는 경우)
 
 > 화면설계 파일이 없으면 사용자에게 파일 위치를 확인 후 진행한다.
 
@@ -83,33 +85,33 @@ fi
 
 아래 문서를 **모두** 읽은 후 Step 3으로 진행한다:
 
-1. `DEV_DOC/ai-docs/10-database/00-database-overview.md` — 전체 테이블 목록
-2. `DEV_DOC/ai-docs/10-database/10-architecture/05-domain.md` — 컬럼 도메인 타입 규칙
-3. `DEV_DOC/ai-docs/10-database/20-rule/04-sequence-creation-rule.md` — 시퀀스 생성 규칙
-4. `DEV_DOC/ai-docs/10-database/90-schema/30-data/01-common-code.md` — 기존 공통코드 목록
+1. `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/00-tables-overview.md` — 전체 테이블 목록
+2. `$AI_DIR/patterns/20-database/10-domain-and-types.md` — 컬럼 도메인 타입 규칙
+3. `$AI_DIR/patterns/20-database/20-rule/04-sequence-creation-rule.md` — 시퀀스 생성 규칙
+4. `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/90-common-code.md` — 기존 공통코드 목록
 5. Step 1에서 도출된 테이블이 기존 테이블인 경우:
-   `DEV_DOC/ai-docs/10-database/90-schema/20-tables/{테이블명}.md`
+   `$AI_DIR/spec/$PROJECT/_knowledge/db-schema/0X-*-tables.md` (도메인 그룹) + 실 스키마 psql 확인
    (신규 테이블은 문서 없음 — 화면설계로부터 도출)
 
 ### Step 3 — 테이블 신규/기존 판정
 
-`00-database-overview.md` 및 `90-schema/20-tables/` 파일 목록과 대조하여 각 테이블을 판정한다:
+`00-tables-overview.md` 및 `0X-*-tables.md` 테이블 목록과 대조하여 각 테이블을 판정한다:
 
 | 판정 | 조건 |
 |------|------|
-| **기존** | overview.md에 등재 + 테이블 문서 있음 |
-| **신규** | overview.md에 없음 |
-| **기존+컬럼추가** | overview.md에 있으나 필요 컬럼이 문서에 없음 |
+| **기존** | `00-tables-overview.md` 그룹표에 등재 |
+| **신규** | `00-tables-overview.md` 에 없음 |
+| **기존+컬럼추가** | 등재돼 있으나 필요 컬럼이 실 스키마(psql)에 없음 |
 
 ### Step 4 — 공통코드 현황 파악
 
-`01-common-code.md`를 기준으로:
+`90-common-code.md` 를 기준으로:
 - `_cd` 접미사 컬럼 식별 → 기존 코드그룹 확인
 - 기존에 없는 코드그룹 → 신규 INSERT SQL 작성 (sm_comm_h + sm_comm_d)
 
 ### Step 5 — 컬럼 도메인 타입 결정
 
-`05-domain.md` 기준으로 각 컬럼의 도메인 분류와 데이터 타입을 결정한다.
+`patterns/20-database/10-domain-and-types.md` 기준으로 각 컬럼의 도메인 분류와 데이터 타입을 결정한다.
 
 **seq 타입 규칙 (엄수)**:
 - **헤더(H) 테이블 seq**: `int4` 고정
@@ -138,9 +140,9 @@ WHERE table_schema = 'public'
 ORDER BY ordinal_position;
 ```
 
-### Step 6 — db.md 작성
+### Step 6 — 데이터모델 문서 작성
 
-`DEV_DOC/ai-docs/20-backend/80-spec/{기능폴더}/db.md` 파일을 아래 템플릿으로 작성한다.
+`$DB_MD` (`$AI_DIR/spec/$PROJECT/{메뉴코드}/{메뉴코드}-03-data-model.md`) 파일을 아래 템플릿으로 작성한다.
 
 **frontmatter `author` 필드 (MUST — 추정 금지)**:
 파일 작성 전 반드시 아래를 실행하고 그 결과를 `author`에 기입한다. 추정·하드코딩 금지.
@@ -156,13 +158,13 @@ git config user.name   # 이 값을 author 필드에 사용
 
 ---
 
-## db.md 템플릿
+## {메뉴코드}-03-data-model.md 템플릿
 
 ```markdown
 # {기능명} DB 설계
 
 > 작성일: {YYYY-MM-DD} | 상태: 초안
-> 참조 화면설계: [ui.md](ui.md)
+> 참조 화면설계: {메뉴코드}-02-ui.md
 > 검토자: {이름} | 승인일자: {YYYY-MM-DD} | 승인여부: [ ] 승인대기 / [x] 승인완료
 
 ---
@@ -253,7 +255,7 @@ git config user.name   # 이 값을 author 필드에 사용
 
 ### Step 7 — 확인 요청
 
-db.md 작성 완료 후:
+`{메뉴코드}-03-data-model.md` 작성 완료 후:
 1. 사용자에게 내용 검토 요청 (특히 섹션 6 DDL SQL)
 2. 확인 완료 시 `/SD_db_apply`로 DB 반영 안내
 3. DB 반영 완료 후 `/SD_api`로 기능 명세서 작성 안내
