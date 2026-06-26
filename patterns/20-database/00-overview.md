@@ -122,3 +122,12 @@ Quartz 2.3.2 프레임워크 내부 테이블 — Job/Trigger 정의, 실행 상
 
 ### 5.3 데이터베이스 함수
 - [PostgreSQL 함수 목록](./11-postgresql-functions.md) - 주요 함수 설명
+
+### 5.4 도메인·타입
+- [도메인 및 데이터 타입 정의](./10-domain-and-types.md) - 컬럼 데이터 타입·기본값 결정용 도메인 정의표
+
+### 5.5 DB 규칙 (`20-rule/`)
+- [주석 네이밍 규칙](./20-rule/02-comment-naming-rule.md) - 테이블·컬럼 COMMENT ON 주석 작성 규칙
+- [업무번호 생성 규칙](./20-rule/03-numbering-rule.md) - 입고/출고/반품 등 업무번호 채번 규칙과 DocNoGenerator 사용법
+- [시퀀스 생성 규칙](./20-rule/04-sequence-creation-rule.md) - 테이블 시퀀스(SEQUENCE) 생성 규칙
+- [제약조건 정책](./20-rule/05-constraint-policy.md) - PK·FK·UNIQUE·NOT NULL·CHECK·INDEX 제약조건 적용 정책

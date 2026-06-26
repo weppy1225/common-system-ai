@@ -40,3 +40,9 @@ agent_usage: reference
 - `30-convention/` — 코딩 컨벤션·헤더+상세 구조 컨벤션
 - `40-guide/` — 레이어별 작성 매뉴얼(Controller·Dao·Mapper·Comp·CompUtil·TxComp)
 - `50-test/` — 테스트 컨벤션
+
+## 상세 문서 목록
+
+- [백엔드 패키지 구조](./10-architecture/02-package-structure.md) — Java 소스 패키지 구조(be/bm/fw/sif/test/vm)·파일 명명 규칙
+- [헤더+상세 구조 메뉴 컨벤션](./30-convention/02-header-detail-convention.md) — 헤더+상세 2단 구조·문서번호 채번·상태 관리 메뉴 코딩 컨벤션
+- [백엔드 테스트 코딩 컨벤션](./50-test/02-test-coding-convention.md) — JUnit 테스트 클래스 구조·어노테이션·assert 패턴·엣지케이스 매트릭스

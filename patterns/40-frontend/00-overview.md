@@ -80,3 +80,11 @@ patterns/40-frontend/
 ├─ 40-store/                      Pinia 스토어 가이드
 └─ 50-pattern/                    작업 유형별 레시피
 ```
+
+## 7. 상세 문서 목록
+
+- [폴더 구조](./10-architecture/01-folder-structure.md) — FE 소스 디렉토리 구조·views/be 패턴·components 책임 분리·api/router 구조
+- [신규 메뉴 등록 절차](./10-architecture/03-menu-registration.md) — FE 라우터 등록·DB sm_menu 등록·권한 부여 3단계 절차
+- [i18n 다국어 처리](./20-convention/04-i18n.md) — vue-i18n $t() 사용법·메시지 키 추가·언어별 포맷 처리
+- [엑셀 컴포넌트 (ZXls*)](./30-component/06-z-excel.md) — ZXlsUp/ZXlsAllUp/ZXlsDown/ZXlsTmpl 엑셀 업로드·다운로드 컴포넌트 사용법
+- [FE 공통 아키텍처](../_common-arch/fe-architecture.md) — 모든 메뉴 공통 FE Vue 파일 구조·함수 네이밍·공통 컴포넌트 패턴 (영역 횡단)
