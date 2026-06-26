@@ -24,8 +24,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCAN_DIRS = [".claude/rules", "patterns", "knowledgebase"]
 SCAN_FILES = ["CLAUDE.md", "STRUCTURE.md", "README.md"]
 
-# patterns/...md 형태의 repo-상대 참조
-RE_PATTERN_REF = re.compile(r"patterns/[A-Za-z0-9/_.\-]+\.md")
+# patterns/...md 형태의 repo-상대 참조.
+# 앞에 경로구분자(/)·단어문자가 붙은 하위경로 내 'patterns/' 는 제외한다 —
+# 예: spec/{$PROJECT}/_knowledge/patterns/... (프로젝트 템플릿 경로),
+#     knowledgebase/domains/oms/patterns/... (도메인 상대경로).
+# 이들은 repo-root patterns/ 가 아니므로 무결성 검사 대상이 아니다(오탐 방지).
+RE_PATTERN_REF = re.compile(r"(?<![/\w])patterns/[A-Za-z0-9/_.\-]+\.md")
 # 마크다운 상대 링크 (./xxx.md, ../xxx.md)
 RE_REL_LINK = re.compile(r"\]\((\.{1,2}/[A-Za-z0-9/_.\-]+\.md)\)")
 
