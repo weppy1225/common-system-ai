@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>아이콘 미리보기</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  padding: 30px 40px;
+}
+h2 { font-size: 15px; color: #304a6e; margin-bottom: 12px; }
+.section { margin-bottom: 40px; }
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-height: 36px;
+}
+.btn-icon {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+}
+.btn-icon:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-icon svg { width: 15px; height: 15px; }
+.btn-excel {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+}
+.btn-excel:hover { border-color: #9ca3af; background: #f9fafb; color: #111827; }
+.btn-excel svg { width: 15px; height: 15px; flex-shrink: 0; }
+.label { font-size: 11px; color: #6b7280; text-align: center; margin-top: 4px; }
+.icon-group { display: flex; flex-direction: column; align-items: center; }
+.compare {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+.box {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px 20px;
+  background: #fafbfc;
+}
+.box h3 { font-size: 13px; color: #111; margin-bottom: 10px; font-weight: 600; }
+.icon-row { display: flex; gap: 8px; align-items: flex-start; }
+
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 30px 0; }
+.note { font-size: 12px; color: #6b7280; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h2>팝업 방식 아이콘 (등록 / 수정 / 복사 / 삭제)</h2>
+<div class="section">
+  <div class="toolbar">
+    <div class="icon-group">
+      <button class="btn-icon" title="등록">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+      </button>
+      <span class="label">등록</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="수정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+      <span class="label">수정</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="복사">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      </button>
+      <span class="label">복사</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="삭제">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+      </button>
+      <span class="label">삭제</span>
+    </div>
+  </div>
+  <p class="note">문서 느낌 아이콘 — 클릭 시 팝업이 열림</p>
+</div>
+
+<hr>
+
+<h2>인라인 방식 아이콘 (행추가 / 행복사 / 행삭제 / 저장)</h2>
+<div class="section">
+  <div class="toolbar">
+    <div class="icon-group">
+      <button class="btn-icon" title="행추가">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="15" y2="6"/>
+          <line x1="3" y1="12" x2="15" y2="12"/>
+          <line x1="3" y1="18" x2="15" y2="18"/>
+          <line x1="20" y1="9" x2="20" y2="15"/>
+          <line x1="17" y1="12" x2="23" y2="12"/>
+        </svg>
+      </button>
+      <span class="label">행추가</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="행복사">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      </button>
+      <span class="label">행복사</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="행삭제">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="15" y2="6"/>
+          <line x1="3" y1="12" x2="15" y2="12"/>
+          <line x1="3" y1="18" x2="15" y2="18"/>
+          <line x1="17" y1="12" x2="23" y2="12"/>
+        </svg>
+      </button>
+      <span class="label">행삭제</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-icon" title="저장">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+      </button>
+      <span class="label">저장</span>
+    </div>
+  </div>
+  <p class="note">행/목록 느낌 아이콘 — 그리드 내 인라인 편집</p>
+</div>
+
+<hr>
+
+<h2>엑셀 버튼 (아이콘 + 텍스트)</h2>
+<div class="section">
+  <div class="toolbar">
+    <div class="icon-group">
+      <button class="btn-excel" title="엑셀등록">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        엑셀등록
+      </button>
+      <span class="label">엑셀등록</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="엑셀다운로드">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        엑셀다운로드
+      </button>
+      <span class="label">엑셀다운로드</span>
+    </div>
+  </div>
+  <p class="note">아이콘 + 텍스트 조합 — 좌측에 엑셀등록(입력), 우측에 엑셀다운로드(출력)</p>
+</div>
+
+<hr>
+
+<h2>명세서 출력 버튼 (아이콘 + 텍스트)</h2>
+<div class="section">
+  <div class="toolbar">
+    <div class="icon-group">
+      <button class="btn-excel" title="재고실사표">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <line x1="8" y1="9" x2="10" y2="9"/>
+        </svg>
+        재고실사표
+      </button>
+      <span class="label">재고실사표</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="입고지시서">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <line x1="8" y1="9" x2="10" y2="9"/>
+        </svg>
+        입고지시서
+      </button>
+      <span class="label">입고지시서</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="피킹지시서">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <line x1="8" y1="9" x2="10" y2="9"/>
+        </svg>
+        피킹지시서
+      </button>
+      <span class="label">피킹지시서</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="출하지시서">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <line x1="8" y1="9" x2="10" y2="9"/>
+        </svg>
+        출하지시서
+      </button>
+      <span class="label">출하지시서</span>
+    </div>
+  </div>
+  <p class="note">문서 아이콘 + 텍스트 — 입고지시서, 피킹지시서, 출하지시서 등 명세서 출력 시 사용</p>
+</div>
+
+<hr>
+
+<h2>라벨 출력 버튼 (프린터 아이콘 + 텍스트)</h2>
+<div class="section">
+  <div class="toolbar">
+    <div class="icon-group">
+      <button class="btn-excel" title="위치라벨">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        위치라벨
+      </button>
+      <span class="label">위치라벨</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="품목라벨">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        품목라벨
+      </button>
+      <span class="label">품목라벨</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="박스라벨">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        박스라벨
+      </button>
+      <span class="label">박스라벨</span>
+    </div>
+    <div class="icon-group">
+      <button class="btn-excel" title="파렛트라벨">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        파렛트라벨
+      </button>
+      <span class="label">파렛트라벨</span>
+    </div>
+  </div>
+  <p class="note">프린터 아이콘 + 텍스트 — 위치라벨, 품목라벨, 박스라벨, 파렛트라벨 출력 시 사용</p>
+</div>
+
+<hr>
+
+<h2>비교</h2>
+<div class="compare">
+  <div class="box">
+    <h3>팝업 방식 (프로모션 목록)</h3>
+    <div class="toolbar">
+      <button class="btn-icon" title="등록">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="수정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="삭제">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="box">
+    <h3>인라인 방식 (대상품목 D1, 증정품목 D2)</h3>
+    <div class="toolbar">
+      <button class="btn-icon" title="행추가">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="15" y2="6"/>
+          <line x1="3" y1="12" x2="15" y2="12"/>
+          <line x1="3" y1="18" x2="15" y2="18"/>
+          <line x1="20" y1="9" x2="20" y2="15"/>
+          <line x1="17" y1="12" x2="23" y2="12"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="행복사">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="행삭제">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="15" y2="6"/>
+          <line x1="3" y1="12" x2="15" y2="12"/>
+          <line x1="3" y1="18" x2="15" y2="18"/>
+          <line x1="17" y1="12" x2="23" y2="12"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="저장">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="box">
+    <h3>엑셀 버튼</h3>
+    <div class="toolbar">
+      <button class="btn-excel" title="엑셀등록">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        엑셀등록
+      </button>
+      <button class="btn-excel" title="엑셀다운로드">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        엑셀다운로드
+      </button>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<h2>전체 조합 예시 (팝업 + 엑셀등록 좌측 / 엑셀다운로드 우측)</h2>
+<div class="section">
+  <div class="toolbar" style="justify-content: space-between;">
+    <div style="display:flex; gap:3px; align-items:center;">
+      <button class="btn-icon" title="등록">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="수정">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+      <button class="btn-icon" title="삭제">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+      </button>
+      <button class="btn-excel" title="엑셀등록" style="margin-left:6px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        엑셀등록
+      </button>
+    </div>
+    <div style="display:flex; gap:3px; align-items:center;">
+      <button class="btn-excel" title="엑셀다운로드">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        엑셀다운로드
+      </button>
+    </div>
+  </div>
+  <p class="note">좌측: 등록·수정·삭제 + 엑셀등록 / 우측: 엑셀다운로드</p>
+</div>
+
+</body>
+</html>

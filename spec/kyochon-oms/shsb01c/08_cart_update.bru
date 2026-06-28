@@ -1,0 +1,35 @@
+meta {
+  name: 08 장바구니 수량 수정
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/cart/update
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "shopCartSeq": {{shop_cart_seq}},
+    "shopOrderQty": 3
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+}

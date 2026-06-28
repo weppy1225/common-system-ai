@@ -1,0 +1,53 @@
+meta {
+  name: 10 주문 등록 (장바구니 → 주문)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "recvrNm": "홍길동",
+    "recvrMobile": "010-1234-5678",
+    "recvrTel": "",
+    "recvrEmail": "test@kyochon.com",
+    "recvPostNo": "12345",
+    "recvAddr": "경기도 수원시 팔달구 테스트로 1",
+    "recvAddrDtl": "101호",
+    "bizRegTypeCd": "EMAIL",
+    "bizRegFax": "",
+    "bizRegEmail": "biz@kyochon.com",
+    "shopCartSeqs": [{{shop_cart_seq}}]
+  }
+}
+
+script:post-response {
+  if (res.body.shopOrderNo) {
+    bru.setEnvVar("shop_order_no", res.body.shopOrderNo);
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+  test("shopOrderNo 존재", function() {
+    expect(res.body.shopOrderNo).to.be.a("string");
+  });
+}

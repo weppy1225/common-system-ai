@@ -1,0 +1,16 @@
+---
+title: patterns 소스코드 패턴 표준화 인덱스
+description: WEB/PDA 화면 설계와 DB, 백엔드, 프론트엔드 소스코드 패턴 표준 문서를 모아두는 진입점
+status: active
+version: 1.0.0
+repo_role: ai-hub
+agent_usage: reference
+---
+
+# patterns
+
+| 문서 | 설명 |
+|---|---|
+| [00-architecture-tech-stack.md](./00-architecture-tech-stack.md) | 시스템 구성(3-Tier)·BE/FE 기술 스택·주요 라이브러리·데이터모델 컬럼타입 SoT (버전 SoT=build.gradle) |
+| [30-backend/be-layer-pattern.md](./30-backend/be-layer-pattern.md) | BE 레이어 구조·호출 원칙·예외 클래스 |
+| [_common-arch/common-code.md](./_common-arch/common-code.md) | 공통코드 왜+어떻게 (시스템 횡단: 코드마스터→BE 상수→FE commCdStore) |

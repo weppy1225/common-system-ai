@@ -1,0 +1,41 @@
+meta {
+  name: 06 장바구니 목록 조회
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/cart/list
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+script:post-response {
+  const list = res.body.cartList;
+  if (list && list.length > 0) {
+    bru.setEnvVar("shop_cart_seq", list[0].shopCartSeq);
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+  test("cartList 배열", function() {
+    expect(res.body.cartList).to.be.an("array");
+  });
+  test("장바구니에 상품 존재", function() {
+    expect(res.body.cartList.length).to.be.greaterThan(0);
+  });
+}

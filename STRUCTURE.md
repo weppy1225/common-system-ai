@@ -1,0 +1,175 @@
+---
+title: common-system-ai 레포 전체 디렉토리 구조 및 영역 역할
+description: 레포 최상위 디렉토리 구조, 각 영역의 역할, 메뉴별 산출 위치와 경계 규칙. 프롬프트 개정·문서 생성/재생성의 기준 문서. (2026-06 재설계 적용)
+status: active
+version: 2.1.0
+repo_role: ai-hub
+agent_usage: reference
+domain: common
+applies_to:
+  - "**"
+last_verified: 2026-06-22
+---
+
+# common-system-ai 레포 전체 디렉토리 구조
+
+업무 시스템 AI 프레임워크 허브 레포. 화면설계·지식베이스·소스패턴·산출물·BE/FE 자동화 스킬의 단일 허브.
+
+> 재설계 배경·결정 근거·이전 매핑은 git 커밋·PR 이력 참조.
+
+---
+
+## 최상위 구조
+
+```
+common-system-ai\
+├── .claude\
+│   ├── skills\        # 슬래시 커맨드 (개발/산출물/유틸 3그룹)
+│   └── rules\         # 항상/조건부 적용 규칙 (UI·BE·문서·경로 4그룹)
+├── spec\             # 메뉴별 설계 정본 (마크다운)
+├── prototype\        # 검증용 화면 (공용 셸 + 메뉴별 wireframe)
+├── patterns\         # 소스코드 패턴 (HOW)
+├── deliverables\     # 고객 제출 산출물
+└── scripts\          # 레포 유틸 스크립트 (문서 색인 생성 등)
+```
+
+| 폴더 | 역할 | 읽는 사람 | 매체 |
+|---|---|---|---|
+| `spec/` | 이 메뉴를 왜·무엇·어떻게 설계했나 | AI·개발자 | 마크다운 |
+| `prototype/` | 화면이 이렇게 생겼다 (검증용) | PL·PM·고객 | 실행 HTML/JS |
+| `patterns/` | 코드는 이 패턴으로 짜라 | AI·개발자 | 마크다운 |
+| `deliverables/` | 고객 제출 문서 | 고객 | 문서·엑셀·PPT |
+| `scripts/` | 레포 유틸 스크립트 (콘텐츠 아님) | 개발자 | 파이썬 |
+
+원칙: **최상위는 역할 이름(번호 없음)**. 번호는 순서가 있는 `spec/{프로젝트}/{메뉴}/` 안에서만 쓴다.
+`scripts/`는 콘텐츠가 아니라 도구다.
+- `gen-md-map.py` — 레포 문서 지도 → `edu/md-index.html` 생성기 (교육자료)
+- `check-doc-refs.py` — rules↔patterns 참조 무결성 가드. 깨진 참조(ERROR)·미참조 패턴 문서(WARN)를 검출. `python scripts/check-doc-refs.py`, ERROR 있으면 종료코드 1.
+
+---
+
+## ①②③ 계층 라벨
+
+도메인 지식은 ① 코어(`patterns/`·무접두 `.claude/`) → ② 도메인 표준(`.claude/rules/{system}-*`) → ③ 프로젝트(`spec/{프로젝트}/_knowledge/`) 3계층으로 나뉜다. 라벨 정의·충돌 우선순위(③ 프로젝트 확정 > ② 도메인 표준 > ① 코어, ③=실제값·①=기본값)는 `CLAUDE.md` §"시스템(프로젝트)별 분할 — 3계층" 이 SoT 다.
+
+> 빌드·배포(install-guide)는 시스템별 차이가 커서 ③ 프로젝트 층에 둔다 → `spec/{프로젝트}/_knowledge/install-guide/` (WMS=`spec/common-system/...`, OMS=`spec/kyochon-oms/...`).
+> AI 개발 절차(BE/FE 단계별) 해설은 교육자료 → `edu/ai-dev-procedure.html`. 실제 실행 절차는 각 `/PI_*` 스킬에 구현.
+
+---
+
+## spec/{프로젝트}/{메뉴}/ (파일 순서 = 읽는 순서)
+
+`spec/`·`prototype/` 는 **시스템(프로젝트)별 네임스페이스** `{프로젝트}/` 아래에 둔다. 현재 프로젝트: `common-system`(WMS) · `kyochon-oms`(OMS). 각 프로젝트는 `_knowledge/`(③ 프로젝트 확정 데이터: 실 스키마·메뉴·공통코드값)와 `{메뉴}/`(메뉴별 설계)를 가진다. `{프로젝트}` 도출은 → `.claude/rules/repo-paths.md`.
+
+```
+spec/{프로젝트}/{메뉴}/
+├── {메뉴}-00-domain.md         업무지식 WHY — 사람 전용, 자동화 스킬 생성·수정 금지
+├── {메뉴}-01-basic-design.md   기본설계
+├── {메뉴}-02-ui.md             화면요건            〔/SD_310_UI〕
+├── {메뉴}-03-data-model.md     DB 설계             〔/SD_db〕
+├── {메뉴}-04-be-mapper-sql.md  쿼리 명세
+├── {메뉴}-05-api.md            API 명세 ★허브      〔/SD_api〕
+├── {메뉴}-06-be-flow.md        BE 흐름
+├── {메뉴}-07-fe-flow.md        FE 흐름
+└── {메뉴}-99-issues.md         설계 미결·하드코딩 등
+```
+
+---
+
+## prototype/ (PC=`{메뉴}`, 모바일=`{메뉴}m`)
+
+> 허브(`common-system-ai`)는 모든 프로젝트 공통이므로 `prototype/` 도 **프로젝트 층 `{프로젝트}/` 아래**에 둔다. `{프로젝트}` 도출 → `.claude/rules/repo-paths.md`.
+
+```text
+prototype/{프로젝트}/
+├── index.html                              # 메인 프레임. 메뉴 클릭 시 {메뉴코드}/{메뉴코드}-wireframe.html 로드
+├── _common/                                # PC 공통 UI
+│   ├── left-menu.html
+│   ├── CPCT01_popup.html
+│   ├── CPPD01_popup.html
+│   ├── icon-preview.html
+│   ├── common.css
+│   ├── common.js
+│   └── _template/                          # SD_311 생성 템플릿
+└── _common-m/                              # PDA 모바일 공용 셸
+    ├── menu.html
+    ├── main.html
+    ├── mobile.css
+    ├── ui-standard.html
+    ├── assets/
+    └── common/_template/                   # SD_312 생성 템플릿
+
+prototype/{프로젝트}/{메뉴코드}/   # PC 검증용 실행물 (SD_311 생성)
+├── {메뉴코드}-wireframe.html
+└── {메뉴코드}-mock-data.js
+
+prototype/{프로젝트}/{메뉴코드}m/  # PDA 모바일 검증용 실행물 (SD_312 생성)
+├── {메뉴코드}m-wireframe.html
+└── {메뉴코드}m-mock-data.js
+```
+
+### 파일 역할
+
+| 파일 | 역할 |
+| --- | --- |
+| `prototype/{프로젝트}/index.html` | 좌측 메뉴 트리, 탭 바, 콘텐츠 iframe. 메뉴 클릭 시 `loadContent('{메뉴코드}/{메뉴코드}-wireframe.html')` 호출 |
+| `prototype/{프로젝트}/_common/left-menu.html` | `index.html`과 동일 파일. `_common/` 경로에서 직접 접근할 때 사용 |
+| `prototype/{프로젝트}/_common/CPCT01_popup.html` | 거래처 검색 팝업. `postMessage` 방식으로 부모와 통신 |
+| `prototype/{프로젝트}/_common/CPPD01_popup.html` | 품목 검색 팝업. `postMessage` 방식으로 부모와 통신 |
+| `prototype/{프로젝트}/_common/icon-preview.html` | 툴바 버튼에 사용할 수 있는 SVG 아이콘 목록. **이 파일에 없는 아이콘은 사용 금지** |
+| `spec/{프로젝트}/{메뉴코드}/{메뉴코드}-02-ui.md` | 화면요건정리 문서. `/SD_310_UI {메뉴코드}` 명령어의 입력 소스 |
+| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-wireframe.html` | 완성된 프로토타입. `prototype/{프로젝트}/index.html`의 iframe 안에서 로드됨 |
+| `prototype/{프로젝트}/{메뉴코드}/{메뉴코드}-mock-data.js` | 테스트 데이터. `const {MENUCODE}_DATA = {...}` 형태로 선언. HTML에서 `<script src>` 로 로드 |
+
+> 메뉴별 설계 정본(`spec/{프로젝트}/{메뉴코드}/` 의 00~07·99)의 파일 구조·역할 → 본 문서 §spec 참조.
+
+---
+
+## patterns/ (코드 작성 패턴 — HOW)
+
+```
+patterns/
+├── 00-overview.md       패턴 개요
+├── 10-screen-design/    화면설계 패턴 (10-web · 20-pda)
+├── 20-database/         DB 패턴 (도메인·타입·네이밍·시퀀스·SQL컨벤션)
+├── 30-backend/          BE 패턴 (10-architecture · 20-rule)
+├── 40-frontend/         FE 패턴 (10-architecture · 20-convention)
+└── _common-arch/        공통 아키텍처 (be/fe-architecture·exceptions)
+```
+
+---
+
+## .claude/skills/ (성격별 3그룹)
+
+스킬은 **출력 성격**으로 분류한다. 전체 명령 목록은 `/skill_list` 또는 `CLAUDE.md` 명령표 참조.
+
+| 그룹 | 수 | 무엇을 만드나 | 출력 위치 |
+|---|---|---|---|
+| 🛠️ 개발 자동화 | 15 | 설계·코드·테스트 (SD_310_UI·SD_db·SD_api·PI_be_*·PI_fe_*·PI_test_*) | `spec/`, BE/FE 레포 |
+| 📦 산출물 자동화 | 16 | 프로토타입·고객 제출 문서 (SD_311·312·SD_33x·RA_222·PI_4xx·TT_5xx) | `prototype/`, `deliverables/30-output` |
+| 🔧 유틸 | 8 | 배포·레드마인·KB·메타 (deploy·daily_brief·md_index·PI_issue_mod·PI_time_reg·KB_100·KB_200·skill_list) | — |
+
+## .claude/rules/ (성격별 그룹)
+
+규칙은 `paths` 글로브로 **조건부 로딩**(매칭 파일 작업 시 첨부)되거나, `paths` 생략 시 **항상 로딩**된다. 시스템 무관(코어)·시스템 공통·시스템별(OMS) 3종이 공존한다.
+
+| 그룹 | 수 | 시스템 | 적용 대상 |
+|---|---|---|---|
+| UI·화면 | 7 | 무관(코어) | 와이어프레임 HTML 작업 시 자동 트리거되는 **얇은 rule**(common_ui·area_*·popup_*) — 금지/필수 판단 기준만 두고 상세 구현은 `patterns/10-screen-design/10-web/01~07`(SSoT)로 라우팅 |
+| BE·DB·연동 | 4 | 무관(코어) | BE·Mapper·재고·SIF (backend/db/wms-biz-framework/wms-sif-convention) |
+| 공통코드 | 1 | 공통(전 시스템) | BE·FE 공통코드 사용 (common-code) |
+| 시스템별 컨벤션 | 4 | OMS 전용 | oms-backend/db/frontend-convention·oms-security |
+| 문서·메타 | 2 | 무관(코어) | frontmatter 작성 (md-frontmatter·rule-skill-frontmatter) |
+| 경로·환경·git | 3 | 무관(코어) | 워크스페이스 레포 경로(repo-paths, 항상)·git 워크플로우(git-workflow)·개발 대상 시스템 자동 판별(system-detect, lazy) |
+
+> 시스템별 컨벤션은 `{system}-` 접두어 + `paths` 글로브로 구분한다. 새 시스템(WCS 등) 추가 시 같은 방식으로 `{system}-*` 규칙을 둔다.
+> 개발 시작 시 대상 시스템 판별은 `system-detect`(lazy 로딩)이 담당한다. 허브(common-system-ai) 자체 수정은 시스템 판별 대상이 아니다.
+
+---
+
+## 경계 규칙 (BLOCKING)
+
+1. 메뉴별 설계·업무지식·미결은 모두 `spec/{프로젝트}/{메뉴}/` (마크다운), 검증 화면은 `prototype/{메뉴}/` (실행 HTML).
+2. `{메뉴}-00-domain.md`는 **사람 전용**. 자동화 스킬은 01~07만 생성/갱신한다.
+3. AS-IS 정본은 **소스 코드**. 역공학 요약 문서를 저장하지 않는다. 메뉴코드→소스경로는 도출 규칙(`patterns/40-frontend/`)으로 계산하거나 BE/FE 레포를 직접 스캔한다. `KB_100`=레거시 소스를 `spec/` 초안(draft)으로 역공학(00-domain 제외), `KB_200`=`spec/`↔라이브 소스 드리프트 검증.
+4. 도메인 공통 지식은 기준 프로젝트의 `spec/{프로젝트}/_knowledge/`(③)·도메인 룰(`.claude/rules/{system}-*`). 메뉴 고유 지식은 `spec/{프로젝트}/{메뉴}/`.

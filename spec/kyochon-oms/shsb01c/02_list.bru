@@ -1,0 +1,42 @@
+meta {
+  name: 02 배송조회 - 부자재 주문목록
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/{{biz_seq}}/shsb01/list
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {}
+}
+
+script:post-response {
+  const list = res.body.orderList;
+  if (list && list.length > 0) {
+    bru.setEnvVar("shop_order_seq", list[0].shopOrderSeq);
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("succeed true", function() {
+    expect(res.body.succeed).to.equal(true);
+  });
+  test("orderList 배열", function() {
+    expect(res.body.orderList).to.be.an("array");
+  });
+}

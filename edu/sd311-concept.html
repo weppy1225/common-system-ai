@@ -1,0 +1,134 @@
+<title>SD_311 스킬 개념 카드</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171e2e; --panel2:#1d2638; --line:#2a3650;
+    --ink:#e8edf6; --muted:#9aa7bd; --accent:#5b8cff; --accent2:#37d39b;
+    --code:#0b0f18;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;line-height:1.6;font-size:15px}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 22px 70px}
+  header.hero{background:linear-gradient(135deg,#1a2440 0%,#10182a 100%);
+    border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:26px}
+  .hero .eyebrow{margin:0 0 6px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .hero h1{margin:0;font-size:30px;letter-spacing:-.5px;font-family:"SF Mono",Consolas,monospace}
+  .hero p{margin:8px 0 0;color:var(--muted);font-size:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:0;margin:14px 0;overflow:hidden}
+  .card .label{display:flex;align-items:center;gap:10px;background:var(--panel2);
+    padding:10px 18px;border-bottom:1px solid var(--line)}
+  .card .label .n{background:var(--accent);color:#06122e;border-radius:7px;font-size:13px;font-weight:700;
+    width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .card .label h2{margin:0;font-size:15px;color:#cdd8ee;border:0;padding:0}
+  .card .body{padding:16px 20px}
+  .card .body p{margin:0}
+  .card .body p+p{margin-top:8px}
+  .muted{color:var(--muted)}
+  code{font-family:"SF Mono",Consolas,"D2Coding",monospace;background:var(--code);
+    padding:2px 7px;border-radius:5px;font-size:13px;color:#8fd3ff}
+  .cmd{color:var(--accent2)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#202a40;color:#cdd8ee;font-weight:600;width:80px;white-space:nowrap}
+  .io{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 9px;margin-right:8px}
+  .io.in{background:rgba(91,140,255,.18);color:#9bc0ff}
+  .io.out{background:rgba(55,211,155,.18);color:#6fe3bd}
+  ul.tight{margin:0;padding-left:20px}
+  ul.tight li{margin:4px 0}
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">스킬 개념 카드</p>
+  <h1>/SD_311</h1>
+  <p>화면설계 자동화 · 2단계 — 프로토타입 HTML 생성</p>
+</header>
+
+<div class="card">
+  <div class="label"><span class="n">1</span><h2>스킬명</h2></div>
+  <div class="body">
+    <p><b>SD_311</b> (화면설계 프로토타입 HTML 생성)</p>
+    <p class="muted">실행: <code class="cmd">/SD_311 {메뉴코드}</code></p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">2</span><h2>주요 작업 내용</h2></div>
+  <div class="body">
+    <p>화면요건 문서(<code>ui.md</code>)를 읽어 <b>프로토타입 HTML + 목업 데이터 JS</b>를 생성하고 좌측 메뉴에 자동 등록한다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">3</span><h2>스킬 개요</h2></div>
+  <div class="body">
+    <p>요건 문서(<code>ui.md</code>)를 <b>공통 CSS/JS·정해진 템플릿</b>에 채워 실행 가능한 프로토타입 화면으로 변환하는 스킬이다.
+    공통 자산은 <b>절대 수정하지 않고</b> <code>&lt;link&gt;</code>/<code>&lt;script&gt;</code> 로 참조하며, 템플릿의 플레이스홀더만 치환한다.</p>
+    <p>입력 <code>ui.md</code> 가 <b>단일 진실원천(SoT)</b> 이므로, 화면을 바꿀 땐 화면을 직접 고치지 않고
+    ui.md 를 수정한 뒤 이 스킬을 다시 실행한다.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">4</span><h2>육하원칙</h2></div>
+  <div class="body">
+    <table>
+      <tr><th>누가</th><td>화면설계 담당자가 Claude와 함께 (AI가 템플릿 변환을 수행)</td></tr>
+      <tr><th>언제</th><td>ui.md(SD_310_UI 산출물)가 준비된 뒤</td></tr>
+      <tr><th>어디서</th><td>AI 허브 레포(common-system-ai) 폴더 안에서 <code class="cmd">/SD_311 {메뉴코드}</code> 실행</td></tr>
+      <tr><th>무엇을</th><td>ui.md 의 화면요건(UI유형·검색·그리드·팝업·업무규칙)을</td></tr>
+      <tr><th>어떻게</th><td>공통 자산 참조 + 템플릿 플레이스홀더 치환으로 (공통 CSS/JS 수정 없이)</td></tr>
+      <tr><th>왜</th><td>요건을 눈으로 검증할 실행 화면을 만들고 좌측 메뉴에 연결하기 위해</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">5</span><h2>INPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io in">INPUT</span><code>common-system-ai/spec/{메뉴코드}/{메뉴코드}-02-ui.md</code></p>
+    <p class="muted" style="margin-top:8px">화면요건정리 문서 (SD_310_UI 산출물) = 핵심 입력.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">6</span><h2>참조 문서</h2></div>
+  <div class="body">
+    <p><b>공통 자산</b> (절대 수정 금지)</p>
+    <ul class="tight muted" style="margin:6px 0 12px">
+      <li><code>common-system-ai/prototype/_common/common.css</code> · <code>common.js</code></li>
+      <li><code>common-system-ai/prototype/_common/_template/base.html</code> · <code>_template/gridX-*.html</code> (UI유형별 1개)</li>
+      <li><code>common-system-ai/prototype/_common/icon-preview.html</code> (사용 가능한 아이콘 목록)</li>
+    </ul>
+    <p><b>UI 규칙</b> (얇은 rule, HTML 작업 시 자동 트리거 → patterns로 라우팅)</p>
+    <ul class="tight muted" style="margin:6px 0 0">
+      <li><code>common-system-ai/.claude/rules/common_ui.md</code> · <code>area_search.md</code> · <code>area_btn.md</code></li>
+      <li><code>area_result_grid.md</code> · <code>area_multi_input_grid.md</code> · <code>popup_reg.md</code> · <code>popup_biz.md</code></li>
+    </ul>
+    <p><b>상세 구현 패턴</b> (SSoT — rule이 가리키는 정본)</p>
+    <ul class="tight muted" style="margin:6px 0 0">
+      <li><code>common-system-ai/patterns/10-screen-design/10-web/01-common-ui.md</code> · <code>02-search-area.md</code> · <code>03-toolbar-buttons.md</code></li>
+      <li><code>04-result-grid.md</code> · <code>05-multi-input-grid.md</code> · <code>06-popup-register.md</code> · <code>07-popup-biz-rule.md</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label"><span class="n">7</span><h2>OUTPUT 자료</h2></div>
+  <div class="body">
+    <p><span class="io out">OUTPUT</span>프로토타입 실행물 + 메뉴 등록</p>
+    <ul class="tight muted" style="margin:8px 0 0">
+      <li><code>common-system-ai/prototype/{메뉴코드}/{메뉴코드}-wireframe.html</code></li>
+      <li><code>common-system-ai/prototype/{메뉴코드}/{메뉴코드}-mock-data.js</code></li>
+      <li><code>common-system-ai/prototype/index.html</code> · <code>common-system-ai/prototype/_common/left-menu.html</code> 메뉴 등록(신규 추가)</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+스킬 개념 카드 · common-system-ai · 출처: <code>.claude/skills/SD_311/SKILL.md</code>
+</footer>
+
+</div>

@@ -1,0 +1,173 @@
+<!--
+  wireframe-only | {{MENU_CODE}} | {{MENU_NAME}} | Type B (처리형) | {{GROUP_CODE}}
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{MENU_NAME}} [{{MENU_CODE}}]</title>
+<link rel="stylesheet" href="../_common-m/mobile.css">
+<style>
+{{CUSTOM_CSS}}
+</style>
+</head>
+<body>
+<div class="pda-wrap">
+
+  <!-- ── 헤더 (뒤로가기 포함) ── -->
+  <header class="pda-header">
+    <button class="header-back" onclick="history.back()">‹</button>
+    <div class="header-title">{{MENU_NAME}}</div>
+    <div class="header-right"></div>
+  </header>
+
+  <!-- ── 처리 요약 정보 ── -->
+  <div class="proc-hdr" id="procHdr">
+    {{PROC_HDR_ROWS}}
+  </div>
+
+  <!-- ── 검색바 ── -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="search-ico"><img src="../_common-m/assets/icon-search.png" alt="검색"></span>
+      <input type="text" id="searchInput" placeholder="{{SEARCH_PLACEHOLDER}}" oninput="renderItems()">
+      <button class="search-act-btn" onclick="alert('[스캔]\n바코드 스캐너를 실행합니다.')">
+        <img src="../_common-m/assets/icon-schBarcode.png" alt="바코드">
+      </button>
+    </div>
+  </div>
+
+  <!-- ── 전체선택 바 ── -->
+  <div class="chk-all-bar">
+    <label><input type="checkbox" id="chkAll" onchange="toggleAll(this.checked)"> 전체선택</label>
+    <span class="proc-total-txt" id="totalTxt">총처리: 0 / 0</span>
+  </div>
+
+  <!-- ── 품목 목록 ── -->
+  <main class="pda-content">
+    <div id="itemList"></div>
+  </main>
+
+  <!-- ── 하단 CTA 버튼 ── -->
+  <div class="footer-cta">
+    {{CTA_BUTTONS}}
+  </div>
+
+</div>
+
+<!-- ── 숫자 키패드 ── -->
+<div class="numpad-overlay" id="numpadOverlay">
+  <div class="numpad-box">
+    <div class="numpad-title" id="numpadTitle">처리수량 입력</div>
+    <div class="numpad-out" id="numpadOut">0</div>
+    <div class="numpad-grid">
+      <button class="np-key" onclick="npInput('1')">1</button>
+      <button class="np-key" onclick="npInput('2')">2</button>
+      <button class="np-key" onclick="npInput('3')">3</button>
+      <button class="np-key" onclick="npInput('4')">4</button>
+      <button class="np-key" onclick="npInput('5')">5</button>
+      <button class="np-key" onclick="npInput('6')">6</button>
+      <button class="np-key" onclick="npInput('7')">7</button>
+      <button class="np-key" onclick="npInput('8')">8</button>
+      <button class="np-key" onclick="npInput('9')">9</button>
+      <button class="np-key np-zero" onclick="npInput('0')">0</button>
+      <button class="np-key np-del" onclick="npDel()">⌫</button>
+    </div>
+    <div class="numpad-btns">
+      <button class="pda-btn btn-gray" onclick="closeNumpad()">취소</button>
+      <button class="pda-btn btn-blue" onclick="confirmNumpad()">확인</button>
+    </div>
+  </div>
+</div>
+
+<script src="./{{MENU_CODE}}-data.js"></script>
+<script>
+var allItems = [];
+var curItemIdx = -1;
+
+/* ── 헤더 정보 렌더링 ── */
+function renderProcHdr(master) {
+  /* SCRIPT_BODY에서 오버라이드 가능 */
+}
+
+/* ── 품목 목록 렌더링 ── */
+function renderItems() {
+  var q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  var data = allItems.filter(function(r) {
+    if (q && JSON.stringify(r).toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+
+  var processed = data.filter(function(r) { return r.checked; }).length;
+  document.getElementById('totalTxt').textContent = '총처리: ' + processed + ' / ' + data.length;
+
+  var html = '';
+  if (!data.length) {
+    html = '<div class="empty-msg">조회된 데이터가 없습니다.</div>';
+  } else {
+    data.forEach(function(r, i) {
+      html += '<div class="proc-card" id="card-' + i + '">'
+        + '<div class="proc-card-hdr">'
+        + '<input type="checkbox" ' + (r.checked ? 'checked' : '') + ' onchange="toggleItem(' + i + ',this.checked)" style="width:18px;height:18px;flex-shrink:0">'
+        + '<span class="proc-card-code">' + (r.code || '') + '</span>'
+        + '<span class="proc-card-name">' + (r.name || '') + '</span>'
+        + '</div>'
+        + '<div class="proc-qty-row">'
+        + '<div class="proc-qty-cell"><span class="qty-num">' + (r.planQty || 0) + '</span><div class="qty-lbl">예정</div></div>'
+        + '<div class="proc-qty-cell"><span class="qty-num edit" onclick="openNumpad(' + i + ')">' + (r.procQty || 0) + '</span><div class="qty-lbl">처리</div></div>'
+        + '<div class="proc-qty-cell"><span class="qty-num">' + (r.unit || 'EA') + '</span><div class="qty-lbl">단위</div></div>'
+        + '</div></div>';
+    });
+  }
+  document.getElementById('itemList').innerHTML = html;
+
+  var allChecked = data.length > 0 && data.every(function(r) { return r.checked; });
+  document.getElementById('chkAll').checked = allChecked;
+}
+
+function toggleAll(checked) {
+  allItems.forEach(function(r) { r.checked = checked; });
+  renderItems();
+}
+
+function toggleItem(idx, checked) {
+  allItems[idx].checked = checked;
+  renderItems();
+}
+
+/* ── 숫자 키패드 ── */
+function openNumpad(idx) {
+  curItemIdx = idx;
+  document.getElementById('numpadOut').textContent = allItems[idx].procQty || '0';
+  document.getElementById('numpadOverlay').classList.add('show');
+}
+function closeNumpad() {
+  curItemIdx = -1;
+  document.getElementById('numpadOverlay').classList.remove('show');
+}
+function npInput(v) {
+  var out = document.getElementById('numpadOut');
+  out.textContent = (out.textContent === '0' ? v : out.textContent + v);
+}
+function npDel() {
+  var out = document.getElementById('numpadOut');
+  out.textContent = out.textContent.length > 1 ? out.textContent.slice(0, -1) : '0';
+}
+function confirmNumpad() {
+  if (curItemIdx >= 0) {
+    allItems[curItemIdx].procQty = parseInt(document.getElementById('numpadOut').textContent) || 0;
+    renderItems();
+  }
+  closeNumpad();
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  allItems = JSON.parse(JSON.stringify({{DATA_VAR}}.items));
+  renderItems();
+});
+
+{{SCRIPT_BODY}}
+</script>
+</body>
+</html>

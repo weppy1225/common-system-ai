@@ -1,0 +1,45 @@
+<!-- UI유형: 그리드 2개 좌·우 — {{MAIN_AREA}} 자리에 들어간다 -->
+<div class="main-area lr">
+
+  <!-- 좌측 그리드 (메인) -->
+  <div class="panel">
+    <div class="toolbar">
+      <div class="toolbar-left">{{GRID_MAIN_TOOLBAR}}</div>
+      <div class="toolbar-right"></div>
+    </div>
+    <div class="grid-wrap" id="mainWrap">
+      <table class="grid-table" id="mainTable">
+        <colgroup>{{GRID_MAIN_COLGROUP}}</colgroup>
+        <thead>{{GRID_MAIN_THEAD}}</thead>
+        <tbody id="mainTbody"></tbody>
+      </table>
+    </div>
+    <div class="h-scroll-wrap" id="mainHScroll"><div class="h-scroll-inner" id="mainHInner"></div></div>
+    <div class="grid-footer">
+      <div class="pagination" id="mainPaging"></div>
+      <div class="page-size-wrap">
+        <select id="mainPageSize" onchange="changeMainPageSize()">
+          <option value="50">50</option><option value="100">100</option><option value="200">200</option>
+        </select>
+      </div>
+      <span class="row-count" id="mainRowCount"></span>
+    </div>
+  </div>
+
+  <!-- 우측 그리드 (디테일) -->
+  <div class="panel">
+    <div class="toolbar">
+      <div class="toolbar-left">{{GRID_D1_TOOLBAR}}</div>
+      <div class="toolbar-right"></div>
+    </div>
+    <div class="grid-wrap" id="d1Wrap">
+      <table class="grid-table" id="d1Table">
+        <colgroup>{{GRID_D1_COLGROUP}}</colgroup>
+        <thead>{{GRID_D1_THEAD}}</thead>
+        <tbody id="d1Tbody"></tbody>
+      </table>
+    </div>
+    <div class="h-scroll-wrap" id="d1HScroll"><div class="h-scroll-inner" id="d1HInner"></div></div>
+  </div>
+
+</div>

@@ -1,0 +1,78 @@
+<!--
+  wireframe-only | {{MENU_CODE}} | {{MENU_NAME}} | Type C (탭형) | {{GROUP_CODE}}
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{MENU_NAME}} [{{MENU_CODE}}]</title>
+<link rel="stylesheet" href="../_common-m/mobile.css">
+<style>
+{{CUSTOM_CSS}}
+</style>
+</head>
+<body>
+<div class="pda-wrap">
+
+  <!-- ── 헤더 ── -->
+  <header class="pda-header">
+    <div class="header-spacer"></div>
+    <div class="header-title">{{MENU_NAME}}</div>
+    <div class="header-right"></div>
+  </header>
+
+  <!-- ── 화면 내 탭 ── -->
+  <div class="scr-tabs" id="scrTabs">
+    {{SCR_TABS}}
+  </div>
+
+  <!-- ── 검색바 ── -->
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="search-ico"><img src="../_common-m/assets/icon-search.png" alt="검색"></span>
+      <input type="text" id="searchInput" placeholder="{{SEARCH_PLACEHOLDER}}" oninput="renderTab()">
+      <button class="search-act-btn" onclick="alert('[스캔]\n바코드를 스캔합니다.')">
+        <img src="../_common-m/assets/icon-schBarcode.png" alt="바코드">
+      </button>
+    </div>
+  </div>
+
+  <!-- ── 탭 콘텐츠 ── -->
+  <main class="pda-content">
+    {{TAB_CONTENTS}}
+  </main>
+
+  <!-- ── 하단 (탭바 또는 CTA) ── -->
+  {{FOOTER}}
+
+</div>
+
+<script src="./{{MENU_CODE}}-data.js"></script>
+<script>
+var curTab = null;
+
+function switchTab(tabId) {
+  curTab = tabId;
+  document.querySelectorAll('.scr-tab').forEach(function(btn) {
+    btn.classList.toggle('on', btn.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.style.display = el.dataset.tab === tabId ? '' : 'none';
+  });
+  renderTab();
+}
+
+function renderTab() {
+  /* SCRIPT_BODY에서 구현 */
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  var firstTab = document.querySelector('.scr-tab');
+  if (firstTab) switchTab(firstTab.dataset.tab);
+});
+
+{{SCRIPT_BODY}}
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+---
+title: BE 공통 예외 처리
+description: 모든 메뉴에 공통으로 적용되는 F/W 수준의 예외 처리 목록. 06-be-flow 작성 시 참조하여 중복 기재하지 않는다.
+status: active
+version: 1.0.0
+repo_role: ai-hub
+agent_usage: reference
+domain: common
+---
+
+# BE 공통 예외 처리
+
+F/W 인터셉터 또는 Comp 공통 로직에서 처리되는 예외의 **런타임 동작(조건→결과)** 이다.
+메뉴별 `06-be-flow.md`에는 이 목록을 반복하지 않는다.
+
+> 이 문서는 런타임 동작이고, **예외 클래스 카탈로그(정본)** 는 → [`patterns/30-backend/30-convention/01-coding-convention.md §9.1`](../30-backend/30-convention/01-coding-convention.md).
+
+## 공통 예외 목록
+
+| 조건 | 결과 |
+|---|---|
+| 미인증 요청 (세션 없음) | 401 반환, F/W 인터셉터 처리 |
+| 권한 없는 메뉴 접근 | 403 반환, F/W 인터셉터 처리 |
+| 필수 파라미터 누락 | 400 반환 |
+| DB 연결 실패 | 500 반환, F/W 공통 처리 |
+| 낙관적 락 충돌 (동시 수정) | 충돌 오류 반환 |
+| 사용 중지 데이터 수정 시도 | 수정 불가 오류 반환 |
+| 이미 삭제된 데이터 접근 | 존재하지 않음 오류 반환 |

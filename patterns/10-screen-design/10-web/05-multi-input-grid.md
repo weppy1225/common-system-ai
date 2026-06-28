@@ -1,0 +1,55 @@
+---
+title: 다중 입력 그리드 영역 패턴 (WEB)
+description: 행(Row) 단위로 데이터를 직접 인라인 입력·관리하는 그리드 영역의 레이아웃·데이터 입력·UI 동작 상세 구현 패턴. 인라인 셀 입력, 체크박스 다중 선택, 계층 구조 컬럼 배치를 정의한다. 얇은 rule(area_multi_input_grid.md)이 이 문서를 SSoT로 참조한다.
+status: active
+version: 1.0.0
+author: ShinHyunKyu
+repo_role: ai-hub
+agent_usage: reference
+domain: frontend
+tags:
+  - web
+  - screen-design
+  - multi-input-grid
+related:
+  - patterns/10-screen-design/10-web/00-overview.md
+  - .claude/rules/area_multi_input_grid.md
+---
+
+# 다중 입력 그리드 영역 패턴 (WEB)
+
+> 다중 입력 그리드의 **상세 구현 SSoT**다. 판단 기준(금지/필수)은 얇은 rule `.claude/rules/area_multi_input_grid.md`에 있다.
+
+---
+
+## 1. 기본 레이아웃
+
+- 상단 툴바에 기능 버튼을 배치하여 데이터 입력 및 편집을 지원한다. (툴바 규칙 → `03-toolbar-buttons.md`)
+- **그리드 영역(툴바 포함)에 그리드 제목 텍스트(예: "프로모션 목록", "대상품목", "주문건" 등)를 표시하지 않는다.** 툴바에는 기능 버튼만 배치한다.
+- 주요 데이터는 테이블(표) 형태로 관리한다.
+- 기본 컬럼 구성: No. (순번) / 체크박스 / 데이터 컬럼들
+
+---
+
+## 2. 데이터 입력 규칙
+
+- 행(Row) 단위로 데이터를 관리한다.
+- 체크박스를 통해 다중 선택 후 일괄 작업을 지원한다. 체크박스 크기는 `width: 12px; height: 12px`으로 설정한다.
+- 특정 셀은 직접 텍스트 입력이 가능하다.
+- 그리드 td 내 input/select 스타일 선언 시 체크박스를 반드시 제외한다: `input:not([type="checkbox"])`. 제외하지 않으면 인라인 입력 스타일(`height: 22px; width: 100%` 등)이 체크박스까지 덮어써서 크기가 깨진다.
+- 아이콘을 사용하지 않는다. 확장/추가 기능은 텍스트 버튼(+)으로 표현한다.
+
+---
+
+## 3. UI 동작 규칙
+
+- No. 열은 시스템이 자동으로 순번을 부여한다.
+- 체크박스 선택 후 툴바 버튼(삭제, 수정 등)으로 기능을 실행한다.
+- 랙/단/열과 같이 계층 구조가 있는 데이터는 상위 → 하위 순으로 컬럼을 배치한다.
+- 시각적 구분은 텍스트와 테두리만으로 표현하며, 아이콘은 사용하지 않는다.
+
+---
+
+## 상세 패턴 문서
+
+WEB 화면 영역별 패턴 인덱스: → `patterns/10-screen-design/10-web/00-overview.md`

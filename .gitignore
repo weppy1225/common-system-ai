@@ -1,0 +1,39 @@
+# 토큰/인증 정보
+.claude/config/
+.claude/settings.local.json
+
+# 작업자 신원 값 (머신·작업자별로 다름 — 커밋 금지. 가이드는 SET_USER_USAGE.md)
+SET_USER.md
+
+# 산출물
+output/
+
+# 로컬 테스트 환경 (DB 평문 비밀번호 포함)
+.local-test-env/
+
+# 빌드/캐시
+node_modules/
+__pycache__/
+*.pyc
+
+# 기타
+*.lock
+*.zip
+
+# 세션 로그·로컬 입력·빌드/벤치 산출물 (2026-06 정리)
+conversation-log.txt
+dist/
+dist-mobile/
+input/
+.claude/bench_pi422/
+
+# Office 임시/잠금 파일 (2026-06 정리)
+~$*
+*.~vsd
+
+# Obsidian 에디터 설정 (로컬)
+.obsidian/
+
+# 생성 산출물 (스킬 출력 — 추적 안 함, 2026-06 통일)
+deliverables/30-output/
+
